@@ -4,16 +4,19 @@ import org.w3c.dom.*;
 
 public class ParserXML {
 	
+	// LET OP: Dit adres werkt natuurlijk alleen bij Maarten!
+	static String FILE_ADDRESS = "D:\\B-Extra\\Eclipse Workspace\\SpreadsheetApp\\XMLbronnen\\bron.xml";
+	
 	public static void main(String args[]) {
 		
 		try {
-			File cells = new File("D:\\B-Extra\\Eclipse Workspace\\SpreadsheetApp\\XMLbronnen\\bron.xml");
+			File cells = new File(FILE_ADDRESS);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(cells);
 			doc.getDocumentElement().normalize();
 			
-			System.out.println("root of xml file " + doc.getDocumentElement().getNodeName());
+			System.out.println("root of xml file=:" + doc.getDocumentElement().getNodeName());
 			NodeList nodes = doc.getElementsByTagName("SPREADSHEET");
 			
 			System.out.println();
@@ -37,11 +40,6 @@ public class ParserXML {
 		Node node = (Node)nodes.item(0);
 		return node.getNodeValue();
 
-	}
-	private static String getInt(String tag, Element element) {
-		NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
-		Node node = (Node)nodes.item(0);
-		return node.getAttributes()["row"];
 	}
 }
 
