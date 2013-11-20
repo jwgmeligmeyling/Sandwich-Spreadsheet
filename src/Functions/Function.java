@@ -46,7 +46,7 @@ public abstract class Function {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Function f = Function.parse("ADD(ADD(5,4),ADD(5,4))");
+		Function f = Function.parse("ADD(ADD(5,4),4)");
 		System.out.println("ValueOf F: " + f.valueOf() );
 	}
 }
