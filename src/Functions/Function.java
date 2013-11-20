@@ -11,7 +11,7 @@ public abstract class Function {
 	
 	/**
 	 * The value method returns the value of the current function instance
-	 * @return
+	 * @return value of current function instance
 	 */
 	abstract public int valueOf();
 	
@@ -23,7 +23,7 @@ public abstract class Function {
 	/**
 	 * Static method to parse functions
 	 * @param input
-	 * @return
+	 * @return function
 	 */
 	static Function parse(String input) {
 		Pattern p = Pattern.compile("^ADD\\((.*)\\,(.*)\\)$");

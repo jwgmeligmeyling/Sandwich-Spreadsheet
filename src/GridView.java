@@ -1,53 +1,43 @@
+/*
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/**
- * @version <b>20-11-2013</b>	Menu aangemaakt met links naar ActionListeners<br>
- * 								Eerste versie van gridview aangemaakt
- * @author Maarten Flikkema
- */
 public class GridView extends JFrame implements ActionListener {
 	
-	/**
-	 * Declaratie van controls.
-	 */
+
 	private JTextField[][] grid;				// names the grid of buttons
 	private JMenuBar jmb = new JMenuBar();
 	
-		private JMenu menuFile = new JMenu("File");
-				private JMenuItem jmiOpen = new JMenuItem("Open");
-				private JMenuItem jmiSaveAs = new JMenuItem("Save As");
-				private JMenuItem jmiExit = new JMenuItem("Exit");
-				
-			private JMenu menuEdit = new JMenu("Edit");
-				private JMenuItem jmiUndo = new JMenuItem("Undo");
-				private JMenuItem jmiRedo = new JMenuItem("Redo");
-				private JMenuItem jmiCut = new JMenuItem("Cut");
-				private JMenuItem jmiCopy = new JMenuItem("Copy");
-				private JMenuItem jmiPaste = new JMenuItem("Paste");
-				
-			private JMenu menuView = new JMenu("View");
-				private JMenuItem jmiZoom = new JMenuItem("Zoom in/out");
-				private JMenuItem jmiStatusBar = new JMenuItem("Show/hide Status Bar");
-				
-			private JMenu menuInsert = new JMenu("Insert");
-				private JMenuItem jmiInsFunction = new JMenuItem("Insert Function");
-				private JMenuItem jmiInsGraph = new JMenuItem("Make Graph");
-				
-			private JMenu menuHelp = new JMenu("Help");
-				private JMenuItem jmiHelp = new JMenuItem("Help");
-				
-			private JTabbedPane tabs = new JTabbedPane();
+	private JMenu menuFile = new JMenu("File");
+		private JMenuItem jmiOpen = new JMenuItem("Open");
+		private JMenuItem jmiSaveAs = new JMenuItem("Save As");
+		private JMenuItem jmiExit = new JMenuItem("Exit");
 			
-			private 
+	private JMenu menuEdit = new JMenu("Edit");
+		private JMenuItem jmiUndo = new JMenuItem("Undo");
+		private JMenuItem jmiRedo = new JMenuItem("Redo");
+		private JMenuItem jmiCut = new JMenuItem("Cut");
+		private JMenuItem jmiCopy = new JMenuItem("Copy");
+		private JMenuItem jmiPaste = new JMenuItem("Paste");
+		
+	private JMenu menuView = new JMenu("View");
+		private JMenuItem jmiZoom = new JMenuItem("Zoom in/out");
+		private JMenuItem jmiStatusBar = new JMenuItem("Show/hide Status Bar");
+		
+	private JMenu menuInsert = new JMenu("Insert");
+		private JMenuItem jmiInsFunction = new JMenuItem("Insert Function");
+		private JMenuItem jmiInsGraph = new JMenuItem("Make Graph");
+		
+	private JMenu menuHelp = new JMenu("Help");
+		private JMenuItem jmiHelp = new JMenuItem("Help");
+		
+	private JTabbedPane tabs = new JTabbedPane();
+	
+	private 
 	
 	
-/**
- * Constructor voor Frame
- * @param width		
- * @param length	
- */
 	public GridView(int width, int length) {	
 		
 		this.setLayout(new GridLayout(width, length));
@@ -155,3 +145,4 @@ public class GridView extends JFrame implements ActionListener {
 		}
 	}
 }
+*/
