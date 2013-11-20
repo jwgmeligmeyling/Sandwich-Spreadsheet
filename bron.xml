@@ -1,0 +1,8 @@
+<SPREADSHEET>
+	<CELL row="1" column="1" type="">IF(B1+5,10,6)</CELL>
+	<CELL row="1" column="2" type="String">Inhoud 1,2</CELL>
+	<CELL row="2" column="1" type="String">Inhoud 2,1</CELL>
+	<CELL row="2" column="2" type="String">Inhoud 2,2</CELL>
+	<CELL row="3" column="1" type="String">Inhoud 3,1</CELL>
+	<CELL row="3" column="2" type="String">Inhoud 3,2</CELL>
+</SPREADSHEET>
