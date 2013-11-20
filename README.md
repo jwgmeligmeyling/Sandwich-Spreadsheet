@@ -25,3 +25,9 @@ M.H.Flikkema@student.tudelft.nl
 mhflikkema@tudelft.nl
 +31617011445
 4306538
+
+Willem Hoogervorst
+willem.hoogervorst@hotmail.com
+whoogervorst@student.tudelft.nl
++31621179458
+4305647
