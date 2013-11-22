@@ -1,11 +1,14 @@
-package Events;
+package GUI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
-public class MenuBar {
+public class MenuBar implements ActionListener{
 	
 	public static void FileOpen_Click() {
-		
+		String st = "File>Open";
+		JOptionPane.showMessageDialog(null, st);
 	}
 	
 	public static void FileSaveAs_Click() {
@@ -46,6 +49,12 @@ public class MenuBar {
 	}
 	
 	public static void InsertFunction_Click() {
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 }

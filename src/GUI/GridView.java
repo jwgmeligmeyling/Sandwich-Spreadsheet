@@ -1,29 +1,21 @@
-import javax.swing.*;
+package GUI;
+/*
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/**
- * @author Maarten Flikkema
- * @version <b>20-11-2013</b>	Menu aangemaakt met links naar ActionListeners<br>
- * 								Eerste versie van gridview aangemaakt
- * @version <b>versie 2</b>		...
- * 
- */
-@SuppressWarnings("serial")
-public class Window extends JFrame implements ActionListener {
+public class GridView extends JFrame implements ActionListener {
 	
-	/**
-	 * Declaratie van controls.
-	 */
+
 	private JTextField[][] grid;				// names the grid of buttons
 	private JMenuBar jmb = new JMenuBar();
-
+	
 	private JMenu menuFile = new JMenu("File");
 		private JMenuItem jmiOpen = new JMenuItem("Open");
 		private JMenuItem jmiSaveAs = new JMenuItem("Save As");
 		private JMenuItem jmiExit = new JMenuItem("Exit");
-		
+			
 	private JMenu menuEdit = new JMenu("Edit");
 		private JMenuItem jmiUndo = new JMenuItem("Undo");
 		private JMenuItem jmiRedo = new JMenuItem("Redo");
@@ -43,19 +35,13 @@ public class Window extends JFrame implements ActionListener {
 		private JMenuItem jmiHelp = new JMenuItem("Help");
 		
 	private JTabbedPane tabs = new JTabbedPane();
-	//javax.swing.JPanel
-	//private Statusbar statusBar = new Statusbar();
 	
-/**
- * Constructor voor Frame
- * 
- */
-	public Window() {	
+	private 
+	
+	
+	public GridView(int width, int length) {	
 		
-		int AANTAL_KOLOMMEN = 20;
-		int AANTAL_RIJEN = 20;
-		
-		this.setLayout(new GridLayout(AANTAL_KOLOMMEN, AANTAL_RIJEN));
+		this.setLayout(new GridLayout(width, length));
 		
 		setJMenuBar(jmb);
 		
@@ -88,9 +74,9 @@ public class Window extends JFrame implements ActionListener {
 			menuHelp.add(jmiHelp);	jmiHelp.setMnemonic('h');
 			
 		
-		grid = new JTextField[AANTAL_RIJEN][AANTAL_KOLOMMEN];							// allocate the size of grid
-		for (int y = 0; y < AANTAL_RIJEN; y++) {
-			for (int x = 0; x < AANTAL_KOLOMMEN; x++) {
+		grid = new JTextField[width][length];							// allocate the size of grid
+		for (int y = 0; y < length; y++) {
+			for (int x = 0; x < width; x++) {
 				grid[x][y] = new JTextField("(" + x + "," + y + ")");	// creates new button
 				add(grid[x][y]);										// adds button to grid
 			}
@@ -114,49 +100,50 @@ public class Window extends JFrame implements ActionListener {
 		setVisible(true);	// makes frame visible
 	}
 	
-	
-	
 	@Override
-	public void actionPerformed(ActionEvent e) {		
+	public void actionPerformed(ActionEvent e) {
+		
 		// Menu File
 		if (e.getSource() == jmiOpen) {
-			Events.MenuBar.FileOpen_Click();
+			
 		}
 		if (e.getSource() == jmiSaveAs) {
-			Events.MenuBar.FileOpen_Click();
+			
 		}
 		if (e.getSource() == jmiExit) {
-			Events.MenuBar.FileOpen_Click();
+			int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (answer == JOptionPane.YES_OPTION) { System.exit(0);	}
 		}
 		
 		// Menu Edit
 		if (e.getSource() == jmiUndo) {
-			Events.MenuBar.EditUndo_Click();
+			
 		}
 		if (e.getSource() == jmiRedo) {
-			Events.MenuBar.EditRedo_Click();
+			
 		}
 		if (e.getSource() == jmiCut) {
-			Events.MenuBar.EditCut_Click();
+			
 		}
 		if (e.getSource() == jmiCopy) {
-			Events.MenuBar.EditCopy_Click();
+			
 		}
 		if (e.getSource() == jmiPaste) {
-			Events.MenuBar.EditPaste_Click();
+			
 		}
 			
 		// Menu View
 		if (e.getSource() == jmiZoom) {
-			Events.MenuBar.ViewZoom_Click();
+			
 		}
 		
 		// Menu Insert
 		if (e.getSource() == jmiInsGraph) {
-			Events.MenuBar.InsertGraph_Click();
+			
 		}
 		if (e.getSource() == jmiInsFunction) {
-			Events.MenuBar.InsertFunction_Click();
+			
 		}
 	}
 }
+*/
