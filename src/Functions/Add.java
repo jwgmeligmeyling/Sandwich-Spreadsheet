@@ -6,19 +6,39 @@ package Functions;
  * @author jgmeligmeyling
  *
  */
-public class Add extends Function {
+public class Add extends Function
+{
 	
-	Function valueA;
-	Function valueB;
-
 	@Override
 	public int valueOf() {
-		return valueA.valueOf() + valueB.valueOf();
+		int value = 0;
+		
+		for ( Function arg : arguments)
+		{
+			value += arg.valueOf();
+		}
+		
+		return value;
 	}
 	
 	@Override
 	public String toString() {
-		return null;
+		StringBuilder sb = new StringBuilder("ADD(");
+		int i = 0, l = arguments.length;
+		
+		while (true)
+		{
+			sb.append(arguments[i].toString());
+			
+			if (++i < l ) {
+				sb.append(",");
+			} else {
+				break;
+			}
+		}
+		
+		sb.append(")");
+		return sb.toString();
 	}
 
 }
