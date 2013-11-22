@@ -69,6 +69,6 @@ public class TestFunctionParser {
 	@Test
 	public void testSingleAddDoubleParseTrue() throws InstantiationException, IllegalAccessException {
 		Function f = Function.parse("ADD(5.9,3.4)");
-		assertEquals((double)9.3, f.toDouble());
+		assertEquals(9.3, f.toDouble(), 1E-15);
 	}
 }
