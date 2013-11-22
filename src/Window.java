@@ -8,6 +8,7 @@ import java.awt.event.*;
  * 								Eerste versie van gridview aangemaakt
  * @version <b>versie 2</b>		...
  */
+@SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 	
 	/**
