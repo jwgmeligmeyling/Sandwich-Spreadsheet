@@ -7,17 +7,15 @@ package Functions;
  *
  */
 public class Literal extends Function {
-	int value = 0;
 	
-	/**
-	 * Literal function is a function container for literals (eg. 5)
-	 * TODO References to cells.
-	 * @param input
-	 */
-	public Literal(String input) {
-		value = Integer.parseInt(input);
+	int value;
+	
+	Literal() {}
+	
+	Literal(String value) {
+		this.value = Integer.parseInt(value);
 	}
-
+	
 	@Override
 	public int valueOf() {
 		return value;
