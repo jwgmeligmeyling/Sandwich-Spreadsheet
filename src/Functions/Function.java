@@ -23,7 +23,7 @@ public abstract class Function {
 	private final static char CLOSING_BRACKET = ')';
 	private final static char SEPARATOR = ',';
 	private final static Pattern TAGS = Pattern.compile("[(),]");
-	private final static Pattern NUMBER = Pattern.compile("^\\d+$");
+	private final static Pattern NUMBER = Pattern.compile("^\\d+(?=\\.\\d+)$");
 	
 	/*
 	 * All instances of Function share this attribute

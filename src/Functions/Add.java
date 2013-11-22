@@ -48,7 +48,7 @@ public class Add extends Function
 		
 		for ( Function arg : arguments)
 		{
-			value += arg.toInteger();
+			value += arg.toDouble();
 		}
 		
 		return value;

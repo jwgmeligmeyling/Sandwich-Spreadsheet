@@ -8,7 +8,7 @@ public class Cel {
 		type = typeIn;
 	}
 	
-	public Object getWaarde() {			return waarde; }
+	public Object getWaarde() { return waarde; }
 	/*
 	public String getWaardeString() {	return (String) waarde; }
 	public int getWaardeInteger() {		return (Integer) waarde; }

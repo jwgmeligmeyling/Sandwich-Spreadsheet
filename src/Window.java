@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -113,48 +114,49 @@ public class Window extends JFrame implements ActionListener {
 		setVisible(true);	// makes frame visible
 	}
 	
+	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {		
 		// Menu File
 		if (e.getSource() == jmiOpen) {
-			
+			Events.MenuBar.FileOpen_Click();
 		}
 		if (e.getSource() == jmiSaveAs) {
-			
+			Events.MenuBar.FileOpen_Click();
 		}
 		if (e.getSource() == jmiExit) {
-			int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if (answer == JOptionPane.YES_OPTION) { System.exit(0);	}
+			Events.MenuBar.FileOpen_Click();
 		}
 		
 		// Menu Edit
 		if (e.getSource() == jmiUndo) {
-			
+			Events.MenuBar.EditUndo_Click();
 		}
 		if (e.getSource() == jmiRedo) {
-			
+			Events.MenuBar.EditRedo_Click();
 		}
 		if (e.getSource() == jmiCut) {
-			
+			Events.MenuBar.EditCut_Click();
 		}
 		if (e.getSource() == jmiCopy) {
-			
+			Events.MenuBar.EditCopy_Click();
 		}
 		if (e.getSource() == jmiPaste) {
-			
+			Events.MenuBar.EditPaste_Click();
 		}
 			
 		// Menu View
 		if (e.getSource() == jmiZoom) {
-			
+			Events.MenuBar.ViewZoom_Click();
 		}
 		
 		// Menu Insert
 		if (e.getSource() == jmiInsGraph) {
-			
+			Events.MenuBar.InsertGraph_Click();
 		}
 		if (e.getSource() == jmiInsFunction) {
-			
+			Events.MenuBar.InsertFunction_Click();
 		}
 	}
 }
