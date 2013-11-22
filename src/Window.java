@@ -7,6 +7,7 @@ import java.awt.event.*;
  * @version <b>20-11-2013</b>	Menu aangemaakt met links naar ActionListeners<br>
  * 								Eerste versie van gridview aangemaakt
  * @version <b>versie 2</b>		...
+ * 
  */
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
@@ -113,8 +114,7 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		
+	public void actionPerformed(ActionEvent e) {		
 		// Menu File
 		if (e.getSource() == jmiOpen) {
 			
