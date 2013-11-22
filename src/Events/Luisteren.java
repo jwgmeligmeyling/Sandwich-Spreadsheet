@@ -1,11 +1,13 @@
 package Events;
 import java.awt.event.*;
 
+import javax.swing.JOptionPane;
+
 class Luisteren implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+		JOptionPane.showMessageDialog(null, "event:MouseClicked");
 	}
 	
 	@Override
