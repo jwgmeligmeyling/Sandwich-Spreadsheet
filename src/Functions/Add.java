@@ -2,8 +2,9 @@ package Functions;
 
 /**
  * ADD function
- * Returns FunctionA * FunctionB
- * @author jgmeligmeyling
+ * Iterators over the Functions in the arguments array,
+ * and returns te sum in the toInteger() and toDouble() methods.
+ * @author Jan-Willem Gmelig Meyling
  *
  */
 public class Add extends Function
