@@ -3,7 +3,7 @@ package Functions;
 /**
  * ADD function
  * Iterators over the Functions in the arguments array,
- * and returns te sum in the toInteger() and toDouble() methods.
+ * and returns the sum in the toInteger() and toDouble() methods.
  * @author Jan-Willem Gmelig Meyling
  *
  */
