@@ -9,7 +9,8 @@ enum Functions {
 	 * Register your functions here!
 	 */
 	ADD(Add.class),
-	POW(Power.class);
+	POW(Power.class),
+	SUBTRACT(Subtract.class);
 	
 	/*
 	 *  Functions.valueOf("ADD") => ADD
