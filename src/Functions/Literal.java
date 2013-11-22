@@ -8,22 +8,27 @@ package Functions;
  */
 public class Literal extends Function {
 	
-	int value;
+	String value = "";
 	
 	Literal() {}
 	
 	Literal(String value) {
-		this.value = Integer.parseInt(value);
-	}
-	
-	@Override
-	public int valueOf() {
-		return value;
+		this.value = value;
 	}
 
 	@Override
 	public String toString() { 
-		return Integer.toString(value);
+		return value;
+	}
+
+	@Override
+	public int toInteger() {
+		return Integer.parseInt(value);
+	}
+
+	@Override
+	public double toDouble() {
+		return Double.parseDouble(value);
 	}
 
 }

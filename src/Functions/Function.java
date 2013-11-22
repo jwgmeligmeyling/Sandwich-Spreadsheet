@@ -28,11 +28,8 @@ public abstract class Function {
 	 * The value method returns the value of the current function instance
 	 * @return
 	 */
-	abstract public int valueOf();
-	
-	/**
-	 * The toString method returns the string representation of current function
-	 */
+	abstract public int toInteger();
+	abstract public double toDouble();
 	abstract public String toString();
 	
 	/**
@@ -112,8 +109,8 @@ public abstract class Function {
 	 */
 	public static void main(String[] args) {
 		try {
-			Function f = Function.parse("ADD(ADD(ADD(1,2),ADD(3,2)),ADD(ADD(4,5),4))");
-			System.out.println("Uitkomst van " + f.toString() + " = " + f.valueOf());
+			Function f = Function.parse("ADD(1,2,POW(2,3))");
+			System.out.println("Uitkomst van " + f.toString() + " = " + f.toInteger());
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

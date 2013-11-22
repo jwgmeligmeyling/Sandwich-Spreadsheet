@@ -10,18 +10,6 @@ public class Add extends Function
 {
 	
 	@Override
-	public int valueOf() {
-		int value = 0;
-		
-		for ( Function arg : arguments)
-		{
-			value += arg.valueOf();
-		}
-		
-		return value;
-	}
-	
-	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("ADD(");
 		int i = 0, l = arguments.length;
@@ -39,6 +27,30 @@ public class Add extends Function
 		
 		sb.append(")");
 		return sb.toString();
+	}
+
+	@Override
+	public int toInteger() {
+		int value = 0;
+		
+		for ( Function arg : arguments)
+		{
+			value += arg.toInteger();
+		}
+		
+		return value;
+	}
+
+	@Override
+	public double toDouble() {
+		double value = 0;
+		
+		for ( Function arg : arguments)
+		{
+			value += arg.toInteger();
+		}
+		
+		return value;
 	}
 
 }

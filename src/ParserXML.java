@@ -4,8 +4,8 @@ import org.w3c.dom.*;
 
 public class ParserXML {
 	
-	// LET OP: Dit adres werkt natuurlijk alleen bij Maarten!
-	static String FILE_ADDRESS = "D:\\B-Extra\\Eclipse Workspace\\SpreadsheetApp\\XMLbronnen\\bron.xml";
+	// Maarten, als je een dergelijk pad gebruikt, werkt hij bij iedereen, toch?
+	static String FILE_ADDRESS = "bron.xml";
 	
 	public static void main(String args[]) {
 		
