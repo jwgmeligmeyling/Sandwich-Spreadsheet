@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+ * This class can be left alone.
+ * Register new functions in the Functions ENUM (Functions.java)
+ */
 /**
  * Abstract class for parsing functions
  * @author jgmeligmeyling

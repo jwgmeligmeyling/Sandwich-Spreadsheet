@@ -5,6 +5,9 @@ package Functions;
  * Parser will use this enum for the functions.
  */
 enum Functions {
+	/*
+	 * Register your functions here!
+	 */
 	ADD(Add.class);
 	
 	/*
