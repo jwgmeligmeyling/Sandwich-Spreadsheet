@@ -1,7 +1,7 @@
 package GUI;
 
 import javax.swing.*;
-import java.awt.*;
+
 import java.awt.event.*;
 
 /**
@@ -48,6 +48,7 @@ public class Window extends JFrame implements ActionListener {
 	//javax.swing.JPanel
 	//private Statusbar statusBar = new Statusbar();
 	
+	@SuppressWarnings("unused")
 	private JTable tabel = new JTable();
 	
 /**
@@ -95,7 +96,7 @@ public class Window extends JFrame implements ActionListener {
 			
 		
 		//tabs.setLayout(new GridLayout(AANTAL_KOLOMMEN, AANTAL_RIJEN));
-		tabs.addTab("Spreadsheet");
+		tabs.addTab("Spreadsheet", jbnTempKnop);
 		add(tabs);
 		
 		
