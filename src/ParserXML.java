@@ -5,6 +5,7 @@ import org.w3c.dom.*;
 public class ParserXML {
 	
 	// Maarten, als je een dergelijk pad gebruikt, werkt hij bij iedereen, toch?
+	// Zoals ik zie is dit DOM - aka het snellere alternatief was SAX waar ik al aan begonnen was, zie de XMLRead -Jim
 	static String FILE_ADDRESS = "bron.xml";
 	
 	public static void main(String args[]) {
