@@ -1,6 +1,6 @@
 package GUI;
-import javax.swing.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -48,6 +48,8 @@ public class Window extends JFrame implements ActionListener {
 	//javax.swing.JPanel
 	//private Statusbar statusBar = new Statusbar();
 	
+	private JTable tabel = new JTable();
+	
 /**
  * Constructor voor Frame
  * 
@@ -89,6 +91,14 @@ public class Window extends JFrame implements ActionListener {
 			menuHelp.setMnemonic('h');
 			menuHelp.add(jmiHelp);	jmiHelp.setMnemonic('h');
 			
+			
+			
+		
+		//tabs.setLayout(new GridLayout(AANTAL_KOLOMMEN, AANTAL_RIJEN));
+		tabs.addTab("Spreadsheet");
+		add(tabs);
+		
+		
 		
 		grid = new JTextField[AANTAL_RIJEN][AANTAL_KOLOMMEN];			// allocate the size of grid
 		for (int y = 0; y < AANTAL_RIJEN; y++) {
@@ -97,10 +107,6 @@ public class Window extends JFrame implements ActionListener {
 				this.add(grid[x][y]);									// adds text fields to grid
 			}
 		}
-		
-		//tabs.setLayout(new GridLayout(AANTAL_KOLOMMEN, AANTAL_RIJEN));
-		tabs.addTab("Spreadsheet", jbnTempKnop);
-		add(tabs);
 		
 		// Add ActionListeners
 		jmiOpen.addActionListener(this);
