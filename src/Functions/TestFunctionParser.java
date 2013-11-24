@@ -71,4 +71,11 @@ public class TestFunctionParser {
 		Function f = Function.parse("ADD(5.9,3.4)");
 		assertEquals(9.3, f.toDouble(), 1E-15);
 	}
+	
+	@Test
+	public void testSingleSubstractDoubleParseTrue() throws InstantiationException, IllegalAccessException {
+		Function f = Function.parse("SUBTRACT(3.3,1.1)");
+		assertEquals(2.2, f.toDouble(), 1E-15);
+	}
+
 }
