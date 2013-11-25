@@ -1,8 +1,13 @@
 package Events;
-import java.awt.event.*;
 
+import java.awt.event.*;
 import javax.swing.JOptionPane;
 
+/**
+ * 
+ * @author 
+ *
+ */
 class Luisteren implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
 	@Override

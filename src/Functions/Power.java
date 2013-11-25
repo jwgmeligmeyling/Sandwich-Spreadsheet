@@ -2,9 +2,9 @@ package Functions;
 
 /**
  * ADD function
- * Returns FunctionA ^ 
+ * Function Power returns: argument[0] ^ argument[1]
  * @author Maarten Flikkema
- *
+ * @author jgmeligmeyling
  */
 public class Power extends Function
 {

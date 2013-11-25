@@ -8,14 +8,13 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * Dit is de XML Parser. Hiervoor maken we gebruik van SAX (sax2r2.jar)
+ * @author Jim
+ * 
+ */
 public class XMLRead {
 	
-	/**
-	 * @param args
-	 * 
-	 * Dit is de XML Parser. Hiervoor maken we gebruik van SAX (sax2r2.jar)
-	 * 
-	 */
 	
 	public static void main(String[] args){
 		
@@ -43,7 +42,6 @@ public class XMLRead {
 					if(qName.equalsIgnoreCase("CELL")){
 						bcell = true;
 					}
-					
 				}
 				
 				/**
@@ -66,9 +64,6 @@ public class XMLRead {
 						bcell = false;
 					}
 				}
-				
-				
-			
 			};
 			
 			saxParser.parse("bron.xml",handler);
