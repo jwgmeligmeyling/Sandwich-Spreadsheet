@@ -1,10 +1,21 @@
+package File;
+
+/**
+ * 
+ * @author Maarten Flikkema
+ *
+ */
 public class Cel extends Sheet {
+	/*
+	 *
+	 */
 
 	protected Object waarde;
 	protected String type;
 	protected boolean hasFormula;
 
 	public Cel(Object waardeIn, String typeIn) {
+		super();
 		waarde = waardeIn;
 		type = typeIn;
 		checkContent();
