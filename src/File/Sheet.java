@@ -34,4 +34,21 @@ public class Sheet extends SpreadSheetFile {
 	public void setSheetName(String newSheetName) {
 		sheetName = newSheetName;
 	}
+	
+	/**
+	 * 
+	 * @return ArrayList rows
+	 */
+	public ArrayList<Row> getRows() {
+		return rows;
+	}
+	
+	/**
+	 * 
+	 * @param rowIndex	rij-index
+	 * @return de gevraagde rij
+	 */
+	public Row getRow(int rowIndex) {
+		return rows.get(rowIndex);
+	}
 }

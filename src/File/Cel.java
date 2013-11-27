@@ -13,18 +13,16 @@ public class Cel {
     private String formula;
 	private Object value;
 	private String type;
-	private boolean hasFormula;
 	
 	/**
 	 * Constructor voor Cel
 	 * @param waardeIn
 	 * @param typeIn
 	 */
-	public Cel(Object valueIn, String typeIn) {
+	public Cel(int column, Object valueIn, String typeIn) {
 		super();
 		value = valueIn;
 		type = typeIn;
-		checkContent();
 	}
 	
 	/**
@@ -47,20 +45,12 @@ public class Cel {
 	public String getType() {
 		return type;
 	}
-
+	
 	/**
-	 * @return true desda het Cel-object een formule bevat
+	 * @return true als het Cel-object een formule bevat
 	 * @see checkContent
 	 */
 	public boolean hasFormula() {
-		return hasFormula;
-	}
-
-	/**
-	 * Op basis van het eerste teken van de raw-waarde van Object waarde wordt
-	 * bepaald of de inhoud als formule moet worden beschouwd (net als in Excel)
-	 */
-	public void checkContent() {
-		hasFormula = (((String)value).substring(0, 1).equals("="));
+		return (formula != null);
 	}
 }
