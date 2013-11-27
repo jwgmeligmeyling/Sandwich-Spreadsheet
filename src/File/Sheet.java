@@ -1,4 +1,7 @@
 package File;
+
+import java.util.ArrayList;
+
 /**
  * 
  * @author Maarten
@@ -7,6 +10,7 @@ package File;
 public class Sheet extends SpreadSheetFile {
 	
 	private String sheetName;
+	private ArrayList<ArrayList<Cel>>[] cellen;
 	
 	/**
 	 * Constructor for declaring a new sheet
