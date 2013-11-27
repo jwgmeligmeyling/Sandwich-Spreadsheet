@@ -1,0 +1,20 @@
+<Workbook>
+	<Worksheet Name="Bladnaam1">
+		<Row index="0">
+			<Cell column="0" type="String" formula="">hoi</Cell>
+			<Cell column="1" type="String" formula="=A1">hoi</Cell>
+		</Row>
+		<Row index="1">
+			<Cell column="0" type="Number" formula="">1</Cell>
+		</Row>
+		<Row index="2">
+			<Cell column="0" type="String" formula="">5.2365</Data></Cell>
+		</Row>
+		<Row index="3">
+			<Cell column="0" type="String" formula="=SUM(5,4)">9</Cell>
+		</Row>
+		<Row index="5">
+			<Cell column"0" type="String" formula="">Na lege regel</Cell>
+		</Row>
+	</Worksheet>
+</Workbook>

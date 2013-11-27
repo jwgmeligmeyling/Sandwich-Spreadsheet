@@ -5,27 +5,32 @@ package File;
  * @author Maarten Flikkema
  *
  */
-public class Cel extends Sheet {
+public class Cel {
 	/*
-	 *
+	 * 
 	 */
-
-	protected Object waarde;
-	protected String type;
-	protected boolean hasFormula;
-
-	public Cel(Object waardeIn, String typeIn) {
+    private String formula;
+	private Object value;
+	private String type;
+	private boolean hasFormula;
+	
+	/**
+	 * Constructor voor Cel
+	 * @param waardeIn
+	 * @param typeIn
+	 */
+	public Cel(Object valueIn, String typeIn) {
 		super();
-		waarde = waardeIn;
+		value = valueIn;
 		type = typeIn;
 		checkContent();
 	}
-
+	
 	/**
 	 * @return de raw-waarde van Object waarde
 	 */
-	public Object getWaarde() {
-		return waarde;
+	public Object getValue() {
+		return value;
 	}
 
 	/*
@@ -55,6 +60,6 @@ public class Cel extends Sheet {
 	 * bepaald of de inhoud als formule moet worden beschouwd (net als in Excel)
 	 */
 	public void checkContent() {
-		hasFormula = (((String) waarde).substring(0, 1).equals("="));
+		hasFormula = (((String)value).substring(0, 1).equals("="));
 	}
 }
