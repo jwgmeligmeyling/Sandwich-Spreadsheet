@@ -6,62 +6,55 @@ import java.awt.Color;
  * @author Maarten Flikkema
  */
 public class Cell implements Interfaces.Cell {
-	
+
 	private String input;
 	private String value;
-	
-	private Color bColor;
+
+	private CelType type;
+
 	private Color fColor;
+	private Color bColor;
 	
-	public Cell() {
-		
+	/**
+	 * Constructor voor Cell
+	 */
+	public Cell(String inputIn, CelType typeIn, Color fColorIn, Color bColorIn) {
+		input = inputIn;
+		type = typeIn;
+		fColor = fColorIn;
+		bColor = bColorIn;
 	}
-
-	@Override
-	public String getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getInput() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setInput(String newInput) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void updateValue() {
-		// TODO Auto-generated method stub
-		
+		/*
+		 * Hier moet de value van de Cell opnieuw worden berekend namens input.
+		 */
 	}
-
+	
 	@Override
-	public Color getFColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public String getValue() { return value; }
+	
 	@Override
-	public Color getBColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	public String getInput() { return input; }
 	@Override
-	public void setFColor(Color newFColor) {
-		// TODO Auto-generated method stub
-		
+	public void setInput(String newInput) {
+		input = newInput;
+		updateValue();
 	}
-
+	
 	@Override
-	public void setBColor(Color newBColor) {
-		// TODO Auto-generated method stub
-		
-	}
+	public CelType getType() { return type; }
+	@Override
+	public void setType(CelType newType) { type = newType; }
+	
+	@Override
+	public Color getFColor() { return fColor; }
+	@Override
+	public void setFColor(Color newFColor) { fColor = newFColor; }
+	
+	@Override
+	public Color getBColor() { return bColor; }
+	@Override
+	public void setBColor(Color newBColor) { bColor = newBColor; }
 }

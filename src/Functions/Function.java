@@ -148,4 +148,13 @@ public abstract class Function implements Interfaces.Function {
 		return Functions.valueOf(name).create(arguments);
 	}
 
+	@Override
+	public String valueOf() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public static boolean isFunction(String testString) {
+		return (testString.charAt(0) == '=');
+	}
 }
