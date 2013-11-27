@@ -39,6 +39,15 @@ public class XMLRead {
 					
 					System.out.println("Start Element: "+qName);
 					
+					int length = attributes.getLength();
+					
+					for(int i = 0; i < length; i++){
+						String attrname = attributes.getQName(i);
+						System.out.println("Attr. Name: "+attrname);
+						String value = attributes.getValue(i);
+						System.out.println("Value:"+value);	
+					}
+					
 					if(qName.equalsIgnoreCase("CELL")){
 						bcell = true;
 					}
