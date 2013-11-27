@@ -10,9 +10,9 @@ import File.Cell;
 public interface Row {
 	
 	/**
-	 * Get the Cell at a specific column index
-	 * @param column index
-	 * @return Cell at index
+	 * Get the Cell at a specific column index in the Row.
+	 * @param colIndex index of the column of the desired Cell-object
+	 * @return Cell in the row at the given column index
 	 */
 	public Cell getCell(int colIndex);
 	

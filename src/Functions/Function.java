@@ -47,7 +47,7 @@ public abstract class Function implements Interfaces.Function {
 	
 	/**
 	 * Method to parse Math strings
-	 * @param {String} input
+	 * @param input
 	 * @return {Function}
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException

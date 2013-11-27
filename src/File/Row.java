@@ -29,9 +29,9 @@ public class Row implements Interfaces.Row {
 	}
 	
 	/**
-	 * 
-	 * @param colIndex
-	 * @return
+	 * Get the Cell at a given column index in a Row (this)
+	 * @param colIndex is the column index the desired Cell is in
+	 * @return Cell at the given column index in this Row
 	 */
 	@Override
 	public Cell getCell(int colIndex) {

@@ -23,16 +23,16 @@ public interface Sheet {
 	public List<Row> getRows();
 	
 	/**
-	 * Method to get the row at supplied index
-	 * @param index of the row
-	 * @return Row at index
+	 * Method to get the row at supplied index.
+	 * @param rowIndex is the index of the desired row (row number - 1)
+	 * @return Row at the given row index
 	 */
 	public Row getRow(int rowIndex);
 
 	/**
 	 * Method to get the cell at given row and column index
-	 * @param index of row
-	 * @param index of column
+	 * @param rowIndex is the index of the row the desired Cell is in
+	 * @param colIndex is the index of the column the desired Cell is in
 	 * @return row at given indexes
 	 */
 	public Cell getCell(int rowIndex, int colIndex);
