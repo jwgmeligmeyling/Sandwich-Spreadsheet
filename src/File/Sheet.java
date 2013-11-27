@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Sheet extends SpreadSheetFile {
 	
 	private String sheetName;
-	private ArrayList<ArrayList<Cel>>[] cellen;
+	private ArrayList<Row> rows;
 	
 	/**
 	 * Constructor for declaring a new sheet

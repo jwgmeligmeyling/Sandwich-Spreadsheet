@@ -6,9 +6,10 @@ package File;
  *
  */
 public class Cel {
-	/*
+	/* 
 	 * 
 	 */
+	private int column;
     private String formula;
 	private Object value;
 	private String type;
