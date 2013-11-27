@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author Maarten
  * @version 2013-11-25
  */
-public class Sheet {
+public class Sheet implements Interfaces.Sheet {
 	
 	private String sheetName;
 	private ArrayList<Row> rows;
@@ -52,7 +52,7 @@ public class Sheet {
 		return rows.get(rowIndex);
 	}
 	
-	public Cel getCel(int rowIndex, int colIndex) {
+	public Cell getCell(int rowIndex, int colIndex) {
 		return rows.get(rowIndex).getCell(colIndex);
 	}
 }

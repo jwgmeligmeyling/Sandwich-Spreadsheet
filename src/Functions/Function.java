@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * The Function class defines a static Parse method to convert Strings to Functions 
  * @author Jan-Willem Gmelig Meyling
  */
-public abstract class Function {
+public abstract class Function implements Interfaces.Function {
 	
 	/*
 	 * Constants

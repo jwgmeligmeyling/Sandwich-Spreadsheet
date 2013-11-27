@@ -2,10 +2,10 @@ package File;
 
 import java.util.ArrayList;
 
-public class Row {
+public class Row implements Interfaces.Row {
 	
 	private int rowNum;
-	private ArrayList<Cel> columns;
+	private ArrayList<Cell> cells;
 	
 	/**
 	 * Constructor voor Row
@@ -19,12 +19,13 @@ public class Row {
 	 * 
 	 * @param celIn
 	 */
-	public void addCell(Cel celIn) {
-		columns.add(celIn);
+	public void addCell(Cell celIn) {
+		cells.add(celIn);
 	}
 	
-	public ArrayList<Cel> getcolumns() {
-		return columns;
+	
+	public ArrayList<Cell> getcolumns() {
+		return cells;
 	}
 	
 	/**
@@ -32,7 +33,13 @@ public class Row {
 	 * @param colIndex
 	 * @return
 	 */
-	public Cel getCell(int colIndex) {
-		return columns.get(colIndex);
+	@Override
+	public Cell getCell(int colIndex) {
+		return cells.get(colIndex);
+	}
+
+	@Override
+	public int getRowNum() {
+		return rowNum;
 	}
 }
