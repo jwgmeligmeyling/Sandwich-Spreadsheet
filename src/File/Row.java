@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Row {
 	
 	private int rowNum;
-	private ArrayList<Cel> cells;
+	private ArrayList<Cel> columns;
 	
 	/**
 	 * Constructor voor Row
@@ -20,11 +20,11 @@ public class Row {
 	 * @param celIn
 	 */
 	public void addCell(Cel celIn) {
-		cells.add(celIn);
+		columns.add(celIn);
 	}
 	
-	public ArrayList<Cel> getCells() {
-		return cells;
+	public ArrayList<Cel> getcolumns() {
+		return columns;
 	}
 	
 	/**
@@ -33,6 +33,6 @@ public class Row {
 	 * @return
 	 */
 	public Cel getCell(int colIndex) {
-		return cells.get(colIndex);
+		return columns.get(colIndex);
 	}
 }

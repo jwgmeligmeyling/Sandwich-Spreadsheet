@@ -1,5 +1,7 @@
 package File;
 
+import java.awt.Color;
+
 /**
  * 
  * @author Maarten Flikkema
@@ -9,9 +11,13 @@ public class Cel {
 	/* 
 	 * 
 	 */
-	private int column;
     private String formula;
-	private Object value;
+	private String input;
+	private String value;
+	
+	private Color bColor;
+	private Color fColor;
+	
 	private String type;
 	
 	/**
@@ -19,17 +25,19 @@ public class Cel {
 	 * @param waardeIn
 	 * @param typeIn
 	 */
-	public Cel(int column, Object valueIn, String typeIn) {
-		super();
-		value = valueIn;
-		type = typeIn;
+	public Cel(String inputIn) {
+		input = inputIn;
 	}
 	
 	/**
 	 * @return de raw-waarde van Object waarde
 	 */
-	public Object getValue() {
+	public String getValue() {
 		return value;
+	}
+	
+	public String getInput() {
+		return input;
 	}
 
 	/*
@@ -38,6 +46,23 @@ public class Cel {
 	 * getWaardeDouble() { return (Double) waarde; } public boolean
 	 * getWaardeBoolenan() {return (Boolean) waarde; }
 	 */
+	
+	public void setInput(String inputIn) {
+		input = inputIn;
+		updateValue();
+	}
+	
+	public void updateValue() {
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * @return het opgeslagen type van de celinhoud of van het resultaat van de
 	 *         formule in de cel
