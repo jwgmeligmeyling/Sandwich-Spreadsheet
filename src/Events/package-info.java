@@ -1,5 +1,5 @@
 /**
- * Package for all Mouse and Key events (Actions)
+ * Package voor alle Mouse en Key events (Actions)
  */
 /**
  * @author Maarten

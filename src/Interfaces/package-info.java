@@ -1,7 +1,7 @@
 /**
  * @author Maarten Flikkema
  * @author Liam Clark
- * In deze interfaces-package worden alle Interfaces gezet zodat deze niet in de weg staan in de andere packages.
- * Voor het implementeren van een interface, gebruik: "implements Interfaces.[Class.name]
+ * This interface package contains all used interfaces.
+ * To implement one of those interfaces, use: "implements Interfaces.[class name]"
  */
 package Interfaces;

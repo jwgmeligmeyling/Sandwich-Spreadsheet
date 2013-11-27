@@ -16,7 +16,7 @@ public class MenuBar implements ActionListener{
 	}
 	
 	public static void FileExit_Click() {
-		int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit", "Confirmation", JOptionPane.YES_NO_OPTION);
+		int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Please confirm", JOptionPane.YES_NO_OPTION);
 		if (answer == JOptionPane.YES_OPTION) { System.exit(0);	}
 	}
 	
@@ -49,6 +49,10 @@ public class MenuBar implements ActionListener{
 	}
 	
 	public static void InsertFunction_Click() {
+		
+	}
+	
+	public static void InsertWorksheet_Click() {
 		
 	}
 

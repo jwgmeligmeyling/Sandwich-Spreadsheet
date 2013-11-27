@@ -38,10 +38,18 @@ public class Window extends JFrame implements ActionListener {
 		
 	private JMenu menuInsert = new JMenu("Insert");
 		private JMenuItem jmiInsFunction = new JMenuItem("Insert Function");
-		private JMenuItem jmiInsGraph = new JMenuItem("Make Graph");
+		private JMenuItem jmiInsGraph = new JMenuItem("Create new Graph");
+		private JMenuItem jmiInsSheet = new JMenuItem("Create new Sheet");
 		
 	private JMenu menuHelp = new JMenu("Help");
 		private JMenuItem jmiHelp = new JMenuItem("Help");
+		
+	
+	private JToolBar tbMain = new JToolBar();
+		//private 
+		
+		
+		
 		
 	JTabbedPane tabs = new JTabbedPane();
 	private JButton jbnTempKnop = new JButton("Test");
@@ -87,6 +95,7 @@ public class Window extends JFrame implements ActionListener {
 			menuInsert.setMnemonic('i');
 			menuInsert.add(jmiInsGraph);	jmiInsGraph.setMnemonic('g');
 			menuInsert.add(jmiInsFunction);	jmiInsFunction.setMnemonic('f');
+			menuInsert.add(jmiInsSheet);	jmiInsSheet.setMnemonix('s');
 			
 		jmb.add(menuHelp);
 			menuHelp.setMnemonic('h');
@@ -121,6 +130,7 @@ public class Window extends JFrame implements ActionListener {
 		jmiZoom.addActionListener(this);
 		jmiInsGraph.addActionListener(this);
 		jmiInsFunction.addActionListener(this);
+		jmiInsSheet.addActionListener(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();		// sets appropriate size for frame
@@ -147,6 +157,7 @@ public class Window extends JFrame implements ActionListener {
 		// Menu Insert
 		if (e.getSource() == jmiInsGraph) {		MenuBar.InsertGraph_Click(); }
 		if (e.getSource() == jmiInsFunction) {	MenuBar.InsertFunction_Click();
+		if (e.getSource() == jmiInsSheet) {		MenuBar.InsertWorksheet_Click(); }
 		}
 	}
 }
