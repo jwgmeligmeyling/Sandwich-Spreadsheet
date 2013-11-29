@@ -10,7 +10,7 @@ public class Divide extends Function
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder("POW(");
+		StringBuilder sb = new StringBuilder("DIVIDE(");
 		int i = 0, l = arguments.length;
 		
 		while (true)
@@ -27,15 +27,14 @@ public class Divide extends Function
 		sb.append(")");
 		return sb.toString();
 	}
-
+	
 	@Override
 	public int toInteger() {
-		return (int) Math.pow(arguments[0].toInteger(), arguments[1].toInteger());
+		return (int)(arguments[0].toDouble() / arguments[1].toDouble());
 	}
-
+	
 	@Override
 	public double toDouble() {
-		return Math.pow(arguments[0].toDouble(), arguments[1].toDouble());
-
+		return arguments[0].toDouble() / arguments[1].toDouble();
 	}
 }

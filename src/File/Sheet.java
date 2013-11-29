@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author Maarten
  * @version 2013-11-25
  */
-public class Sheet extends SpreadSheetFile {
+public class Sheet implements Interfaces.Sheet {
 	
 	private String sheetName;
 	private ArrayList<Row> rows;
@@ -33,5 +33,31 @@ public class Sheet extends SpreadSheetFile {
 	 */
 	public void setSheetName(String newSheetName) {
 		sheetName = newSheetName;
+	}
+	
+	/**
+	 * 
+	 * @return ArrayList rows
+	 */
+	public ArrayList<Row> getRows() {
+		return rows;
+	}
+	
+	/**
+	 * 
+	 * @param rowIndex	rij-index
+	 * @return de gevraagde rij
+	 */
+	public Row getRow(int rowIndex) {
+		return rows.get(rowIndex);
+	}
+	
+	public Cell getCell(int rowIndex, int colIndex) {
+		return rows.get(rowIndex).getCell(colIndex);
+	}
+	
+	@Override
+	public String getSheetNaam() {
+		return sheetName;
 	}
 }

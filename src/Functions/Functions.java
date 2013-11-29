@@ -9,8 +9,10 @@ enum Functions {
 	 * Register your functions here!
 	 */
 	ADD(Add.class),
+	SUBTRACT(Subtract.class),
 	POWER(Power.class),
-	SUBTRACT(Subtract.class);
+	ROUND(Round.class),
+	DIVIDE(Divide.class);
 	
 	/*
 	 *  Functions.valueOf("ADD") => ADD
@@ -24,8 +26,8 @@ enum Functions {
 		c = f;
 	}
 	
-	Function create(Function... arguments) throws InstantiationException, IllegalAccessException
-	{
+	Function create(Function... arguments) throws InstantiationException,
+			IllegalAccessException {
 		Function f = c.newInstance();
 		f.arguments = arguments;
 		return f;

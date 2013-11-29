@@ -1,8 +1,8 @@
 package GUI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
-
-import java.awt.event.*;
 
 /**
  * @author Maarten Flikkema
@@ -14,10 +14,11 @@ import java.awt.event.*;
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 	
+	
 	/**
 	 * Declaratie van controls.
 	 */
-	private JTextField[][] grid;				// names the grid of buttons
+	//private JTextField[][] grid;				// names the grid of buttons
 	private JMenuBar jmb = new JMenuBar();
 
 	private JMenu menuFile = new JMenu("File");
@@ -38,17 +39,21 @@ public class Window extends JFrame implements ActionListener {
 		
 	private JMenu menuInsert = new JMenu("Insert");
 		private JMenuItem jmiInsFunction = new JMenuItem("Insert Function");
-		private JMenuItem jmiInsGraph = new JMenuItem("Make Graph");
+		private JMenuItem jmiInsGraph = new JMenuItem("Create new Graph");
+		private JMenuItem jmiInsSheet = new JMenuItem("Create new Sheet");
 		
 	private JMenu menuHelp = new JMenu("Help");
 		private JMenuItem jmiHelp = new JMenuItem("Help");
 		
+	
+	private JToolBar tbMain = new JToolBar();
+		//private 
+	
 	JTabbedPane tabs = new JTabbedPane();
 	private JButton jbnTempKnop = new JButton("Test");
 	//javax.swing.JPanel
 	//private Statusbar statusBar = new Statusbar();
 	
-	@SuppressWarnings("unused")
 	private JTable tabel = new JTable();
 	
 /**
@@ -87,6 +92,7 @@ public class Window extends JFrame implements ActionListener {
 			menuInsert.setMnemonic('i');
 			menuInsert.add(jmiInsGraph);	jmiInsGraph.setMnemonic('g');
 			menuInsert.add(jmiInsFunction);	jmiInsFunction.setMnemonic('f');
+			menuInsert.add(jmiInsSheet);	jmiInsSheet.setMnemonic('s');
 			
 		jmb.add(menuHelp);
 			menuHelp.setMnemonic('h');
@@ -100,7 +106,7 @@ public class Window extends JFrame implements ActionListener {
 		add(tabs);
 		
 		
-		
+		/*
 		grid = new JTextField[AANTAL_RIJEN][AANTAL_KOLOMMEN];			// allocate the size of grid
 		for (int y = 0; y < AANTAL_RIJEN; y++) {
 			for (int x = 0; x < AANTAL_KOLOMMEN; x++) {
@@ -108,6 +114,7 @@ public class Window extends JFrame implements ActionListener {
 				this.add(grid[x][y]);									// adds text fields to grid
 			}
 		}
+		*/
 		
 		// Add ActionListeners
 		jmiOpen.addActionListener(this);
@@ -121,6 +128,7 @@ public class Window extends JFrame implements ActionListener {
 		jmiZoom.addActionListener(this);
 		jmiInsGraph.addActionListener(this);
 		jmiInsFunction.addActionListener(this);
+		jmiInsSheet.addActionListener(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();		// sets appropriate size for frame
@@ -147,6 +155,7 @@ public class Window extends JFrame implements ActionListener {
 		// Menu Insert
 		if (e.getSource() == jmiInsGraph) {		MenuBar.InsertGraph_Click(); }
 		if (e.getSource() == jmiInsFunction) {	MenuBar.InsertFunction_Click();
+		if (e.getSource() == jmiInsSheet) {		MenuBar.InsertWorksheet_Click(); }
 		}
 	}
 }

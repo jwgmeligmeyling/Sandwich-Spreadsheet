@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * The Function class defines a static Parse method to convert Strings to Functions 
  * @author Jan-Willem Gmelig Meyling
  */
-public abstract class Function {
+public abstract class Function implements Interfaces.Function {
 	
 	/*
 	 * Constants
@@ -47,7 +47,7 @@ public abstract class Function {
 	
 	/**
 	 * Method to parse Math strings
-	 * @param {String} input
+	 * @param input
 	 * @return {Function}
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
@@ -148,4 +148,13 @@ public abstract class Function {
 		return Functions.valueOf(name).create(arguments);
 	}
 
+	@Override
+	public String valueOf() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public static boolean isFunction(String testString) {
+		return (testString.charAt(0) == '=');
+	}
 }

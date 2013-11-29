@@ -1,5 +1,5 @@
 package File;
 
-public class Graph extends SpreadSheetFile {
-
+public class Graph {
+	
 }

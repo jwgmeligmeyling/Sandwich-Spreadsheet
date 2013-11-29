@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 
 /**
  * 
- * @author 
+ * @author Maarten Flikkema
  *
  */
 class Luisteren implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
