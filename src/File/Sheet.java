@@ -55,4 +55,9 @@ public class Sheet implements Interfaces.Sheet {
 	public Cell getCell(int rowIndex, int colIndex) {
 		return rows.get(rowIndex).getCell(colIndex);
 	}
+	
+	@Override
+	public String getSheetNaam() {
+		return sheetName;
+	}
 }

@@ -1,6 +1,7 @@
 package File;
 
 import java.awt.Color;
+import java.util.Observable;
 
 /**
  * @author Maarten Flikkema
@@ -57,4 +58,10 @@ public class Cell implements Interfaces.Cell {
 	public Color getBColor() { return bColor; }
 	@Override
 	public void setBColor(Color newBColor) { bColor = newBColor; }
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
 }
