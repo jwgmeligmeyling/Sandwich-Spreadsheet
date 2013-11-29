@@ -29,26 +29,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package GUI;
+package Zandbak;
 
 /*
  * TabbedPaneDemo.java requires one additional file:
  *   images/middle.gif.
  */
 
-import javax.swing.JTabbedPane;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 
 @SuppressWarnings("serial")
 public class TabbedPaneDemo extends JPanel {
@@ -74,14 +65,14 @@ public class TabbedPaneDemo extends JPanel {
 		panel4.setPreferredSize(new Dimension(410, 50));
 		tabbedPane.addTab("Tab 4", icon, panel4, "Does nothing at all");
 		tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
-
+		
 		// Add the tabbed pane to this panel.
 		add(tabbedPane);
 
 		// The following line enables to use scrolling tabs.
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 	}
-
+	
 	protected JComponent makeTextPanel(String text) {
 		JPanel panel = new JPanel(false);
 		JLabel filler = new JLabel(text);
