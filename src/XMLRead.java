@@ -28,6 +28,8 @@ public class XMLRead {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 			
+			final StringBuilder inhoud = new StringBuilder();
+			
 			DefaultHandler handler = new DefaultHandler() {
 				
 				boolean bcell = false;
@@ -56,15 +58,6 @@ public class XMLRead {
 				}
 
 				/**
-				 * Print het einde van het element.
-				 */
-				public void endElement(String uri, String localName, String qName) throws SAXException {
-					
-					System.out.println("End Element:    " + qName);
-					
-				}
-
-				/**
 				 * Deze functie print de inhoud van het element. De String
 				 * inhoud neemt de opgegeven array van chars, en vormt zo de
 				 * string met het antwoord. Dit dienen wij te gebruiken om
@@ -72,14 +65,28 @@ public class XMLRead {
 				 */
 				public void characters(char ch[], int start, int length) throws SAXException {
 					if (bcell) {
-						String inhoud = new String(ch, start, length);
-						System.out.println("CELL: " + inhoud);
-						bcell = false;
+						String inhoudcell = new String(ch, start, length);
+						System.out.println("CELL:           " + inhoudcell);
+						inhoud.append(inhoudcell);
 					}
+				}
+				
+				/**
+				 * Print het einde van het element.
+				 */
+				public void endElement(String uri, String localName, String qName) throws SAXException {
+					if(qName.equalsIgnoreCase("CELL")){
+						bcell = false;
+						System.out.println("Final Cell:     "+inhoud.toString());
+					}
+					
+					inhoud.setLength(0);
+					System.out.println("End Element:    " + qName);
+					
 				}
 			};
 
-			saxParser.parse("C:\\Users\\Maarten\\git\\OOP-Project-3A2\\xml\\nieuwe xml.xml", handler);
+			saxParser.parse("xml/fout.xml", handler);
 
 		} catch (SAXException e) {
 			System.out.println("Unhandled SAXException");
