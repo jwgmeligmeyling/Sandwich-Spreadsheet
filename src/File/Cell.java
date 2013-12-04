@@ -10,9 +10,9 @@ public class Cell implements Interfaces.Cell {
 
 	private String input;
 	private String value;
-
+	
 	private CelType type;
-
+	
 	private Color fColor;
 	private Color bColor;
 	
@@ -61,7 +61,7 @@ public class Cell implements Interfaces.Cell {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 }

@@ -2,6 +2,11 @@ package File;
 
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Liam Clark
+ *
+ */
 public class Row implements Interfaces.Row {
 	
 	private int rowNum;
