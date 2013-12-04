@@ -6,8 +6,12 @@ import java.util.Observable;
 /**
  * @author Maarten Flikkema
  */
-public class Cell implements Interfaces.Cell {
+public class Cell extends Observable implements Interfaces.Cell {
 
+	private int row;
+	private int column;
+	private String columnUser;
+	
 	private String input;
 	private String value;
 	
@@ -19,11 +23,9 @@ public class Cell implements Interfaces.Cell {
 	/**
 	 * Constructor voor Cell
 	 */
-	public Cell(String inputIn, CelType typeIn, Color fColorIn, Color bColorIn) {
+	public Cell(String inputIn) {
 		input = inputIn;
-		type = typeIn;
-		fColor = fColorIn;
-		bColor = bColorIn;
+		updateValue();
 	}
 	
 	@Override
@@ -45,6 +47,22 @@ public class Cell implements Interfaces.Cell {
 	}
 	
 	@Override
+	public boolean inputIsFunction() {
+		if (!input.equals("")) {
+			return (input.substring(0, 1).equals("="));
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int getRow() {return row; }
+	@Override
+	public int getColumn() { return column; }
+	@Override
+	public String getColumnString() { return columnUser; }
+	
+	@Override
 	public CelType getType() { return type; }
 	@Override
 	public void setType(CelType newType) { type = newType; }
@@ -58,10 +76,10 @@ public class Cell implements Interfaces.Cell {
 	public Color getBColor() { return bColor; }
 	@Override
 	public void setBColor(Color newBColor) { bColor = newBColor; }
-
+	
 	@Override
 	public void update(Observable o, Object arg) {
-		
+		// TODO Auto-generated method stub
 		
 	}
 }

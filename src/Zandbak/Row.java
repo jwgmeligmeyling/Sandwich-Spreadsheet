@@ -1,12 +1,12 @@
-package File;
+package Zandbak;
 
 import java.util.ArrayList;
 
-/**
- * 
- * @author Liam Clark
- *
- */
+import File.Cell;
+
+/** * * * * * * * * * * * * * * * * * * * * *
+* De klasse Row is niet meer in gebruik!  * *
+* * * * * * * * * * * * * * * * * * * * * * */
 public class Row implements Interfaces.Row {
 	
 	private int rowNum;

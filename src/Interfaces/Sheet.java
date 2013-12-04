@@ -1,8 +1,6 @@
 package Interfaces;
 
-import java.util.List;
-import File.Cell;
-import File.Row;
+import java.util.ArrayList;
 
 /**
  * @author Maarten Flikkema
@@ -17,17 +15,10 @@ public interface Sheet {
 	public String getSheetNaam();
 	
 	/**
-	 * Method to get all rows
-	 * @return List of rows
+	 * Method to get all cells
+	 * @return ArrayListList of cells
 	 */
-	public List<Row> getRows();
-	
-	/**
-	 * Method to get the row at supplied index.
-	 * @param rowIndex is the index of the desired row (row number - 1)
-	 * @return Row at the given row index
-	 */
-	public Row getRow(int rowIndex);
+	public ArrayList<File.Cell> getCells();
 
 	/**
 	 * Method to get the cell at given row and column index
@@ -36,4 +27,18 @@ public interface Sheet {
 	 * @return row at given indexes
 	 */
 	public Cell getCell(int rowIndex, int colIndex);
+	
+	/**
+	 * Method to get all cells in a given row
+	 * @param rowIndex
+	 * @return
+	 */
+	public ArrayList<File.Cell> getRowCells(int rowIndex);
+	
+	/**
+	 * Method to get all cells in a given column
+	 * @param colIndex
+	 * @return
+	 */
+	public ArrayList<File.Cell> getColumnCells(int colIndex);
 }
