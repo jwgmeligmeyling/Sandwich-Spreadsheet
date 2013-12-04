@@ -10,7 +10,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Dit is de XML Parser. Hiervoor maken we gebruik van SAX (sax2r2.jar)
- * @author Jim
+ * @author Jim Hommes
  * 
  */
 public class XMLRead {
