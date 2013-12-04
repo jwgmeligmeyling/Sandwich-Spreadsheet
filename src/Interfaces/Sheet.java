@@ -31,14 +31,14 @@ public interface Sheet {
 	/**
 	 * Method to get all cells in a given row
 	 * @param rowIndex
-	 * @return
+	 * @return all the cells in the given row
 	 */
 	public ArrayList<File.Cell> getRowCells(int rowIndex);
 	
 	/**
 	 * Method to get all cells in a given column
 	 * @param colIndex
-	 * @return
+	 * @return all the cells in the given column
 	 */
 	public ArrayList<File.Cell> getColumnCells(int colIndex);
 }
