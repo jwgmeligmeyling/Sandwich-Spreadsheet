@@ -4,6 +4,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -13,7 +14,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Jim
  * 
  */
-public class XMLRead {
+public class XMLRead extends DefaultHandler{
 	
 	
 	public static void main(String[] args){
@@ -26,7 +27,7 @@ public class XMLRead {
 			 */
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
-			
+						
 			DefaultHandler handler = new DefaultHandler(){
 			
 				boolean bcell = false;
@@ -45,21 +46,12 @@ public class XMLRead {
 						String attrname = attributes.getQName(i);
 						System.out.println("Attr. Name: "+attrname);
 						String value = attributes.getValue(i);
-						System.out.println("Value:"+value);	
+						System.out.println("Value: "+value);	
 					}
 					
 					if(qName.equalsIgnoreCase("CELL")){
 						bcell = true;
 					}
-				}
-				
-				/**
-				 * Print het einde van het element.
-				 */
-				public void endElement(String uri, String localName, String qName) throws SAXException{
-					
-					System.out.println("End Element: " + qName);
-									
 				}
 				
 				/**
@@ -73,9 +65,19 @@ public class XMLRead {
 						bcell = false;
 					}
 				}
+				
+				/**
+				 * Print het einde van het element.
+				 */
+				public void endElement(String uri, String localName, String qName) throws SAXException{
+					if(qName.equalsIgnoreCase("CELL")){
+						System.out.println("End Element: " + qName);
+					}
+					
+				}
 			};
 			
-			saxParser.parse("bron.xml",handler);
+			saxParser.parse("xml/fout.xml",handler);
 			
 		}catch(SAXException e){
 			System.out.println("Unhandled SAXException");
