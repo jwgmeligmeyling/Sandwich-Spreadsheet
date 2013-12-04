@@ -1,24 +1,25 @@
 <SPREADSHEET>
-<CELL row="4" column="4">
-I wonder how you handle
-line breaks in a cell?
-</CELL>
-<CELL row="10" column="1">
-Are doubly defined cells a problem for you?
-</CELL>
-<CELL row="10" column="2">
-It appears you show the first one, when a cell is doubly defined.
-</CELL>
-<CELL row="10" column="2">
-It appears you show the second one, when a cell is doubly defined.
-</CELL>
-<CELL row="2" column="1">
-If I use encoded symbols such as &lt; and &gt; or &amp;, how do they show?
-</CELL>
-<CELL row="2" column="2">
-<VALUE>
-What if I define another xml tag in here?
-</VALUE>
-Or will only the text 'outside' of 'VALUE' show?
-</CELL>
+	<CELL row="4" column="4">
+		I wonder how you handle
+		line breaks in a cell?
+	</CELL>
+	<CELL row="10" column="1">
+		Are doubly defined cells a problem for you?
+	</CELL>
+	<CELL row="10" column="2">
+		It appears you show the first one, when a cell is doubly defined.
+	</CELL>
+	<CELL row="10" column="2">
+		It appears you show the second one, when a cell is doubly defined.
+	</CELL>
+	<CELL row="2" column="1">
+		If I use encoded symbols such as &lt; and &gt; or &amp;, how do they
+		show?
+	</CELL>
+	<CELL row="2" column="2">
+		<VALUE>
+			What if I define another xml tag in here?
+		</VALUE>
+		Or will only the text 'outside' of 'VALUE' show?
+	</CELL>
 </SPREADSHEET>
