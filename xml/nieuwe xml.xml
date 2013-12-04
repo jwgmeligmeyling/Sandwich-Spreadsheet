@@ -8,7 +8,7 @@
 			<Cell column="0" type="Number" formula="">1</Cell>
 		</Row>
 		<Row index="2">
-			<Cell column="0" type="String" formula="">5.2365</Data></Cell>
+			<Cell column="0" type="String" formula="">5.2365</Cell>
 		</Row>
 		<Row index="3">
 			<Cell column="0" type="String" formula="=SUM(5,4)">9</Cell>

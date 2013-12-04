@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 /**
  * 
- * @author Maarten
- * @version 2013-11-25
- */
+ * @author Liam Clark
+ * @author Maarten Flikkema
+ * @version 1.0
+ * 
+ * */
 public class Sheet implements Interfaces.Sheet {
 	
 	private String sheetName;
