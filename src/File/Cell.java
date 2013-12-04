@@ -10,9 +10,9 @@ public class Cell implements Interfaces.Cell {
 
 	private String input;
 	private String value;
-
+	
 	private CelType type;
-
+	
 	private Color fColor;
 	private Color bColor;
 	
