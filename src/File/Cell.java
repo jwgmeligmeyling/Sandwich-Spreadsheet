@@ -20,6 +20,7 @@ public class Cell extends Observable implements Interfaces.Cell {
 	private Color fColor;
 	private Color bColor;
 	
+	
 	/**
 	 * Constructor voor Cell
 	 */

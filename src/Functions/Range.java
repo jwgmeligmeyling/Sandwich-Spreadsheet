@@ -36,7 +36,7 @@ public class Range implements Interfaces.Range {
 	public String getName() {
 		return name;
 	}
-
+	
 	@Override
 	public void setCells(Sheet sheet, Cell upLeft, Cell downRight) {
 		cells = sheet.getRangeCells(upLeft, downRight);
