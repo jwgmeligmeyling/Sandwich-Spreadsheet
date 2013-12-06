@@ -21,6 +21,11 @@ public class Sheet implements Interfaces.Sheet {
 		cells = new ArrayList<Cell>();
 	}
 	
+	public Sheet(String nameIn) {
+		sheetName = nameIn;
+		cells = new ArrayList<Cell>();
+	}
+	
 	@Override
 	public String getSheetName() {
 		return sheetName;
