@@ -1,7 +1,9 @@
 package Interfaces;
 
 import java.awt.Color;
+
 import File.CelType;
+
 import java.util.Observer;
 
 /**
