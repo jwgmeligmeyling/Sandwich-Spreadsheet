@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
@@ -19,11 +20,19 @@ public class XMLWrite {
 			
 			out.writeStartDocument("SPREADSHEET");
 			out.writeStartElement("CELL");
+			out.writeAttribute("row","1");
+			out.writeAttribute("column","4");
+			out.writeAttribute("type","");
 			
 			out.writeCharacters("Hallo! ik ben een cell");
 			
 			out.writeEndElement();
 			out.writeEndDocument();
+			
+			System.out.println("Klaar!");
+			
+			out.close();
+			output.close();
 			
 		}catch(FileNotFoundException e){
 			System.out.println("File not found!");
@@ -31,6 +40,8 @@ public class XMLWrite {
 			System.out.println("XML Stream exception");
 		}catch(UnsupportedEncodingException e){
 			System.out.println("Unsupported encoding exception");
+		}catch(IOException e){
+			System.out.println("IOException");
 		}
 	}
 }
