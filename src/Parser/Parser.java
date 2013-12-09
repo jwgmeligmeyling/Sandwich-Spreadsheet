@@ -173,6 +173,8 @@ public class Parser {
 				 * TODO References and Ranges
 				 * TODO "true" & "false"
 				 * TODO 0xFF
+				 * TODO Strings between ""
+				 * TODO Right-to-left operators
 				 */
 
 				getFunction();
