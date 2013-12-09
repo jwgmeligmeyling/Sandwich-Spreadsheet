@@ -1,5 +1,12 @@
 package File;
 
-public class Graph {
+/**
+ * 
+ * @author Maarten Flikkema
+ *
+ */
+public class Graph implements Interfaces.Graph {
+	
+	
 	
 }

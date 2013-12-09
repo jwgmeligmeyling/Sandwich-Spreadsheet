@@ -2,8 +2,7 @@ package Interfaces;
 
 /**
  * Interface voor de klasse Function
- * @author Maarten Flikkema
- * @author Liam Clark
+ * @author undef.
  */
 public interface Function {
 	

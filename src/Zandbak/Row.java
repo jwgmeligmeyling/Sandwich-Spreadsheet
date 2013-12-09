@@ -1,13 +1,13 @@
-package File;
+package Zandbak;
 
 import java.util.ArrayList;
 
-/**
- * 
- * @author Liam Clark
- *
- */
-public class Row implements Interfaces.Row {
+import File.Cell;
+
+/** * * * * * * * * * * * * * * * * * * * * *
+* De klasse Row is niet meer in gebruik!  * *
+* * * * * * * * * * * * * * * * * * * * * * */
+public class Row {
 	
 	private int rowNum;
 	private ArrayList<Cell> cells;
@@ -38,12 +38,10 @@ public class Row implements Interfaces.Row {
 	 * @param colIndex is the column index the desired Cell is in
 	 * @return Cell at the given column index in this Row
 	 */
-	@Override
 	public Cell getCell(int colIndex) {
 		return cells.get(colIndex);
 	}
 
-	@Override
 	public int getRowNum() {
 		return rowNum;
 	}

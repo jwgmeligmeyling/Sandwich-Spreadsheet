@@ -25,6 +25,12 @@ public interface Cell extends Observer {
 	public String getInput();
 	
 	/**
+	 * Check of de input van de cel een formule bevat.
+	 * @return true als er een functie/formule in de input staat.
+	 */
+	public boolean inputIsFunction();	
+	
+	/**
 	 * Method to change the current input of the cell.
 	 * @param newInput is the new input to parse
 	 */
@@ -35,6 +41,22 @@ public interface Cell extends Observer {
 	 * Checks is input contains a formula, if it does, it calculates the formula, else is takes over the value of input
 	 */
 	public void updateValue();
+	
+	
+	/**
+	 * @return the row index of the row (row 1 == index 0)
+	 */
+	public int getRow();
+	
+	/**
+	 * @return the column index of the row (column A == index 0)
+	 */
+	public int getColumn();
+	
+	/**
+	 * @return the column in user friendly form (e.a.: "A", "F", "AF") (column A == column 1 == index 0)
+	 */
+	public String getColumnString();
 	
 	/**
 	 * Method to get the overlay data type of this cell.
