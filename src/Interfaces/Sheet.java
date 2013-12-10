@@ -39,14 +39,14 @@ public interface Sheet {
 	 * @param rowIndex
 	 * @return all the cells in the given row
 	 */
-	public Cell[] getRowCells(int rowIndex);
+	public Range getRowCells(int rowIndex);
 	
 	/**
 	 * Method to get all cells in a given column
 	 * @param colIndex
 	 * @return all the cells in the given column
 	 */
-	public Cell[] getColumnCells(int colIndex);
+	public Range getColumnCells(int colIndex);
 	
 	/**
 	 * 
@@ -54,7 +54,7 @@ public interface Sheet {
 	 * @param downRight is the last cell in the expected range
 	 * @return an array of cells with all the celsl in the range form Cell upLeft to Cell downRigth
 	 */
-	public Cell[] getRangeCells(Cell upLeft, Cell downRight);
+	public Range getRangeCells(Cell upLeft, Cell downRight);
 	
 	/**
 	 * 
@@ -64,5 +64,5 @@ public interface Sheet {
 	 * @param colDownRight is the column index of the last cell in the range
 	 * @return an array of cells with all the cells in the range from cell(rowUp, colLeft) to cell(rowDown, colRight)
 	 */
-	public Cell[] getRangeCells(int rowUp, int colLeft, int rowDown, int colRight);
+	public Range getRangeCells(int rowUp, int colLeft, int rowDown, int colRight);
 }

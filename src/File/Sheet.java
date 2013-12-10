@@ -155,7 +155,7 @@ public class Sheet implements Interfaces.Sheet {
 	 * @author Jan-Willem Gmelig Meyling
 	 * 
 	 */
-	public class Range {
+	public class Range implements Interfaces.Range {
 		/**
 		 * The start of the <code>Range</code>
 		 */
@@ -208,6 +208,7 @@ public class Sheet implements Interfaces.Sheet {
 			this.numRows = bottomRight.rowIndex - topLeft.rowIndex + 1;
 		}
 
+		@Override
 		/**
 		 * Method to get an array of <code>Cell</code> instances from this
 		 * <code>Range</code>
@@ -310,24 +311,24 @@ public class Sheet implements Interfaces.Sheet {
 	}
 
 	@Override
-	public Cell[] getRowCells(int rowIndex) {
-		return new Row(rowIndex).getCellArray();
+	public Range getRowCells(int rowIndex) {
+		return new Row(rowIndex);
 	}
 
 	@Override
-	public Cell[] getColumnCells(int colIndex) {
-		return new Column(colIndex).getCellArray();
+	public Range getColumnCells(int colIndex) {
+		return new Column(colIndex);
 	}
 
 	@Override
-	public Cell[] getRangeCells(Cell upLeft, Cell downRight) {
-		return new Range(upLeft.position, downRight.position).getCellArray();
+	public Range getRangeCells(Cell upLeft, Cell downRight) {
+		return new Range(upLeft.position, downRight.position);
 	}
 
 	@Override
-	public Cell[] getRangeCells(int colLeft, int rowUp, int colRight,
+	public Range getRangeCells(int colLeft, int rowUp, int colRight,
 			int rowDown) {
 		return new Range(new Position(colLeft, rowUp), new Position(colRight,
-				rowDown)).getCellArray();
+				rowDown));
 	}
 }
