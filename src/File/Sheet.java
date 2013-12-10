@@ -184,7 +184,7 @@ public class Sheet implements Interfaces.Sheet {
 		 *             When the indexes are negative values or the down right
 		 *             values are not higher than the up left values.
 		 */
-		public Range(int colLeft, int rowUp, int colRight, int rowDown) {
+		Range(int colLeft, int rowUp, int colRight, int rowDown) {
 			this(new Position(colLeft, rowUp), new Position(colRight, rowDown));
 		}
 
@@ -197,7 +197,7 @@ public class Sheet implements Interfaces.Sheet {
 		 *             When the indexes are negative values or the down right
 		 *             values are not higher than the up left values.
 		 */
-		public Range(Position topLeft, Position bottomRight) {
+		Range(Position topLeft, Position bottomRight) {
 			assert topLeft.colIndex <= bottomRight.colIndex;
 			assert topLeft.rowIndex <= bottomRight.rowIndex;
 
@@ -231,7 +231,7 @@ public class Sheet implements Interfaces.Sheet {
 	 * @author Jan-Willem Gmelig Meyling
 	 * 
 	 */
-	private class Column extends Range {
+	public class Column extends Range {
 		/**
 		 * The constructor for a <code>Column</code>. Takes a column index as
 		 * argument, and creates a <code>Range</code> with all the
@@ -239,7 +239,7 @@ public class Sheet implements Interfaces.Sheet {
 		 * 
 		 * @param colIndex
 		 */
-		public Column(int colIndex) {
+		Column(int colIndex) {
 			super(colIndex, 0, colIndex, rowCount);
 		}
 	}
@@ -250,7 +250,7 @@ public class Sheet implements Interfaces.Sheet {
 	 * @author Jan-Willem Gmelig Meyling
 	 * 
 	 */
-	private class Row extends Range {
+	public class Row extends Range {
 		/**
 		 * The constructor for a <code>Row</code>. Takes a row index as
 		 * argument, and creates a <code>Range</code> with all the
@@ -258,7 +258,7 @@ public class Sheet implements Interfaces.Sheet {
 		 * 
 		 * @param rowIndex
 		 */
-		public Row(int rowIndex) {
+		Row(int rowIndex) {
 			super(0, rowIndex, columnCount, rowIndex);
 		}
 	}
@@ -289,13 +289,9 @@ public class Sheet implements Interfaces.Sheet {
 		sheetName = newSheetName;
 	}
 
-	public void putCellAt(Cell cell, int colIndex, int rowIndex) {
-		cells.put(new Position(colIndex, rowIndex), cell);
-	}
-
 	public Cell createCell(String value, int colIndex, int rowIndex) {
 		Position position = new Position(colIndex, rowIndex);
-		Cell cell = new Cell(position, value);
+		Cell cell = new Cell(this, position, value);
 		cells.put(position, cell);
 		return cell;
 	}
@@ -311,22 +307,22 @@ public class Sheet implements Interfaces.Sheet {
 	}
 
 	@Override
-	public Range getRowCells(int rowIndex) {
+	public Row getRow(int rowIndex) {
 		return new Row(rowIndex);
 	}
 
 	@Override
-	public Range getColumnCells(int colIndex) {
+	public Column getColumn(int colIndex) {
 		return new Column(colIndex);
 	}
 
 	@Override
-	public Range getRangeCells(Cell upLeft, Cell downRight) {
+	public Range getRange(Cell upLeft, Cell downRight) {
 		return new Range(upLeft.position, downRight.position);
 	}
 
 	@Override
-	public Range getRangeCells(int colLeft, int rowUp, int colRight,
+	public Range getRange(int colLeft, int rowUp, int colRight,
 			int rowDown) {
 		return new Range(new Position(colLeft, rowUp), new Position(colRight,
 				rowDown));

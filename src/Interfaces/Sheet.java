@@ -1,6 +1,8 @@
 package Interfaces;
 
 import File.Cell;
+import File.Sheet.Column;
+import File.Sheet.Row;
 
 /**
  * @author Maarten Flikkema
@@ -39,14 +41,14 @@ public interface Sheet {
 	 * @param rowIndex
 	 * @return all the cells in the given row
 	 */
-	public Range getRowCells(int rowIndex);
+	public Row getRow(int rowIndex);
 	
 	/**
 	 * Method to get all cells in a given column
 	 * @param colIndex
 	 * @return all the cells in the given column
 	 */
-	public Range getColumnCells(int colIndex);
+	public Column getColumn(int colIndex);
 	
 	/**
 	 * 
@@ -54,7 +56,7 @@ public interface Sheet {
 	 * @param downRight is the last cell in the expected range
 	 * @return an array of cells with all the celsl in the range form Cell upLeft to Cell downRigth
 	 */
-	public Range getRangeCells(Cell upLeft, Cell downRight);
+	public Range getRange(Cell upLeft, Cell downRight);
 	
 	/**
 	 * 
@@ -64,5 +66,5 @@ public interface Sheet {
 	 * @param colDownRight is the column index of the last cell in the range
 	 * @return an array of cells with all the cells in the range from cell(rowUp, colLeft) to cell(rowDown, colRight)
 	 */
-	public Range getRangeCells(int rowUp, int colLeft, int rowDown, int colRight);
+	public Range getRange(int rowUp, int colLeft, int rowDown, int colRight);
 }

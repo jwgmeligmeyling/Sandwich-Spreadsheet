@@ -18,7 +18,7 @@ public interface Cell extends Observer {
 	 * Method to get the current value of the cell, for example "5", "4", "hello".
 	 * @return value of this cell
 	 */
-	public String getValue();
+	public Object getValue();
 	
 	/**
 	 * Method to get the current input of the cell, for example "=ADD(3,2)", "4", "hello".

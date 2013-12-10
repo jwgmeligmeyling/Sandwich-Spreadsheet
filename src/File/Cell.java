@@ -4,17 +4,19 @@ import java.awt.Color;
 import java.util.Observable;
 
 import File.Sheet.Position;
+import Parser.Parser;
 
 /**
  * @author Maarten Flikkema
  */
 public class Cell extends Observable implements Interfaces.Cell {
 
+	final Sheet sheet;
 	final Position position;
 	private String columnUser;
 
 	private String input;
-	private String value;
+	private Object value;
 
 	private CelType type;
 
@@ -24,7 +26,8 @@ public class Cell extends Observable implements Interfaces.Cell {
 	/**
 	 * Constructor voor Cell
 	 */
-	public Cell(Position position, String input) {
+	public Cell(Sheet sheet, Position position, String input) {
+		this.sheet = sheet;
 		this.position = position;
 		this.input = input;
 		updateValue();
@@ -32,13 +35,11 @@ public class Cell extends Observable implements Interfaces.Cell {
 
 	@Override
 	public void updateValue() {
-		/*
-		 * Hier moet de value van de Cell opnieuw worden berekend namens input.
-		 */
+		value = Parser.parse(sheet, input);
 	}
 
 	@Override
-	public String getValue() {
+	public Object getValue() {
 		return value;
 	}
 
@@ -55,11 +56,7 @@ public class Cell extends Observable implements Interfaces.Cell {
 
 	@Override
 	public boolean inputIsFunction() {
-		if (!input.equals("")) {
-			return (input.substring(0, 1).equals("="));
-		} else {
-			return false;
-		}
+		return !input.isEmpty() && input.charAt(0) == '=';
 	}
 
 	@Override

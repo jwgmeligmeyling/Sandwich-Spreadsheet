@@ -50,38 +50,38 @@ public class TestSheet {
 
 	@Test
 	public void testGetRangeSingle() {
-		assertArrayEquals(new Cell[] { A1 }, sheet.getRangeCells(0, 0, 0, 0)
+		assertArrayEquals(new Cell[] { A1 }, sheet.getRange(0, 0, 0, 0)
 				.getCellArray());
 	}
 
 	@Test
 	public void testGetRangeSingleByCell() {
-		assertArrayEquals(new Cell[] { A1 }, sheet.getRangeCells(A1, A1)
+		assertArrayEquals(new Cell[] { A1 }, sheet.getRange(A1, A1)
 				.getCellArray());
 	}
 
 	@Test
 	public void testGetRangeMulti() {
 		assertArrayEquals(new Cell[] { A2, A3, B2, B3 },
-				sheet.getRangeCells(0, 1, 1, 2).getCellArray());
+				sheet.getRange(0, 1, 1, 2).getCellArray());
 	}
 
 	@Test
 	public void testGetRangeMultiByCell() {
 		assertArrayEquals(new Cell[] { A2, A3, B2, B3 },
-				sheet.getRangeCells(A2, B3).getCellArray());
+				sheet.getRange(A2, B3).getCellArray());
 	}
 
 	@Test
 	public void testGetColumnCells() {
-		assertArrayEquals(new Cell[] { B1, B2, B3 }, sheet.getColumnCells(1)
+		assertArrayEquals(new Cell[] { B1, B2, B3 }, sheet.getColumn(1)
 				.getCellArray());
 
 	}
 
 	@Test
 	public void testGetRowCells() {
-		assertArrayEquals(new Cell[] { A2, B2 }, sheet.getRowCells(1)
+		assertArrayEquals(new Cell[] { A2, B2 }, sheet.getRow(1)
 				.getCellArray());
 
 	}
