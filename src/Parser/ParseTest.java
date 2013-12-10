@@ -23,12 +23,12 @@ public class ParseTest {
 	
 	@Test
 	public void doubleValue() {
-		assertEquals(5.1234, Parser.parse("=5.1234"));
+		assertEquals(5.1234, (double) Parser.parse("=5.1234"), 1e-15);
 	}
 	
 	@Test
 	public void doubleENotation() {
-		assertEquals(5e3, Parser.parse("=5e3"));
+		assertEquals(5e3, (double) Parser.parse("=5e3"), 1e-15);
 	}
 	
 	@Test
@@ -64,12 +64,12 @@ public class ParseTest {
 
 	@Test
 	public void plusOperatorDouble() {
-		assertEquals(6.2, Parser.parse("=3.0+3.2"));
+		assertEquals(6.2, (double) Parser.parse("=3.0+3.2"), 1e-15);
 	}
 	
 	@Test
 	public void plusOperatorDoubleAndInt() {
-		assertEquals(6.2, Parser.parse("=3.2+3"));
+		assertEquals(6.2, (double) Parser.parse("=3.2+3"), 1e-15);
 	}
 	
 	@Test
@@ -99,12 +99,12 @@ public class ParseTest {
 		
 	@Test
 	public void subtractOperatorDouble() {
-		assertEquals(2.2, Parser.parse("=5.2-3.0"));
+		assertEquals(2.2, (double) Parser.parse("=5.2-3.0"), 1e-15);
 	}
 	
 	@Test
 	public void subtractOperatorDoubleAndInt() {
-		assertEquals(2.2, Parser.parse("=5.2-3"));
+		assertEquals(2.2, (double) Parser.parse("=5.2-3"), 1e-15);
 	}
 	
 	@Test
