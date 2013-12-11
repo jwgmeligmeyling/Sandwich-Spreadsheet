@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
+import File.Cell;
+import File.Sheet;
+
 /**
  * Class to parse the String
  * 
@@ -16,13 +19,19 @@ public class Parser {
 	/**
 	 * A final variable to store the <code>String</code> that is being parsed.
 	 */
-	private final String s;
+	private final String input;
 
 	/**
 	 * An final <code>int</code> to store the length of the input
 	 * <code>String</code>.
 	 */
 	private final int length;
+
+	/**
+	 * A variable to store the current <code>Sheet</code>, so <code>Cell</code> and
+	 * <code>Range</code> types can be accessed.
+	 */
+	private final Sheet sheet;
 
 	/**
 	 * An <code>int</code> to store the current index. Because we increment the
@@ -70,8 +79,8 @@ public class Parser {
 	 * expressions - which require different behaviour of the parentheses - are
 	 * parsed correctly.
 	 */
-	private Function f;
-
+	private Function function;
+	
 	/**
 	 * This list is used to store the function arguments.
 	 */
@@ -92,9 +101,10 @@ public class Parser {
 	 * 
 	 * @param string
 	 */
-	public Parser(String string) {
+	public Parser(Sheet sheet, String string) {
+		this.sheet = sheet;
 		length = string.length();
-		s = string;
+		input = string;
 	}
 
 	/**
@@ -108,8 +118,9 @@ public class Parser {
 	 * @param to
 	 *            To index
 	 */
-	private Parser(Parser Parser, int from, int to) {
-		s = Parser.s;
+	private Parser(Parser parser, int from, int to) {
+		sheet = parser.sheet;
+		input = parser.input;
 		index = from;
 		length = to;
 	}
@@ -131,6 +142,7 @@ public class Parser {
 			current = next();
 			switch (current) {
 			case ' ':
+			case ':':
 				continue;
 			case '(':
 				openBracket();
@@ -161,6 +173,12 @@ public class Parser {
 				if (depth > 0) {
 					break;
 				}
+				
+				Object reference = new Reference().getReference();
+				if ( reference != null ) {
+					values.push(reference);
+					break;
+				}
 
 				if (current > 47 && current < 58) {
 					Number n = getNumber();
@@ -170,7 +188,6 @@ public class Parser {
 				}
 				
 				/*
-				 * TODO References and Ranges
 				 * TODO "true" & "false"
 				 * TODO 0xFF
 				 * TODO Strings between ""
@@ -222,7 +239,7 @@ public class Parser {
 		if (depth == 0) {
 			closeBracket = index;
 
-			if (f != null) {
+			if (function != null) {
 				/*
 				 * Since we're parsing a function, we need to push the last
 				 * argument to the argument list, by calling the
@@ -241,8 +258,8 @@ public class Parser {
 				 * When the value needs to be negative, calculate the negative
 				 * value, else, calculate the normal value.
 				 */
-				Object value = (isNegative) ? f.calculateNegative(first, args)
-						: f.calculate(first, args);
+				Object value = (isNegative) ? function.calculateNegative(first, args)
+						: function.calculate(first, args);
 				/*
 				 * Push the value to the value stack, and clear the arguments
 				 * list and function variable, so that other expressions are
@@ -250,7 +267,7 @@ public class Parser {
 				 */
 				values.push(value);
 				arguments.clear();
-				f = null;
+				function = null;
 				System.out.println("Value pushed to stack: " + value);
 			} else {
 				/*
@@ -262,7 +279,7 @@ public class Parser {
 		}
 		System.out.println("Close bracket...");
 	}
-
+	
 	/**
 	 * To calculate a value, pop two value objects from the value stack, and one
 	 * <code>Operator</code> from the operator stack. Then calculate the value,
@@ -313,7 +330,7 @@ public class Parser {
 	 * Create a new argument separator
 	 */
 	private void argumentSeparator() {
-		if (depth < 2 && f != null) {
+		if (depth < 2 && function != null) {
 			Object value = new Parser(this, openBracket, index).parse();
 			arguments.add(value);
 			openBracket = index;
@@ -423,11 +440,139 @@ public class Parser {
 		 * found. We catch this Exception, and then return null.
 		 */
 		if (s.length() > 0) {
-			f = Function.get(s);
+			function = Function.get(s);
 			increment(i - 1);
-			System.out.println("Function parsed " + f);
+			System.out.println("Function parsed " + function);
 		}
 	}
+
+	/**
+	 * These split methods needs some shared variables, and are placed in a
+	 * inner class for this purpose.
+	 * 
+	 * @author Jan-Willem Gmelig Meyling
+	 * 
+	 */
+	private class Reference {
+		/**
+		 * A value to store the current value of p in.
+		 */
+		private int p = 0;
+		
+		/**
+		 * Fetch a reference. A reference can be in several formats:
+		 * <ul>
+		 * <li>A reference to a single cell, matches one or more letters followed by
+		 * one or more digits ("A3")</li>
+		 * <li>A reference to one or more columns, matches one or more letters,
+		 * followed by a colon and the same pattern ("A:B")</li>
+		 * <li>A reference to a row, matches one or more digits, followed by a colon
+		 * and the same character pattern ("1:3")</li>
+		 * <li>A reference to a range of cells, matches two single cell
+		 * representations described above, separated by a colon. ("A1:B3")</li>
+		 * </ul>
+		 * 
+		 * @return <code>Object</code> of type <code>Cell</code>,
+		 *         <code>Column</code>, <code>Row</code> or <code>Range</code>, or
+		 *         <code>null</code> if the character sequence did not match a
+		 *         reference.
+		 * 
+		 * @throws IllegalArgumentException
+		 *             When the input of the reference is malformed.
+		 */
+		private Object getReference() {
+			/*
+			 * Current implementation only supports Cells (A1) or Ranges (A1:B2)
+			 * TODO Support for rows and columns (?)
+			 */
+			Cell a = getCell();
+			if (a != null) {
+				if (peek(p) == ':') {
+					p++;
+					Cell b = getCell();
+					if (b != null) {
+						index += p;
+						return sheet.getRange(a, b);
+					} else {
+						throw new IllegalArgumentException(
+								"Expected a column reference after :");
+					}
+				} else {
+					index += p;
+					return a.getValue();
+				}
+			}
+			return null;
+		}
+	
+		/**
+		 * Method to peek for a <code>Cell</code> at current index. A cell is
+		 * expected to be in the format "A1"
+		 * 
+		 * @return <code>Cell</code> in the current <code>Sheet</code>, or
+		 *         <code>null</code> if no <code>Cell</code> was found either in the
+		 *         input String or the <code>Sheet</code>.
+		 */
+		private Cell getCell() {
+			int colIndex = getColIndex();
+			if (colIndex != -1) {
+				int rowIndex = getRowIndex();
+				if (rowIndex != -1) {
+					return sheet.getCellAt(colIndex, rowIndex);
+				}
+			}
+			return null;
+		}
+	
+		/**
+		 * Method to peek for a String representation of an column index. Column
+		 * indexes are expected to be in the format A, B, C... When a column is
+		 * found, the current index is incremented.
+		 * 
+		 * @return The index of the column, starting at 0 for A, or -1 when no
+		 *         column index was found.
+		 */
+		private int getColIndex() {
+			int colIndex = 0;
+			for (int i = p;; i++) {
+				char c = Character.toUpperCase(peek(i));
+				if (Character.isLetter(c)) {
+					colIndex = colIndex * 26 + c - 64;
+					p++;
+				} else if (colIndex <= 0) {
+					return -1;
+				} else {
+					break;
+				}
+			}
+			return colIndex - 1;
+		}
+	
+		/**
+		 * Method to peek for an row index. Row indexes are expected to be in the
+		 * format 1, 2, 3...
+		 * 
+		 * @return The index of the row, starting at 0 for 1, or -1 when no row
+		 *         index was found.
+		 */
+		private int getRowIndex() {
+			int rowIndex = 0;
+			for (int i = p;; i++) {
+				char c = peek(i);
+				if (Character.isDigit(c)) {
+					rowIndex = rowIndex * 10 + Character.getNumericValue(c);
+					p++;
+				} else if (rowIndex <= 0) {
+					return -1;
+				} else {
+					break;
+				}
+			}
+			return rowIndex - 1;
+		}
+	}
+
+
 
 	/**
 	 * Method to determine if there is a next character
@@ -445,7 +590,7 @@ public class Parser {
 	 * @return next character
 	 */
 	char next() {
-		return s.charAt(++index);
+		return input.charAt(++index);
 	}
 
 	/**
@@ -461,7 +606,7 @@ public class Parser {
 	char peek(int n) {
 		n += index;
 		if (n < length) {
-			return s.charAt(n);
+			return input.charAt(n);
 		}
 		return 0;
 	}
@@ -485,14 +630,14 @@ public class Parser {
 	 */
 	char previous() {
 		if (index > 0) {
-			return s.charAt(index - 1);
+			return input.charAt(index - 1);
 		}
 		return 0;
 	}
 
 	@Override
 	public String toString() {
-		return s;
+		return input;
 	}
 
 	/**
@@ -505,11 +650,11 @@ public class Parser {
 	 *         input <code>String</code> did not start with a <code>=</code>
 	 *         character, the original <code>String</code> is returned.
 	 */
-	public static Object parse(String string) {
+	public static Object parse(Sheet sheet, String string) {
 		if (string.length() < 2 || string.charAt(0) != '=') {
 			return string;
 		} else {
-			return new Parser(string.substring(1).replaceAll("\\s+", ""))
+			return new Parser(sheet, string.substring(1).replaceAll("\\s+", ""))
 					.parse();
 		}
 	}
@@ -528,7 +673,7 @@ public class Parser {
 		
 		while(sc.hasNext()) {
 			try {
-				System.out.println(Parser.parse(sc.next()));
+				System.out.println(Parser.parse(new Sheet(), sc.next()));
 			} catch ( Exception e ) {
 				e.printStackTrace();
 			}

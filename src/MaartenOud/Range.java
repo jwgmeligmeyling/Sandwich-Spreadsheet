@@ -1,4 +1,4 @@
-package Functions;
+package MaartenOud;
 
 import java.util.ArrayList;
 import File.Cell;

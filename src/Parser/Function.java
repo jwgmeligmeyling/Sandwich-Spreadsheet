@@ -1,5 +1,8 @@
 package Parser;
 
+import File.Cell;
+import File.Sheet.Range;
+
 /**
  * Enumeration that binds functions to their function name.
  * 
@@ -41,6 +44,16 @@ public enum Function {
 					output += doubleValueOf(argument);
 				}
 				return new Double(output);
+			} else if (first instanceof Range) {
+				double output = 0;
+				for (Cell cell : ((Range) first).getCellArray()) {
+					output += doubleValueOf(cell.getValue());
+				}
+				if ( Math.floor(output) == output ) {
+					return new Integer((int) output);
+				} else {
+					return new Double(output);
+				}
 			}
 			throw new IllegalArgumentException("#VALUE");
 		}
