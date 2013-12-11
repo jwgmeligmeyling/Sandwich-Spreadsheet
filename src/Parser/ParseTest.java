@@ -68,12 +68,12 @@ public class ParseTest {
 
 	@Test
 	public void doubleValue() {
-		assertEquals(5.1234, (double) Parser.parse(sheet, "=5.1234"), 1e-15);
+		assertEquals(5.1234, ((Double) Parser.parse(sheet, "=5.1234")).doubleValue(), 1e-15);
 	}
 
 	@Test
 	public void doubleENotation() {
-		assertEquals(5e3, (double) Parser.parse(sheet, "=5e3"), 1e-15);
+		assertEquals(5e3, ((Double)  Parser.parse(sheet, "=5e3")).doubleValue(), 1e-15);
 	}
 
 	@Test
@@ -108,12 +108,12 @@ public class ParseTest {
 
 	@Test
 	public void plusOperatorDouble() {
-		assertEquals(6.2, (double) Parser.parse(sheet, "=3.0+3.2"), 1e-15);
+		assertEquals(6.2, ((Double) Parser.parse(sheet, "=3.0+3.2")).doubleValue(), 1e-15);
 	}
 
 	@Test
 	public void plusOperatorDoubleAndInt() {
-		assertEquals(6.2, (double) Parser.parse(sheet, "=3.2+3"), 1e-15);
+		assertEquals(6.2, ((Double)  Parser.parse(sheet, "=3.2+3")).doubleValue(), 1e-15);
 	}
 
 	@Test
@@ -143,12 +143,12 @@ public class ParseTest {
 
 	@Test
 	public void subtractOperatorDouble() {
-		assertEquals(2.2, (double) Parser.parse(sheet, "=5.2-3.0"), 1e-15);
+		assertEquals(2.2, ((Double)  Parser.parse(sheet, "=5.2-3.0")).doubleValue(), 1e-15);
 	}
 
 	@Test
 	public void subtractOperatorDoubleAndInt() {
-		assertEquals(2.2, (double) Parser.parse(sheet, "=5.2-3"), 1e-15);
+		assertEquals(2.2, ((Double) Parser.parse(sheet, "=5.2-3")).doubleValue(), 1e-15);
 	}
 
 	@Test

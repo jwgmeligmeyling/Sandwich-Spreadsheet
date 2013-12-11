@@ -13,7 +13,7 @@ public class TestFunctions {
 	
 	@Test
 	public void testAddDoubles() {
-		assertEquals(7.3, (double) Function.ADD.calculate(6.9, 0.4), 1e-15);
+		assertEquals(7.3, ((Double) Function.ADD.calculate(6.9, 0.4)).doubleValue(), 1e-15);
 	}
 
 	@Test
@@ -23,7 +23,7 @@ public class TestFunctions {
 	
 	@Test
 	public void testAddDoubleAndInt() {
-		assertEquals(7.125, (double) Function.ADD.calculate(6.125, 1), 1e-15);
+		assertEquals(7.125, ((Double) Function.ADD.calculate(6.125, 1)).doubleValue(), 1e-15);
 	}
 	
 }
