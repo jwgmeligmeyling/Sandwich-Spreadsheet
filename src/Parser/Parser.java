@@ -343,8 +343,10 @@ public class Parser {
 	 */
 	private void argumentSeparator() {
 		if (depth < 2 && function != null) {
-			Object value = new Parser(this, openBracket, index).parse();
-			arguments.add(value);
+			if ( openBracket < index - 1 ) {
+				Object value = new Parser(this, openBracket, index).parse();
+				arguments.add(value);
+			}
 			openBracket = index;
 		}
 	}

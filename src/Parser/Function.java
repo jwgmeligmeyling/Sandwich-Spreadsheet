@@ -39,14 +39,12 @@ public enum Function {
 			double output = 0;
 			
 			for ( Object argument : arguments ) {
-				if ( argument instanceof Number ) {
-					output += doubleValueOf(argument);
-				} else if ( argument instanceof Range ) {
+				if ( argument instanceof Range ) {
 					for ( Cell cell : ((Range) argument).getCellArray() ) {
 						output += doubleValueOf(cell.getValue());
 					}
 				} else {
-					throw new IllegalArgumentException("#VALUE");
+					output += doubleValueOf(argument);
 				}
 			}
 			
@@ -84,11 +82,7 @@ public enum Function {
 			double output = doubleValueOf(arguments[0]);
 			
 			for ( int i = 1; i < arguments.length; i++ ) {
-				if ( arguments[i] instanceof Number ) {
-					output -= doubleValueOf(arguments[i]);
-				} else {
-					throw new IllegalArgumentException("#VALUE");
-				}
+				output -= doubleValueOf(arguments[i]);
 			}
 			
 			if ( Math.floor(output) == output ) {
@@ -124,11 +118,7 @@ public enum Function {
 			double output = doubleValueOf(arguments[0]);
 			
 			for ( int i = 1; i < arguments.length; i++ ) {
-				if ( arguments[i] instanceof Number ) {
-					output *= doubleValueOf(arguments[i]);
-				} else {
-					throw new IllegalArgumentException("#VALUE");
-				}
+				output *= doubleValueOf(arguments[i]);
 			}
 			
 			if ( Math.floor(output) == output ) {
@@ -165,11 +155,7 @@ public enum Function {
 			double output = doubleValueOf(arguments[0]);
 			
 			for ( int i = 1; i < arguments.length; i++ ) {
-				if ( arguments[i] instanceof Number ) {
-					output /= doubleValueOf(arguments[i]);
-				} else {
-					throw new IllegalArgumentException("#VALUE");
-				}
+				output /= doubleValueOf(arguments[i]);
 			}
 			
 			if ( Math.floor(output) == output ) {
@@ -232,18 +218,14 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length == 1;
-			
-			if (arguments[0] instanceof Integer) {
-				return arguments[0];
-			} else if (arguments[0] instanceof Double) {
-				return new Integer(intValueOf(arguments[0]));
-			} else {
-				throw new IllegalArgumentException("#VALUE");
-			}
+			return intValueOf(arguments[0]);
 		}
 
 	},
 	
+	/**
+	 * Get a random <code>Double</code> value
+	 */
 	RAND {
 		@Override
 		Object calculate(Object... arguments) {
@@ -251,6 +233,10 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * Get the square root of a value. Returns an <code>integer</code> when
+	 * applicable, else it returns a double.
+	 */
 	SQRT {
 		@Override
 		Object calculate(Object... arguments) {
@@ -265,6 +251,9 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * Get the sin of a value. Returns a <code>Double</code> value.
+	 */
 	SIN {
 		@Override
 		Object calculate(Object... arguments) {
@@ -273,6 +262,9 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * Get the cos of a value. Returns a <code>Double</code> value.
+	 */
 	COS {
 		@Override
 		Object calculate(Object... arguments) {
@@ -333,8 +325,12 @@ public enum Function {
 			return ((Number) obj).intValue();
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
+		} else if ( obj instanceof Range ) {
+			return intValueOf(((Range) obj).getCellArray()[0]);
+		} else if ( obj instanceof Cell ) {
+			return intValueOf(((Cell) obj).getValue());
 		}
-		return 0;
+		throw new IllegalArgumentException("#VALUE");
 	}
 
 	/**
@@ -353,8 +349,12 @@ public enum Function {
 			return ((Number) obj).doubleValue();
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
+		} else if ( obj instanceof Range ) {
+			return doubleValueOf(((Range) obj).getCellArray()[0]);
+		} else if ( obj instanceof Cell ) {
+			return doubleValueOf(((Cell) obj).getValue());
 		}
-		return 0;
+		throw new IllegalArgumentException("#VALUE");
 	}
 
 	/**
