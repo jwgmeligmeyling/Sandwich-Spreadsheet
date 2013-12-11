@@ -144,6 +144,10 @@ public class Parser {
 			case ' ':
 			case ':':
 				continue;
+			case '"':
+			case '\'':
+				getString();
+				break;
 			case '(':
 				openBracket();
 				break;
@@ -333,7 +337,7 @@ public class Parser {
 	private void pushOperator(Operator operator) {
 		if (!operators.empty()) {
 			Operator previous = operators.peek();
-			if (previous.precedence >= operator.precedence) {
+			if (previous.precedence <= operator.precedence) {
 				calculate();
 			}
 		}
@@ -385,10 +389,29 @@ public class Parser {
 	}
 
 	/**
+	 * Method to get a <code>String</code> from the input
+	 */
+	private void getString() {
+		int i = 1;
+		String s = "";
+		do {
+			char c = peek(i);
+			if ( c == '\'' || c == '"' ) {
+				break;
+			} else {
+				s += c;
+				i++;
+			}
+		} while ( true );
+		values.push(s);
+		index += i;
+	}
+
+	/**
 	 * These characters are the allowed characters for the operators that take
 	 * two characters (for example the <code>>=</code> operator)
 	 */
-	private final static String SECOND_OPERATOR_CHARACTERS = "=>&|";
+	private final static String SECOND_OPERATOR_CHARACTERS = "=<>&|";
 
 	/**
 	 * Method to peek for an operator at the current position in the
@@ -399,7 +422,7 @@ public class Parser {
 	 */
 	private void getOperator() {
 		if (current == '-'
-				&& (index == 0 || "+-*/<>~!&|^=()".indexOf(previous()) != -1)) {
+				&& (index == 0 || "+-*/<>~!&|^=(".indexOf(previous()) != -1)) {
 			/*
 			 * Parse -5 and x-5 differently :)
 			 */
@@ -684,6 +707,7 @@ public class Parser {
 		System.out.println("=5+2*3");
 		
 		Scanner sc = new Scanner(System.in);
+		sc.useDelimiter("\n");
 		
 		while(sc.hasNext()) {
 			try {

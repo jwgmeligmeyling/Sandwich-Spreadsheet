@@ -16,7 +16,7 @@ public enum Operator {
 	 * <em>10 + 20 will give 30</em>
 	 * </pre>
 	 */
-	ADD(new char[] { '+' }, 5) {
+	ADD(new char[] { '+' }, 6) {
 		
 		@Override
 		Object calculate(Object first, Object second) {
@@ -42,7 +42,7 @@ public enum Operator {
 	 * <em>10 - 20 will give -10</em>
 	 * </pre>
 	 */
-	SUBTRACT(new char[] { '-' }, 5) {
+	SUBTRACT(new char[] { '-' }, 6) {
 		
 		@Override
 		Object calculate(Object first, Object second) {
@@ -68,7 +68,7 @@ public enum Operator {
 	 * <em>10 * 20 will give 200</em>
 	 * </pre>
 	 */
-	MULTIPLY(new char[] { '*' }, 7) {
+	MULTIPLY(new char[] { '*' }, 5) {
 		
 		@Override
 		Object calculate(Object first, Object second) {
@@ -92,7 +92,7 @@ public enum Operator {
 	 * <em>20 / 10 will give 2</em>
 	 * </pre>
 	 */
-	DIVIDE(new char[] { '/' }, 7) {
+	DIVIDE(new char[] { '/' }, 5) {
 		
 		@Override
 		Object calculate(Object first, Object second) {
@@ -114,7 +114,7 @@ public enum Operator {
 	 * <em>20 % 10 will give 0</em>
 	 * </pre>
 	 */
-	MODULUS(new char[] { '%' }, 7) {
+	MODULUS(new char[] { '%' }, 5) {
 		
 		@Override
 		Object calculate(Object first, Object second) {
@@ -125,10 +125,110 @@ public enum Operator {
 			}
 			throw new IllegalArgumentException("#VALUE");
 		}
+	},
+	
+	GREATER_THAN(new char[] {'>'}, 8) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return (Function.doubleValueOf(first) > Function.doubleValueOf(second));
+		}
+		
+	},
+	
+	GREATER_OR_EQUAL(new char[] {'>', '='}, 8) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return (Function.doubleValueOf(first) >= Function.doubleValueOf(second));
+		}
+		
+	},
+	
+	LESS(new char[] {'<'}, 8) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return (Function.doubleValueOf(first) < Function.doubleValueOf(second));
+		}
+		
+	},
+	
+	LESS_OR_EQUAL(new char[] {'<','='}, 8) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return (Function.doubleValueOf(first) <= Function.doubleValueOf(second));
+		}
+		
+	},
+	
+	EQUAL(new char[] {'=','='}, 9) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return (Function.doubleValueOf(first) == Function.doubleValueOf(second));
+		}
+		
+	},
+	
+	DIFFERENT(new char[] {'<','>'}, 9) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return (Function.doubleValueOf(first) != Function.doubleValueOf(second));
+		}
+		
+	},
+	
+	NOT_EQUAL(new char[] {'!','='}, 9) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return (Function.doubleValueOf(first) != Function.doubleValueOf(second));
+		}
+		
+	},
+	
+	AND(new char[] {'&','&'}, 14) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return Function.booleanValueOf(first) && Function.booleanValueOf(second);
+		}
+		
+	},
+	
+	OR(new char[] {'|','|'}, 14) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return Function.booleanValueOf(first) || Function.booleanValueOf(second);
+		}
+		
+	},
+	
+	SHIFT_LEFT(new char[] {'<','<'}, 7) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return Function.intValueOf(first) << Function.intValueOf(second);
+		}
+		
+	},
+	
+	SHIFT_RIGHT(new char[] {'>','>'}, 7) {
+		
+		@Override
+		Object calculate(Object first, Object second) {
+			return Function.intValueOf(first) >> Function.intValueOf(second);
+		}
+		
 	};
 
 	char[] op;
 	int precedence;
+	boolean associativity = true;
 
 	/**
 	 * Constructor for an operand. Binds an unique char array.
