@@ -2,6 +2,17 @@ package File;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 /**
  * The <code>Sheet</code> class is the main class for the spreadsheet
@@ -146,7 +157,60 @@ public class Sheet implements Interfaces.Sheet {
 			return true;
 		}
 	}
-
+	
+	/**
+	 * The function that writes the sheet to a XML file.
+	 * 
+	 * @author Jim Hommes
+	 */
+	public void Write(){
+		try{ 
+			String path = "xml/output.xml";
+			OutputStream output = new FileOutputStream(new File(path)); 
+			XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(output,"UTF-8"));
+			
+			Cell[] lijst = getCells();
+			
+			//Start Spreadsheet
+			out.writeStartElement("SPREADSHEET");
+			
+			for(int i = 0; i < lijst.length; i++){
+				//<CELL>
+				out.writeStartElement("CELL");
+				//Attributes
+				String string = ""+lijst[i].getRow();
+				out.writeAttribute("row",string);
+				string = ""+lijst[i].getColumn();
+				out.writeAttribute("column",string);
+				string = ""+lijst[i].getType();
+				out.writeAttribute("type",string);
+				//Whats in the cell
+				out.writeCharacters(lijst[i].getInput());
+				
+				//end
+				out.writeEndElement();
+			}
+			
+			out.writeEndElement();
+			
+			out.close();
+			output.close();
+			
+		}catch(FileNotFoundException e){
+			System.out.println("File not found!");
+		}catch(XMLStreamException e){
+			System.out.println("XML Stream exception");
+		}catch(UnsupportedEncodingException e){
+			System.out.println("Unsupported encoding exception");
+		}catch(IOException e){
+			System.out.println("IOException");
+		}
+		
+		
+	}
+	
+	
+	
 	/**
 	 * The range class is used to select a range of <code>Cell</code> instances
 	 * from the current <code>Sheet</code>.

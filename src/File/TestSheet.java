@@ -85,5 +85,12 @@ public class TestSheet {
 				.getCellArray());
 
 	}
+	
+	@Test
+	public void testWriteSheet() {
+		sheet.Write();
+		
+		
+	}
 
 }
