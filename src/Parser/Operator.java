@@ -17,21 +17,24 @@ public enum Operator {
 	 * </pre>
 	 */
 	ADD(new char[] { '+' }, 6) {
-		
+
 		@Override
 		Object calculate(Object first, Object second) {
-			if ( first instanceof Integer ) {
-				return new Integer((Integer) first + Function.intValueOf(second));
-			} else if ( first instanceof Double ) {
-				return new Double((Double) first + Function.doubleValueOf(second));
-			} else if ( first instanceof Boolean ) {
-				return ((Boolean) first).equals(Boolean.TRUE) || Function.booleanValueOf(second);
-			} else if ( first instanceof String ) {
+			if (first instanceof Integer) {
+				return new Integer((Integer) first
+						+ Function.intValueOf(second));
+			} else if (first instanceof Double) {
+				return new Double((Double) first
+						+ Function.doubleValueOf(second));
+			} else if (first instanceof Boolean) {
+				return ((Boolean) first).equals(Boolean.TRUE)
+						|| Function.booleanValueOf(second);
+			} else if (first instanceof String) {
 				return first.toString() + second.toString();
 			}
 			throw new IllegalArgumentException("#VALUE");
 		}
-		
+
 	},
 
 	/**
@@ -43,21 +46,24 @@ public enum Operator {
 	 * </pre>
 	 */
 	SUBTRACT(new char[] { '-' }, 6) {
-		
+
 		@Override
 		Object calculate(Object first, Object second) {
-			if ( first instanceof Integer ) {
-				return new Integer((Integer) first - Function.intValueOf(second));
-			} else if ( first instanceof Double ) {
-				return new Double((Double) first - Function.doubleValueOf(second));
-			} else if ( first instanceof Boolean ) {
-				return ((Boolean) first).equals(Boolean.TRUE) && !Function.booleanValueOf(second);
-			} else if ( first instanceof String ) {
+			if (first instanceof Integer) {
+				return new Integer((Integer) first
+						- Function.intValueOf(second));
+			} else if (first instanceof Double) {
+				return new Double((Double) first
+						- Function.doubleValueOf(second));
+			} else if (first instanceof Boolean) {
+				return ((Boolean) first).equals(Boolean.TRUE)
+						&& !Function.booleanValueOf(second);
+			} else if (first instanceof String) {
 				return ((String) first).replace(second.toString(), "");
 			}
 			throw new IllegalArgumentException("#VALUE");
 		}
-		
+
 	},
 
 	/**
@@ -69,19 +75,22 @@ public enum Operator {
 	 * </pre>
 	 */
 	MULTIPLY(new char[] { '*' }, 5) {
-		
+
 		@Override
 		Object calculate(Object first, Object second) {
-			if ( first instanceof Integer ) {
-				return new Integer((Integer) first * Function.intValueOf(second));
-			} else if ( first instanceof Double ) {
-				return new Double((Double) first * Function.doubleValueOf(second));
-			} else if ( first instanceof Boolean ) {
-				return ((Boolean) first).equals(Boolean.TRUE) && Function.booleanValueOf(second);
+			if (first instanceof Integer) {
+				return new Integer((Integer) first
+						* Function.intValueOf(second));
+			} else if (first instanceof Double) {
+				return new Double((Double) first
+						* Function.doubleValueOf(second));
+			} else if (first instanceof Boolean) {
+				return ((Boolean) first).equals(Boolean.TRUE)
+						&& Function.booleanValueOf(second);
 			}
 			throw new IllegalArgumentException("#VALUE");
 		}
-		
+
 	},
 
 	/**
@@ -93,17 +102,19 @@ public enum Operator {
 	 * </pre>
 	 */
 	DIVIDE(new char[] { '/' }, 5) {
-		
+
 		@Override
 		Object calculate(Object first, Object second) {
-			if ( first instanceof Integer ) {
-				return new Integer((Integer) first / Function.intValueOf(second));
-			} else if ( first instanceof Double ) {
-				return new Double((Double) first / Function.doubleValueOf(second));
+			if (first instanceof Integer) {
+				return new Integer((Integer) first
+						/ Function.intValueOf(second));
+			} else if (first instanceof Double) {
+				return new Double((Double) first
+						/ Function.doubleValueOf(second));
 			}
 			throw new IllegalArgumentException("#VALUE");
 		}
-		
+
 	},
 
 	/**
@@ -115,115 +126,143 @@ public enum Operator {
 	 * </pre>
 	 */
 	MODULUS(new char[] { '%' }, 5) {
-		
+
 		@Override
 		Object calculate(Object first, Object second) {
-			if ( first instanceof Integer ) {
-				return new Integer((Integer) first % Function.intValueOf(second));
-			} else if ( first instanceof Double ) {
-				return new Integer(Function.intValueOf(first) % Function.intValueOf(second));
+			if (first instanceof Integer) {
+				return new Integer((Integer) first
+						% Function.intValueOf(second));
+			} else if (first instanceof Double) {
+				return new Integer(Function.intValueOf(first)
+						% Function.intValueOf(second));
 			}
 			throw new IllegalArgumentException("#VALUE");
 		}
 	},
-	
-	GREATER_THAN(new char[] {'>'}, 8) {
-		
+
+	POWER(new char[] { '^' }, 4) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return (Function.doubleValueOf(first) > Function.doubleValueOf(second));
+			if ( !(first instanceof Number) || !(second instanceof Number) ) {
+				throw new IllegalArgumentException("#VALUE");
+			}
+			double output = Math.pow(Function.doubleValueOf(first),
+					Function.doubleValueOf(second));
+			if (Math.floor(output) == output) {
+				return new Integer((int) output);
+			} else {
+				return new Double(output);
+			}
 		}
-		
 	},
-	
-	GREATER_OR_EQUAL(new char[] {'>', '='}, 8) {
-		
+
+	GREATER_THAN(new char[] { '>' }, 8) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return (Function.doubleValueOf(first) >= Function.doubleValueOf(second));
+			return (Function.doubleValueOf(first) > Function
+					.doubleValueOf(second));
 		}
-		
+
 	},
-	
-	LESS(new char[] {'<'}, 8) {
-		
+
+	GREATER_OR_EQUAL(new char[] { '>', '=' }, 8) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return (Function.doubleValueOf(first) < Function.doubleValueOf(second));
+			return (Function.doubleValueOf(first) >= Function
+					.doubleValueOf(second));
 		}
-		
+
 	},
-	
-	LESS_OR_EQUAL(new char[] {'<','='}, 8) {
-		
+
+	LESS(new char[] { '<' }, 8) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return (Function.doubleValueOf(first) <= Function.doubleValueOf(second));
+			return (Function.doubleValueOf(first) < Function
+					.doubleValueOf(second));
 		}
-		
+
 	},
-	
-	EQUAL(new char[] {'=','='}, 9) {
-		
+
+	LESS_OR_EQUAL(new char[] { '<', '=' }, 8) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return (Function.doubleValueOf(first) == Function.doubleValueOf(second));
+			return (Function.doubleValueOf(first) <= Function
+					.doubleValueOf(second));
 		}
-		
+
 	},
-	
-	DIFFERENT(new char[] {'<','>'}, 9) {
-		
+
+	EQUAL(new char[] { '=', '=' }, 9) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return (Function.doubleValueOf(first) != Function.doubleValueOf(second));
+			return (Function.doubleValueOf(first) == Function
+					.doubleValueOf(second));
 		}
-		
+
 	},
-	
-	NOT_EQUAL(new char[] {'!','='}, 9) {
-		
+
+	DIFFERENT(new char[] { '<', '>' }, 9) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return (Function.doubleValueOf(first) != Function.doubleValueOf(second));
+			return (Function.doubleValueOf(first) != Function
+					.doubleValueOf(second));
 		}
-		
+
 	},
-	
-	AND(new char[] {'&','&'}, 14) {
-		
+
+	NOT_EQUAL(new char[] { '!', '=' }, 9) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return Function.booleanValueOf(first) && Function.booleanValueOf(second);
+			return (Function.doubleValueOf(first) != Function
+					.doubleValueOf(second));
 		}
-		
+
 	},
-	
-	OR(new char[] {'|','|'}, 14) {
-		
+
+	AND(new char[] { '&', '&' }, 14) {
+
 		@Override
 		Object calculate(Object first, Object second) {
-			return Function.booleanValueOf(first) || Function.booleanValueOf(second);
+			return Function.booleanValueOf(first)
+					&& Function.booleanValueOf(second);
 		}
-		
+
 	},
-	
-	SHIFT_LEFT(new char[] {'<','<'}, 7) {
-		
+
+	OR(new char[] { '|', '|' }, 14) {
+
+		@Override
+		Object calculate(Object first, Object second) {
+			return Function.booleanValueOf(first)
+					|| Function.booleanValueOf(second);
+		}
+
+	},
+
+	SHIFT_LEFT(new char[] { '<', '<' }, 7) {
+
 		@Override
 		Object calculate(Object first, Object second) {
 			return Function.intValueOf(first) << Function.intValueOf(second);
 		}
-		
+
 	},
-	
-	SHIFT_RIGHT(new char[] {'>','>'}, 7) {
-		
+
+	SHIFT_RIGHT(new char[] { '>', '>' }, 7) {
+
 		@Override
 		Object calculate(Object first, Object second) {
 			return Function.intValueOf(first) >> Function.intValueOf(second);
 		}
-		
+
 	};
 
 	char[] op;
@@ -259,6 +298,7 @@ public enum Operator {
 			if (Arrays.equals(op, o.op))
 				return o;
 		}
-		throw new IllegalArgumentException(new String(op).toString() + " is not a valid operator!");
+		throw new IllegalArgumentException(new String(op).toString()
+				+ " is not a valid operator!");
 	}
 }

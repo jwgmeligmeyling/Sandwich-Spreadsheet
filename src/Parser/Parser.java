@@ -139,8 +139,7 @@ public class Parser {
 	 */
 	public Object parse() {
 		while (hasNext()) {
-			current = next();
-			switch (current) {
+			switch (current = next()) {
 			case ' ':
 			case ':':
 				continue;
@@ -193,9 +192,7 @@ public class Parser {
 				
 				/*
 				 * TODO "true" & "false"
-				 * TODO 0xFF
-				 * TODO Strings between ""
-				 * TODO Right-to-left operators
+				 * TODO Numbers without '='
 				 */
 
 				getFunction();
@@ -335,11 +332,9 @@ public class Parser {
 	 * </div>
 	 */
 	private void pushOperator(Operator operator) {
-		if (!operators.empty()) {
-			Operator previous = operators.peek();
-			if (previous.precedence <= operator.precedence) {
-				calculate();
-			}
+		while (!operators.empty()
+				&& operators.peek().precedence <= operator.precedence) {
+			calculate();
 		}
 		operators.push(operator);
 	}
@@ -706,12 +701,20 @@ public class Parser {
 		System.out.println("Some examples:");
 		System.out.println("=5+2*3");
 		
+		Sheet sheet = new Sheet();
+		Cell A1 = sheet.createCell("bliep", 0, 0);
+		Cell A2 = sheet.createCell("5", 0, 1);
+		Cell A3 = sheet.createCell("=5", 0, 2);
+		Cell B1 = sheet.createCell("=5*2", 1, 0);
+		Cell B2 = sheet.createCell("=2+2*3", 1, 1);
+		Cell B3 = sheet.createCell("=ADD(5,3)", 1, 2);
+		
 		Scanner sc = new Scanner(System.in);
 		sc.useDelimiter("\n");
 		
 		while(sc.hasNext()) {
 			try {
-				System.out.println(Parser.parse(new Sheet(), sc.next()));
+				System.out.println(Parser.parse(sheet, sc.next()));
 			} catch ( Exception e ) {
 				e.printStackTrace();
 			}
