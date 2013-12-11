@@ -444,7 +444,7 @@ public class Parser {
 		 * the function name String. If a non-alphabetic character is found, we
 		 * break out of the while loop.
 		 */
-		while ((c > 64 && c < 91) || (c > 96 && c < 122)) {
+		while (Character.isLetter(c)) {
 			s += c;
 			c = peek(++i);
 		}
