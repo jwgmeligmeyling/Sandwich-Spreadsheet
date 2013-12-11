@@ -90,8 +90,7 @@ public class Sheet implements Interfaces.Sheet {
 		 *             When the indexes are negative values.
 		 */
 		Position(int colIndex, int rowIndex) {
-			assert colIndex >= 0;
-			assert rowIndex >= 0;
+			assert colIndex >= 0 && rowIndex >= 0;
 
 			this.colIndex = colIndex;
 			this.rowIndex = rowIndex;

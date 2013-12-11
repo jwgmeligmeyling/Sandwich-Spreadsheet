@@ -180,7 +180,7 @@ public class Parser {
 					break;
 				}
 
-				if (current > 47 && current < 58) {
+				if (Character.isDigit(current)) {
 					Number n = getNumber();
 					values.push(n);
 					System.out.println("Number pushed to stack: " + n);
@@ -368,7 +368,7 @@ public class Parser {
 		do {
 			s += c;
 			c = peek(++i);
-			if (!(c > 47 && c < 58)) {
+			if (!Character.isDigit(c)) {
 				if (c == '.' || c == 'E' || c == 'e') {
 					d = true;
 				} else {
@@ -453,7 +453,7 @@ public class Parser {
 		 * function will throw an IllegalArgumentException if no Operator is
 		 * found. We catch this Exception, and then return null.
 		 */
-		if (s.length() > 0) {
+		if (!s.isEmpty()) {
 			function = Function.get(s);
 			increment(i - 1);
 			System.out.println("Function parsed " + function);
