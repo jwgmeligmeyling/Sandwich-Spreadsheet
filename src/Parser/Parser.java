@@ -524,14 +524,14 @@ public class Parser {
 					p++;
 					Cell b = getCell();
 					if (b != null) {
-						index += p;
+						index += p - 1;
 						return sheet.getRange(a, b);
 					} else {
 						throw new IllegalArgumentException(
 								"Expected a column reference after :");
 					}
 				} else {
-					index += p;
+					index += p - 1;
 					return a.getValue();
 				}
 			}
@@ -567,11 +567,10 @@ public class Parser {
 		 */
 		private int getColIndex() {
 			int colIndex = 0;
-			for (int i = p;; i++) {
-				char c = Character.toUpperCase(peek(i));
+			for ( ;; p++) {
+				char c = Character.toUpperCase(peek(p));
 				if (Character.isLetter(c)) {
 					colIndex = colIndex * 26 + c - 64;
-					p++;
 				} else if (colIndex <= 0) {
 					return -1;
 				} else {
@@ -590,11 +589,10 @@ public class Parser {
 		 */
 		private int getRowIndex() {
 			int rowIndex = 0;
-			for (int i = p;; i++) {
-				char c = peek(i);
+			for ( ;; p++) {
+				char c = peek(p);
 				if (Character.isDigit(c)) {
 					rowIndex = rowIndex * 10 + Character.getNumericValue(c);
-					p++;
 				} else if (rowIndex <= 0) {
 					return -1;
 				} else {
@@ -703,12 +701,12 @@ public class Parser {
 		System.out.println("=5+2*3");
 		
 		Sheet sheet = new Sheet();
-		Cell A1 = sheet.createCell("bliep", 0, 0);
-		Cell A2 = sheet.createCell("5", 0, 1);
-		Cell A3 = sheet.createCell("=5", 0, 2);
-		Cell B1 = sheet.createCell("=5*2", 1, 0);
-		Cell B2 = sheet.createCell("=2+2*3", 1, 1);
-		Cell B3 = sheet.createCell("=ADD(5,3)", 1, 2);
+		sheet.createCell("bliep", 0, 0);
+		sheet.createCell("5", 0, 1);
+		sheet.createCell("=5", 0, 2);
+		sheet.createCell("=5*2", 1, 0);
+		sheet.createCell("=2+2*3", 1, 1);
+		sheet.createCell("=ADD(5,3)", 1, 2);
 		
 		Scanner sc = new Scanner(System.in);
 		sc.useDelimiter("\n");

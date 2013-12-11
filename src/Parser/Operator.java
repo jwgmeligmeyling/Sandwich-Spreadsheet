@@ -20,19 +20,7 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			if (first instanceof Integer) {
-				return new Integer((Integer) first
-						+ Function.intValueOf(second));
-			} else if (first instanceof Double) {
-				return new Double((Double) first
-						+ Function.doubleValueOf(second));
-			} else if (first instanceof Boolean) {
-				return ((Boolean) first).equals(Boolean.TRUE)
-						|| Function.booleanValueOf(second);
-			} else if (first instanceof String) {
-				return first.toString() + second.toString();
-			}
-			throw new IllegalArgumentException("#VALUE");
+			return Function.ADD.calculate(first, second);
 		}
 
 	},
@@ -49,19 +37,7 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			if (first instanceof Integer) {
-				return new Integer((Integer) first
-						- Function.intValueOf(second));
-			} else if (first instanceof Double) {
-				return new Double((Double) first
-						- Function.doubleValueOf(second));
-			} else if (first instanceof Boolean) {
-				return ((Boolean) first).equals(Boolean.TRUE)
-						&& !Function.booleanValueOf(second);
-			} else if (first instanceof String) {
-				return ((String) first).replace(second.toString(), "");
-			}
-			throw new IllegalArgumentException("#VALUE");
+			return Function.SUBTRACT.calculate(first, second);
 		}
 
 	},
@@ -78,17 +54,7 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			if (first instanceof Integer) {
-				return new Integer((Integer) first
-						* Function.intValueOf(second));
-			} else if (first instanceof Double) {
-				return new Double((Double) first
-						* Function.doubleValueOf(second));
-			} else if (first instanceof Boolean) {
-				return ((Boolean) first).equals(Boolean.TRUE)
-						&& Function.booleanValueOf(second);
-			}
-			throw new IllegalArgumentException("#VALUE");
+			return Function.MULTIPLY.calculate(first, second);
 		}
 
 	},
@@ -105,14 +71,7 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			if (first instanceof Integer) {
-				return new Integer((Integer) first
-						/ Function.intValueOf(second));
-			} else if (first instanceof Double) {
-				return new Double((Double) first
-						/ Function.doubleValueOf(second));
-			}
-			throw new IllegalArgumentException("#VALUE");
+			return Function.DIVIDE.calculate(first, second);
 		}
 
 	},
@@ -129,14 +88,7 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			if (first instanceof Integer) {
-				return new Integer((Integer) first
-						% Function.intValueOf(second));
-			} else if (first instanceof Double) {
-				return new Integer(Function.intValueOf(first)
-						% Function.intValueOf(second));
-			}
-			throw new IllegalArgumentException("#VALUE");
+			return Function.intValueOf(first) % Function.intValueOf(second);
 		}
 	},
 
@@ -144,16 +96,14 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			if ( !(first instanceof Number) || !(second instanceof Number) ) {
-				throw new IllegalArgumentException("#VALUE");
-			}
-			double output = Math.pow(Function.doubleValueOf(first),
-					Function.doubleValueOf(second));
-			if (Math.floor(output) == output) {
+			double output = Function.doubleValueOf(first);
+			output = Math.pow(output, Function.doubleValueOf(second));
+			
+			if ( Math.floor(output) == output ) {
 				return new Integer((int) output);
-			} else {
-				return new Double(output);
 			}
+
+			return output;
 		}
 	},
 
@@ -263,18 +213,30 @@ public enum Operator {
 			return Function.intValueOf(first) >> Function.intValueOf(second);
 		}
 
+	},
+	
+	CONCAT(new char[] {'&' }, 6) {
+		@Override
+		Object calculate(Object first, Object second) {
+			return first.toString() + second.toString();
+		}
 	};
 
 	char[] op;
 	int precedence;
-	boolean associativity = true;
+	Associativity associativity = Associativity.LEFT_TO_RIGHT;
+	
+	public enum Associativity {
+		LEFT_TO_RIGHT,
+		RIGHT_TO_LEFT;
+	}
 
 	/**
 	 * Constructor for an operand. Binds an unique char array.
 	 * 
 	 * @param op
 	 */
-	Operator(char[] op, int precedence) {
+	private Operator(char[] op, int precedence) {
 		this.op = op;
 		this.precedence = precedence;
 	}

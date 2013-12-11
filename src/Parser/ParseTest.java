@@ -113,7 +113,7 @@ public class ParseTest {
 
 	@Test
 	public void plusOperatorIntAndDouble() {
-		assertEquals(6, Parser.parse(sheet, "=3+3.2"));
+		assertEquals(6.2, Parser.parse(sheet, "=3+3.2"));
 	}
 
 	@Test
@@ -148,7 +148,7 @@ public class ParseTest {
 
 	@Test
 	public void subtractOperatorIntAndDouble() {
-		assertEquals(3, Parser.parse(sheet, "=5-2.8"));
+		assertEquals(2.2, Parser.parse(sheet, "=5-2.8"));
 	}
 
 	@Test
@@ -198,5 +198,11 @@ public class ParseTest {
 	@Test
 	public void simpleRange() {
 		assertEquals(26, Parser.parse(sheet, "=ADD(B1:B3)"));
+	}
+	
+
+	@Test
+	public void multiplySingleReferences() {
+		assertEquals(80, Parser.parse(sheet, "=B1*B3"));
 	}
 }
