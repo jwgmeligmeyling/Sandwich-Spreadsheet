@@ -332,7 +332,7 @@ public class Parser {
 	 */
 	private void pushOperator(Operator operator) {
 		while (!operators.empty()
-				&& operators.peek().precedence <= operator.precedence) {
+				&& operators.peek().hasLowerOrEqualPrecedence(operator)) {
 			calculate();
 		}
 		operators.push(operator);

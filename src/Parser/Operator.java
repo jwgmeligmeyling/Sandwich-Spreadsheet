@@ -92,6 +92,9 @@ public enum Operator {
 		}
 	},
 
+	/**
+	 * Return left operand to the power of the right operand
+	 */
 	POWER(new char[] { '^' }, 4) {
 
 		@Override
@@ -107,6 +110,10 @@ public enum Operator {
 		}
 	},
 
+	/**
+	 * Return <code>true</code> if the value of operand A is greater than
+	 * operand B
+	 */
 	GREATER_THAN(new char[] { '>' }, 8) {
 
 		@Override
@@ -117,6 +124,10 @@ public enum Operator {
 
 	},
 
+	/**
+	 * Return <code>true</code> if the value of operand A is greater than or
+	 * equal to operand B
+	 */
 	GREATER_OR_EQUAL(new char[] { '>', '=' }, 8) {
 
 		@Override
@@ -127,6 +138,9 @@ public enum Operator {
 
 	},
 
+	/**
+	 * Return <code>true</code> if the value of operand A is less than operand B
+	 */
 	LESS(new char[] { '<' }, 8) {
 
 		@Override
@@ -137,6 +151,10 @@ public enum Operator {
 
 	},
 
+	/**
+	 * Return <code>true</code> if the value of operand A is less than or
+	 * equal to operand B
+	 */
 	LESS_OR_EQUAL(new char[] { '<', '=' }, 8) {
 
 		@Override
@@ -147,6 +165,9 @@ public enum Operator {
 
 	},
 
+	/**
+	 * Return <code>true</code> if the value of operand A is equal to operand B
+	 */
 	EQUAL(new char[] { '=', '=' }, 9) {
 
 		@Override
@@ -157,6 +178,9 @@ public enum Operator {
 
 	},
 
+	/**
+	 *  Return <code>true</code> if the value of operand A is not equal to operand B
+	 */
 	DIFFERENT(new char[] { '<', '>' }, 9) {
 
 		@Override
@@ -167,6 +191,9 @@ public enum Operator {
 
 	},
 
+	/**
+	 *  Return <code>true</code> if the value of operand A is not equal to operand B
+	 */
 	NOT_EQUAL(new char[] { '!', '=' }, 9) {
 
 		@Override
@@ -177,6 +204,9 @@ public enum Operator {
 
 	},
 
+	/**
+	 *  Return <code>true</code> if the both operand A and operand B are <code>true</code>
+	 */
 	AND(new char[] { '&', '&' }, 14) {
 
 		@Override
@@ -187,6 +217,9 @@ public enum Operator {
 
 	},
 
+	/**
+	 *  Return <code>true</code> if either operand A or operand B is <code>true</code>.
+	 */
 	OR(new char[] { '|', '|' }, 14) {
 
 		@Override
@@ -197,6 +230,9 @@ public enum Operator {
 
 	},
 
+	/**
+	 *  Binary shift an integer value to the left with 0's.
+	 */
 	SHIFT_LEFT(new char[] { '<', '<' }, 7) {
 
 		@Override
@@ -206,6 +242,9 @@ public enum Operator {
 
 	},
 
+	/**
+	 *  Binary shift an integer value to the right
+	 */
 	SHIFT_RIGHT(new char[] { '>', '>' }, 7) {
 
 		@Override
@@ -215,6 +254,9 @@ public enum Operator {
 
 	},
 	
+	/**
+	 *  Concatenate two Strings
+	 */
 	CONCAT(new char[] {'&' }, 6) {
 		@Override
 		Object calculate(Object first, Object second) {
@@ -222,13 +264,37 @@ public enum Operator {
 		}
 	};
 
-	char[] op;
-	int precedence;
-	Associativity associativity = Associativity.LEFT_TO_RIGHT;
+	/**
+	 * The character sequence for this operator
+	 */
+	private final char[] op;
+	/**
+	 * The precedence for this operator
+	 */
+	public final int precedence;
+	/**
+	 * The associativity for this operator
+	 */
+	public final Associativity associativity = Associativity.LEFT_TO_RIGHT;
 	
+	/**
+	 * An enumeration with types of associativity for operators
+	 * @author Jan-Willem Gmelig Meyling
+	 *
+	 */
 	public enum Associativity {
 		LEFT_TO_RIGHT,
 		RIGHT_TO_LEFT;
+	}
+	
+	/**
+	 * Method to determine if a operator has a higher precedence
+	 * than another
+	 * @param operator Another operator
+	 * @return <code>true</code> if this operator has a higher precedence
+	 */
+	public boolean hasLowerOrEqualPrecedence(Operator operator) {
+		return precedence <= operator.precedence;
 	}
 
 	/**
