@@ -5,6 +5,7 @@ import File.Cell;
 /**
  * Interface for Range class.
  * @author Maarten Flikkema
+ * 
  */
 public interface Range {
 	

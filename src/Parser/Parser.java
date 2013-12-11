@@ -111,7 +111,7 @@ public class Parser {
 	 * Private Parse constructor. Used for recursive parsing between
 	 * parentheses.
 	 * 
-	 * @param Parser
+	 * @param parser
 	 *            Another parse instance
 	 * @param from
 	 *            From index
@@ -232,7 +232,12 @@ public class Parser {
 	 * If the <code>value</code> is a <code>Function</code> result, fetch the
 	 * arguments first and calculate the <code>value</code>.
 	 * 
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	private void closeBracket() {
 		depth--;
@@ -289,7 +294,12 @@ public class Parser {
 	 * @throws EmptyStackException
 	 *             if this value stack or operator stack is empty.
 	 *             
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	private void calculate() {
 		Object a = values.pop();
@@ -313,8 +323,12 @@ public class Parser {
 	 * 
 	 * @param operator
 	 *            The operator to push
-	 * 
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	private void pushOperator(Operator operator) {
 		if (!operators.empty()) {

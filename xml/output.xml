@@ -1,1 +1,1 @@
-<?xml version="SPREADSHEET"?><CELL row="1" column="4" type="">Hallo! ik ben een cell</CELL>
+<SPREADSHEET><CELL row="1" column="4" type="">Hallo! ik ben een cell &lt;&gt;&amp;&amp;</CELL><CELL row="1" column="5" type="">Hallo! ik ben een cell2</CELL></SPREADSHEET>

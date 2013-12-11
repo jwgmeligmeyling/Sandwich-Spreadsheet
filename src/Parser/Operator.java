@@ -148,7 +148,7 @@ public enum Operator {
 	 * 
 	 * @param first
 	 *            First argument
-	 * @param arguments
+	 * @param second
 	 *            Optional additional arguments
 	 * @return <code>Object</code> of implemented type
 	 */
@@ -159,7 +159,6 @@ public enum Operator {
 			if (Arrays.equals(op, o.op))
 				return o;
 		}
-		throw new IllegalArgumentException(new String(op).toString()
-				+ " is not a valid operator!");
+		throw new IllegalArgumentException(new String(op).toString() + " is not a valid operator!");
 	}
 }

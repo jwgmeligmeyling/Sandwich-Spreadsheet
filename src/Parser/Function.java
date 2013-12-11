@@ -26,10 +26,14 @@ public enum Function {
 	 * </br> When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
 	 * 
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	ADD {
-
 		@Override
 		Object calculate(Object first, Object... arguments) {
 			if (first instanceof Integer) {
@@ -70,7 +74,12 @@ public enum Function {
 	 * </br> When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
 	 * 
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	SUBTRACT {
 
@@ -103,7 +112,12 @@ public enum Function {
 	 * </br> When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
 	 * 
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	MULTIPLY {
 
@@ -136,9 +150,13 @@ public enum Function {
 	 * <code>Integer</code>. <br>
 	 * </br> When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
-	 * 
-	 * @author Maarten Flikkema
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	DIVIDE {
 
@@ -172,8 +190,13 @@ public enum Function {
 	 * </br> When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
 	 * 
-	 * @author Maarten Flikkema
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	POWER {
 
@@ -196,8 +219,13 @@ public enum Function {
 	/**
 	 * Get the rounded value of a <code>Double</code>.
 	 * 
-	 * @author Maarten Flikkema
-	 * @author Jan-Willem Gmelig Meyling
+	 * <div>
+	 * <b>Authors:</b><br>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	ROUND {
 

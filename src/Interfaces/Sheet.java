@@ -60,11 +60,11 @@ public interface Sheet {
 	
 	/**
 	 * 
-	 * @param rowUpLeft is the row index of the upper left cell in the range
-	 * @param colUpLeft is the column index of the upper left cell in the range
-	 * @param rowDownRight is the row index of the last cell in the range
-	 * @param colDownRight is the column index of the last cell in the range
+	 * @param rowUp is the row index of the upper left cell in the range
+	 * @param colLeft is the column index of the upper left cell in the range
+	 * @param rowDown is the row index of the last cell in the range
+	 * @param colRight is the column index of the last cell in the range
 	 * @return an array of cells with all the cells in the range from cell(rowUp, colLeft) to cell(rowDown, colRight)
 	 */
-	public Range getRange(int rowUp, int colLeft, int rowDown, int colRight);
+	public Range getRange(int colLeft, int rowUp, int colRight, int rowDown);
 }
