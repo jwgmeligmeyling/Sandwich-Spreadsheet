@@ -1,5 +1,7 @@
 package Parser;
 
+import java.text.SimpleDateFormat;
+
 import File.Cell;
 import File.Sheet.Range;
 
@@ -270,6 +272,17 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			assert arguments.length == 0;
 			return Math.cos(doubleValueOf(arguments[0]));
+		}
+	},
+	
+	/**
+	 * Create a date from a format string
+	 */
+	DATE {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length == 1;
+			return (new SimpleDateFormat(arguments[0].toString())).format(System.currentTimeMillis());
 		}
 	};
 

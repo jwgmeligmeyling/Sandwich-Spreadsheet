@@ -388,19 +388,21 @@ public class Parser {
 	 * Method to get a <code>String</code> from the input
 	 */
 	private void getString() {
-		int i = 1;
-		String s = "";
-		do {
-			char c = peek(i);
-			if ( c == '\'' || c == '"' ) {
-				break;
-			} else {
-				s += c;
-				i++;
-			}
-		} while ( true );
-		values.push(s);
-		index += i;
+		if (depth == 0) {
+			int i = 1;
+			String s = "";
+			do {
+				char c = peek(i);
+				if ( c == '\'' || c == '"' ) {
+					break;
+				} else {
+					s += c;
+					i++;
+				}
+			} while ( true );
+			values.push(s);
+			index += i;
+		}
 	}
 
 	/**
