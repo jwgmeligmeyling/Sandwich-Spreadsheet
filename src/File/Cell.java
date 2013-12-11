@@ -3,6 +3,9 @@ package File;
 import java.awt.Color;
 import java.util.Observable;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import File.Sheet.Position;
 import Parser.Parser;
 
@@ -18,7 +21,7 @@ public class Cell extends Observable implements Interfaces.Cell {
 	private String input;
 	private Object value;
 
-	private CelType type;
+	private CelType type = CelType.TEXT;
 
 	private Color fColor;
 	private Color bColor;
@@ -31,6 +34,24 @@ public class Cell extends Observable implements Interfaces.Cell {
 		this.position = position;
 		this.input = input;
 		updateValue();
+	}
+	
+	/**
+	 * Method to write a cell to the XML-file
+	 * @param writer XMLStreamWriter
+	 * @throws XMLStreamException 
+	 */
+	public void write(XMLStreamWriter writer) throws XMLStreamException {
+		/*
+		 * Start the <CELL> element and append the attributes
+		 */
+		writer.writeStartElement("CELL");
+		writer.writeAttribute("row", Integer.toString(getRow()));
+		writer.writeAttribute("column", Integer.toString(getColumn()));
+		writer.writeAttribute("type", getType().toString());
+		
+		writer.writeCharacters(getInput());
+		writer.writeEndElement();
 	}
 
 	@Override

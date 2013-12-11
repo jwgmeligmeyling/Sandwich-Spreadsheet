@@ -1,8 +1,1 @@
-<SPREADSHEET>
-<CELL row="0" column="0" type="null">bliep</CELL>
-<CELL row="1" column="0" type="null">5</CELL>
-<CELL row="2" column="0" type="null">=5</CELL>
-<CELL row="0" column="1" type="null">=5*2</CELL>
-<CELL row="1" column="1" type="null">=2+2*3</CELL>
-<CELL row="2" column="1" type="null">=ADD(5,3)</CELL>
-</SPREADSHEET>
+<SPREADSHEET><CELL row="1" column="1" type="TEXT">=2+2*3</CELL><CELL row="2" column="0" type="TEXT">=5</CELL><CELL row="0" column="1" type="TEXT">=5*2</CELL><CELL row="1" column="0" type="TEXT">5</CELL><CELL row="0" column="0" type="TEXT">bliep</CELL><CELL row="2" column="1" type="TEXT">=ADD(5,3)</CELL></SPREADSHEET>

@@ -2,6 +2,11 @@ package File;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -87,10 +92,8 @@ public class TestSheet {
 	}
 	
 	@Test
-	public void testWriteSheet() {
-		sheet.Write();
-		
-		
+	public void testWriteSheet() throws XMLStreamException, FactoryConfigurationError, IOException {
+		sheet.write("xml/output.xml");
 	}
 
 }

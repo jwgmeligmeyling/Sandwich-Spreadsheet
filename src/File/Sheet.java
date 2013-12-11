@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 
+import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -159,59 +160,6 @@ public class Sheet implements Interfaces.Sheet {
 	}
 	
 	/**
-	 * The function that writes the sheet to a XML file.
-	 * 
-	 * @author Jim Hommes
-	 */
-	public void Write(){
-		try{ 
-			String path = "xml/output.xml";
-			OutputStream output = new FileOutputStream(new File(path)); 
-			XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(output,"UTF-8"));
-			
-			Cell[] lijst = getCells();
-			
-			//Start Spreadsheet
-			out.writeStartElement("SPREADSHEET");
-			
-			for(int i = 0; i < lijst.length; i++){
-				//<CELL>
-				out.writeStartElement("CELL");
-				//Attributes
-				String string = ""+lijst[i].getRow();
-				out.writeAttribute("row",string);
-				string = ""+lijst[i].getColumn();
-				out.writeAttribute("column",string);
-				string = ""+lijst[i].getType();
-				out.writeAttribute("type",string);
-				//Whats in the cell
-				out.writeCharacters(lijst[i].getInput());
-				
-				//end
-				out.writeEndElement();
-			}
-			
-			out.writeEndElement();
-			
-			out.close();
-			output.close();
-			
-		}catch(FileNotFoundException e){
-			System.out.println("File not found!");
-		}catch(XMLStreamException e){
-			System.out.println("XML Stream exception");
-		}catch(UnsupportedEncodingException e){
-			System.out.println("Unsupported encoding exception");
-		}catch(IOException e){
-			System.out.println("IOException");
-		}
-		
-		
-	}
-	
-	
-	
-	/**
 	 * The range class is used to select a range of <code>Cell</code> instances
 	 * from the current <code>Sheet</code>.
 	 * 
@@ -340,6 +288,49 @@ public class Sheet implements Interfaces.Sheet {
 	 */
 	public Sheet(String nameIn) {
 		sheetName = nameIn;
+	}
+
+	/**
+	 * The function that writes the sheet to a XML file.
+	 * 
+	 * @param path
+	 *            Path to file
+	 * @throws XMLStreamException
+	 *             If there was an error occurred writing XML
+	 * @throws FactoryConfigurationError
+	 *             if an instance of this factory cannot be loaded
+	 * @throws IOException
+	 *             If there was an error writing the file in the correct
+	 *             encoding
+	 * 
+	 * @author Jim Hommes
+	 */
+	public void write(String path) throws XMLStreamException,
+			FactoryConfigurationError, IOException {
+		OutputStream output = new FileOutputStream(new File(path));
+		XMLStreamWriter writer = XMLOutputFactory.newInstance()
+				.createXMLStreamWriter(new OutputStreamWriter(output, "UTF-8"));
+		write(writer);
+		writer.close();
+		output.close();
+	}
+	
+	/**
+	 * The function that writes the sheet to a XML file.
+	 *             
+	 * @throws XMLStreamException
+	 *             If there was an error processing the XML stream      
+	 *             
+	 * @author Jim Hommes
+	 */
+	public void write(XMLStreamWriter writer) throws XMLStreamException {
+		writer.writeStartElement("SPREADSHEET");
+	
+		for (Cell cell : cells.values()) {
+			cell.write(writer);
+		}
+	
+		writer.writeEndElement();
 	}
 
 	@Override
