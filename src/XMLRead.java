@@ -86,7 +86,7 @@ public class XMLRead {
 				}
 			};
 
-			saxParser.parse("xml/testXML.xml", handler);
+			saxParser.parse("xml/output.xml", handler);
 
 		} catch (SAXException e) {
 			System.out.println("Unhandled SAXException");

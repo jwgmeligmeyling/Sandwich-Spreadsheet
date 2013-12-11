@@ -18,16 +18,28 @@ public class XMLWrite {
 			OutputStream output = new FileOutputStream(new File("xml/output.xml")); 
 			XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(output,"UTF-8"));
 			
-			out.writeStartDocument("SPREADSHEET");
+			//out.writeStartDocument("UTF-8");
+			out.writeStartElement("SPREADSHEET");
 			out.writeStartElement("CELL");
+		
 			out.writeAttribute("row","1");
 			out.writeAttribute("column","4");
 			out.writeAttribute("type","");
 			
-			out.writeCharacters("Hallo! ik ben een cell");
+			out.writeCharacters("Hallo! ik ben een cell <>&&");
 			
 			out.writeEndElement();
-			out.writeEndDocument();
+			out.writeStartElement("CELL");
+			
+			out.writeAttribute("row","1");
+			out.writeAttribute("column","5");
+			out.writeAttribute("type","");
+			
+			out.writeCharacters("Hallo! ik ben een cell2");
+			
+			out.writeEndElement();
+			out.writeEndElement();
+			//out.writeEndDocument();
 			
 			System.out.println("Klaar!");
 			
