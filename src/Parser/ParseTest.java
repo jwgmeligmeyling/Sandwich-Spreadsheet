@@ -205,4 +205,63 @@ public class ParseTest {
 	public void multiplySingleReferences() {
 		assertEquals(80, Parser.parse(sheet, "=B1*B3"));
 	}
+	
+	@Test
+	public void testPrevious() {
+		assertEquals(0, new Parser(sheet, "").previous());
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testNullReference() {
+		Parser.parse(sheet, "=ADD(B1:B4)");
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testInvalidReference() {
+		Parser.parse(sheet, "=ADD(B1:)");
+	}
+	
+	@Test
+	public void concatStrings() {
+		assertEquals("BLIEPBLA", Parser.parse(sheet, "='BLIEP'&'BLA'"));
+	}
+	
+	@Test
+	public void fairlyComplexFunction() {
+		assertEquals(68, Parser.parse(sheet, "=2+3^2*4+3*7+(2+1)*3"));
+	}
+	
+	@Test
+	public void testToString() {
+		Parser p = new Parser(sheet, "ADD(5,3)");
+		assertEquals("ADD(5,3)", p.toString());
+	}
+	
+	@Test
+	public void testWithDoubleOperator() {
+		assertEquals(16, Parser.parse(sheet, "=2<<3"));
+	}
+	
+	@Test
+	public void testNegativeFunction() {
+		assertEquals(-5, Parser.parse(sheet, "=-ADD(3,2)"));
+	}
+	
+	@Test
+	public void testENotation() {
+		assertEquals(5e3, Parser.parse(sheet, "=5e3"));
+		assertEquals(5e3, Parser.parse(sheet, "=5E3"));
+	}
+	
+	@Test
+	public void strInBrackets() {
+		assertEquals("SDAFBAAB", Parser.parse(sheet, "='SDAF'&('BA'&'AB')"));
+	}
+	
+
+	@Test
+	public void strInQuotes() {
+		assertEquals("sadfsadf", Parser.parse(sheet, "=\"sadfsadf\""));
+	}
+
 }
