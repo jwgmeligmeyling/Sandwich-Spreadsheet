@@ -13,11 +13,6 @@ public class TestRead {
 	
 	public String path;
 	
-	@Before
-	public void create(){
-		
-	}
-	
 	@Test
 	public void TestReadNormalWholeBlock(){
 		path = "xml/oude xml.xml";
@@ -40,25 +35,11 @@ public class TestRead {
 		boolean check = true;
 		for(int i = 0; i < lijst.length; i++){
 			if(check){
-				check = lijst[i].getValue().equals(lijst2[i].getValue());
+				check = lijst[i].getInput().equals(lijst2[i].getInput());
 			}
 		}
 		
 		assertEquals(check,true);	
-			
-		//Testing the block from 1,1 to 1,2
-		check = true;
-		
-		lijst = sheet.getRange(1,1,2,1).getCellArray();
-		lijst2 = csheet.getRange(1,1,2,1).getCellArray();
-		
-		for(int i = 0; i < lijst.length; i++){
-			if(check){
-				check = lijst[i].getValue().equals(lijst2[i].getValue());
-			}
-		}
-		
-		assertEquals(check,true);
 		
 	}
 
@@ -83,7 +64,7 @@ public class TestRead {
 		
 		for(int i = 0; i < lijst.length; i++){
 			if(check){
-				check = lijst[i].getValue().equals(lijst2[i].getValue());
+				check = lijst[i].getInput().equals(lijst2[i].getInput());
 			}
 		}
 		
@@ -112,10 +93,42 @@ public class TestRead {
 		
 		for(int i = 0; i < lijst.length; i++){
 			if(check){
-				check = lijst[i].getValue().equals(lijst2[i].getValue());
+				check = lijst[i].getInput().equals(lijst2[i].getInput());
 			}
 		}
 		
 		assertEquals(check,true);
+	}
+	
+	@Test
+	public void TestReadFoutWholeBlock(){
+		path = "xml/fout.xml";
+		Sheet sheet = XMLRead.read(path);
+		
+		Sheet csheet = new Sheet();
+		
+		csheet.createCell(" I wonder how you handle\nline breaks in a cell?",4,4);
+		csheet.createCell("Are doubly defined cells a problem for you?",1,10);
+		csheet.createCell("It appears you show the first one, when a cell is doubly defined.",2,10);
+		csheet.createCell("It appears you show the second one, when a cell is doubly defined.",2,10);
+		csheet.createCell("If I use encoded symbols such as < and > or &, how do they show?",1,2);
+		csheet.createCell("<VALUE>What if I define another xml tag in here?</VALUE>Or will only the text 'outside' of 'VALUE' show?",2,2);
+		
+		boolean check = true;
+		
+		Cell[] lijst = sheet.getRange(1,1,10,10).getCellArray();
+		Cell[] lijst2 = csheet.getRange(1,1,10,10).getCellArray();
+		
+		System.out.println("bla"+sheet.getCellAt(2, 2).getInput());
+		
+		for(int i = 0; i < lijst.length; i++){
+			if(check){
+				check = lijst[i].getInput().equals("swag");
+			}
+		}
+		
+		assertEquals(check,true);
+		
+		
 	}
 }

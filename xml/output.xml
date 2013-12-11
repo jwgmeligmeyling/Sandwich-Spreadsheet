@@ -1,1 +1,8 @@
-<SPREADSHEET><CELL row="1" column="4" type="">Hallo! ik ben een cell &lt;&gt;&amp;&amp;</CELL><CELL row="1" column="5" type="">Hallo! ik ben een cell2</CELL></SPREADSHEET>
+<SPREADSHEET>
+<CELL row="0" column="0" type="null">bliep</CELL>
+<CELL row="1" column="0" type="null">5</CELL>
+<CELL row="2" column="0" type="null">=5</CELL>
+<CELL row="0" column="1" type="null">=5*2</CELL>
+<CELL row="1" column="1" type="null">=2+2*3</CELL>
+<CELL row="2" column="1" type="null">=ADD(5,3)</CELL>
+</SPREADSHEET>
