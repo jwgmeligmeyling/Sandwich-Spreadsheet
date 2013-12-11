@@ -12,12 +12,7 @@ public class ParseTest {
 
 	public Sheet sheet;
 
-	public Cell A1;
-	public Cell A2;
-	public Cell A3;
-	public Cell B1;
-	public Cell B2;
-	public Cell B3;
+	public Cell A1, A2, A3, B1, B2, B3;
 
 	@Before
 	public void setUp() throws Exception {
