@@ -9,9 +9,3 @@ Collaborators:
 | Jim | Hommes | jimhommes@tudelft.nl | jim@homm.es | +31651676585 | 4306090 |
 | Liam | Clark | liam.alistair.clark@gmail.com | | | 4303423 |
 | Maarten | Flikkema | maartenflikkema@hotmail.com | M.H.Flikkema@student.tudelft.nl | +31617011445 | 4306538 |
-| Willem | Hoogervorst | willem.hoogervorst@hotmail.com | whoogervorst@student.tudelft.nl | +31621179458 | 4305647 |
-
-Implemented methods:
-* `ADD(a,b,...)`
-* `SUBTRACT(a,b)`
-* `POWER(a,b)`
