@@ -4,5 +4,8 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="jar/sax2r2.jar"/>
+	<classpathentry kind="lib" path="jar/controlsfx-8.0.3.jar"/>
+	<classpathentry kind="lib" path="jar/controlsfx-samples-8.0.3.jar"/>
+	<classpathentry kind="lib" path="jar/fxsampler-1.0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
