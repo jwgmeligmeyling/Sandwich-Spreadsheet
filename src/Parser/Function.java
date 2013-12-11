@@ -35,31 +35,26 @@ public enum Function {
 	 */
 	ADD {
 		@Override
-		Object calculate(Object first, Object... arguments) {
-			if (first instanceof Integer) {
-				int output = (Integer) first;
-				for (Object argument : arguments) {
-					output += intValueOf(argument);
-				}
-				return new Integer(output);
-			} else if (first instanceof Double) {
-				double output = (Double) first;
-				for (Object argument : arguments) {
+		Object calculate(Object... arguments) {
+			double output = 0;
+			
+			for ( Object argument : arguments ) {
+				if ( argument instanceof Number ) {
 					output += doubleValueOf(argument);
-				}
-				return new Double(output);
-			} else if (first instanceof Range) {
-				double output = 0;
-				for (Cell cell : ((Range) first).getCellArray()) {
-					output += doubleValueOf(cell.getValue());
-				}
-				if ( Math.floor(output) == output ) {
-					return new Integer((int) output);
+				} else if ( argument instanceof Range ) {
+					for ( Cell cell : ((Range) argument).getCellArray() ) {
+						output += doubleValueOf(cell.getValue());
+					}
 				} else {
-					return new Double(output);
+					throw new IllegalArgumentException("#VALUE");
 				}
 			}
-			throw new IllegalArgumentException("#VALUE");
+			
+			if ( Math.floor(output) == output ) {
+				return new Integer((int) output);
+			}
+
+			return output;
 		}
 
 	},
@@ -84,21 +79,23 @@ public enum Function {
 	SUBTRACT {
 
 		@Override
-		Object calculate(Object first, Object... arguments) {
-			if (first instanceof Integer) {
-				int output = (Integer) first;
-				for (Object argument : arguments) {
-					output -= intValueOf(argument);
+		Object calculate(Object... arguments) {
+			assert arguments.length > 1;
+			double output = doubleValueOf(arguments[0]);
+			
+			for ( int i = 1; i < arguments.length; i++ ) {
+				if ( arguments[i] instanceof Number ) {
+					output -= doubleValueOf(arguments[i]);
+				} else {
+					throw new IllegalArgumentException("#VALUE");
 				}
-				return new Integer(output);
-			} else if (first instanceof Double) {
-				double output = (Double) first;
-				for (Object argument : arguments) {
-					output -= doubleValueOf(argument);
-				}
-				return new Double(output);
 			}
-			throw new IllegalArgumentException("#VALUE");
+			
+			if ( Math.floor(output) == output ) {
+				return new Integer((int) output);
+			}
+			
+			return output;
 		}
 
 	},
@@ -122,21 +119,23 @@ public enum Function {
 	MULTIPLY {
 
 		@Override
-		Object calculate(Object first, Object... arguments) {
-			if (first instanceof Integer) {
-				int output = (Integer) first;
-				for (Object argument : arguments) {
-					output *= intValueOf(argument);
+		Object calculate(Object... arguments) {
+			assert arguments.length > 1;
+			double output = doubleValueOf(arguments[0]);
+			
+			for ( int i = 1; i < arguments.length; i++ ) {
+				if ( arguments[i] instanceof Number ) {
+					output *= doubleValueOf(arguments[i]);
+				} else {
+					throw new IllegalArgumentException("#VALUE");
 				}
-				return new Integer(output);
-			} else if (first instanceof Double) {
-				double output = (Double) first;
-				for (Object argument : arguments) {
-					output *= doubleValueOf(argument);
-				}
-				return new Double(output);
 			}
-			throw new IllegalArgumentException("#VALUE");
+			
+			if ( Math.floor(output) == output ) {
+				return new Integer((int) output);
+			}
+
+			return output;
 		}
 
 	},
@@ -161,21 +160,23 @@ public enum Function {
 	DIVIDE {
 
 		@Override
-		Object calculate(Object first, Object... arguments) {
-			if (first instanceof Integer) {
-				int output = (Integer) first;
-				for (Object argument : arguments) {
-					output /= intValueOf(argument);
+		Object calculate(Object... arguments) {
+			assert arguments.length > 1;
+			double output = doubleValueOf(arguments[0]);
+			
+			for ( int i = 1; i < arguments.length; i++ ) {
+				if ( arguments[i] instanceof Number ) {
+					output /= doubleValueOf(arguments[i]);
+				} else {
+					throw new IllegalArgumentException("#VALUE");
 				}
-				return new Integer(output);
-			} else if (first instanceof Double) {
-				double output = (Double) first;
-				for (Object argument : arguments) {
-					output /= doubleValueOf(argument);
-				}
-				return new Double(output);
 			}
-			throw new IllegalArgumentException("#VALUE");
+			
+			if ( Math.floor(output) == output ) {
+				return new Integer((int) output);
+			}
+
+			return output;
 		}
 
 	},
@@ -201,17 +202,16 @@ public enum Function {
 	POWER {
 
 		@Override
-		Object calculate(Object first, Object... arguments) {
-			if (first instanceof Integer) {
-				int a = (Integer) first;
-				int b = intValueOf(arguments[0]);
-				return new Integer((int) Math.pow(a, b));
-			} else if (first instanceof Double) {
-				double a = (Double) first;
-				double b = doubleValueOf(arguments[0]);
-				return new Double(Math.pow(a, b));
+		Object calculate(Object... arguments) {
+			assert arguments.length == 2;
+			double output = Math.pow(doubleValueOf(arguments[0]),
+					doubleValueOf(arguments[1]));
+
+			if (Math.floor(output) == output) {
+				return new Integer((int) output);
 			}
-			throw new IllegalArgumentException("#VALUE");
+			
+			return output;
 		}
 
 	},
@@ -230,15 +230,55 @@ public enum Function {
 	ROUND {
 
 		@Override
-		Object calculate(Object first, Object... arguments) {
-			if (first instanceof Integer) {
-				return first;
-			} else if (first instanceof Double) {
-				return new Integer(intValueOf(first));
+		Object calculate(Object... arguments) {
+			assert arguments.length == 1;
+			
+			if (arguments[0] instanceof Integer) {
+				return arguments[0];
+			} else if (arguments[0] instanceof Double) {
+				return new Integer(intValueOf(arguments[0]));
+			} else {
+				throw new IllegalArgumentException("#VALUE");
 			}
-			throw new IllegalArgumentException("#VALUE");
 		}
 
+	},
+	
+	RAND {
+		@Override
+		Object calculate(Object... arguments) {
+			return Math.random();
+		}
+	},
+	
+	SQRT {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length == 0;
+			double output = Math.sqrt(doubleValueOf(arguments[0]));
+			
+			if (Math.floor(output) == output) {
+				return (int) output;
+			}
+			
+			return output;
+		}
+	},
+	
+	SIN {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length == 0;
+			return Math.sin(doubleValueOf(arguments[0]));
+		}
+	},
+	
+	COS {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length == 0;
+			return Math.cos(doubleValueOf(arguments[0]));
+		}
 	};
 
 	/**
@@ -248,13 +288,11 @@ public enum Function {
 	 * <code>Boolean</code>, <code>String</code>, <code>Reference</code>, or
 	 * another <code>Function</code>.
 	 * 
-	 * @param first
-	 *            First argument
 	 * @param arguments
 	 *            Optional additional arguments
 	 * @return <code>Object</code> of implemented type
 	 */
-	abstract Object calculate(Object first, Object... arguments);
+	abstract Object calculate(Object... arguments);
 
 	/**
 	 * Calculate the negative value for a function. This method takes at least
@@ -263,14 +301,12 @@ public enum Function {
 	 * <code>Boolean</code>, <code>String</code>, <code>Reference</code>, or
 	 * another <code>Function</code>.
 	 * 
-	 * @param first
-	 *            First argument
 	 * @param arguments
 	 *            Optional additional arguments
 	 * @return <code>Object</code> of implemented type
 	 */
-	Object calculateNegative(Object first, Object... arguments) {
-		Object result = calculate(first, arguments);
+	Object calculateNegative(Object... arguments) {
+		Object result = calculate(arguments);
 		if (result instanceof Integer) {
 			return new Integer(-(Integer) result);
 		} else if (result instanceof Double) {

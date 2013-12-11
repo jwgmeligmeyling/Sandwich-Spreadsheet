@@ -78,7 +78,7 @@ public class ParseTest {
 
 	@Test
 	public void simpleFunctionWithCast() {
-		assertEquals(7, Parser.parse(sheet, "=ADD(3,4.1234)"));
+		assertEquals(7.1234, Parser.parse(sheet, "=ADD(3,4.1234)"));
 	}
 
 	@Test

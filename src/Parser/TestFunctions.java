@@ -18,7 +18,7 @@ public class TestFunctions {
 
 	@Test
 	public void testAddIntAndDouble() {
-		assertEquals(7, Function.ADD.calculate(6, 1.25));
+		assertEquals(7.25, Function.ADD.calculate(6, 1.25));
 	}
 	
 	@Test

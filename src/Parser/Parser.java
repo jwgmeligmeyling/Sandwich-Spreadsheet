@@ -257,15 +257,14 @@ public class Parser {
 				 * and convert the tail of the argument list to an array of
 				 * Objects, so that the function can be called with varargs.
 				 */
-				Object[] args = new Object[arguments.size() - 1];
-				Object first = arguments.remove(0);
+				Object[] args = new Object[arguments.size()];
 				arguments.toArray(args);
 				/*
 				 * When the value needs to be negative, calculate the negative
 				 * value, else, calculate the normal value.
 				 */
-				Object value = (isNegative) ? function.calculateNegative(first, args)
-						: function.calculate(first, args);
+				Object value = (isNegative) ? function.calculateNegative(args)
+						: function.calculate(args);
 				/*
 				 * Push the value to the value stack, and clear the arguments
 				 * list and function variable, so that other expressions are
