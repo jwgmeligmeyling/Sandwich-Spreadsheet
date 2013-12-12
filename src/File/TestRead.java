@@ -2,10 +2,12 @@ package File;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
-import org.junit.Before;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import File.Cell;
 
@@ -14,7 +16,7 @@ public class TestRead {
 	public String path;
 	
 	@Test
-	public void TestReadNormalWholeBlock(){
+	public void TestReadNormalWholeBlock() throws ParserConfigurationException, SAXException, IOException{
 		path = "xml/oude xml.xml";
 		Sheet sheet = XMLRead.read(path);
 		
@@ -30,11 +32,11 @@ public class TestRead {
 		Cell[] lijst = sheet.getRange(1,1,2,3).getCellArray();
 		Cell[] lijst2 = csheet.getRange(1,1,2,3).getCellArray();
 		
-		assertArrayEquals(lijst, lijst2);
+		assertArrayEquals(lijst2, lijst);
 	}
 
 	@Test
-	public void TestReadNormalSmallestBlock(){
+	public void TestReadNormalSmallestBlock() throws ParserConfigurationException, SAXException, IOException{
 		path = "xml/oude xml.xml";
 		Sheet sheet = XMLRead.read(path);
 		
@@ -50,11 +52,11 @@ public class TestRead {
 		Cell[] lijst = sheet.getRange(1,1,2,1).getCellArray();
 		Cell[] lijst2 = csheet.getRange(1,1,2,1).getCellArray();
 		
-		assertArrayEquals(lijst, lijst2);
+		assertArrayEquals(lijst2, lijst);
 	}
 	
 	@Test
-	public void TestReadNormalSpecificBlock(){
+	public void TestReadNormalSpecificBlock() throws ParserConfigurationException, SAXException, IOException{
 		path = "xml/oude xml.xml";
 		Sheet sheet = XMLRead.read(path);
 		
@@ -70,11 +72,11 @@ public class TestRead {
 		Cell[] lijst = sheet.getRange(2,2,1,3).getCellArray();
 		Cell[] lijst2 = csheet.getRange(2,2,1,3).getCellArray();
 		
-		assertArrayEquals(lijst, lijst2);
+		assertArrayEquals(lijst2, lijst);
 	}
 	
 	@Test
-	public void TestReadFoutWholeBlock(){
+	public void TestReadFoutWholeBlock() throws ParserConfigurationException, SAXException, IOException{
 		path = "xml/fout.xml";
 		Sheet sheet = XMLRead.read(path);
 		
@@ -90,6 +92,6 @@ public class TestRead {
 		Cell[] lijst = sheet.getRange(1,1,10,10).getCellArray();
 		Cell[] lijst2 = csheet.getRange(1,1,10,10).getCellArray();
 		
-		assertNotEquals(lijst, lijst2);		
+		assertArrayEquals(lijst2, lijst);		
 	}
 }

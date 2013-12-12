@@ -3,17 +3,20 @@ package File;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * The <code>Sheet</code> class is the main class for the spreadsheet
@@ -157,6 +160,25 @@ public class Sheet implements Interfaces.Sheet {
 				return false;
 			return true;
 		}
+
+		@Override
+		public String toString() {
+			return getColumnLetter(colIndex) + rowIndex;
+		}
+		
+		/**
+		 * Method to get the letter for a column
+		 * @param index
+		 * @return
+		 */
+		private String getColumnLetter(int index) {
+			int quotient = (index) / 26;
+			if (quotient > 0) {
+				return getColumnLetter(quotient - 1) + (char) ((index % 26) + 65);
+			} else {
+				return "" + (char) ((index % 26) + 65);
+			}
+		}
 	}
 	
 	/**
@@ -232,6 +254,11 @@ public class Sheet implements Interfaces.Sheet {
 				output[i] = cells.get(topLeft.offset(i / numRows, i % numRows));
 			}
 			return output;
+		}
+
+		@Override
+		public String toString() {
+			return topLeft + ":" + bottomRight;
 		}
 
 	}
@@ -380,5 +407,30 @@ public class Sheet implements Interfaces.Sheet {
 			int rowDown) {
 		return new Range(new Position(colLeft, rowUp), new Position(colRight,
 				rowDown));
+	}
+
+	public static class XMLHandler extends DefaultHandler {
+		private final XMLReader reader;
+		private final Sheet sheet;
+
+		public XMLHandler(Sheet sheet, XMLReader reader) {
+			this.reader = reader;
+			this.sheet = sheet;
+		}
+		
+		@Override
+		public void startElement(String uri, String localName, String name,
+				Attributes attributes) throws SAXException {
+			if (name.equalsIgnoreCase("SPREADSHEET")) {
+				String sheetName = attributes.getValue("name");
+				if ( sheetName == null ) {
+					sheet.setSheetName(sheetName);
+				}
+			} else if (name.equalsIgnoreCase("CELL")) {
+				DefaultHandler cellHandler = new Cell.XMLHandler(sheet);
+				reader.setContentHandler(cellHandler);
+				cellHandler.startElement(uri, localName, name, attributes);
+			}
+		}
 	}
 }

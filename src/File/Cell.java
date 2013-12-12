@@ -6,6 +6,10 @@ import java.util.Observable;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import File.Sheet.Position;
 import Parser.Parser;
 
@@ -35,7 +39,7 @@ public class Cell extends Observable implements Interfaces.Cell {
 		this.input = input;
 		updateValue();
 	}
-	
+
 	/**
 	 * Method to write a cell to the XML-file
 	 * @param writer XMLStreamWriter
@@ -144,5 +148,47 @@ public class Cell extends Observable implements Interfaces.Cell {
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public static class XMLHandler extends DefaultHandler {
+		private final StringBuilder content;
+
+	    private final Sheet sheet;
+	    private int colIndex;
+	    private int rowIndex;
+
+		public XMLHandler(Sheet sheet) {
+			this.sheet = sheet;
+			this.content = new StringBuilder();
+		}
+
+		@Override
+		public void characters(char[] ch, int start, int length)
+				throws SAXException {
+			/*
+			 * characters can be called multiple times per element so aggregate
+			 * the content in a StringBuilder
+			 */
+			content.append(ch, start, length);
+		}
+
+		@Override
+		public void startElement(String uri, String localName, String name,
+				Attributes attributes) throws SAXException {
+			content.setLength(0);
+			if (name.equalsIgnoreCase("CELL")) {
+				colIndex = Integer.parseInt(attributes.getValue("column"));
+				rowIndex = Integer.parseInt(attributes.getValue("row"));
+			}
+			// type?
+		}
+
+		@Override
+		public void endElement(String uri, String localName, String name)
+				throws SAXException {
+			if (name.equalsIgnoreCase("CELL")) {
+				sheet.createCell(content.toString(), colIndex, rowIndex);
+			}
+		}
 	}
 }
