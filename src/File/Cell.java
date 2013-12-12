@@ -150,13 +150,23 @@ public class Cell extends Observable implements Interfaces.Cell {
 
 	}
 	
+	/**
+	 * XML Handler for SAX Parsing of Cells
+	 * @author Jim Hommes
+	 *
+	 */
 	public static class XMLHandler extends DefaultHandler {
 		private final StringBuilder content;
-
 	    private final Sheet sheet;
 	    private int colIndex;
 	    private int rowIndex;
 
+		/**
+		 * Constructor for Cell parser
+		 * 
+		 * @param sheet
+		 *            The <code>sheet</code> to put this <code>Cell</code> in
+		 */
 		public XMLHandler(Sheet sheet) {
 			this.sheet = sheet;
 			this.content = new StringBuilder();

@@ -409,10 +409,20 @@ public class Sheet implements Interfaces.Sheet {
 				rowDown));
 	}
 
+	/**
+	 * XML Handler for SAX Parsing of Sheets
+	 * @author Jim Hommes
+	 *
+	 */
 	public static class XMLHandler extends DefaultHandler {
 		private final XMLReader reader;
 		private final Sheet sheet;
 
+		/**
+		 * Constructor for sheet parser
+		 * @param sheet
+		 * @param reader
+		 */
 		public XMLHandler(Sheet sheet, XMLReader reader) {
 			this.reader = reader;
 			this.sheet = sheet;
