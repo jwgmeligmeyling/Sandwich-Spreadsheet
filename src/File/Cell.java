@@ -55,6 +55,21 @@ public class Cell extends Observable implements Interfaces.Cell {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Cell) {
+			Cell other = (Cell) obj;
+			return value.equals(other.value) && position.equals(other.position);
+		} else {
+			return super.equals(obj);
+		}
+	}
+
+	@Override
+	public String toString() {
+		return value.toString();
+	}
+
+	@Override
 	public void updateValue() {
 		value = Parser.parse(sheet, input);
 	}

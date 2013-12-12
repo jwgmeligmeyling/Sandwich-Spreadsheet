@@ -30,17 +30,7 @@ public class TestRead {
 		Cell[] lijst = sheet.getRange(1,1,2,3).getCellArray();
 		Cell[] lijst2 = csheet.getRange(1,1,2,3).getCellArray();
 		
-		
-		//Testing the whole block of cells
-		boolean check = true;
-		for(int i = 0; i < lijst.length; i++){
-			if(check){
-				check = lijst[i].getInput().equals(lijst2[i].getInput());
-			}
-		}
-		
-		assertEquals(check,true);	
-		
+		assertArrayEquals(lijst, lijst2);
 	}
 
 	@Test
@@ -57,19 +47,10 @@ public class TestRead {
 		csheet.createCell("Inhoud 3,1",1,3);
 		csheet.createCell("Inhoud 3,2",2,3);
 		
-		boolean check = true;
-		
 		Cell[] lijst = sheet.getRange(1,1,2,1).getCellArray();
 		Cell[] lijst2 = csheet.getRange(1,1,2,1).getCellArray();
 		
-		for(int i = 0; i < lijst.length; i++){
-			if(check){
-				check = lijst[i].getInput().equals(lijst2[i].getInput());
-			}
-		}
-		
-		assertEquals(check,true);
-		
+		assertArrayEquals(lijst, lijst2);
 	}
 	
 	@Test
@@ -86,18 +67,10 @@ public class TestRead {
 		csheet.createCell("Inhoud 3,1",1,3);
 		csheet.createCell("Inhoud 3,2",2,3);
 		
-		boolean check = true;
-		
 		Cell[] lijst = sheet.getRange(2,2,1,3).getCellArray();
 		Cell[] lijst2 = csheet.getRange(2,2,1,3).getCellArray();
 		
-		for(int i = 0; i < lijst.length; i++){
-			if(check){
-				check = lijst[i].getInput().equals(lijst2[i].getInput());
-			}
-		}
-		
-		assertEquals(check,true);
+		assertArrayEquals(lijst, lijst2);
 	}
 	
 	@Test
@@ -114,21 +87,9 @@ public class TestRead {
 		csheet.createCell("If I use encoded symbols such as < and > or &, how do they show?",1,2);
 		csheet.createCell("<VALUE>What if I define another xml tag in here?</VALUE>Or will only the text 'outside' of 'VALUE' show?",2,2);
 		
-		boolean check = true;
-		
 		Cell[] lijst = sheet.getRange(1,1,10,10).getCellArray();
 		Cell[] lijst2 = csheet.getRange(1,1,10,10).getCellArray();
 		
-		System.out.println("bla"+sheet.getCellAt(2, 2).getInput());
-		
-		for(int i = 0; i < lijst.length; i++){
-			if(check){
-				check = lijst[i].getInput().equals("swag");
-			}
-		}
-		
-		assertEquals(check,true);
-		
-		
+		assertNotEquals(lijst, lijst2);		
 	}
 }
