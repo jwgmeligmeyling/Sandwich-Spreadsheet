@@ -185,8 +185,7 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			return (Function.doubleValueOf(first) != Function
-					.doubleValueOf(second));
+			return NOT_EQUAL.calculate(first, second);
 		}
 
 	},
