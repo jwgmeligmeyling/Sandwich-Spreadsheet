@@ -182,6 +182,12 @@ public class Parser {
 					break;
 				}
 				
+				Boolean b = getBoolean();
+				if ( b != null ) {
+					values.push(b);
+					break;
+				}
+				
 				Object reference = getReference();
 				if ( reference != null ) {
 					values.push(reference);
@@ -193,11 +199,6 @@ public class Parser {
 					values.push(n);
 					break;
 				}
-				
-				/*
-				 * TODO "true" & "false"
-				 * TODO Numbers without '='
-				 */
 
 				getFunction();
 				break;
@@ -352,6 +353,21 @@ public class Parser {
 		}
 	}
 
+	/**
+	 * Method to parse a <code>Boolean</code> from the input string.
+	 * 
+	 * @return a <code>Boolean</code> object holding the value represented by the
+	 *         <code>String</code>-argument.
+	 */
+	private Boolean getBoolean() {
+		if (searchWord("TRUE")) {
+			return true;
+		} else if (searchWord("FALSE")) {
+			return false;
+		}
+		return null;
+	}
+	
 	/**
 	 * Method to parse a <code>Number</code> from the input string.
 	 * 
@@ -634,6 +650,29 @@ public class Parser {
 		while(hasNext()) {
 			if ( next() == character ) {
 				break;
+			}
+		}
+	}
+
+	/**
+	 * Method to peek for a word at current peekIndex, and
+	 * update the current index if the input matches the needle.
+	 * @param needle String to search for
+	 * @return <code>true</code> if found
+	 */
+	private boolean searchWord(String needle) {
+		peekIndex = index;
+		for (;;) {
+			char c = Character.toUpperCase(peek());
+			int i = peekIndex - index;
+			if ( i+1 == needle.length() ) {
+				index = peekIndex;
+				return true;
+			} else if ( needle.charAt(i) == c) {
+				peekIndex++;
+				continue;
+			} else {
+				return false;
 			}
 		}
 	}

@@ -334,6 +334,9 @@ public enum Function {
 	 * @return <code>integer</code> value to calculate with
 	 */
 	public static int intValueOf(Object obj) {
+		/*
+		 * TODO Numbers without '='
+		 */
 		if (obj instanceof Number) {
 			return ((Number) obj).intValue();
 		} else if (obj instanceof Boolean) {
@@ -358,6 +361,9 @@ public enum Function {
 	 * @return <code>double</code> value to calculate with
 	 */
 	public static double doubleValueOf(Object obj) {
+		/*
+		 * TODO Numbers without '='
+		 */
 		if (obj instanceof Number) {
 			return ((Number) obj).doubleValue();
 		} else if (obj instanceof Boolean) {

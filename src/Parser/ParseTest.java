@@ -286,4 +286,33 @@ public class ParseTest {
 		assertEquals(3, Parser.parse(sheet, null));
 	}
 
+	@Test
+	public void testBoolean() {
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=TRUE"));
+	}
+	
+	@Test
+	public void testBooleanLcase() {
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=true"));
+	}
+	
+	@Test
+	public void testBooleanFalse() {
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=false"));
+	}
+	
+	@Test
+	public void testBooleanOperatorWithBooles() {
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=false&&true"));
+	}
+	
+	@Test
+	public void testBooleanOperatorWithBooles1() {
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=true&&true"));
+	}
+
+	@Test
+	public void testBooleanOperatorWithBooles2() {
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=false||true"));
+	}
 }
