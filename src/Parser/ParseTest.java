@@ -206,11 +206,6 @@ public class ParseTest {
 		assertEquals(80, Parser.parse(sheet, "=B1*B3"));
 	}
 	
-	@Test
-	public void testPrevious() {
-		assertEquals(0, new Parser(sheet, "").previous());
-	}
-	
 	@Test(expected=IllegalArgumentException.class)
 	public void testNullReference() {
 		Parser.parse(sheet, "=ADD(B1:B4)");
@@ -219,6 +214,18 @@ public class ParseTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testInvalidReference() {
 		Parser.parse(sheet, "=ADD(B1:)");
+	}
+	
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testInvalidFunction() {
+		Parser.parse(sheet, "=UNDEFINED(B1)");
+	}
+	
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testInvalidOperator() {
+		Parser.parse(sheet, "=B1|&B2");
 	}
 	
 	@Test
@@ -262,6 +269,21 @@ public class ParseTest {
 	@Test
 	public void strInQuotes() {
 		assertEquals("sadfsadf", Parser.parse(sheet, "=\"sadfsadf\""));
+	}
+	
+	@Test
+	public void realDeep() {
+		assertEquals(1+2+3+4+5+6+7, Parser.parse(sheet, "=(((((ADD(1,2))+3)+4)+5)+6)+7"));
+	}
+	
+	@Test
+	public void parseNullSheet() {
+		assertEquals(3, Parser.parse(null, "=SUBTRACT(10,7)"));
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void parseNullString() {
+		assertEquals(3, Parser.parse(sheet, null));
 	}
 
 }

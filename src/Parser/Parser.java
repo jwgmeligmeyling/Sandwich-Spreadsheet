@@ -38,6 +38,12 @@ public class Parser {
 	 * value always matches the current index.
 	 */
 	private int index = -1;
+	
+	/**
+     * A value to store the current value of the peekIndex in. The peek index is
+     * used to peek for a character without changing the current index.
+     */
+	private int peekIndex;
 
 	/**
 	 * A <code>char</code> to store the current character.
@@ -176,7 +182,7 @@ public class Parser {
 					break;
 				}
 				
-				Object reference = new Reference().getReference();
+				Object reference = getReference();
 				if ( reference != null ) {
 					values.push(reference);
 					break;
@@ -185,7 +191,6 @@ public class Parser {
 				if (Character.isDigit(current)) {
 					Number n = getNumber();
 					values.push(n);
-					System.out.println("Number pushed to stack: " + n);
 					break;
 				}
 				
@@ -221,7 +226,6 @@ public class Parser {
 		if (depth == 1) {
 			openBracket = index;
 		}
-		System.out.println("Open bracket...");
 	}
 
 	/**
@@ -272,7 +276,6 @@ public class Parser {
 				values.push(value);
 				arguments.clear();
 				function = null;
-				System.out.println("Value pushed to stack: " + value);
 			} else {
 				/*
 				 * Parse the expression between the parentheses recursively, by
@@ -281,7 +284,6 @@ public class Parser {
 				values.push(new Parser(this, openBracket, closeBracket).parse());
 			}
 		}
-		System.out.println("Close bracket...");
 	}
 	
 	/**
@@ -363,10 +365,10 @@ public class Parser {
 		isNegative = false;
 		char c = current;
 		boolean d = false;
-		int i = 0;
+		peekIndex = index + 1;
 		do {
 			s += c;
-			c = peek(++i);
+			c = peek();
 			if (!Character.isDigit(c)) {
 				if (c == '.' || c == 'E' || c == 'e') {
 					d = true;
@@ -374,8 +376,10 @@ public class Parser {
 					break;
 				}
 			}
+			peekIndex++;
 		} while (true);
-		increment(i - 1);
+		
+		index = peekIndex -1;
 		if (d) {
 			return new Double(s);
 		} else {
@@ -384,26 +388,18 @@ public class Parser {
 	}
 
 	/**
-	 * Method to get a <code>String</code> from the input
+	 * Method to get a <code>String</code> from the input. Expects the current
+	 * character to be the start of a string - a quote basically. Then it skips
+	 * to the next quote and pushes the substring to the value <code>Stack</code>.
 	 */
 	private void getString() {
 		if (depth == 0) {
-			int i = 1;
-			String s = "";
-			do {
-				char c = peek(i);
-				if ( c == '\'' || c == '"' ) {
-					break;
-				} else {
-					s += c;
-					i++;
-				}
-			} while ( true );
-			values.push(s);
-			index += i;
+			int start = index + 1;
+			skipToNext(current);
+			values.push(input.substring(start, index));
 		}
 	}
-
+	
 	/**
 	 * These characters are the allowed characters for the operators that take
 	 * two characters (for example the <code>>=</code> operator)
@@ -425,14 +421,16 @@ public class Parser {
 			 */
 			isNegative = true;
 		} else if (depth == 0) {
+			peekIndex = index + 1;
 			char[] op;
 			/*
 			 * Look if the operator uses a second character (">=")
 			 */
-			char c = peek(1);
+			char c = peek();
 			if (SECOND_OPERATOR_CHARACTERS.indexOf(c) != -1) {
 				op = new char[] { current, c };
-				increment(1);
+				peekIndex++;
+				index = peekIndex -1;
 			} else {
 				op = new char[] { current };
 			}
@@ -442,7 +440,6 @@ public class Parser {
 			 */
 			Operator o = Operator.get(op);
 			pushOperator(o);
-			System.out.println("Operator parsed: " + o);
 		}
 	}
 
@@ -457,8 +454,8 @@ public class Parser {
 	 */
 	private void getFunction() {
 		String s = "";
-		int i = 0;
 		char c = current;
+		peekIndex = index;
 		/*
 		 * Characters need to be in the range [A-z]. Append these characters to
 		 * the function name String. If a non-alphabetic character is found, we
@@ -466,7 +463,8 @@ public class Parser {
 		 */
 		while (Character.isLetter(c)) {
 			s += c;
-			c = peek(++i);
+			peekIndex++;
+			c = peek();
 		}
 		/*
 		 * If the String isn't empty, we try to fetch the function. This
@@ -475,143 +473,129 @@ public class Parser {
 		 */
 		if (!s.isEmpty()) {
 			function = Function.get(s);
-			increment(i - 1);
-			System.out.println("Function parsed " + function);
+			index = peekIndex -1;
 		}
+	}
+	
+	/**
+	 * Fetch a reference. A reference can be in several formats:
+	 * <ul>
+	 * <li>A reference to a single cell, matches one or more letters followed by
+	 * one or more digits ("A3")</li>
+	 * <li>A reference to one or more columns, matches one or more letters,
+	 * followed by a colon and the same pattern ("A:B")</li>
+	 * <li>A reference to a row, matches one or more digits, followed by a colon
+	 * and the same character pattern ("1:3")</li>
+	 * <li>A reference to a range of cells, matches two single cell
+	 * representations described above, separated by a colon. ("A1:B3")</li>
+	 * </ul>
+	 * 
+	 * @return <code>Object</code> of type <code>Cell</code>,
+	 *         <code>Column</code>, <code>Row</code> or <code>Range</code>, or
+	 *         <code>null</code> if the character sequence did not match a
+	 *         reference.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             When the input of the reference is malformed.
+	 */
+	private Object getReference() {
+		/*
+		 * Current implementation only supports Cells (A1) or Ranges (A1:B2)
+		 * TODO Support for rows and columns (?)
+		 */
+		peekIndex = index;
+		Cell a = getCell();
+		if (a != null) {
+			if (peek() == ':') {
+				peekIndex++;
+				Cell b = getCell();
+				if (b != null) {
+					index = peekIndex -1;
+					return sheet.getRange(a, b);
+				} else {
+					throw new IllegalArgumentException(
+							"Expected a column reference after :");
+				}
+			} else {
+				index = peekIndex -1;
+				return a.getValue();
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * These split methods needs some shared variables, and are placed in a
-	 * inner class for this purpose.
+	 * Method to peek for a <code>Cell</code> at current index. A cell is
+	 * expected to be in the format "A1"
 	 * 
-	 * @author Jan-Willem Gmelig Meyling
-	 * 
+	 * @return <code>Cell</code> in the current <code>Sheet</code>, or
+	 *         <code>null</code> if no <code>Cell</code> was found either in the
+	 *         input String or the <code>Sheet</code>.
 	 */
-	private class Reference {
-		/**
-		 * A value to store the current value of p in.
-		 */
-		private int p = 0;
-		
-		/**
-		 * Fetch a reference. A reference can be in several formats:
-		 * <ul>
-		 * <li>A reference to a single cell, matches one or more letters followed by
-		 * one or more digits ("A3")</li>
-		 * <li>A reference to one or more columns, matches one or more letters,
-		 * followed by a colon and the same pattern ("A:B")</li>
-		 * <li>A reference to a row, matches one or more digits, followed by a colon
-		 * and the same character pattern ("1:3")</li>
-		 * <li>A reference to a range of cells, matches two single cell
-		 * representations described above, separated by a colon. ("A1:B3")</li>
-		 * </ul>
-		 * 
-		 * @return <code>Object</code> of type <code>Cell</code>,
-		 *         <code>Column</code>, <code>Row</code> or <code>Range</code>, or
-		 *         <code>null</code> if the character sequence did not match a
-		 *         reference.
-		 * 
-		 * @throws IllegalArgumentException
-		 *             When the input of the reference is malformed.
-		 */
-		private Object getReference() {
-			/*
-			 * Current implementation only supports Cells (A1) or Ranges (A1:B2)
-			 * TODO Support for rows and columns (?)
-			 */
-			Cell a = getCell();
-			if (a != null) {
-				if (peek(p) == ':') {
-					p++;
-					Cell b = getCell();
-					if (b != null) {
-						index += p - 1;
-						return sheet.getRange(a, b);
-					} else {
-						throw new IllegalArgumentException(
-								"Expected a column reference after :");
-					}
-				} else {
-					index += p - 1;
-					return a.getValue();
-				}
+	private Cell getCell() {
+		int colIndex = getColIndex();
+		if (colIndex != -1) {
+			int rowIndex = getRowIndex();
+			if (rowIndex != -1) {
+				return sheet.getCellAt(colIndex, rowIndex);
 			}
-			return null;
 		}
-	
-		/**
-		 * Method to peek for a <code>Cell</code> at current index. A cell is
-		 * expected to be in the format "A1"
-		 * 
-		 * @return <code>Cell</code> in the current <code>Sheet</code>, or
-		 *         <code>null</code> if no <code>Cell</code> was found either in the
-		 *         input String or the <code>Sheet</code>.
-		 */
-		private Cell getCell() {
-			int colIndex = getColIndex();
-			if (colIndex != -1) {
-				int rowIndex = getRowIndex();
-				if (rowIndex != -1) {
-					return sheet.getCellAt(colIndex, rowIndex);
-				}
-			}
-			return null;
-		}
-	
-		/**
-		 * Method to peek for a String representation of an column index. Column
-		 * indexes are expected to be in the format A, B, C... When a column is
-		 * found, the current index is incremented.
-		 * 
-		 * @return The index of the column, starting at 0 for A, or -1 when no
-		 *         column index was found.
-		 */
-		private int getColIndex() {
-			int colIndex = 0;
-			for ( ;; p++) {
-				char c = Character.toUpperCase(peek(p));
-				if (Character.isLetter(c)) {
-					colIndex = colIndex * 26 + c - 64;
-				} else if (colIndex <= 0) {
-					return -1;
-				} else {
-					break;
-				}
-			}
-			return colIndex - 1;
-		}
-	
-		/**
-		 * Method to peek for an row index. Row indexes are expected to be in the
-		 * format 1, 2, 3...
-		 * 
-		 * @return The index of the row, starting at 0 for 1, or -1 when no row
-		 *         index was found.
-		 */
-		private int getRowIndex() {
-			int rowIndex = 0;
-			for ( ;; p++) {
-				char c = peek(p);
-				if (Character.isDigit(c)) {
-					rowIndex = rowIndex * 10 + Character.getNumericValue(c);
-				} else if (rowIndex <= 0) {
-					return -1;
-				} else {
-					break;
-				}
-			}
-			return rowIndex - 1;
-		}
+		return null;
 	}
 
+	/**
+	 * Method to peek for a String representation of an column index. Column
+	 * indexes are expected to be in the format A, B, C... When a column is
+	 * found, the current index is incremented.
+	 * 
+	 * @return The index of the column, starting at 0 for A, or -1 when no
+	 *         column index was found.
+	 */
+	private int getColIndex() {
+		int colIndex = 0;
+		for (;;) {
+			char c = Character.toUpperCase(peek());
+			if (Character.isLetter(c)) {
+				colIndex = colIndex * 26 + c - 64;
+				peekIndex++;
+			} else if (colIndex <= 0) {
+				return -1;
+			} else {
+				break;
+			}
+		}
+		return colIndex - 1;
+	}
 
+	/**
+	 * Method to peek for an row index. Row indexes are expected to be in the
+	 * format 1, 2, 3...
+	 * 
+	 * @return The index of the row, starting at 0 for 1, or -1 when no row
+	 *         index was found.
+	 */
+	private int getRowIndex() {
+		int rowIndex = 0;
+		for (;;) {
+			char c = peek();
+			if (Character.isDigit(c)) {
+				rowIndex = rowIndex * 10 + Character.getNumericValue(c);
+				peekIndex++;
+			} else if (rowIndex <= 0) {
+				return -1;
+			} else {
+				break;
+			}
+		}
+		return rowIndex - 1;
+	}
 
 	/**
 	 * Method to determine if there is a next character
 	 * 
 	 * @return true if there is a next character
 	 */
-	boolean hasNext() {
+	private boolean hasNext() {
 		return (index + 1) < length;
 	}
 
@@ -621,12 +605,12 @@ public class Parser {
 	 * 
 	 * @return next character
 	 */
-	char next() {
+	private char next() {
 		return input.charAt(++index);
 	}
 
 	/**
-	 * Peek for the next n-character. This is useful for parsing elements of
+	 * Peek for the character at peekIndex. This is useful for parsing elements of
 	 * which you can't be sure what type it is. For instance, 'A' can mean: the
 	 * start of <code>Function</code> ADD(), or the <code>Reference</code> to
 	 * <code>Cell</code> A1.
@@ -635,23 +619,23 @@ public class Parser {
 	 *            Amount of characters to peek forward
 	 * @return The character at the given index
 	 */
-	char peek(int n) {
-		n += index;
-		if (n < length) {
-			return input.charAt(n);
+	private char peek() {
+		if ( peekIndex < length ) {
+			return input.charAt(peekIndex);
 		}
 		return 0;
 	}
 
 	/**
-	 * Increment the index with a given value. This is useful when the current
-	 * <code>index</code> needs to be changed after a peek.
-	 * 
-	 * @param n
-	 *            Amount to increment <code>index</code> with.
+	 * Skips to the next character of the given value
+	 * @param character Character to search for
 	 */
-	void increment(int n) {
-		index += n;
+	private void skipToNext(char character) {
+		while(hasNext()) {
+			if ( next() == character ) {
+				break;
+			}
+		}
 	}
 
 	/**
@@ -660,7 +644,7 @@ public class Parser {
 	 * @return The previous character, or <code>0</code> if the current
 	 *         <code>index</code> is <code>0</code>.
 	 */
-	char previous() {
+	private char previous() {
 		if (index > 0) {
 			return input.charAt(index - 1);
 		}
