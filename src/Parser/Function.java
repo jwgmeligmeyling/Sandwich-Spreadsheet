@@ -210,10 +210,9 @@ public enum Function {
 	POWER {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 2 &&
-					(arguments[0] instanceof Double || arguments[0] instanceof Integer) &&
-					(arguments[1] instanceof Double || arguments[1] instanceof Integer);
-					// @Jan-Willem: is het nodig om dit te asserten? - Maarten
+			assert arguments.length == 2;
+			// @Jan-Willem: is het nodig om dit te asserten? - Maarten
+			// Je wilt dit juist niet asserten, dan werken references niet meer
 			
 			double output = Math.pow(doubleValueOf(arguments[0]), doubleValueOf(arguments[1]));
 			if (Math.floor(output) == output) {
@@ -245,7 +244,9 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length == 1;
-			return intValueOf(arguments[0]);		// HO HO HO!!! Klopt dit wel??? Zie functie-omschrijving!!!!!!! - Maarten
+			return intValueOf(arguments[0]);
+			// HO HO HO!!! Klopt dit wel??? Zie functie-omschrijving!!!!!!! - Maarten
+			// Test het en we zullen het zien ;)
 		}
 	},
 	
