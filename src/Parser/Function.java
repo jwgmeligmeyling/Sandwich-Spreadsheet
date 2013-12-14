@@ -297,9 +297,10 @@ public enum Function {
 	RANDBETWEEN {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 2 && arguments[0] instanceof Integer && arguments[1] instanceof Integer;
-			// TODO implementeren
-			return null;
+			assert arguments.length == 2;
+			int a = intValueOf(arguments[0]);
+			int b = intValueOf(arguments[1]);
+			return (int) (Math.random() * ( b - a ) + a);
 		}
 	},
 	
@@ -410,15 +411,24 @@ public enum Function {
 	IF {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length >= 1 && arguments.length <= 3 && (arguments[0] instanceof Boolean);
+			assert arguments.length >= 1 && arguments.length <= 3;
 			// Weet je zeker dat je zoveel wilt checken?
 			// 4 argumenten geven nu een error, terwijl je ook gewoon het vierde argument zou kunnen negeren
 			// Een argument van type Range wordt nu niet geaccepteerd, omdat het geen Boolean is.
-			// booleanValueOf() zou dit mooi oplossen, dus eigenlijk kan je de check gewoon weglaten.			
+			// booleanValueOf() zou dit mooi oplossen, dus eigenlijk kan je de
+			// check gewoon weglaten.			
 			if (booleanValueOf(arguments[0])) {
-				if (arguments.length >= 2) { return arguments[1]; } else { return true; }
+				if (arguments.length >= 2) {
+					return arguments[1];
+				} else {
+					return true;
+				}
 			} else {
-				if (arguments.length >= 3) { return arguments[2]; } else { return false; }
+				if (arguments.length >= 3) {
+					return arguments[2];
+				} else {
+					return false;
+				}
 			}
 		}
 	},
@@ -512,9 +522,14 @@ public enum Function {
 	SIGN {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 1 && !(arguments[0] instanceof Range);
+			// TODO de Excel variant werkt ook met ranges van 1 cell bij mij?
+			assert arguments.length == 1;
 			int temp = 0;
-			if (doubleValueOf(arguments[0]) < 0) { temp = -1; } else if (doubleValueOf(arguments[0]) > 0) { temp = 1; }
+			if (doubleValueOf(arguments[0]) < 0) {
+				temp = -1;
+			} else if (doubleValueOf(arguments[0]) > 0) {
+				temp = 1;
+			}
 			return temp;
 		}
 	},
