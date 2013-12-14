@@ -87,6 +87,16 @@ public class TestFunctions {
 	}
 	
 	@Test
+	public void testIntMoreArgs() {
+		assertEquals(5, Function.INT.calculate(5.2, 6.9));
+	}
+	
+	@Test
+	public void testIntNoArgs() {
+		assertEquals(5, Function.INT.calculate());
+	}
+	
+	@Test
 	public void testCount() {
 		assertEquals(5, Parser.parse(sheet, "=COUNT(A1:B3)"));
 	}

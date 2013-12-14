@@ -351,12 +351,10 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>decimals places</code> As Integer
+	 * <b>Expected arguments:</b> <code>number</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
-	 * <ul>
-	 * <li>
-	 * </ul>
+	 * <ul><li>The integer portion of a number</li></ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
 	 * [opmerkingen]
@@ -371,7 +369,7 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length == 1;
-			return (int)Math.floor((double)arguments[0]);
+			return (int)Math.floor(doubleValueOf(arguments[0]));
 		}
 	},
 	
