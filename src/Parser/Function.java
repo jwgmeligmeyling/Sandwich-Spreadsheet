@@ -676,6 +676,10 @@ public enum Function {
 			return ((Boolean) obj).equals(Boolean.TRUE);
 		} else if (obj instanceof String) {
 			return ((String) obj).length() >= 1;
+		} else if ( obj instanceof Range ) {
+			return booleanValueOf(((Range) obj).getCellArray()[0]);
+		} else if ( obj instanceof Cell ) {
+			return booleanValueOf(((Cell) obj).getValue());
 		}
 		return false;
 	}
