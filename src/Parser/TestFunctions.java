@@ -86,14 +86,14 @@ public class TestFunctions {
 		assertEquals(-9, Function.INT.calculate(-8.2));
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testIntMoreArgs() {
 		assertEquals(5, Function.INT.calculate(5.2, 6.9));
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testIntNoArgs() {
-		assertEquals(5, Function.INT.calculate());
+		Function.INT.calculate();
 	}
 	
 	@Test

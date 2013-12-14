@@ -45,6 +45,10 @@ public enum Function {
 	SUM {
 		@Override
 		Object calculate(Object... arguments) {
+			if ( arguments.length == 0) {
+				throw new IllegalArgumentException("This function takes at least one parameters!");
+			}
+			
 			double output = 0;
 			
 			for (Object argument : arguments) {
@@ -91,7 +95,10 @@ public enum Function {
 	SUBTRACT {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length > 1;
+			if ( arguments.length < 2) {
+				throw new IllegalArgumentException("This function takes at least two parameters!");
+			}
+			
 			double output = doubleValueOf(arguments[0]);
 			
 			for ( int i = 1; i < arguments.length; i++ ) {
@@ -130,7 +137,9 @@ public enum Function {
 	PRODUCT {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length > 1;
+			if ( arguments.length < 2) {
+				throw new IllegalArgumentException("This function takes at least two parameters!");
+			}
 			double output = doubleValueOf(arguments[0]);
 			
 			for ( int i = 1; i < arguments.length; i++ ) {
@@ -172,7 +181,9 @@ public enum Function {
 	DIVIDE {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length > 1;
+			if ( arguments.length < 2) {
+				throw new IllegalArgumentException("This function takes at least two parameters!");
+			}
 			double output = doubleValueOf(arguments[0]);
 			
 			for ( int i = 1; i < arguments.length; i++ ) {
@@ -210,8 +221,9 @@ public enum Function {
 	POWER {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 2;
-			
+			if ( arguments.length != 2) {
+				throw new IllegalArgumentException("This function takes two parameters!");
+			}
 			double output = Math.pow(doubleValueOf(arguments[0]), doubleValueOf(arguments[1]));
 			if (Math.floor(output) == output) {
 				return new Integer((int) output);
@@ -241,9 +253,10 @@ public enum Function {
 	AVERAGE {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length >= 1;
-			
-			return (double)SUM.calculate(arguments) / (double)COUNT.calculate(arguments);
+			if ( arguments.length == 0) {
+				throw new IllegalArgumentException("This function takes at least one parameter!");
+			}
+			return (Double) (SUM.calculate(arguments)) / (Double) (COUNT.calculate(arguments));
 		}
 	},
 	
@@ -268,13 +281,17 @@ public enum Function {
 	COUNT {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length >= 1;
+			if ( arguments.length == 0) {
+				throw new IllegalArgumentException("This function takes at least one parameter!");
+			}
 			int count = 0;
 			for(Object arg : arguments) {
 				assert arg instanceof Range : "Argument type error! All arguments in this function must be a Range.";
 				Range rng = (Range)arg;
 				for (Cell cell : rng.getCellArray()) {
-					if ((boolean)ISNUMBER.calculate(cell)) { count++; }
+					if ((Boolean) ISNUMBER.calculate(cell)) {
+						count++;
+					}
 				}	
 			}
 			return count;
@@ -303,7 +320,9 @@ public enum Function {
 	ISNUMBER {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 1;
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
 			if (arguments[0] instanceof Range) {
 				return ISNUMBER.calculate(((Range)arguments[0]).getCellArray()[0]);
 			} else if (arguments[0] instanceof Cell) {
@@ -335,7 +354,9 @@ public enum Function {
 	ROUND {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 2;
+			if ( arguments.length != 2 ) {
+				throw new IllegalArgumentException("This function takes only two parameters!");
+			}
 			
 			double value = doubleValueOf(arguments[0]);
 			int decPlaces = intValueOf(arguments[1]);
@@ -368,8 +389,10 @@ public enum Function {
 	INT {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 1;
-			return (int)Math.floor(doubleValueOf(arguments[0]));
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return (int) Math.floor(doubleValueOf(arguments[0]));
 		}
 	},
 	
@@ -420,7 +443,9 @@ public enum Function {
 	RANDBETWEEN {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 2;
+			if ( arguments.length != 2 ) {
+				throw new IllegalArgumentException("This function takes only two parameters!");
+			}
 			int a = intValueOf(arguments[0]);
 			int b = intValueOf(arguments[1]);
 			return (int) (Math.random() * ( b - a ) + a);
@@ -449,7 +474,10 @@ public enum Function {
 	SQRT {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 0;
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			
 			double output = Math.sqrt(doubleValueOf(arguments[0]));
 			
 			if (Math.floor(output) == output) {
@@ -481,7 +509,9 @@ public enum Function {
 	SIN {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 0;
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
 			return Math.sin(doubleValueOf(arguments[0]));
 		}
 	},
@@ -507,7 +537,9 @@ public enum Function {
 	COS {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 0;
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
 			return Math.cos(doubleValueOf(arguments[0]));
 		}
 	},
@@ -534,13 +566,9 @@ public enum Function {
 	IF {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length >= 1 && arguments.length <= 3;
-			// Weet je zeker dat je zoveel wilt checken?
-			// 4 argumenten geven nu een error, terwijl je ook gewoon het vierde argument zou kunnen negeren
-			// Een argument van type Range wordt nu niet geaccepteerd, omdat het geen Boolean is.
-			// booleanValueOf() zou dit mooi oplossen, dus eigenlijk kan je de
-			// check gewoon weglaten.			
-			if (booleanValueOf(arguments[0])) {
+			if ( arguments.length < 2 || arguments.length > 3 ) {
+				throw new IllegalArgumentException("This function takes 2 or 3 arguments");
+			} else if (booleanValueOf(arguments[0])) {
 				if (arguments.length >= 2) {
 					return arguments[1];
 				} else {
@@ -578,8 +606,9 @@ public enum Function {
 	OR {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length >= 1;
-			
+			if ( arguments.length == 0 ) {
+				throw new IllegalArgumentException("This function takes at least one parameter");
+			}
 			for(Object argument : arguments) {
 				if (booleanValueOf(argument) == true) {
 					return true;
@@ -611,8 +640,9 @@ public enum Function {
 	AND {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length >= 1;
-			
+			if ( arguments.length == 0 ) {
+				throw new IllegalArgumentException("This function takes at least one parameter");
+			}
 			for(Object argument : arguments) {
 				if (!booleanValueOf(argument)) {
 					return false;
@@ -645,8 +675,9 @@ public enum Function {
 	SIGN {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 1;
-			if (doubleValueOf(arguments[0]) < 0) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			} else if (doubleValueOf(arguments[0]) < 0) {
 				return -1;
 			} else if (doubleValueOf(arguments[0]) > 0) {
 				return 1;
@@ -676,7 +707,9 @@ public enum Function {
 	DATE {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 1;
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function requires only one parameter!");
+			}
 			return (new SimpleDateFormat(arguments[0].toString())).format(System.currentTimeMillis());
 		}
 	};
