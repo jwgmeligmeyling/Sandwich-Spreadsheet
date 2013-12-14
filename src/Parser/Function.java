@@ -326,10 +326,9 @@ public enum Function {
 			if (arguments[0] instanceof Range) {
 				return ISNUMBER.calculate(((Range)arguments[0]).getCellArray()[0]);
 			} else if (arguments[0] instanceof Cell) {
-				return ISNUMBER.calculate(((Cell)arguments[0]).getValue() instanceof Number);
-			} else {
-				return (arguments[0] instanceof Number);
+				return ISNUMBER.calculate(((Cell)arguments[0]).getValue());
 			}
+			return (arguments[0] instanceof Number);
 		}
 	},
 	

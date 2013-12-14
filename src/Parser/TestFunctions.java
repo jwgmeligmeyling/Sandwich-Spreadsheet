@@ -98,6 +98,6 @@ public class TestFunctions {
 	
 	@Test
 	public void testCount() {
-		assertEquals(5, Parser.parse(sheet, "=COUNT(A1:B3)"));
+		assertEquals(4, Parser.parse(sheet, "=COUNT(A1:B3)"));
 	}
 }
