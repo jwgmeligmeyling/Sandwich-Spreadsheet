@@ -3,7 +3,6 @@ package Parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import File.Cell;
 import File.Sheet;
 
@@ -239,9 +238,7 @@ public class Parser {
 	 * 
 	 * <div>
 	 * <b>Authors:</b><br>
-	 * <ul>
-	 * <li>Jan-Willem Gmelig Meyling</li>
-	 * </ul>
+	 * <ul><li>Jan-Willem Gmelig Meyling</li></ul>
 	 * </div>
 	 */
 	private void closeBracket() {
@@ -295,12 +292,10 @@ public class Parser {
 	 * 
 	 * @throws EmptyStackException
 	 *             if this value stack or operator stack is empty.
-	 *             
+	 * 
 	 * <div>
 	 * <b>Authors:</b><br>
-	 * <ul>
-	 * <li>Jan-Willem Gmelig Meyling</li>
-	 * </ul>
+	 * <ul><li>Jan-Willem Gmelig Meyling</li></ul>
 	 * </div>
 	 */
 	private void calculate() {
@@ -325,11 +320,10 @@ public class Parser {
 	 * 
 	 * @param operator
 	 *            The operator to push
+	 * 
 	 * <div>
 	 * <b>Authors:</b><br>
-	 * <ul>
-	 * <li>Jan-Willem Gmelig Meyling</li>
-	 * </ul>
+	 * <ul><li>Jan-Willem Gmelig Meyling</li></ul>
 	 * </div>
 	 */
 	private void pushOperator(Operator operator) {
@@ -631,8 +625,7 @@ public class Parser {
 	 * start of <code>Function</code> ADD(), or the <code>Reference</code> to
 	 * <code>Cell</code> A1.
 	 * 
-	 * @param n
-	 *            Amount of characters to peek forward
+	 * @param n Amount of characters to peek forward
 	 * @return The character at the given index
 	 */
 	private char peek() {
@@ -709,8 +702,7 @@ public class Parser {
 		if (string.length() < 2 || string.charAt(0) != '=') {
 			return string;
 		} else {
-			return new Parser(sheet, string.substring(1).replaceAll("\\s+", ""))
-					.parse();
+			return new Parser(sheet, string.substring(1).replaceAll("\\s+", "")).parse();
 		}
 	}
 

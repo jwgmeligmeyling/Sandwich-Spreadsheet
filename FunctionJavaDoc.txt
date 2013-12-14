@@ -1,0 +1,28 @@
+// Sjabloon voor JavaDoc bij functies
+// @author Maarten Flikkema
+
+// Voorschriften:
+// 	- een argument binnen "[]" (viekante haken) is een optioneel argument
+// 	- een argument met "..." erachter staat voor een array van argumenten
+// 	- de naam van een argument wordt binnen <code>-blocks gezet, de tussenkomma's, eventuele omschrijvingen en vierkante haken buiten de <code>-blocks
+// 	- "..." wordt binnen de <code>-blocks gezet!
+// ==========================================================================
+
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */

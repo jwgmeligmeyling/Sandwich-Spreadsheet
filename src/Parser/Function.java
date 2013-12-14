@@ -1,35 +1,41 @@
 package Parser;
 
 import java.text.SimpleDateFormat;
-
 import File.Cell;
 import File.Sheet.Range;
 
 /**
- * Enumeration that binds functions to their function name.
- * 
+ * Enumeration that binds functions to their function name.<br>
  * Functions must implement a <code>calculate</code> method, which takes one or
  * more (arg, varargs) <code>Object</code> parameters of type
  * <code>Number</code>, <code>Boolean</code>, <code>Reference</code> or
  * <code>Range</code> and returns the result of the calculation as
  * <code>Number</code>.
  * 
- * @author Jan-Willem Gmelig Meyling
+ * @author Jan-Willem Gmelig Meyling <i>(functions, other)</i>
+ * @author Maarten Flikkema <i>(functions)</i>
  */
 public enum Function {
-
+	
 	/**
+	 * <div> <b>Expected arguments:</b> <code>[argument]</code>,
+	 * <code>[oneindig argument]...</code> </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
 	 * The <code>ADD</code>-function adds the values of the arguments, and
 	 * returns the result in the type of the first argument. For example: if the
 	 * first argument is an instance of <code>Integer</code> and the second and
 	 * third arguments are instances of <code>Double</code>, these arguments are
 	 * rounded to the closest <code>Integer</code> and added to the result of
-	 * type <code>Integer</code>. <br>
-	 * </br> When the input doesn't make any sense (adding a <code>String</code>
+	 * type <code>Integer</code>.<br>
+	 * When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
-	 * 
-	 * <div>
-	 * <b>Authors:</b><br>
+	 * </div><br>
+	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
@@ -49,35 +55,40 @@ public enum Function {
 					output += doubleValueOf(argument);
 				}
 			}
-			
 			if ( Math.floor(output) == output ) {
 				return new Integer((int) output);
 			}
-
 			return output;
 		}
 
 	},
-
+	
 	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>starting number</code>, <code>subtr. number</code>, <code>[subtr. numbers...]</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Result of the subtraction in the type of the <code>starting number</code>.</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
 	 * The <code>SUBTRACT</code>-function subtracts the values of the arguments
-	 * from the first argument, and returns the result in the type of the first
+	 * from the first argument and returns the result in the type of the first
 	 * argument. For example: if the first argument is an instance of
 	 * <code>Integer</code> and the second and third arguments are instances of
 	 * <code>Double</code>, these arguments are rounded to the closest
-	 * <code>Integer</code>. <br>
-	 * </br> When the input doesn't make any sense (adding a <code>String</code>
+	 * <code>Integer</code>.<br>
+	 * When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
-	 * 
-	 * <div>
-	 * <b>Authors:</b><br>
+	 * </div><br>
+	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
 	SUBTRACT {
-
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length > 1;
@@ -86,34 +97,37 @@ public enum Function {
 			for ( int i = 1; i < arguments.length; i++ ) {
 				output -= doubleValueOf(arguments[i]);
 			}
-			
 			if ( Math.floor(output) == output ) {
 				return new Integer((int) output);
 			}
-			
 			return output;
 		}
-
 	},
-
+	
 	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>starting number</code>, <code>mult. number</code>, <code>[mult. numbers...]</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
 	 * The <code>MULTIPLY</code>-function multiplies the values of the
 	 * arguments, and returns the result in the type of the first argument. For
 	 * example: if the first argument is an instance of <code>Integer</code> and
 	 * the second and third arguments are instances of <code>Double</code>,
-	 * these arguments are rounded to the closest <code>Integer</code>. <br>
-	 * </br> When the input doesn't make any sense (adding a <code>String</code>
+	 * these arguments are rounded to the closest <code>Integer</code>.<br>
+	 * When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
-	 * 
-	 * <div>
-	 * <b>Authors:</b><br>
+	 * </div><br>
+	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
 	MULTIPLY {
-
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length > 1;
@@ -122,17 +136,23 @@ public enum Function {
 			for ( int i = 1; i < arguments.length; i++ ) {
 				output *= doubleValueOf(arguments[i]);
 			}
-			
 			if ( Math.floor(output) == output ) {
 				return new Integer((int) output);
 			}
-
 			return output;
 		}
-
 	},
-
+	
 	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
 	 * The <code>DIVIDE</code>-function divides the values of the arguments from
 	 * the first argument, and returns the result in the type of the first
 	 * argument. For example: if the first argument is an instance of
@@ -141,8 +161,8 @@ public enum Function {
 	 * <code>Integer</code>. <br>
 	 * </br> When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
-	 * <div>
-	 * <b>Authors:</b><br>
+	 * </div><br>
+	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
 	 * <li>Jan-Willem Gmelig Meyling</li>
@@ -150,7 +170,6 @@ public enum Function {
 	 * </div>
 	 */
 	DIVIDE {
-
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length > 1;
@@ -159,17 +178,18 @@ public enum Function {
 			for ( int i = 1; i < arguments.length; i++ ) {
 				output /= doubleValueOf(arguments[i]);
 			}
-			
 			if ( Math.floor(output) == output ) {
 				return new Integer((int) output);
 			}
-
 			return output;
 		}
-
 	},
 
 	/**
+	 * <div>
+	 * <b>Arguments:</b> <code>base</code>, <code>power</code>
+	 * </div>
+	 * <div>
 	 * The <code>POWER</code>-function takes two arguments, and returns the
 	 * first argument to the power of the second argument, in the type of the
 	 * first argument. For example: if the first argument is an instance of
@@ -178,9 +198,9 @@ public enum Function {
 	 * <code>Integer</code> for the calculation. <br>
 	 * </br> When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
-	 * 
+	 * </div>
 	 * <div>
-	 * <b>Authors:</b><br>
+	 * <b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
 	 * <li>Jan-Willem Gmelig Meyling</li>
@@ -188,45 +208,64 @@ public enum Function {
 	 * </div>
 	 */
 	POWER {
-
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 2;
-			double output = Math.pow(doubleValueOf(arguments[0]),
-					doubleValueOf(arguments[1]));
-
+			assert arguments.length == 2 &&
+					(arguments[0] instanceof Double || arguments[0] instanceof Integer) &&
+					(arguments[1] instanceof Double || arguments[1] instanceof Integer);
+					// @Jan-Willem: is het nodig om dit te asserten? - Maarten
+			
+			double output = Math.pow(doubleValueOf(arguments[0]), doubleValueOf(arguments[1]));
 			if (Math.floor(output) == output) {
 				return new Integer((int) output);
 			}
-			
 			return output;
 		}
-
 	},
-
+	
 	/**
-	 * Get the rounded value of a <code>Double</code>.
-	 * 
 	 * <div>
-	 * <b>Authors:</b><br>
+	 * <b>Expected arguments:</b> <code>number</code> As Double
+	 * </div><br>
+	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>Maarten Flikkema</li>
+	 * <li>Mathematicaly correct rounded value of <code>number</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
 	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
 	ROUND {
-
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length == 1;
-			return intValueOf(arguments[0]);
+			return intValueOf(arguments[0]);		// HO HO HO!!! Klopt dit wel??? Zie functie-omschrijving!!!!!!! - Maarten
 		}
-
 	},
 	
 	/**
-	 * Get a random <code>Double</code> value
+	 * <div>
+	 * <b>Expected arguments:</b> <i>None</i>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>A random <code>Double</code> number</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	RAND {
 		@Override
@@ -236,8 +275,51 @@ public enum Function {
 	},
 	
 	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>lower limit</code> As Integer, <code>upper limit</code> As Integer
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>A random Integer number between <code>lower limit</code> and <code>upper limit</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * <li>[naam auteur]</li>
+	 * </ul>
+	 * </div>
+	 */
+	RANDBETWEEN {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length == 2 && arguments[0] instanceof Integer && arguments[1] instanceof Integer;
+			// TODO implementeren
+			return null;
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
 	 * Get the square root of a value. Returns an <code>integer</code> when
 	 * applicable, else it returns a double.
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	SQRT {
 		@Override
@@ -254,7 +336,22 @@ public enum Function {
 	},
 	
 	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>real number</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>The sin of <code>real number</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
 	 * Get the sin of a value. Returns a <code>Double</code> value.
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	SIN {
 		@Override
@@ -265,7 +362,22 @@ public enum Function {
 	},
 	
 	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>real number</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>The cos of <code>real number</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
 	 * Get the cos of a value. Returns a <code>Double</code> value.
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	COS {
 		@Override
@@ -276,7 +388,150 @@ public enum Function {
 	},
 	
 	/**
-	 * Create a date from a format string
+	 * <div>
+	 * <b>Expected arguments:</b> <code>logical test</code>, [<code>value if true</code>], [<code>value if false</code>]
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li><code>argument[1]</code> (<code>value if true</code>) if <code>argument[0]</code> (<code>logical test</code>) is true</li>
+	 * <li><code>argument[2]</code> (<code>value if false</code>)</li> if <code>logical test</code> is false
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * If "<code>value if true</code>" is missing, <code>TRUE</code> will be shown if <code>logical test</code> is true.<br>
+	 * If "<code>value if false</code>" is missing, <code>FALSE</code> will be shown if the <code>logical test</code> is false.
+	 * It is not possible to imply <code>value if false</code> and not imply <code>value if true</code>.
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul><li>Maarten Flikkema</li></ul>
+	 * </div>
+	 */
+	IF {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length >= 1 && arguments.length <= 3 && (arguments[0] instanceof Boolean);
+			
+			if (booleanValueOf(arguments[0])) {
+				if (arguments.length >= 2) { return arguments[1]; } else { return true; }
+			} else {
+				if (arguments.length >= 3) { return arguments[2]; } else { return false; }
+			}
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>logical value</code>, [<code>logical values...</code>]
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li><code>TRUE</code> if one or more logical values are true</li>
+	 * <li><code>FALSE</code> if none of the logical values are true</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * ...
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten</li>
+	 * </ul>
+	 * </div>
+	 */
+	OR {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length >= 1;
+			
+			for(Object argument : arguments) {
+				if (booleanValueOf(argument) == true) {
+					return booleanValueOf(true);
+				}
+			}
+			return booleanValueOf(false);
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>logical value</code>, [<code>logical values...</code>]
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li><code>TRUE</code> if all logical values are true</li>
+	 * <li><code>FALSE</code> if none of the logical values are true</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	AND {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length >= 1;
+			
+			for(Object argument : arguments) {
+				if (!booleanValueOf(argument)) {
+					return booleanValueOf(false);
+				}
+			}
+			return booleanValueOf(true);
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>number</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>If the argument is positive, the <code>SIGN</code> function will return <code>1</code></li>
+	 * <li>If the argument is negative, the <code>SIGN</code> function will return <code>-1</code></li>
+	 * <li>If the argument is zero, the <code>SIGN</code> function will return <code>0</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	SIGN {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length == 1 && !(arguments[0] instanceof Range);
+			int temp = 0;
+			if (doubleValueOf(arguments[0]) < 0) { temp = -1; } else if (doubleValueOf(arguments[0]) > 0) { temp = 1; }
+			return temp;
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>format string</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Date</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
 	 */
 	DATE {
 		@Override
@@ -298,6 +553,11 @@ public enum Function {
 	 * @return <code>Object</code> of implemented type
 	 */
 	abstract Object calculate(Object... arguments);
+
+	Object calculate(Object logicalTest, Object valueIfTrue, Object valueIfFalse) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * Calculate the negative value for a function. This method takes at least
@@ -379,14 +639,20 @@ public enum Function {
 	/**
 	 * Logic operations will use the <code>boolean</code> type for calculations.
 	 * Arguments with other types will be converted to a boolean value.
-	 * <code>Integer</code> and <code>Double</code>-values with a value greater
-	 * or equal to <code>1</code> will be parsed as <code>true</code>, values
-	 * less than <code>1</code> will be parsed as <code>false</code>. Values of
-	 * the type <code>String</code> with a length greater than <code>1</code>
-	 * will be parsed as <code>true</code>, else <code>false</code>.
+	 * <ul>
+	 * <li><code>Integer</code> and <code>Double</code>-values with a value...
+	 * <ul>
+	 * <li>greater or equal to <code>1</code> will be parsed as <code>true</code></li>
+	 * <li>less than <code>1</code> will be parsed as <code>false</code></li>
+	 * </ul>
+	 * <li>Values of the type <code>String</code> with a length...
+	 * <ul>
+	 * <li>greater than <code>1</code> will be parsed as <code>true</code></li>
+	 * <li>else (empty String) will be parsed as <code>false</code></li>
+	 * </ul>
 	 * 
 	 * @param obj
-	 *            Object to convert
+	 * 				Object to convert
 	 * @return <code>boolean</code> value to calculate with
 	 */
 	public static boolean booleanValueOf(Object obj) {
@@ -401,8 +667,7 @@ public enum Function {
 	}
 
 	/**
-	 * Get a function value by name. The name is converted to uppercase
-	 * automatically
+	 * Get a function value by name. The name is converted to uppercase automatically
 	 * 
 	 * @param value
 	 * @return Function matching the name
