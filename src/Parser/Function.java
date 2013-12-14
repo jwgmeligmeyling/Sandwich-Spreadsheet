@@ -445,10 +445,10 @@ public enum Function {
 			
 			for(Object argument : arguments) {
 				if (booleanValueOf(argument) == true) {
-					return booleanValueOf(true);
+					return true;
 				}
 			}
-			return booleanValueOf(false);
+			return false;
 		}
 	},
 	
@@ -478,10 +478,10 @@ public enum Function {
 			
 			for(Object argument : arguments) {
 				if (!booleanValueOf(argument)) {
-					return booleanValueOf(false);
+					return false;
 				}
 			}
-			return booleanValueOf(true);
+			return true;
 		}
 	},
 	
@@ -553,11 +553,6 @@ public enum Function {
 	 * @return <code>Object</code> of implemented type
 	 */
 	abstract Object calculate(Object... arguments);
-
-	Object calculate(Object logicalTest, Object valueIfTrue, Object valueIfFalse) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	/**
 	 * Calculate the negative value for a function. This method takes at least
