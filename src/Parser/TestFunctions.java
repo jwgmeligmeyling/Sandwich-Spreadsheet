@@ -44,4 +44,14 @@ public class TestFunctions {
 	public void testOrFalse() {
 		assertFalse((Boolean) Function.OR.calculate(false, false));
 	}
+	
+	@Test
+	public void testRoundToInt() {
+		assertEquals(5, Function.ROUND.calculate(5.4589, 0));
+	}
+	
+	@Test
+	public void testRoundTo1DecPlace() {
+		assertEquals(7.3, Function.ROUND.calculate(7.250001, 1));
+	}
 }

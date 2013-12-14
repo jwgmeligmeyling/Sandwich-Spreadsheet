@@ -211,8 +211,6 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length == 2;
-			// @Jan-Willem: is het nodig om dit te asserten? - Maarten
-			// Je wilt dit juist niet asserten, dan werken references niet meer
 			
 			double output = Math.pow(doubleValueOf(arguments[0]), doubleValueOf(arguments[1]));
 			if (Math.floor(output) == output) {
@@ -224,11 +222,11 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>number</code> As Double
+	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>decimals places</code> As Integer
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>Mathematicaly correct rounded value of <code>number</code></li>
+	 * <li>Mathematicaly correct rounded value of <code>number</code> to <code>decimals places</code> decimal places</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
@@ -243,10 +241,16 @@ public enum Function {
 	ROUND {
 		@Override
 		Object calculate(Object... arguments) {
-			assert arguments.length == 1;
-			return intValueOf(arguments[0]);
-			// HO HO HO!!! Klopt dit wel??? Zie functie-omschrijving!!!!!!! - Maarten
-			// Test het en we zullen het zien ;)
+			assert arguments.length == 2;
+			
+			double value = doubleValueOf(arguments[0]);
+			int decPlaces = intValueOf(arguments[1]);
+			
+			if (decPlaces == 0) {
+				return (int)Math.floor(value);
+			} else {
+				return ((double)Math.floor((Math.pow(10, decPlaces) * value) + 0.5d)) / Math.pow(10, decPlaces);
+			}
 		}
 	},
 	
