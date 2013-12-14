@@ -411,7 +411,10 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length >= 1 && arguments.length <= 3 && (arguments[0] instanceof Boolean);
-			
+			// Weet je zeker dat je zoveel wilt checken?
+			// 4 argumenten geven nu een error, terwijl je ook gewoon het vierde argument zou kunnen negeren
+			// Een argument van type Range wordt nu niet geaccepteerd, omdat het geen Boolean is.
+			// booleanValueOf() zou dit mooi oplossen, dus eigenlijk kan je de check gewoon weglaten.			
 			if (booleanValueOf(arguments[0])) {
 				if (arguments.length >= 2) { return arguments[1]; } else { return true; }
 			} else {
