@@ -625,7 +625,7 @@ public class Parser {
 	 * start of <code>Function</code> ADD(), or the <code>Reference</code> to
 	 * <code>Cell</code> A1.
 	 * 
-	 * @param n Amount of characters to peek forward
+	 * param n Amount of characters to peek forward
 	 * @return The character at the given index
 	 */
 	private char peek() {

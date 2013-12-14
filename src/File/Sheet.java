@@ -169,7 +169,7 @@ public class Sheet implements Interfaces.Sheet {
 		/**
 		 * Method to get the letter for a column
 		 * @param index
-		 * @return
+		 * @return column letter
 		 */
 		private String getColumnLetter(int index) {
 			int quotient = (index) / 26;
@@ -319,6 +319,11 @@ public class Sheet implements Interfaces.Sheet {
 
 	/**
 	 * The function that writes the sheet to a XML file.
+	 * <div><b>Author:</b><br>
+	 * <ul>
+	 * <li>Jim Hommes</li>
+	 * </ul>
+	 * </div>
 	 * 
 	 * @param path
 	 *            Path to file
@@ -329,8 +334,6 @@ public class Sheet implements Interfaces.Sheet {
 	 * @throws IOException
 	 *             If there was an error writing the file in the correct
 	 *             encoding
-	 * 
-	 * @author Jim Hommes
 	 */
 	public void write(String path) throws XMLStreamException,
 			FactoryConfigurationError, IOException {
@@ -344,11 +347,16 @@ public class Sheet implements Interfaces.Sheet {
 	
 	/**
 	 * The function that writes the sheet to a XML file.
-	 *             
+	 * <div><b>Author:</b><br>
+	 * <ul>
+	 * <li>Jim Hommes</li>
+	 * </ul>
+	 * </div>
+	 * 
+	 * @param writer
+	 *            ...
 	 * @throws XMLStreamException
-	 *             If there was an error processing the XML stream      
-	 *             
-	 * @author Jim Hommes
+	 *             If there was an error processing the XML stream
 	 */
 	public void write(XMLStreamWriter writer) throws XMLStreamException {
 		writer.writeStartElement("SPREADSHEET");
@@ -376,12 +384,12 @@ public class Sheet implements Interfaces.Sheet {
 		cells.put(position, cell);
 		return cell;
 	}
-
+	
 	@Override
 	public Cell getCellAt(int colIndex, int rowIndex) {
 		return cells.get(new Position(colIndex, rowIndex));
 	}
-
+	
 	@Override
 	public Cell[] getCells() {
 		return new Range(0, 0, columnCount, rowCount).getCellArray();

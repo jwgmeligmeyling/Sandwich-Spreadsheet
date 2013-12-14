@@ -1,6 +1,7 @@
 package Parser;
 
 import java.text.SimpleDateFormat;
+
 import File.Cell;
 import File.Sheet.Range;
 
@@ -26,7 +27,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
-	 * The <code>ADD</code>-function adds the values of the arguments, and
+	 * The <code>SUM</code>-function adds the values of the arguments, and
 	 * returns the result in the type of the first argument. For example: if the
 	 * first argument is an instance of <code>Integer</code> and the second and
 	 * third arguments are instances of <code>Double</code>, these arguments are
@@ -41,26 +42,25 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ADD {
+	SUM {
 		@Override
 		Object calculate(Object... arguments) {
 			double output = 0;
 			
-			for ( Object argument : arguments ) {
-				if ( argument instanceof Range ) {
-					for ( Cell cell : ((Range) argument).getCellArray() ) {
+			for (Object argument : arguments) {
+				if (argument instanceof Range) {
+					for (Cell cell : ((Range) argument).getCellArray()) {
 						output += doubleValueOf(cell.getValue());
 					}
 				} else {
 					output += doubleValueOf(argument);
 				}
 			}
-			if ( Math.floor(output) == output ) {
+			if (Math.floor(output) == output) {
 				return new Integer((int) output);
 			}
 			return output;
 		}
-
 	},
 	
 	/**
@@ -113,7 +113,7 @@ public enum Function {
 	 * <li>[return omschrijving]</li>
 	 * </ul>
 	 * </div>
-	 * The <code>MULTIPLY</code>-function multiplies the values of the
+	 * The <code>PRODUCT</code>-function multiplies the values of the
 	 * arguments, and returns the result in the type of the first argument. For
 	 * example: if the first argument is an instance of <code>Integer</code> and
 	 * the second and third arguments are instances of <code>Double</code>,
@@ -127,7 +127,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	MULTIPLY {
+	PRODUCT {
 		@Override
 		Object calculate(Object... arguments) {
 			assert arguments.length > 1;
@@ -222,6 +222,100 @@ public enum Function {
 	
 	/**
 	 * <div>
+	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>[real number...]</code> As Double
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Average of all the numerical values in the given range(s).</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	AVERAGE {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length >= 1;
+			
+			return (double)SUM.calculate(arguments) / (double)COUNT.calculate(arguments);
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>range</code>, <code>[range...]</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Number of cells in the given ranges with a numerical value in it</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	COUNT {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length >= 1;
+			int count = 0;
+			for(Object arg : arguments) {
+				assert arg instanceof Range : "Argument type error! All arguments in this function must be a Range.";
+				Range rng = (Range)arg;
+				for (Cell cell : rng.getCellArray()) {
+					if ((boolean)ISNUMBER.calculate(cell)) { count++; }
+				}	
+			}
+			return count;
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>argument</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li><code>TRUE</code> if <code>argument</code> is a numerical value</li>
+	 * <li><code>FALSE</code> if <code>argument</code> is not a numerical value</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	ISNUMBER {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length == 1;
+			if (arguments[0] instanceof Range) {
+				return ISNUMBER.calculate(((Range)arguments[0]).getCellArray()[0]);
+			} else if (arguments[0] instanceof Cell) {
+				return ISNUMBER.calculate(((Cell)arguments[0]).getValue() instanceof Number);
+			} else {
+				return (arguments[0] instanceof Number);
+			}
+		}
+	},
+	
+	/**
+	 * <div>
 	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>decimals places</code> As Integer
 	 * </div><br>
 	 * <div><b>Returns:</b>
@@ -251,6 +345,33 @@ public enum Function {
 			} else {
 				return ((double)Math.floor((Math.pow(10, decPlaces) * value) + 0.5d)) / Math.pow(10, decPlaces);
 			}
+		}
+	},
+	
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>decimals places</code> As Integer
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	INT {
+		@Override
+		Object calculate(Object... arguments) {
+			assert arguments.length == 1;
+			return (int)Math.floor((double)arguments[0]);
 		}
 	},
 	
@@ -526,15 +647,13 @@ public enum Function {
 	SIGN {
 		@Override
 		Object calculate(Object... arguments) {
-			// TODO de Excel variant werkt ook met ranges van 1 cell bij mij?
 			assert arguments.length == 1;
-			int temp = 0;
 			if (doubleValueOf(arguments[0]) < 0) {
-				temp = -1;
+				return -1;
 			} else if (doubleValueOf(arguments[0]) > 0) {
-				temp = 1;
+				return 1;
 			}
-			return temp;
+			return 0;
 		}
 	},
 	
@@ -686,6 +805,24 @@ public enum Function {
 			return booleanValueOf(((Cell) obj).getValue());
 		}
 		return false;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param obj
+	 * 				Object to convert
+	 * @return <code>boolean</code> value to calculate with
+	 */
+	public static String stringValueOf(Object obj) {
+		if (obj instanceof Range) {
+			return stringValueOf(((Range) obj).getCellArray()[0].getValue());
+		} else if (obj instanceof Cell) {
+			return ((Cell) obj).getValue().toString();
+		} else {
+			return obj.toString();
+		}
 	}
 
 	/**

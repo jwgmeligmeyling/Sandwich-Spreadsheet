@@ -20,7 +20,7 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			return Function.ADD.calculate(first, second);
+			return Function.SUM.calculate(first, second);
 		}
 
 	},
@@ -54,7 +54,7 @@ public enum Operator {
 
 		@Override
 		Object calculate(Object first, Object second) {
-			return Function.MULTIPLY.calculate(first, second);
+			return Function.PRODUCT.calculate(first, second);
 		}
 
 	},

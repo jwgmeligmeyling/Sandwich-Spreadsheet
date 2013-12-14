@@ -11,7 +11,6 @@ import File.Sheet;
 public class ParseTest {
 
 	public Sheet sheet;
-
 	public Cell A1, A2, A3, B1, B2, B3;
 
 	@Before
@@ -22,7 +21,7 @@ public class ParseTest {
 		A3 = sheet.createCell("=5", 0, 2);
 		B1 = sheet.createCell("=5*2", 1, 0);
 		B2 = sheet.createCell("=2+2*3", 1, 1);
-		B3 = sheet.createCell("=ADD(5,3)", 1, 2);
+		B3 = sheet.createCell("=SUM(5,3)", 1, 2);
 	}
 
 	@Test
@@ -47,8 +46,7 @@ public class ParseTest {
 
 	@Test
 	public void noCalculation() {
-		assertEquals("Bert is de sigaar",
-				Parser.parse(sheet, "Bert is de sigaar"));
+		assertEquals("Bert is de sigaar", Parser.parse(sheet, "Bert is de sigaar"));
 	}
 
 	@Test
@@ -73,27 +71,27 @@ public class ParseTest {
 
 	@Test
 	public void simpleFunction() {
-		assertEquals(7, Parser.parse(sheet, "=ADD(3,4)"));
+		assertEquals(7, Parser.parse(sheet, "=SUM(3,4)"));
 	}
 
 	@Test
 	public void simpleFunctionWithCast() {
-		assertEquals(7.1234, Parser.parse(sheet, "=ADD(3,4.1234)"));
+		assertEquals(7.1234, Parser.parse(sheet, "=SUM(3,4.1234)"));
 	}
 
 	@Test
 	public void nestedFunction() {
-		assertEquals(6, Parser.parse(sheet, "=ADD(3,ADD(1,2))"));
+		assertEquals(6, Parser.parse(sheet, "=SUM(3,SUM(1,2))"));
 	}
 
 	@Test
 	public void testMultiAddParseIntTrue() {
-		assertEquals(10, Parser.parse(sheet, "=ADD(ADD(1,2),ADD(3,4))"));
+		assertEquals(10, Parser.parse(sheet, "=SUM(SUM(1,2),SUM(3,4))"));
 	}
 
 	@Test
 	public void functionWithSpaces() {
-		assertEquals(6, Parser.parse(sheet, "=ADD ( 3, A D D ( 1 , 2 ) ) "));
+		assertEquals(6, Parser.parse(sheet, "=SUM ( 3, S U M ( 1 , 2 ) ) "));
 	}
 
 	@Test
@@ -182,12 +180,12 @@ public class ParseTest {
 
 	@Test
 	public void testCombined() {
-		assertEquals(13, Parser.parse(sheet, "=ADD(5,2)+3.0*2"));
+		assertEquals(13, Parser.parse(sheet, "=SUM(5,2)+3.0*2"));
 	}
 
 	@Test
 	public void twoFunctions() {
-		assertEquals(10, Parser.parse(sheet, "=ADD(1,2)+ADD(3,4)"));
+		assertEquals(10, Parser.parse(sheet, "=SUM(1,2)+SUM(3,4)"));
 	}
 
 	@Test
@@ -197,7 +195,7 @@ public class ParseTest {
 
 	@Test
 	public void simpleRange() {
-		assertEquals(26, Parser.parse(sheet, "=ADD(B1:B3)"));
+		assertEquals(26, Parser.parse(sheet, "=SUM(B1:B3)"));
 	}
 	
 
@@ -208,12 +206,12 @@ public class ParseTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testNullReference() {
-		Parser.parse(sheet, "=ADD(B1:B4)");
+		Parser.parse(sheet, "=SUM(B1:B4)");
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testInvalidReference() {
-		Parser.parse(sheet, "=ADD(B1:)");
+		Parser.parse(sheet, "=SUM(B1:)");
 	}
 	
 
@@ -240,8 +238,8 @@ public class ParseTest {
 	
 	@Test
 	public void testToString() {
-		Parser p = new Parser(sheet, "ADD(5,3)");
-		assertEquals("ADD(5,3)", p.toString());
+		Parser p = new Parser(sheet, "SUM(5,3)");
+		assertEquals("SUM(5,3)", p.toString());
 	}
 	
 	@Test
@@ -251,7 +249,7 @@ public class ParseTest {
 	
 	@Test
 	public void testNegativeFunction() {
-		assertEquals(-5, Parser.parse(sheet, "=-ADD(3,2)"));
+		assertEquals(-5, Parser.parse(sheet, "=-SUM(3,2)"));
 	}
 	
 	@Test
@@ -273,7 +271,7 @@ public class ParseTest {
 	
 	@Test
 	public void realDeep() {
-		assertEquals(1+2+3+4+5+6+7, Parser.parse(sheet, "=(((((ADD(1,2))+3)+4)+5)+6)+7"));
+		assertEquals(1+2+3+4+5+6+7, Parser.parse(sheet, "=(((((SUM(1,2))+3)+4)+5)+6)+7"));
 	}
 	
 	@Test
