@@ -298,6 +298,79 @@ public enum Function {
 		}
 	},
 	
+	COUNTIF {
+		@Override
+		Object calculate(Object... arguments) {
+			if (arguments.length != 2 || !(arguments[0] instanceof Range)) {
+				throw new IllegalArgumentException(
+						"This function takes two parameters!");
+			}
+			
+			int count = 0;
+			Cell[] range = ((Range) arguments[0]).getCellArray();
+			String criteria = arguments[1].toString();
+			
+			if ("<>!".indexOf(criteria.charAt(0)) == -1) {
+				criteria = "==".concat(criteria); // geen operator -> ==
+			} else if ( criteria.charAt(0) == '=') {
+				criteria = "=".concat(criteria); // = -> ==
+			}
+			
+			for ( int i = 0; i < range.length; i++ ) {
+				Cell cell = range[i];
+				if ( cell == null ) continue;
+				if ((Boolean) new Parser(null, cell.toString() + criteria).parse()) {
+					count++;
+				}
+			}
+			
+			return count;
+		}
+	},
+	
+	SUMIF {
+		@Override
+		Object calculate(Object... arguments) {
+			if (arguments.length < 2 || !(arguments[0] instanceof Range)) {
+				throw new IllegalArgumentException(
+						"This function takes two parameters!");
+			}
+			
+			double sum = 0;
+			Cell[] range = ((Range) arguments[0]).getCellArray();
+			Cell[] sum_range = (arguments.length == 3 && arguments[2] instanceof Range) ? ((Range) arguments[2])
+					.getCellArray() : range;
+			String criteria = arguments[1].toString();
+			
+			if ( sum_range.length < range.length ) {
+				throw new IllegalArgumentException("The sum range is too small.");
+			}
+			
+			if ("<>!".indexOf(criteria.charAt(0)) == -1) {
+				criteria = "==".concat(criteria); // geen operator -> ==
+			} else if ( criteria.charAt(0) == '=') {
+				criteria = "=".concat(criteria); // = -> ==
+			}
+			
+			for ( int i = 0; i < range.length; i++ ) {
+				Cell cell = range[i];
+				Cell valueCell = sum_range[i];
+				if ( cell == null || valueCell == null ) continue;
+				if ((Boolean) new Parser(null, cell.toString() + criteria).parse()) {
+					if (!(valueCell.getValue() instanceof String) ) {
+						sum += doubleValueOf(valueCell);
+					}
+				}
+			}
+			
+			if (Math.floor(sum) == sum) {
+				return (int) sum;
+			}
+			
+			return sum;
+		}
+	},
+	
 	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>argument</code>
@@ -515,6 +588,56 @@ public enum Function {
 		}
 	},
 	
+	ASIN {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.asin(doubleValueOf(arguments[0]));
+		}
+	},
+	
+	ACOS {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.acos(doubleValueOf(arguments[0]));
+		}
+	},
+	
+	ATAN {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.atan(doubleValueOf(arguments[0]));
+		}
+	},
+	
+	DEGREE {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.toDegrees(doubleValueOf(arguments[0]));
+		}
+	},
+
+	RADIAN {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.toRadians(doubleValueOf(arguments[0]));
+		}
+	},
+	
 	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>real number</code>
@@ -543,7 +666,86 @@ public enum Function {
 		}
 	},
 	
+	TAN {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.tan(doubleValueOf(arguments[0]));			
+		}
+	},
+	
+	LOG {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.log10(doubleValueOf(arguments[0]));
+		}
+	},
+	
+	LOGBASE {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 2 ) {
+				throw new IllegalArgumentException("This function takes only two parameters!");
+			}
+			return Math.log(doubleValueOf(arguments[0])) / Math.log(intValueOf(arguments[1]));			
+		}
+	},
+	
+	LN {
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.log(doubleValueOf(arguments[0]));			
+		}
+	},
+	
 	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>number</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>If the argument is positive, the <code>SIGN</code> function will return <code>1</code></li>
+	 * <li>If the argument is negative, the <code>SIGN</code> function will return <code>-1</code></li>
+	 * <li>If the argument is zero, the <code>SIGN</code> function will return <code>0</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */SIGN{
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			} else if (doubleValueOf(arguments[0]) < 0) {
+				return -1;
+			} else if (doubleValueOf(arguments[0]) > 0) {
+				return 1;
+			}
+			return 0;
+		}
+	}, ABS{
+		@Override
+		Object calculate(Object... arguments) {
+			if ( arguments.length != 1 ) {
+				throw new IllegalArgumentException("This function takes only one parameter!");
+			}
+			return Math.abs(doubleValueOf(arguments[0]));
+		}
+	}, /**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>logical test</code>, [<code>value if true</code>], [<code>value if false</code>]
 	 * </div><br>
@@ -648,40 +850,6 @@ public enum Function {
 				}
 			}
 			return true;
-		}
-	},
-	
-	/**
-	 * <div>
-	 * <b>Expected arguments:</b> <code>number</code>
-	 * </div><br>
-	 * <div><b>Returns:</b>
-	 * <ul>
-	 * <li>If the argument is positive, the <code>SIGN</code> function will return <code>1</code></li>
-	 * <li>If the argument is negative, the <code>SIGN</code> function will return <code>-1</code></li>
-	 * <li>If the argument is zero, the <code>SIGN</code> function will return <code>0</code></li>
-	 * </ul>
-	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
-	 * <div><b>Authors:</b>
-	 * <ul>
-	 * <li>Maarten Flikkema</li>
-	 * </ul>
-	 * </div>
-	 */
-	SIGN {
-		@Override
-		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			} else if (doubleValueOf(arguments[0]) < 0) {
-				return -1;
-			} else if (doubleValueOf(arguments[0]) > 0) {
-				return 1;
-			}
-			return 0;
 		}
 	},
 	

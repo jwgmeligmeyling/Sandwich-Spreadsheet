@@ -163,7 +163,7 @@ public class Sheet implements Interfaces.Sheet {
 
 		@Override
 		public String toString() {
-			return getColumnLetter(colIndex) + rowIndex;
+			return getColumnLetter(colIndex) + (rowIndex + 1);
 		}
 		
 		/**

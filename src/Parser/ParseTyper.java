@@ -22,7 +22,7 @@ public class ParseTyper {
 		sheet.createCell("=5", 0, 2);
 		sheet.createCell("=5*2", 1, 0);
 		sheet.createCell("=2+2*3", 1, 1);
-		sheet.createCell("=ADD(5,3)", 1, 2);
+		sheet.createCell("=SUM(5,3)", 1, 2);
 		
 		Scanner sc = new Scanner(System.in);
 		sc.useDelimiter("\n");
