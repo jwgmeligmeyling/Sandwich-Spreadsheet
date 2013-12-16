@@ -60,10 +60,8 @@ public enum Function {
 					output += doubleValueOf(argument);
 				}
 			}
-			if (Math.floor(output) == output) {
-				return new Integer((int) output);
-			}
-			return output;
+			
+			return convertToIntIfApplicable(output);
 		}
 	},
 	
@@ -104,10 +102,8 @@ public enum Function {
 			for ( int i = 1; i < arguments.length; i++ ) {
 				output -= doubleValueOf(arguments[i]);
 			}
-			if ( Math.floor(output) == output ) {
-				return new Integer((int) output);
-			}
-			return output;
+			
+			return convertToIntIfApplicable(output);
 		}
 	},
 	
@@ -145,10 +141,8 @@ public enum Function {
 			for ( int i = 1; i < arguments.length; i++ ) {
 				output *= doubleValueOf(arguments[i]);
 			}
-			if ( Math.floor(output) == output ) {
-				return new Integer((int) output);
-			}
-			return output;
+			
+			return convertToIntIfApplicable(output);
 		}
 	},
 	
@@ -189,10 +183,8 @@ public enum Function {
 			for ( int i = 1; i < arguments.length; i++ ) {
 				output /= doubleValueOf(arguments[i]);
 			}
-			if ( Math.floor(output) == output ) {
-				return new Integer((int) output);
-			}
-			return output;
+
+			return convertToIntIfApplicable(output);
 		}
 	},
 
@@ -225,10 +217,8 @@ public enum Function {
 				throw new IllegalArgumentException("This function takes two parameters!");
 			}
 			double output = Math.pow(doubleValueOf(arguments[0]), doubleValueOf(arguments[1]));
-			if (Math.floor(output) == output) {
-				return new Integer((int) output);
-			}
-			return output;
+
+			return convertToIntIfApplicable(output);
 		}
 	},
 	
@@ -363,11 +353,7 @@ public enum Function {
 				}
 			}
 			
-			if (Math.floor(sum) == sum) {
-				return (int) sum;
-			}
-			
-			return sum;
+			return convertToIntIfApplicable(sum);
 		}
 	},
 	
@@ -434,9 +420,11 @@ public enum Function {
 			int decPlaces = intValueOf(arguments[1]);
 			
 			if (decPlaces == 0) {
-				return (int)Math.floor(value);
+				return (int) Math.floor(value);
 			} else {
-				return ((double)Math.floor((Math.pow(10, decPlaces) * value) + 0.5d)) / Math.pow(10, decPlaces);
+				return ((double) Math
+						.floor((Math.pow(10, decPlaces) * value) + 0.5d))
+						/ Math.pow(10, decPlaces);
 			}
 		}
 	},
@@ -461,9 +449,7 @@ public enum Function {
 	INT {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return (int) Math.floor(doubleValueOf(arguments[0]));
 		}
 	},
@@ -546,17 +532,9 @@ public enum Function {
 	SQRT {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
-			
+			assertArguments(1, arguments.length);
 			double output = Math.sqrt(doubleValueOf(arguments[0]));
-			
-			if (Math.floor(output) == output) {
-				return (int) output;
-			}
-			
-			return output;
+			return convertToIntIfApplicable(output);
 		}
 	},
 	
@@ -581,9 +559,7 @@ public enum Function {
 	SIN {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.sin(doubleValueOf(arguments[0]));
 		}
 	},
@@ -591,9 +567,7 @@ public enum Function {
 	ASIN {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.asin(doubleValueOf(arguments[0]));
 		}
 	},
@@ -601,9 +575,7 @@ public enum Function {
 	ACOS {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.acos(doubleValueOf(arguments[0]));
 		}
 	},
@@ -611,9 +583,7 @@ public enum Function {
 	ATAN {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.atan(doubleValueOf(arguments[0]));
 		}
 	},
@@ -621,9 +591,7 @@ public enum Function {
 	DEGREE {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.toDegrees(doubleValueOf(arguments[0]));
 		}
 	},
@@ -631,9 +599,7 @@ public enum Function {
 	RADIAN {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.toRadians(doubleValueOf(arguments[0]));
 		}
 	},
@@ -659,9 +625,7 @@ public enum Function {
 	COS {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.cos(doubleValueOf(arguments[0]));
 		}
 	},
@@ -669,9 +633,7 @@ public enum Function {
 	TAN {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.tan(doubleValueOf(arguments[0]));			
 		}
 	},
@@ -679,9 +641,7 @@ public enum Function {
 	LOG {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.log10(doubleValueOf(arguments[0]));
 		}
 	},
@@ -689,9 +649,7 @@ public enum Function {
 	LOGBASE {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 2 ) {
-				throw new IllegalArgumentException("This function takes only two parameters!");
-			}
+			assertArguments(2, arguments.length);
 			return Math.log(doubleValueOf(arguments[0])) / Math.log(intValueOf(arguments[1]));			
 		}
 	},
@@ -699,9 +657,7 @@ public enum Function {
 	LN {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.log(doubleValueOf(arguments[0]));			
 		}
 	},
@@ -737,15 +693,57 @@ public enum Function {
 			}
 			return 0;
 		}
-	}, ABS{
+	},
+	
+	ABS {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return Math.abs(doubleValueOf(arguments[0]));
 		}
-	}, /**
+	},
+	
+	MIN {
+		@Override
+		Object calculate(Object... arguments) {
+			double min = 0;
+			
+			for ( int i = 0; i < arguments.length; i++ ) {
+				if ( arguments[i] instanceof String ) {
+					continue;
+				} else {
+					double d = doubleValueOf(arguments[i]);
+					if ( i == 0 || d < min ) {
+						min = d;
+					}
+				}
+			}
+			
+			return convertToIntIfApplicable(min);
+		}
+	},
+	
+	MAX {
+		@Override
+		Object calculate(Object... arguments) {
+			double max = 0;
+			
+			for ( int i = 0; i < arguments.length; i++ ) {
+				if ( arguments[i] instanceof String ) {
+					continue;
+				} else {
+					double d = doubleValueOf(arguments[i]);
+					if ( i == 0 || d > max ) {
+						max = d;
+					}
+				}
+			}
+			
+			return convertToIntIfApplicable(max);
+		}
+	},
+	
+	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>logical test</code>, [<code>value if true</code>], [<code>value if false</code>]
 	 * </div><br>
@@ -807,11 +805,9 @@ public enum Function {
 	OR {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length == 0 ) {
-				throw new IllegalArgumentException("This function takes at least one parameter");
-			}
+			assertMinArguments(1, arguments.length);
 			for(Object argument : arguments) {
-				if (booleanValueOf(argument) == true) {
+				if (booleanValueOf(argument)) {
 					return true;
 				}
 			}
@@ -841,15 +837,21 @@ public enum Function {
 	AND {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length == 0 ) {
-				throw new IllegalArgumentException("This function takes at least one parameter");
-			}
+			assertMinArguments(1, arguments.length);
 			for(Object argument : arguments) {
 				if (!booleanValueOf(argument)) {
 					return false;
 				}
 			}
 			return true;
+		}
+	},
+	
+	NOT {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return !booleanValueOf(arguments[0]);
 		}
 	},
 	
@@ -1038,5 +1040,26 @@ public enum Function {
 	public static Function get(String value) {
 		return Function.valueOf(value.toUpperCase());
 	}
+	
+	private static Object convertToIntIfApplicable(double d) {
+		if (Math.floor(d) == d) {
+			return (int) d;
+		}
+		return d;
+	}
+	
+	private static void assertArguments(int count, int length) {
+		if (count != length)
+			throw new IllegalArgumentException("This function requires "
+					+ count + "arguments, but " + length
+					+ " arguments were supplied");
+	}
 
+	private static void assertMinArguments(int min, int length) {
+		if (min > length)
+			throw new IllegalArgumentException(
+					"This function requires at least " + min
+							+ "arguments, but " + length
+							+ " arguments were supplied");
+	}
 }
