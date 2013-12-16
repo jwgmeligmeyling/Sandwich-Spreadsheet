@@ -378,6 +378,14 @@ public class Sheet implements Interfaces.Sheet {
 		sheetName = newSheetName;
 	}
 
+	public int getColumnCount() {
+		return columnCount + 1;
+	}
+
+	public int getRowCount() {
+		return rowCount + 1;
+	}
+
 	public Cell createCell(String value, int colIndex, int rowIndex) {
 		Position position = new Position(colIndex, rowIndex);
 		Cell cell = new Cell(this, position, value);
@@ -387,7 +395,13 @@ public class Sheet implements Interfaces.Sheet {
 	
 	@Override
 	public Cell getCellAt(int colIndex, int rowIndex) {
-		return cells.get(new Position(colIndex, rowIndex));
+		Position position = new Position(colIndex, rowIndex);
+		Cell output = cells.get(position);
+		if (output == null ) {
+			output = new Cell(this, position, "");
+			cells.put(position, output);
+		}
+		return output;
 	}
 	
 	@Override

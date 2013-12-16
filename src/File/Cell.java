@@ -12,11 +12,12 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import File.Sheet.Position;
 import Parser.Parser;
+import Parser.Function;
 
 /**
  * @author Maarten Flikkema
  */
-public class Cell extends Observable implements Interfaces.Cell {
+public class Cell extends Observable implements Interfaces.Cell, Comparable<Cell> {
 
 	final Sheet sheet;
 	final Position position;
@@ -200,5 +201,10 @@ public class Cell extends Observable implements Interfaces.Cell {
 				sheet.createCell(content.toString(), colIndex, rowIndex);
 			}
 		}
+	}
+
+	@Override
+	public int compareTo(Cell o) {
+		return (int) (Function.doubleValueOf(this) - Function.doubleValueOf(o));
 	}
 }
