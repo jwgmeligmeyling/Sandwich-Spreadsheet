@@ -1,6 +1,7 @@
 package Parser;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 import File.Cell;
 import File.Sheet.Range;
@@ -454,6 +455,13 @@ public enum Function {
 		}
 	},
 	
+	RAW {
+		@Override
+		Object calculate(Object... arguments) {
+			return Arrays.toString(arguments);
+		}
+	},
+	
 	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <i>None</i>
@@ -807,7 +815,7 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			for(Object argument : arguments) {
-				if (booleanValueOf(argument)) {
+				if (booleanValueOf(argument) == true) {
 					return true;
 				}
 			}

@@ -391,9 +391,9 @@ public class Parser {
 		
 		index = peekIndex -1;
 		if (d) {
-			return new Double(s);
+			return Double.valueOf(s);
 		} else {
-			return new Integer(s);
+			return Integer.valueOf(s);
 		}
 	}
 
@@ -424,8 +424,8 @@ public class Parser {
 	 *             if no such <code>Operator</code> is implemented
 	 */
 	private void getOperator() {
-		if (current == '-'
-				&& (index == 0 || "+-*/<>~!&|^=(".indexOf(previous()) != -1)) {
+		if (current == '-' && depth == 0 
+				&& (index == 0 || "+-*/<>~!&|^=(,".indexOf(previous()) != -1)) {
 			/*
 			 * Parse -5 and x-5 differently :)
 			 */
