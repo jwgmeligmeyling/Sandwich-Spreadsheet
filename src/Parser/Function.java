@@ -57,6 +57,8 @@ public enum Function {
 					for (Cell cell : ((Range) argument).getCellArray()) {
 						output += doubleValueOf(cell.getValue());
 					}
+				} else if (argument instanceof String) {
+					output += 0;
 				} else {
 					output += doubleValueOf(argument);
 				}
@@ -979,10 +981,12 @@ public enum Function {
 			return 0;
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
-		} else if ( obj instanceof Range ) {
+		} else if (obj instanceof Range) {
 			return doubleValueOf(((Range) obj).getCellArray()[0]);
-		} else if ( obj instanceof Cell ) {
+		} else if (obj instanceof Cell) {
 			return doubleValueOf(((Cell) obj).getValue());
+		} else if (obj instanceof String) {
+			return 0;
 		}
 		throw new IllegalArgumentException("#VALUE");
 	}
