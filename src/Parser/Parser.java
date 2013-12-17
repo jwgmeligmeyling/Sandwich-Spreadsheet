@@ -581,7 +581,7 @@ public class Parser {
 					Range range = sheet.getRange(a,b);
 					if ( cell != null && range.contains(cell) )
 						throw new IllegalArgumentException("Cross reference!");
-					cell.startListening(range);
+					// cell.startListening(range);
 					return sheet.getRange(a, b);
 				} else {
 					throw new IllegalArgumentException(

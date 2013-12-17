@@ -17,7 +17,7 @@ import Parser.Function;
 /**
  * @author Maarten Flikkema
  */
-public class Cell extends Observable implements Interfaces.Cell, Comparable<Cell> {
+public class Cell implements Interfaces.Cell, Comparable<Cell> {
 
 	final Sheet sheet;
 	final Position position;
@@ -76,7 +76,7 @@ public class Cell extends Observable implements Interfaces.Cell, Comparable<Cell
 
 	@Override
 	public void updateValue() {
-		value = Parser.parse(sheet, input);
+		value = Parser.parse(this);
 	}
 
 	@Override
@@ -87,6 +87,10 @@ public class Cell extends Observable implements Interfaces.Cell, Comparable<Cell
 	@Override
 	public String getInput() {
 		return input;
+	}
+
+	public Sheet getSheet() {
+		return sheet;
 	}
 
 	@Override
@@ -143,12 +147,6 @@ public class Cell extends Observable implements Interfaces.Cell, Comparable<Cell
 	@Override
 	public void setBColor(Color newBColor) {
 		bColor = newBColor;
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-
 	}
 	
 	/**

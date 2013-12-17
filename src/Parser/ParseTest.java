@@ -204,7 +204,7 @@ public class ParseTest {
 		assertEquals(80, Parser.parse(sheet, "=B1*B3"));
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testNullReference() {
 		Parser.parse(sheet, "=SUM(B1:B4)");
 	}

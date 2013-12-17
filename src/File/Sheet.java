@@ -257,6 +257,13 @@ public class Sheet implements Interfaces.Sheet {
 			return super.equals(obj);
 		}
 		
+		public boolean contains(Cell cell) {
+			return cell.position.colIndex >= topLeft.colIndex &&
+					cell.position.colIndex <= bottomRight.colIndex &&
+					cell.position.rowIndex >= topLeft.rowIndex &&
+					cell.position.rowIndex <= bottomRight.rowIndex;
+		}
+		
 		/**
 		 * Determine if the range contains a single <code>Cell</code>
 		 * @return true if this <code>Cell</code> contains only one <code>Cell</code>

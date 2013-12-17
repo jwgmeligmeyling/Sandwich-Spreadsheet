@@ -12,7 +12,7 @@ import java.util.Observer;
  * @author Liam Clark
  * @author Jan-Willem Gmelig Meyling
  */
-public interface Cell extends Observer {
+public interface Cell {
 	
 	/**
 	 * Method to get the current value of the cell, for example "5", "4", "hello".
