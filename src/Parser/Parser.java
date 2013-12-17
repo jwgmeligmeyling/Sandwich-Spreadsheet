@@ -3,8 +3,10 @@ package Parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import File.Cell;
 import File.Sheet;
+import File.Sheet.Range;
 
 /**
  * Class to parse the String
@@ -30,6 +32,11 @@ public class Parser {
 	 * <code>Range</code> types can be accessed.
 	 */
 	private final Sheet sheet;
+	
+	/**
+	 * A variable to store the current <code>Cell</code>
+	 */
+	private final Cell cell;
 
 	/**
 	 * An <code>int</code> to store the current index. Because we increment the
@@ -86,6 +93,10 @@ public class Parser {
 	private Function function;
 	
 	/**
+	 */
+	private Object value;
+	
+	/**
 	 * This list is used to store the function arguments.
 	 */
 	List<Object> arguments = new ArrayList<Object>();
@@ -100,15 +111,30 @@ public class Parser {
 	 */
 	Stack<Operator> operators = new Stack<Operator>();
 
+	@Deprecated
 	/**
 	 * Public Parse constructor. Takes a <code>String</code> as argument.
-	 * 
+	 * @param sheet
 	 * @param string
 	 */
 	public Parser(Sheet sheet, String string) {
 		this.sheet = sheet;
+		this.cell = null;
 		length = string.length();
 		input = string;
+	}
+	
+	/**
+	 * Public Parse constructor. Takes a <code>String</code> as argument.
+	 * @param cell
+	 * @param string
+	 */
+	public Parser(Cell cell) {
+		this.cell = cell;
+		this.sheet = cell.getSheet();
+		input = cell.getInput().replaceAll("\\s+", "");
+		length = input.length();
+		value = preparse();
 	}
 
 	/**
@@ -124,6 +150,7 @@ public class Parser {
 	 */
 	private Parser(Parser parser, int from, int to) {
 		sheet = parser.sheet;
+		cell = parser.cell;
 		input = parser.input;
 		index = from;
 		length = to;
@@ -142,6 +169,10 @@ public class Parser {
 	 *             If the string does not contain a parsable number.
 	 */
 	public Object parse() {
+		if ( value != null ) {
+			return value;
+		}
+		
 		while (hasNext()) {
 			switch (current = next()) {
 			case ' ':
@@ -212,6 +243,32 @@ public class Parser {
 		}
 
 		return values.pop();
+	}
+
+	/**
+	 * Preparse the string, slices off the '=' sign, and looks for literals (5,
+	 * 2.1, true/false) or returns the string
+	 */
+	private Object preparse() {
+		if ( hasNext() ) {
+			current = next();
+			if  ( current == '=' ) {
+				return null;
+			} else {
+				Boolean b = getBoolean();
+				if ( b != null && !hasNext()) {
+					return b;
+				} else if (Character.isDigit(current)) {
+					Number n = getNumber();
+					if (!hasNext()) {
+						return n;
+					}
+				}
+				return input;
+			}
+		} else {
+			return input;
+		}
 	}
 
 	/**
@@ -521,11 +578,17 @@ public class Parser {
 				Cell b = getCell();
 				if (b != null) {
 					index = peekIndex -1;
+					Range range = sheet.getRange(a,b);
+					if ( cell != null && range.contains(cell) )
+						throw new IllegalArgumentException("Cross reference!");
+					cell.startListening(range);
 					return sheet.getRange(a, b);
 				} else {
 					throw new IllegalArgumentException(
 							"Expected a column reference after :");
 				}
+			} else if (cell != null && a.equals(cell) ) {
+				throw new IllegalArgumentException("Cross reference!");
 			} else {
 				index = peekIndex -1;
 				return a.getValue();
@@ -688,6 +751,7 @@ public class Parser {
 		return input;
 	}
 
+	@Deprecated
 	/**
 	 * Static method to initiate parsing of an expression. Automatically slices
 	 * of the '=' character at the beginning, and removes spaces.
@@ -704,6 +768,10 @@ public class Parser {
 		} else {
 			return new Parser(sheet, string.substring(1).replaceAll("\\s+", "")).parse();
 		}
+	}
+	
+	public static Object parse(Cell cell) {
+		return new Parser(cell).parse();
 	}
 
 }
