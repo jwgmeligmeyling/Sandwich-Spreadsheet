@@ -165,20 +165,6 @@ public class Sheet implements Interfaces.Sheet {
 		public String toString() {
 			return getColumnLetter(colIndex) + (rowIndex + 1);
 		}
-		
-		/**
-		 * Method to get the letter for a column
-		 * @param index
-		 * @return column letter
-		 */
-		private String getColumnLetter(int index) {
-			int quotient = (index) / 26;
-			if (quotient > 0) {
-				return getColumnLetter(quotient - 1) + (char) ((index % 26) + 65);
-			} else {
-				return "" + (char) ((index % 26) + 65);
-			}
-		}
 	}
 	
 	/**
@@ -315,6 +301,20 @@ public class Sheet implements Interfaces.Sheet {
 	 */
 	public Sheet(String nameIn) {
 		sheetName = nameIn;
+	}
+
+	/**
+	 * Method to get the letter for a column
+	 * @param index
+	 * @return column letter
+	 */
+	public String getColumnLetter(int index) {
+		int quotient = (index) / 26;
+		if (quotient > 0) {
+			return getColumnLetter(quotient - 1) + (char) ((index % 26) + 65);
+		} else {
+			return "" + (char) ((index % 26) + 65);
+		}
 	}
 
 	/**

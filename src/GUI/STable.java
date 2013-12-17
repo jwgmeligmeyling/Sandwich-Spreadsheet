@@ -9,6 +9,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.LookAndFeel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
@@ -22,14 +23,16 @@ import File.Sheet;
 
 public class STable extends JTable {
 	private final Sheet sheet;
-	private final JTextField formule;
+	private final JTextField formule;	
+	
 
 	public STable(final Sheet sheet, JTextField formule) {
 		super(new AbstractTableModel() {
-			private final String[] columnNames = { "#", "A", "B", "C", "D", "E", "F" };
-
 			public String getColumnName(int column) {
-				return columnNames[column].toString();
+				if ( column == 0 ) {
+					return "";
+				}
+				return sheet.getColumnLetter(column - 1);
 			}
 
 			public int getRowCount() {
@@ -57,12 +60,18 @@ public class STable extends JTable {
 			}
 		}, null, null);
 		
-		getColumnModel().getColumn(0).setPreferredWidth(30);
+		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		setRowSelectionAllowed(true);
+	    setColumnSelectionAllowed(true);
+	    setCellSelectionEnabled(true);
+	    setGridColor(new Color(220, 220, 255));
+
+		
+		getColumnModel().getColumn(0).setPreferredWidth(15);
 		getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
 
             @Override
             public Component getTableCellRendererComponent(JTable x, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
                 boolean selected = getSelectionModel().isSelectedIndex(row);
                 Component component = x.getTableHeader().getDefaultRenderer().getTableCellRendererComponent(x, value, false, false, -1, -2);
                 ((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
@@ -75,6 +84,7 @@ public class STable extends JTable {
             }
         });
 
+		
 		this.sheet = sheet;
 		this.formule = formule;
 	}

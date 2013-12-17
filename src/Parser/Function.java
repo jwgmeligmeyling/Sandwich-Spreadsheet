@@ -247,7 +247,9 @@ public enum Function {
 			if ( arguments.length == 0) {
 				throw new IllegalArgumentException("This function takes at least one parameter!");
 			}
-			return (Double) (SUM.calculate(arguments)) / (Double) (COUNT.calculate(arguments));
+			return convertToIntIfApplicable(doubleValueOf(SUM
+					.calculate(arguments))
+					/ doubleValueOf(COUNT.calculate(arguments)));
 		}
 	},
 	
