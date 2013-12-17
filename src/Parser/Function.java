@@ -948,6 +948,8 @@ public enum Function {
 			return ((Number) obj).intValue();
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
+		} else if ( obj instanceof String ) {
+			return 0;
 		} else if ( obj instanceof Range ) {
 			return intValueOf(((Range) obj).getCellArray()[0]);
 		} else if ( obj instanceof Cell ) {
@@ -973,6 +975,8 @@ public enum Function {
 		 */
 		if (obj instanceof Number) {
 			return ((Number) obj).doubleValue();
+		} else if ( obj instanceof String ) {
+			return 0;
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
 		} else if ( obj instanceof Range ) {

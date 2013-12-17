@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.Arrays;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
@@ -11,14 +12,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import sun.reflect.misc.ReflectUtil;
-import sun.swing.SwingUtilities2;
 import File.Cell;
 import File.Sheet;
+import File.Sheet.Range;
 
 public class STable extends JTable {
 	private final Sheet sheet;
@@ -58,6 +60,10 @@ public class STable extends JTable {
 				fireTableCellUpdated(row, col);
 			}
 		}, null, null);
+		
+		SelectionHandler handler = new SelectionHandler();
+		getSelectionModel().addListSelectionListener(handler);
+		getColumnModel().getSelectionModel().addListSelectionListener(handler);
 		
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		setRowSelectionAllowed(true);
@@ -128,5 +134,48 @@ public class STable extends JTable {
 		public Object getCellEditorValue() {
 			return value;
 		}
+	}
+	
+	private Range previousRange;
+	
+	class SelectionHandler implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if ( e.getValueIsAdjusting() )
+				return;
+			int[] selectedColumns = getSelectedColumns();
+			int[] selectedRows = getSelectedRows();
+			
+			if ( selectedColumns != null & selectedRows != null ) {
+				int selectedColumnsCount = selectedColumns.length;
+				int selectedRowsCount = selectedRows.length;
+				
+				if ( selectedColumnsCount == 0 || selectedRowsCount == 0 ) {
+					return;
+				}
+				
+				int colLeft = selectedColumns[0] - 1;
+				int rowUp = selectedRows[0];
+				int colRight = selectedColumns[selectedColumnsCount-1] - 1;
+				int rowDown = selectedRows[selectedRowsCount -1];
+					
+				if ( colLeft == 0) {
+					return; // First column is reserved for row index
+				}
+				
+				Range range = sheet.getRange(colLeft, rowUp, colRight, rowDown);
+				if (!range.equals(previousRange)) {
+					previousRange = range;
+					System.out.println("Selected range: "  + range.toString());
+					/*
+					 * TODO Liam formule.setText() -> cell.getInput() wanneer range.isSingleCell().
+					 * Daarna kijken hoe we aanpassingen in het formule tekstveld kunnen doorvoeren
+					 * naar de cell. ( range.getCellArray()[0] -> Cell.setInput(String) )
+					 */
+				}
+			}
+		}
+		
 	}
 }

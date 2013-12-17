@@ -46,7 +46,14 @@ public class VoorbereidingLiam extends JFrame {
 		sheet.createCell("2+2", 2, 0);
 		sheet.createCell("=PRODUCT(3,5,2)",1,1);
 		sheet.createCell("", 2, 2);
-		sheet.createCell("", 5, 49);
+		
+		for ( int i = 10; i < 20; i++ ) {
+			for ( int j = 10; j < 200; j++ ) {
+				sheet.createCell("=5", i, j);
+			}
+		}
+		
+//		sheet.createCell("", 50, 2000);
 	}
 
 	public static void main(String[] args) {

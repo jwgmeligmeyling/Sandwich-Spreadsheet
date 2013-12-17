@@ -247,6 +247,36 @@ public class Sheet implements Interfaces.Sheet {
 			return topLeft + ":" + bottomRight;
 		}
 
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Range) {
+				Range other = (Range) obj;
+				return topLeft.equals(other.topLeft)
+						&& bottomRight.equals(other.bottomRight);
+			}
+			return super.equals(obj);
+		}
+		
+		/**
+		 * Determine if the range contains a single <code>Cell</code>
+		 * @return true if this <code>Cell</code> contains only one <code>Cell</code>
+		 */
+		public boolean isSingleCell() {
+			return topLeft.equals(bottomRight);
+		}
+		
+		/**
+		 * Return the first <code>Cell</code> in this <code>Range</code>
+		 * @return
+		 */
+		public Cell firstCell() {
+			Cell[] cells = getCellArray();
+			if ( cells.length > 0 ) {
+				return cells[0];
+			}
+			return null;
+		}
+
 	}
 
 	/**
