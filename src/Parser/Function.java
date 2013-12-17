@@ -985,8 +985,6 @@ public enum Function {
 			return doubleValueOf(((Range) obj).getCellArray()[0]);
 		} else if (obj instanceof Cell) {
 			return doubleValueOf(((Cell) obj).getValue());
-		} else if (obj instanceof String) {
-			return 0;
 		}
 		throw new IllegalArgumentException("#VALUE");
 	}
