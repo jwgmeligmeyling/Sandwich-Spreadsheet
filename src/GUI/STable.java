@@ -10,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.LookAndFeel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
@@ -96,38 +95,22 @@ public class STable extends JTable {
 
 	public class CustomTableCellEditor extends DefaultCellEditor implements
 			TableCellEditor {
-
-		Class[] argTypes = new Class[] { String.class };
-		java.lang.reflect.Constructor constructor;
-		Object value;
+		String value;
 
 		public CustomTableCellEditor() {
 			super(new JTextField());
 			getComponent().setName("Table.editor");
 		}
-
+		
+		@Override
 		public boolean stopCellEditing() {
-			String s = (String) super.getCellEditorValue();
 			formule.setEnabled(false);
 			formule.setText("");
-			try {
-				if ("".equals(s)) {
-					if (constructor.getDeclaringClass() == String.class) {
-						value = s;
-					}
-					return super.stopCellEditing();
-				}
-
-				SwingUtilities2.checkAccess(constructor.getModifiers());
-				value = constructor.newInstance(new Object[] { s });
-			} catch (Exception e) {
-				((JComponent) getComponent()).setBorder(new LineBorder(
-						Color.red));
-				return false;
-			}
+			value = (String) super.getCellEditorValue();
 			return super.stopCellEditing();
 		}
 
+		@Override
 		public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
 			Cell cell = sheet.getCellAt(column - 1, row);
@@ -135,23 +118,13 @@ public class STable extends JTable {
 			this.value = null;
 			((JComponent) getComponent())
 					.setBorder(new LineBorder(Color.black));
-			try {
-				Class<?> type = table.getColumnClass(column);
-				if (type == Object.class) {
-					type = String.class;
-				}
-				ReflectUtil.checkPackageAccess(type);
-				SwingUtilities2.checkAccess(type.getModifiers());
-				constructor = type.getConstructor(argTypes);
-			} catch (Exception e) {
-				return null;
-			}
 			formule.setText(input.toString());
 			formule.setEnabled(true);
 			return super.getTableCellEditorComponent(table, input, isSelected,
 					row, column);
 		}
 
+		@Override
 		public Object getCellEditorValue() {
 			return value;
 		}
