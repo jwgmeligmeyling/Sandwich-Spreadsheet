@@ -1,15 +1,19 @@
 package GUI;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import File.Sheet;
+import File.SpreadSheetFile;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
 
 	//private static Sheet sheet;
+	
+	// Table setting declarations
+	private static final Color selectionColor = new Color(190, 220, 255);
+	
 	
 	// ImageIcon declaration
 	private static ImageIcon icoNew = 			new ImageIcon("img/new.png", "New");
@@ -37,7 +41,11 @@ public class Window extends JFrame implements ActionListener {
 		
 	private static JMenu menuView = new JMenu("View");
 		private static JMenuItem jmiZoom = new JMenuItem("Zoom in/out");
-		private static JMenuItem jmiStatusBar = new JMenuItem("Show/hide Status Bar");
+		private static JCheckBox jmiStatusBar = new JCheckBox("Show/hide Status Bar");
+		//private static JMenu jmTabsTopBottom = new JMenu("Show tabs on top/bottom");
+		private static ButtonGroup jbgTabsTopBottom = new ButtonGroup();
+		private static JRadioButton jrbTabsTop = new JRadioButton("Tabs on top");
+		private static JRadioButton jrbTabsBottom = new JRadioButton("Tabs on bottom", true);
 		
 	private static JMenu menuInsert = new JMenu("Insert");
 		private static JMenuItem jmiInsFunction = new JMenuItem("Insert Function");
@@ -46,6 +54,7 @@ public class Window extends JFrame implements ActionListener {
 		
 	private static JMenu menuHelp = new JMenu("Help");
 		private static JMenuItem jmiHelp = new JMenuItem("Help");
+		private static JMenuItem jmiAbout = new JMenuItem("About");
 		
 	// Toolbar declaration
 	private static JToolBar tbMain = new JToolBar();
@@ -53,15 +62,16 @@ public class Window extends JFrame implements ActionListener {
 		private static JButton tbnOpen = new JButton(icoOpen);
 		private static JButton tbnSave = new JButton(icoSave);
 		private static JButton tbnPrint = new JButton(icoPrint);
-		private static JButton tbnFColor = new JButton("F color");		// ColorPicker!!
-		private static JButton tbnBColor = new JButton("B color");		// ColorPicker!!
+		private static JButton tbnFColor = new JButton("F color");	// ColorPicker!!
+		private static JButton tbnBColor = new JButton("B color");	// ColorPicker!!
 		private static JToggleButton ttgBold = new JToggleButton(icoBold);
 		private static JToggleButton ttgItalic = new JToggleButton(icoItalic);
 		private static JToggleButton ttgUnderlined = new JToggleButton(icoUnderlined);
-	
-	private static JTextField formule = new JTextField();
+		private static JTextField formule = new JTextField();
 	
 	private static JTabbedPane tabs = new JTabbedPane();
+	
+	private static SpreadSheetFile newFile;
 	
 	/**
 	 * Constructor for the GUI.
@@ -79,35 +89,35 @@ public class Window extends JFrame implements ActionListener {
 		
 		setJMenuBar(jmb);
 		
-		jmb.add(menuFile);
-			menuFile.setMnemonic('f');
+		jmb.add(menuFile);			menuFile.setMnemonic('f');
 			menuFile.add(jmiOpen);		jmiOpen.setMnemonic('o');
 			menuFile.add(jmiSave);		jmiSave.setMnemonic('s');
 			menuFile.add(jmiSaveAs);	jmiSaveAs.setMnemonic('a');
 			menuFile.add(jmiExit);		jmiExit.setMnemonic('s');
 			
-		jmb.add(menuEdit);
-			menuEdit.setMnemonic('e');
+		jmb.add(menuEdit);			menuEdit.setMnemonic('e');
 			menuEdit.add(jmiUndo);		jmiUndo.setMnemonic('u');
 			menuEdit.add(jmiRedo);		jmiRedo.setMnemonic('r');
 			menuEdit.add(jmiCut);		jmiCut.setMnemonic('x');
 			menuEdit.add(jmiCopy);		jmiCopy.setMnemonic('c');
 			menuEdit.add(jmiPaste);		jmiPaste.setMnemonic('v');
 			
-		jmb.add(menuView);
-			menuView.setMnemonic('v');
+		jmb.add(menuView);			menuView.setMnemonic('v');
 			menuView.add(jmiZoom);		jmiZoom.setMnemonic('z');
 			menuView.add(jmiStatusBar);	jmiStatusBar.setMnemonic('s');
+			menuView.addSeparator();
+			//menuView.add(jmTabsTopBottom);	jmTabsTopBottom.setMnemonic('t');
+			menuView.add(jrbTabsTop);		jrbTabsTop.setMnemonic('t');		jbgTabsTopBottom.add(jrbTabsTop);
+			menuView.add(jrbTabsBottom);	jrbTabsBottom.setMnemonic('b');		jbgTabsTopBottom.add(jrbTabsBottom);
 			
-		jmb.add(menuInsert);
-			menuInsert.setMnemonic('i');
+		jmb.add(menuInsert);			menuInsert.setMnemonic('i');
 			menuInsert.add(jmiInsGraph);	jmiInsGraph.setMnemonic('g');
 			menuInsert.add(jmiInsFunction);	jmiInsFunction.setMnemonic('f');
 			menuInsert.add(jmiInsSheet);	jmiInsSheet.setMnemonic('s');
 			
-		jmb.add(menuHelp);
-			menuHelp.setMnemonic('h');
-			menuHelp.add(jmiHelp);	jmiHelp.setMnemonic('h');
+		jmb.add(menuHelp);			menuHelp.setMnemonic('h');
+			menuHelp.add(jmiHelp);		jmiHelp.setMnemonic('h');
+			menuHelp.add(jmiAbout);		jmiAbout.setMnemonic('a');
 		
 		// Adding the main toolbar
 		container.add(tbMain, BorderLayout.PAGE_START);
@@ -131,6 +141,9 @@ public class Window extends JFrame implements ActionListener {
 		
 		add(tabs, BorderLayout.CENTER);
 		tabs.setTabPlacement(JTabbedPane.BOTTOM);
+		
+		newFile = new SpreadSheetFile();
+		
 		createSheet();
 		
 		// Add ActionListeners to Events
@@ -144,10 +157,14 @@ public class Window extends JFrame implements ActionListener {
 		jmiCopy.addActionListener(this);
 		jmiPaste.addActionListener(this);
 		jmiZoom.addActionListener(this);
+		jmiStatusBar.addActionListener(this);
+		jrbTabsTop.addActionListener(this);
+		jrbTabsBottom.addActionListener(this);
 		jmiInsGraph.addActionListener(this);
 		jmiInsFunction.addActionListener(this);
 		jmiInsSheet.addActionListener(this);
 		jmiHelp.addActionListener(this);
+		jmiAbout.addActionListener(this);
 		
 		// Add ActionListeners to ToolBar
 		tbnNew.addActionListener(this);
@@ -162,13 +179,13 @@ public class Window extends JFrame implements ActionListener {
 	}
 	
 	public static void createSheet() {
-		
-		Sheet newSheet = new Sheet("NewSheet");
+		System.out.println("countSheets() = " + newFile.countSheets());
+		Sheet newSheet = newFile.newSheet("Sheet" + (newFile.countSheets() + 1));
 		
 		fillSheet(newSheet);
 		
 		JTable table = new STable(newSheet, formule);
-		table.setSelectionBackground(new Color(180, 220, 255));
+		table.setSelectionBackground(selectionColor);
 		
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
@@ -199,12 +216,16 @@ public class Window extends JFrame implements ActionListener {
 			if (e.getSource() == jmiPaste) {		Events.EditPaste_Click(); }
 			// Menu View
 			if (e.getSource() == jmiZoom) {			Events.ViewZoom_Click(); }
+			if (e.getSource() == jmiStatusBar) {	Events.ViewStatusBar_Click(); }
+			if (e.getSource() == jrbTabsTop) {		Events.ViewTabsTop_Click(tabs); }
+			if (e.getSource() == jrbTabsBottom) {	Events.ViewTabsBottom_Click(tabs); }
 			// Menu Insert
 			if (e.getSource() == jmiInsGraph) {		Events.InsertGraph_Click(); }
 			if (e.getSource() == jmiInsFunction) {	Events.InsertFunction_Click(); }
 			if (e.getSource() == jmiInsSheet) {		Events.InsertWorksheet_Click(); }
 			// MenuHelp
 			if (e.getSource() == jmiHelp) {			Events.HelpHelp_Click(); }
+			if (e.getSource() == jmiAbout) {		Events.HelpAbout_Click(); }
 		
 		//ToolBar	
 			if (e.getSource() == tbnNew           ) { Events.tbMainNew_Click(); }
@@ -217,6 +238,11 @@ public class Window extends JFrame implements ActionListener {
 			if (e.getSource() == ttgItalic        ) { Events.tbMainItalic_Click(); }
 			if (e.getSource() == ttgUnderlined    ) { Events.tbMainUnderlined_Click(); }
 	}
+	
+	public void setTabPlacement(int setting) {
+		tabs.setTabPlacement(setting);
+	}
+	
 	
 	
 	public static void main(String[] args) {
@@ -236,7 +262,7 @@ public class Window extends JFrame implements ActionListener {
 		
 		for ( int i = 10; i < 20; i++ ) {
 			for ( int j = 10; j < 200; j++ ) {
-				sheet.createCell("=RANDBETWEEN(1,100)", i, j);
+				sheet.createCell("=RANDBETWEEN(0,100)", i, j);
 			}
 		}
 	}

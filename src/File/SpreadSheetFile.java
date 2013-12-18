@@ -36,10 +36,23 @@ public class SpreadSheetFile {
 		sheets.add(newSheet);
 	}
 	
-	public void newSheet() {
-		
+	public Sheet newSheet(String nameIn) {
+		Sheet newSheet = new Sheet(nameIn);
+		addSheet(newSheet);
+		return newSheet;
 	}
 	
+	public ArrayList<Sheet> getSheets() {
+		return sheets;
+	}
+	
+	public int countSheets() {
+		return sheets.size();
+	}
+	
+	public Sheet getSheet(int index) {
+		return sheets.get(index);
+	}
 	
 	
 	/**
@@ -51,7 +64,7 @@ public class SpreadSheetFile {
 	public void openFile(String filename, String filepath) throws ParserConfigurationException, SAXException, IOException {
 		Sheet sheet;
 		for(int i = 0; i < 10; i++){
-			XMLRead.read(filepath+"/"+filename);
+			XMLRead.read(filepath + "/" + filename);
 		}
 		
 	}

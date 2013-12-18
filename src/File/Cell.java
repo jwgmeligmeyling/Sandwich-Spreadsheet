@@ -25,9 +25,9 @@ public class Cell implements Interfaces.Cell, Comparable<Cell> {
 
 	private String input;
 	private Object value;
-
+	
 	private CelType type = CelType.TEXT;
-
+	
 	private Color fColor;
 	private Color bColor;
 

@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 
 public class Events {
 	
@@ -54,6 +55,19 @@ public class Events {
 		JOptionPane.showMessageDialog(null, st);
 	}
 	
+	public static void ViewStatusBar_Click() {
+		String st = "View>StatusBar";
+		JOptionPane.showMessageDialog(null, st);
+	}
+	
+	public static void ViewTabsTop_Click(JTabbedPane tabPane) {
+		tabPane.setTabPlacement(JTabbedPane.TOP);
+	}
+	
+	public static void ViewTabsBottom_Click(JTabbedPane tabPane) {
+		tabPane.setTabPlacement(JTabbedPane.BOTTOM);
+	}
+	
 	public static void InsertGraph_Click() {
 		String st = "Insert>Graph";
 		JOptionPane.showMessageDialog(null, st);
@@ -72,6 +86,11 @@ public class Events {
 	
 	public static void HelpHelp_Click() {
 		String st = "Help>Help";
+		JOptionPane.showMessageDialog(null, st);
+	}
+	
+	public static void HelpAbout_Click() {
+		String st = "Help>About";
 		JOptionPane.showMessageDialog(null, st);
 	}
 	
