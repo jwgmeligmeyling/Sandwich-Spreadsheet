@@ -274,7 +274,7 @@ public class Sheet implements Interfaces.Sheet {
 		
 		/**
 		 * Return the first <code>Cell</code> in this <code>Range</code>
-		 * @return
+		 * @return first Cell in CellArray cells
 		 */
 		public Cell firstCell() {
 			Cell[] cells = getCellArray();
@@ -283,9 +283,8 @@ public class Sheet implements Interfaces.Sheet {
 			}
 			return null;
 		}
-
 	}
-
+	
 	/**
 	 * A class for <code>Column</code> instances. Extends <code>Range</code>.
 	 * 

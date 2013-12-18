@@ -74,7 +74,7 @@ public class STable extends JTable {
 		
 		getColumnModel().getColumn(0).setPreferredWidth(15);
 		getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
-
+			
             @Override
             public Component getTableCellRendererComponent(JTable x, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 boolean selected = getSelectionModel().isSelectedIndex(row);
@@ -88,21 +88,19 @@ public class STable extends JTable {
                 return component;
             }
         });
-
 		
 		this.sheet = sheet;
 		this.formule = formule;
 	}
-
+	
 	@Override
 	public TableCellEditor getCellEditor(int row, int column) {
 		return new CustomTableCellEditor();
 	}
-
-	public class CustomTableCellEditor extends DefaultCellEditor implements
-			TableCellEditor {
+	
+	public class CustomTableCellEditor extends DefaultCellEditor implements TableCellEditor {
 		String value;
-
+		
 		public CustomTableCellEditor() {
 			super(new JTextField());
 			getComponent().setName("Table.editor");
@@ -115,21 +113,18 @@ public class STable extends JTable {
 			value = (String) super.getCellEditorValue();
 			return super.stopCellEditing();
 		}
-
+		
 		@Override
-		public Component getTableCellEditorComponent(JTable table,
-				Object value, boolean isSelected, int row, int column) {
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 			Cell cell = sheet.getCellAt(column - 1, row);
 			Object input = cell.getInput();
 			this.value = null;
-			((JComponent) getComponent())
-					.setBorder(new LineBorder(Color.black));
+			((JComponent) getComponent()).setBorder(new LineBorder(Color.black));
 			formule.setText(input.toString());
 			formule.setEnabled(true);
-			return super.getTableCellEditorComponent(table, input, isSelected,
-					row, column);
+			return super.getTableCellEditorComponent(table, input, isSelected, row, column);
 		}
-
+		
 		@Override
 		public Object getCellEditorValue() {
 			return value;
@@ -139,7 +134,7 @@ public class STable extends JTable {
 	private Range previousRange;
 	
 	class SelectionHandler implements ListSelectionListener {
-
+		
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if ( e.getValueIsAdjusting() )
@@ -169,13 +164,19 @@ public class STable extends JTable {
 					previousRange = range;
 					System.out.println("Selected range: "  + range.toString());
 					/*
-					 * TODO Liam formule.setText() -> cell.getInput() wanneer range.isSingleCell().
-					 * Daarna kijken hoe we aanpassingen in het formule tekstveld kunnen doorvoeren
-					 * naar de cell. ( range.getCellArray()[0] -> Cell.setInput(String) )
+					 * TODO Liam formule.setText() -> cell.getInput() wanneer
+					 * range.isSingleCell(). Daarna kijken hoe we aanpassingen
+					 * in het formule tekstveld kunnen doorvoeren naar de cell.
+					 * ( range.getCellArray()[0] -> Cell.setInput(String) )
+					 * 
+					 * TODO Functie-namen en celverwijzingen na invoeren omzetten in hoofdletters.
+					 * TODO Altijd de formule (Cell.input) van de ACTIEVE cel zichtbaar in de formulebalk.
+					 * TODO Verwijzingen automatisch invoeren als in edit-mode andere cellen worden geselecteerd.
+					 * TODO Check voordat de input wordt ingesteld op net ingevoerde waarde of er 
+					 * kringverwijzingen in voorkomen (let op! kunnen direct en indirect zijn!!!)
 					 */
 				}
 			}
 		}
-		
 	}
 }
