@@ -8,12 +8,6 @@ import File.SpreadSheetFile;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ActionListener {
-
-	//private static Sheet sheet;
-	
-	// Table setting declarations
-	private static final Color selectionColor = new Color(190, 220, 255);
-	
 	
 	// ImageIcon declaration
 	private static ImageIcon icoNew = 			new ImageIcon("img/new.png", "New");
@@ -185,10 +179,6 @@ public class Window extends JFrame implements ActionListener {
 		fillSheet(newSheet);
 		
 		JTable table = new STable(newSheet, formule);
-		table.setSelectionBackground(selectionColor);
-		
-		table.setShowVerticalLines(true);
-		table.setShowHorizontalLines(true);
 		
 		Box box = Box.createVerticalBox();
 		box.add(table.getTableHeader());

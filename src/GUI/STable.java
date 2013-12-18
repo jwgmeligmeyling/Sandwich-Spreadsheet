@@ -33,6 +33,11 @@ public class STable extends JTable {
 	private JTextField currentEditor;
 	private boolean formuleEditing = false;
 
+	private static final Color DEFAULT_GRID_COLOR = new Color(206,206,206);
+	private static final Color DEFAULT_SELECTION_COLOR = new Color(190, 220, 255);
+	private static final Color DEFAULT_SELECTION_TEXT = new Color(0,0,0);
+	
+	
 	public STable(final Sheet sheet, final JTextField formule) {
 		super(new AbstractTableModel() {
 			public String getColumnName(int column) {
@@ -75,7 +80,10 @@ public class STable extends JTable {
 		setRowSelectionAllowed(true);
 		setColumnSelectionAllowed(true);
 		setCellSelectionEnabled(true);
-		setGridColor(new Color(220, 220, 255));
+		
+		setGridColor(DEFAULT_GRID_COLOR);
+		setSelectionBackground(DEFAULT_SELECTION_COLOR);
+		setSelectionForeground(DEFAULT_SELECTION_TEXT);
 
 		getColumnModel().getColumn(0).setPreferredWidth(15);
 		getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
