@@ -1,104 +1,86 @@
 <?xml version="1.0"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
-	xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"
-	xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">
-	<DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
-		<Author>Maarten Flikkema</Author>
-		<LastAuthor>Maarten Flikkema</LastAuthor>
-		<Created>2013-11-27T12:09:41Z</Created>
-		<Company>TBM</Company>
-		<Version>11.9999</Version>
-	</DocumentProperties>
-	<ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
-		<WindowHeight>8760</WindowHeight>
-		<WindowWidth>13395</WindowWidth>
-		<WindowTopX>360</WindowTopX>
-		<WindowTopY>120</WindowTopY>
-		<ProtectStructure>False</ProtectStructure>
-		<ProtectWindows>False</ProtectWindows>
-	</ExcelWorkbook>
-	<Styles>
-		<Style ss:ID="Default" ss:Name="Normal">
-			<Alignment ss:Vertical="Bottom" />
-			<Borders />
-			<Font />
-			<Interior />
-			<NumberFormat />
-			<Protection />
-		</Style>
-		<Style ss:ID="s22">
-			<Font ss:Color="#FF0000" />
-			<Interior ss:Color="#FFFF00" ss:Pattern="Solid" />
-		</Style>
-		<Style ss:ID="s23">
-			<Font ss:Color="#666699" />
-		</Style>
-	</Styles>
-	<Worksheet ss:Name="Bladnaam1">
-		<Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="6"
-			x:FullColumns="1" x:FullRows="1">
-			<Row>
-				<Cell>
-					<Data ss:Type="String">hoi</Data>
-				</Cell>
-				<Cell ss:Formula="=RC[-1]">
-					<Data ss:Type="String">hoi</Data>
-				</Cell>
-			</Row>
-			<Row>
-				<Cell>
-					<Data ss:Type="Number">1</Data>
-				</Cell>
-				<Cell ss:Formula="=RC[-1]">
-					<Data ss:Type="Number">1</Data>
-				</Cell>
-			</Row>
-			<Row>
-				<Cell>
-					<Data ss:Type="Number">5.2365000000000004</Data>
-				</Cell>
-				<Cell ss:StyleID="s22" ss:Formula="=RC[-1]">
-					<Data ss:Type="Number">5.2365000000000004</Data>
-				</Cell>
-			</Row>
-			<Row>
-				<Cell>
-					<Data ss:Type="Boolean">1</Data>
-				</Cell>
-				<Cell ss:Formula="=RC[-1]">
-					<Data ss:Type="Boolean">1</Data>
-				</Cell>
-			</Row>
-			<Row ss:Index="6">
-				<Cell ss:StyleID="s23">
-					<Data ss:Type="String">overslaan</Data>
-				</Cell>
-				<Cell ss:Formula="=RC[-1]">
-					<Data ss:Type="String">overslaan</Data>
-				</Cell>
-			</Row>
-		</Table>
-		<WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
-			<PageSetup>
-				<PageMargins x:Bottom="0.984251969" x:Left="0.78740157499999996"
-					x:Right="0.78740157499999996" x:Top="0.984251969" />
-			</PageSetup>
-			<Print>
-				<ValidPrinterInfo />
-				<PaperSizeIndex>9</PaperSizeIndex>
-				<HorizontalResolution>600</HorizontalResolution>
-				<VerticalResolution>600</VerticalResolution>
-			</Print>
-			<Selected />
-			<Panes>
-				<Pane>
-					<Number>3</Number>
-					<ActiveRow>5</ActiveRow>
-				</Pane>
-			</Panes>
-			<ProtectObjects>False</ProtectObjects>
-			<ProtectScenarios>False</ProtectScenarios>
-		</WorksheetOptions>
-	</Worksheet>
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Maarten Flikkema</Author>
+  <LastAuthor>Maarten Flikkema</LastAuthor>
+  <Created>2013-11-27T12:09:41Z</Created>
+  <Company>TBM</Company>
+  <Version>11.9999</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>8760</WindowHeight>
+  <WindowWidth>13395</WindowWidth>
+  <WindowTopX>360</WindowTopX>
+  <WindowTopY>120</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s22">
+   <Font ss:Color="#FF0000"/>
+   <Interior ss:Color="#FFFF00" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s23">
+   <Font ss:Color="#666699"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Bladnaam1">
+  <Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="6" x:FullColumns="1"
+   x:FullRows="1">
+   <Row>
+    <Cell><Data ss:Type="String">hoi</Data></Cell>
+    <Cell ss:Formula="=RC[-1]"><Data ss:Type="String">hoi</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:Formula="=RC[-1]"><Data ss:Type="Number">1</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">5.2365000000000004</Data></Cell>
+    <Cell ss:StyleID="s22" ss:Formula="=RC[-1]"><Data ss:Type="Number">5.2365000000000004</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Boolean">1</Data></Cell>
+    <Cell ss:Formula="=RC[-1]"><Data ss:Type="Boolean">1</Data></Cell>
+   </Row>
+   <Row ss:Index="6">
+    <Cell ss:StyleID="s23"><Data ss:Type="String">overslaan</Data></Cell>
+    <Cell ss:Formula="=RC[-1]"><Data ss:Type="String">overslaan</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <PageMargins x:Bottom="0.984251969" x:Left="0.78740157499999996"
+     x:Right="0.78740157499999996" x:Top="0.984251969"/>
+   </PageSetup>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>5</ActiveRow>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
 </Workbook>

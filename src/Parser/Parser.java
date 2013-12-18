@@ -93,7 +93,6 @@ public class Parser {
 	private Function function;
 	
 	/**
-	 * 
 	 */
 	private Object value;
 	
@@ -128,6 +127,7 @@ public class Parser {
 	/**
 	 * Public Parse constructor. Takes a <code>String</code> as argument.
 	 * @param cell
+	 * @param string
 	 */
 	public Parser(Cell cell) {
 		this.cell = cell;
