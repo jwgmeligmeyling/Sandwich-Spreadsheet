@@ -566,7 +566,7 @@ public enum Function {
 			}
 			int a = intValueOf(arguments[0]);
 			int b = intValueOf(arguments[1]);
-			return (int) (Math.random() * ( b - a ) + a);
+			return (int) (Math.random() * ( b - a + 1) + a);
 		}
 	},
 	
