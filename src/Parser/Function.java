@@ -42,7 +42,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	SUM() {
+	SUM("Returns the sum of a set of values contained in a specified field on a query.") {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length == 0) {
@@ -132,7 +132,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	PRODUCT() {
+	PRODUCT("The PRODUCT function multiplies all the numbers given as arguments and returns the product.") {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length < 2) {
@@ -212,7 +212,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	POWER() {
+	POWER("Returns the result of a number raised to a power.") {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length != 2) {
@@ -242,15 +242,11 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	AVERAGE() {
+	AVERAGE("Returns the average (arithmetic mean) of the arguments.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length == 0) {
-				throw new IllegalArgumentException("This function takes at least one parameter!");
-			}
-			return convertToIntIfApplicable(doubleValueOf(SUM
-					.calculate(arguments))
-					/ doubleValueOf(COUNT.calculate(arguments)));
+			assertMinArguments(1, arguments.length);
+			return convertToIntIfApplicable(doubleValueOf(SUM.calculate(arguments)) / doubleValueOf(COUNT.calculate(arguments)));
 		}
 	},
 	
@@ -272,12 +268,10 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	COUNT() {
+	COUNT("Returns the number of numerical values of the arguments.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length == 0) {
-				throw new IllegalArgumentException("This function takes at least one parameter!");
-			}
+			assertMinArguments(1, arguments.length);
 			int count = 0;
 			for(Object arg : arguments) {
 				assert arg instanceof Range : "Argument type error! All arguments in this function must be a Range.";
@@ -310,13 +304,11 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	COUNTIF() {
+	COUNTIF("Counts the number of cells within a range that meet the given criteria.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if (arguments.length != 2 || !(arguments[0] instanceof Range)) {
-				throw new IllegalArgumentException(
-						"This function takes two parameters!");
-			}
+			assertArguments(2, arguments.length);
+			assertArgumentRange(0, arguments);
 			
 			int count = 0;
 			Cell[] range = ((Range) arguments[0]).getCellArray();
@@ -363,6 +355,11 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			if (arguments.length < 2 || !(arguments[0] instanceof Range)) {
 				throw new IllegalArgumentException("This function takes two parameters!");
+			}
+			assertTwoArguments(2, 3, arguments.length);
+			assertArgumentRange(0, arguments);
+			if (arguments.length == 3) {
+				assertArgumentRange(2, arguments);
 			}
 			
 			double sum = 0;
@@ -414,7 +411,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ISNUMBER {
+	ISNUMBER("Returns the logical value TRUE if value is a number; otherwise, it returns FALSE.") {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length != 1 ) {
@@ -447,7 +444,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ROUND {
+	ROUND("The ROUND function rounds a number to a specified number of digits.") {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length != 2 ) {
@@ -484,7 +481,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	INT {
+	INT("Rounds a number down to the nearest integer.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -510,7 +507,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	RAW {
+	RAW() {
 		@Override
 		Object calculate(Object... arguments) {
 			return Arrays.toString(arguments);
@@ -535,7 +532,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	RAND {
+	RAND("Returns an evenly distributed random number greater than or equal to 0 and less than 1. A new random number is returned every time the sheet is calculated.") {
 		@Override
 		Object calculate(Object... arguments) {
 			return Math.random();
@@ -561,7 +558,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	RANDBETWEEN {
+	RANDBETWEEN("Returns a random integer between the numbers you specify. A new random number is returned every time the sheet is calculated.") {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length != 2 ) {
@@ -592,7 +589,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	SQRT {
+	SQRT("Returns the square root.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -619,7 +616,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	SIN {
+	SIN("Returns a Double specifying the sine of an angle.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -645,7 +642,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ASIN {
+	ASIN("Returns the arcsine, or inverse sine, of a number. The arcsine is the angle whose sine is number. The returned angle is given in radians in the range -pi/2 to pi/2.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -671,7 +668,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ACOS {
+	ACOS("Returns the arccosine, or inverse cosine, of a number. The arccosine is the angle whose cosine is number. The returned angle is given in radians in the range 0 (zero) to pi.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -697,7 +694,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ATAN {
+	ATAN("Returns the arctangent, or inverse tangent, of a number. The arctangent is the angle whose tangent is number. The returned angle is given in radians in the range -pi/2 to pi/2.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -723,7 +720,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	DEGREE {
+	DEGREE("Converts radians into degrees.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -749,7 +746,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	RADIAN {
+	RADIAN("Converts degrees to radians.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -775,7 +772,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	COS {
+	COS("Returns a Double specifying the cosine of an angle.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -801,7 +798,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	TAN {
+	TAN("Returns a Double specifying the tangent of an angle.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -827,7 +824,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	LOG {
+	LOG("Returns the logarithm of a number to base 10.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -853,7 +850,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	LOGBASE {
+	LOGBASE("Returns the logarithm of a number to the base you specify.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
@@ -879,7 +876,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	LN {
+	LN("Returns a Double specifying the natural logarithm of a number.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -906,7 +903,8 @@ public enum Function {
 	 * <li>Maarten Flikkema</li>
 	 * </ul>
 	 * </div>
-	 */SIGN{
+	 */
+	SIGN("Determines the sign of a number. Returns 1 if the number is positive, zero (0) if the number is 0, and -1 if the number is negative.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -919,7 +917,7 @@ public enum Function {
 		}
 	},
 	
-	ABS {
+	ABS("Returns a value of the same type that is passed to it specifying the absolute value of a number.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -927,7 +925,7 @@ public enum Function {
 		}
 	},
 	
-	MIN() {
+	MIN("Return the minimum of a set of values contained in a specified field on a query.") {
 		@Override
 		Object calculate(Object... arguments) {
 			double min = 0;
@@ -947,7 +945,7 @@ public enum Function {
 		}
 	},
 	
-	MAX() {
+	MAX("Return the maximum of a set of values contained in a specified field on a query.") {
 		@Override
 		Object calculate(Object... arguments) {
 			double max = 0;
@@ -986,7 +984,7 @@ public enum Function {
 	 * <ul><li>Maarten Flikkema</li></ul>
 	 * </div>
 	 */
-	IF() {
+	IF("Returns the second argument is the first argument is true, else returns the third argument.") {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length < 2 || arguments.length > 3 ) {
@@ -1026,7 +1024,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	OR() {
+	OR("Returns TRUE if any argument is TRUE; returns FALSE if all arguments are FALSE.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
@@ -1058,7 +1056,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	AND() {
+	AND("Returns TRUE if all its arguments evaluate to TRUE; returns FALSE if one or more arguments evaluate to FALSE.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
@@ -1071,7 +1069,7 @@ public enum Function {
 		}
 	},
 	
-	NOT() {
+	NOT("Reverses the value of its argument. Use NOT when you want to make sure a value is not equal to one particular value.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -1289,15 +1287,26 @@ public enum Function {
 	}
 	
 	private static void assertArguments(int count, int length) {
-		if (count != length)
-			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " arguments were supplied");
+		if (count != length) {
+			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " were supplied");
+		}
+	}
+	
+	private static void assertTwoArguments(int count1, int count2, int length) {
+		if (count1 != length && count2 != length) {
+			throw new IllegalArgumentException("This function requires " + count1 + " or " + count2 + " arguments, but " + length + " were supplied");
+		}
 	}
 
 	private static void assertMinArguments(int min, int length) {
-		if (min > length)
-			throw new IllegalArgumentException(
-					"This function requires at least " + min
-							+ "arguments, but " + length
-							+ " arguments were supplied");
+		if (min > length) {
+			throw new IllegalArgumentException("This function requires at least " + min + "arguments, but " + length + " were supplied");
+		}
+	}
+	
+	private static void assertArgumentRange(int index, Object... args) {
+		if (!(args[index] instanceof Range)) {
+			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a reference, but is is not");
+		}
 	}
 }

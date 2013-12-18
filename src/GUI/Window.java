@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import File.Sheet;
@@ -129,6 +130,7 @@ public class Window extends JFrame implements ActionListener {
 		setVisible(true);
 		
 		add(tabs, BorderLayout.CENTER);
+		tabs.setTabPlacement(JTabbedPane.BOTTOM);
 		createSheet();
 		
 		// Add ActionListeners to Events
@@ -166,6 +168,7 @@ public class Window extends JFrame implements ActionListener {
 		fillSheet(newSheet);
 		
 		JTable table = new STable(newSheet, formule);
+		table.setSelectionBackground(new Color(180, 220, 255));
 		
 		table.setShowVerticalLines(true);
 		table.setShowHorizontalLines(true);
