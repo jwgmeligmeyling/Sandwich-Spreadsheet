@@ -1,4 +1,4 @@
-package Zandbak;
+package GUI;
 
 /**
  * @author Maarten Flikkema
