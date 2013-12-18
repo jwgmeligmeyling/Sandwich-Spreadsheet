@@ -91,9 +91,4 @@ public class TestSheet {
 
 	}
 	
-	@Test
-	public void testWriteSheet() throws XMLStreamException, FactoryConfigurationError, IOException {
-		sheet.write("xml/output.xml");
-	}
-
 }

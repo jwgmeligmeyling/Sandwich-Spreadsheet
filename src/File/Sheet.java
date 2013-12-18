@@ -361,34 +361,6 @@ public class Sheet implements Interfaces.Sheet {
 	 * </ul>
 	 * </div>
 	 * 
-	 * @param path
-	 *            Path to file
-	 * @throws XMLStreamException
-	 *             If there was an error occurred writing XML
-	 * @throws FactoryConfigurationError
-	 *             if an instance of this factory cannot be loaded
-	 * @throws IOException
-	 *             If there was an error writing the file in the correct
-	 *             encoding
-	 */
-	public void write(String path) throws XMLStreamException,
-			FactoryConfigurationError, IOException {
-		OutputStream output = new FileOutputStream(new File(path));
-		XMLStreamWriter writer = XMLOutputFactory.newInstance()
-				.createXMLStreamWriter(new OutputStreamWriter(output, "UTF-8"));
-		write(writer);
-		writer.close();
-		output.close();
-	}
-	
-	/**
-	 * The function that writes the sheet to a XML file.
-	 * <div><b>Author:</b><br>
-	 * <ul>
-	 * <li>Jim Hommes</li>
-	 * </ul>
-	 * </div>
-	 * 
 	 * @param writer
 	 *            ...
 	 * @throws XMLStreamException
@@ -396,12 +368,13 @@ public class Sheet implements Interfaces.Sheet {
 	 */
 	public void write(XMLStreamWriter writer) throws XMLStreamException {
 		writer.writeStartElement("SPREADSHEET");
-	
+			
 		for (Cell cell : cells.values()) {
 			cell.write(writer);
 		}
-	
+		
 		writer.writeEndElement();
+		
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -40,8 +41,8 @@ public class XMLRead {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
 		Sheet sheet = new Sheet();
-
-		DefaultHandler handler = new Sheet.XMLHandler(sheet,
+		
+		DefaultHandler handler = new SpreadSheetFile.XMLHandler(sheet,
 				saxParser.getXMLReader());
 		saxParser.parse(path, handler);
 
