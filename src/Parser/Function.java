@@ -2,7 +2,6 @@ package Parser;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-
 import File.Cell;
 import File.Sheet.Range;
 
@@ -43,7 +42,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	SUM {
+	SUM() {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length == 0) {
@@ -93,7 +92,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	SUBTRACT {
+	SUBTRACT() {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length < 2) {
@@ -133,7 +132,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	PRODUCT {
+	PRODUCT() {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length < 2) {
@@ -175,7 +174,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	DIVIDE {
+	DIVIDE() {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length < 2) {
@@ -213,7 +212,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	POWER {
+	POWER() {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length != 2) {
@@ -243,7 +242,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	AVERAGE {
+	AVERAGE() {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length == 0) {
@@ -273,7 +272,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	COUNT {
+	COUNT() {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length == 0) {
@@ -293,7 +292,25 @@ public enum Function {
 		}
 	},
 	
-	COUNTIF {
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
+	COUNTIF() {
 		@Override
 		Object calculate(Object... arguments) {
 			if (arguments.length != 2 || !(arguments[0] instanceof Range)) {
@@ -323,18 +340,34 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	SUMIF {
 		@Override
 		Object calculate(Object... arguments) {
 			if (arguments.length < 2 || !(arguments[0] instanceof Range)) {
-				throw new IllegalArgumentException(
-						"This function takes two parameters!");
+				throw new IllegalArgumentException("This function takes two parameters!");
 			}
 			
 			double sum = 0;
 			Cell[] range = ((Range) arguments[0]).getCellArray();
-			Cell[] sum_range = (arguments.length == 3 && arguments[2] instanceof Range) ? ((Range) arguments[2])
-					.getCellArray() : range;
+			Cell[] sum_range = (arguments.length == 3 && arguments[2] instanceof Range) ? ((Range) arguments[2]).getCellArray() : range;
 			String criteria = arguments[1].toString();
 			
 			if ( sum_range.length < range.length ) {
@@ -459,6 +492,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	RAW {
 		@Override
 		Object calculate(Object... arguments) {
@@ -576,6 +627,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	ASIN {
 		@Override
 		Object calculate(Object... arguments) {
@@ -584,6 +653,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	ACOS {
 		@Override
 		Object calculate(Object... arguments) {
@@ -592,6 +679,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	ATAN {
 		@Override
 		Object calculate(Object... arguments) {
@@ -600,6 +705,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	DEGREE {
 		@Override
 		Object calculate(Object... arguments) {
@@ -608,6 +731,24 @@ public enum Function {
 		}
 	},
 
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	RADIAN {
 		@Override
 		Object calculate(Object... arguments) {
@@ -642,6 +783,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	TAN {
 		@Override
 		Object calculate(Object... arguments) {
@@ -650,6 +809,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	LOG {
 		@Override
 		Object calculate(Object... arguments) {
@@ -658,6 +835,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	LOGBASE {
 		@Override
 		Object calculate(Object... arguments) {
@@ -666,6 +861,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
 	LN {
 		@Override
 		Object calculate(Object... arguments) {
@@ -696,9 +909,8 @@ public enum Function {
 	 */SIGN{
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			} else if (doubleValueOf(arguments[0]) < 0) {
+			assertArguments(1, arguments.length);
+			if (doubleValueOf(arguments[0]) < 0) {
 				return -1;
 			} else if (doubleValueOf(arguments[0]) > 0) {
 				return 1;
@@ -715,7 +927,7 @@ public enum Function {
 		}
 	},
 	
-	MIN {
+	MIN() {
 		@Override
 		Object calculate(Object... arguments) {
 			double min = 0;
@@ -735,7 +947,7 @@ public enum Function {
 		}
 	},
 	
-	MAX {
+	MAX() {
 		@Override
 		Object calculate(Object... arguments) {
 			double max = 0;
@@ -774,7 +986,7 @@ public enum Function {
 	 * <ul><li>Maarten Flikkema</li></ul>
 	 * </div>
 	 */
-	IF {
+	IF() {
 		@Override
 		Object calculate(Object... arguments) {
 			if ( arguments.length < 2 || arguments.length > 3 ) {
@@ -814,7 +1026,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	OR {
+	OR() {
 		@Override
 		Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
@@ -846,7 +1058,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	AND {
+	AND() {
 		@Override
 		Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
@@ -859,7 +1071,7 @@ public enum Function {
 		}
 	},
 	
-	NOT {
+	NOT() {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -885,15 +1097,27 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	DATE {
+	DATE() {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function requires only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			return (new SimpleDateFormat(arguments[0].toString())).format(System.currentTimeMillis());
 		}
 	};
+	
+	private final String description;
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	private Function() {
+		this("No description available for this function");
+	}
+	
+	private Function(String description) {
+		this.description = description;
+	}
 
 	/**
 	 * Calculate the value for a function. This method takes at least one object
@@ -907,7 +1131,7 @@ public enum Function {
 	 * @return <code>Object</code> of implemented type
 	 */
 	abstract Object calculate(Object... arguments);
-
+	
 	/**
 	 * Calculate the negative value for a function. This method takes at least
 	 * one object as parameter, but additional arguments are allowed. Parameters
@@ -1066,9 +1290,7 @@ public enum Function {
 	
 	private static void assertArguments(int count, int length) {
 		if (count != length)
-			throw new IllegalArgumentException("This function requires "
-					+ count + "arguments, but " + length
-					+ " arguments were supplied");
+			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " arguments were supplied");
 	}
 
 	private static void assertMinArguments(int min, int length) {
