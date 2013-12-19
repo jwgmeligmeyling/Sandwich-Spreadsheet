@@ -35,48 +35,16 @@ public class STable extends JTable {
 	private static final Color DEFAULT_SELECTION_COLOR = new Color(190, 220, 255);
 	private static final Color DEFAULT_SELECTION_TEXT = new Color(0,0,0);
 	
-	
-	public STable(final Sheet sheet, FormuleBalk formule) {
-		super(new AbstractTableModel() {
-			public String getColumnName(int column) {
-				if (column == 0) {
-					return "";
-				}
-				return sheet.getColumnLetter(column - 1);
-			}
-
-			public int getRowCount() {
-				return sheet.getRowCount();
-			}
-
-			public int getColumnCount() {
-				return sheet.getColumnCount() + 1;
-			}
-
-			public Object getValueAt(int row, int col) {
-				if (col == 0) {
-					return row + 1;
-				}
-				return sheet.getCellAt(col - 1, row).getValue();
-			}
-
-			public boolean isCellEditable(int row, int column) {
-				return column != 0;
-			}
-
-			public void setValueAt(Object value, int row, int col) {
-				sheet.getCellAt(col - 1, row).setInput(value.toString());
-				fireTableCellUpdated(row, col);
-			}
-		}, null, null);
-
+	public STable(Sheet sheet, FormuleBalk formule) {
+		super(new TableModel(sheet), null, null);
+		this.sheet = sheet;
+		this.formuleBalk = formule;
+		
 		SelectionHandler handler = new SelectionHandler();
 		getSelectionModel().addListSelectionListener(handler);
 		getColumnModel().getSelectionModel().addListSelectionListener(handler);
 
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		setRowSelectionAllowed(true);
-		setColumnSelectionAllowed(true);
 		setCellSelectionEnabled(true);
 		
 		setGridColor(DEFAULT_GRID_COLOR);
@@ -84,32 +52,7 @@ public class STable extends JTable {
 		setSelectionForeground(DEFAULT_SELECTION_TEXT);
 
 		getColumnModel().getColumn(0).setPreferredWidth(100);
-		getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
-
-			@Override
-			public Component getTableCellRendererComponent(JTable x,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				boolean selected = getSelectionModel().isSelectedIndex(row);
-				Component component = x
-						.getTableHeader()
-						.getDefaultRenderer()
-						.getTableCellRendererComponent(x, value, false, false,
-								-1, -2);
-				((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
-				if (selected) {
-					component
-							.setFont(component.getFont().deriveFont(Font.BOLD));
-				} else {
-					component.setFont(component.getFont()
-							.deriveFont(Font.PLAIN));
-				}
-				return component;
-			}
-		});
-
-		this.sheet = sheet;
-		this.formuleBalk = formule;
+		getColumnModel().getColumn(0).setCellRenderer(new RowNumberRenderer());
 	}
 
 	@Override
@@ -120,10 +63,20 @@ public class STable extends JTable {
 		return new CustomTableCellEditor();
 	}
 
-	public class CustomTableCellEditor extends DefaultCellEditor implements
-			TableCellEditor {
-		String value;
+	/**
+	 * The custom TableCellEditor binds the <code>Sheet</code> class to this
+	 * current <code>STable</code> instance.
+	 * 
+	 * @author Jan-Willem Gmelig Meyling, Liam Clark
+	 * 
+	 */
+	private class CustomTableCellEditor extends DefaultCellEditor {
+		private String value;
 
+		/**
+		 * Constructor for the CustomTableCellEditor. Creates a new table cell
+		 * editor with the JTextField stored in the currentEditor variable.
+		 */
 		public CustomTableCellEditor() {
 			super(currentEditor);
 			getComponent().setName("Table.editor");
@@ -153,7 +106,100 @@ public class STable extends JTable {
 		}
 	}
 
-	class SelectionHandler implements ListSelectionListener {
+	/**
+	 * The custom TableCellEditor binds the <code>Sheet</code> class to this
+	 * current <code>STable</code> instance.
+	 * 
+	 * @author Jan-Willem Gmelig Meyling, Liam Clark
+	 * 
+	 */
+	private static class TableModel extends AbstractTableModel {
+	
+		private final Sheet sheet;
+		
+		/**
+		 * Constructor for the TableModel, sets a sheet variable.
+		 * @param sheet
+		 */
+		private TableModel(Sheet sheet) {
+			this.sheet = sheet;
+		}
+		
+		@Override
+		public String getColumnName(int column) {
+			if (column == 0) {
+				return "";
+			}
+			return sheet.getColumnLetter(column - 1);
+		}
+		
+		@Override
+		public int getRowCount() {
+			return sheet.getRowCount();
+		}
+	
+		@Override
+		public int getColumnCount() {
+			return sheet.getColumnCount() + 1;
+		}
+	
+		@Override
+		public Object getValueAt(int row, int col) {
+			if (col == 0) {
+				return row + 1;
+			}
+			return sheet.getCellAt(col - 1, row).getValue();
+		}
+	
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return column != 0;
+		}
+		
+		@Override
+		public void setValueAt(Object value, int row, int col) {
+			sheet.getCellAt(col - 1, row).setInput(value.toString());
+			fireTableCellUpdated(row, col);
+		}
+		
+	}
+
+	/**
+	 * Renderer for the rowNumbers
+	 * @author Jan-willem Gmelig Meyling, Liam Clark
+	 *
+	 */
+	private class RowNumberRenderer implements TableCellRenderer {
+		
+		@Override
+		public Component getTableCellRendererComponent(JTable x,
+				Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			boolean selected = getSelectionModel().isSelectedIndex(row);
+			Component component = x
+					.getTableHeader()
+					.getDefaultRenderer()
+					.getTableCellRendererComponent(x, value, false, false,
+							-1, -2);
+			((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
+			if (selected) {
+				component
+						.setFont(component.getFont().deriveFont(Font.BOLD));
+			} else {
+				component.setFont(component.getFont()
+						.deriveFont(Font.PLAIN));
+			}
+			return component;
+		}
+		
+	}
+
+	/**
+	 * The selection handler listens for new selected Ranges
+	 * @author Liam Clark
+	 *
+	 */
+	private class SelectionHandler implements ListSelectionListener {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
@@ -176,15 +222,18 @@ public class STable extends JTable {
 				int rowUp = selectedRows[0];
 				int colRight = selectedColumns[selectedColumnsCount - 1] - 1;
 				int rowDown = selectedRows[selectedRowsCount - 1];
+				
 				if (colLeft == -1) {
 					return; // First column is reserved for row index
 				}
 
 				Range range = sheet.getRange(colLeft, rowUp, colRight, rowDown);
+				
 				if (!range.equals(selectedRange)) {
 					selectedRange = range;
 					System.out.println("Selected range: " + range.toString());
 				}
+				
 				if (range.isSingleCell()) {
 					Cell selectedCell = range.firstCell();
 					formuleBalk.setText(selectedCell.getInput());
