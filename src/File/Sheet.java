@@ -332,6 +332,12 @@ public class Sheet implements Interfaces.Sheet {
 	public Sheet(String nameIn) {
 		sheetName = nameIn;
 	}
+	
+	public void init() {
+		for ( Cell cell : cells.values() ) {
+			cell.update();
+		}
+	}
 
 	/**
 	 * Method to get the letter for a column

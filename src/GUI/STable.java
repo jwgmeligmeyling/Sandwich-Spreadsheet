@@ -14,7 +14,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -38,6 +37,7 @@ public class STable extends JTable {
 	
 	public STable(Sheet sheet, FormuleBalk formule) {
 		super(new TableModel(sheet), null, null);
+		sheet.init();
 		this.sheet = sheet;
 		this.formuleBalk = formule;
 		
@@ -52,8 +52,7 @@ public class STable extends JTable {
 		selectionForeground = DEFAULT_SELECTION_TEXT;
 		autoResizeMode = AUTO_RESIZE_OFF;
 		
-		JTableHeader header = getTableHeader();
-		header.setDefaultRenderer(new HeaderNameRenderer(header.getDefaultRenderer()));
+		tableHeader.setDefaultRenderer(new HeaderNameRenderer(tableHeader.getDefaultRenderer()));
 		
 		getColumnModel().getColumn(0).setPreferredWidth(50);
 		getColumnModel().getColumn(0).setCellRenderer(new RowNumberRenderer());
@@ -162,7 +161,9 @@ public class STable extends JTable {
 		
 		@Override
 		public void setValueAt(Object value, int row, int col) {
-			sheet.getCellAt(col - 1, row).setInput(value.toString());
+			Cell cell = sheet.getCellAt(col - 1, row);
+			cell.setInput(value.toString());
+			cell.update(this);
 			fireTableCellUpdated(row, col);
 		}
 		
@@ -217,6 +218,7 @@ public class STable extends JTable {
 				int column) {
 			Component component = delegate.getTableCellRendererComponent(table,
 					value, false, false, row, column);
+			((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
 			if (isSelected(column)) {
 				component.setFont(component.getFont().deriveFont(Font.BOLD));
 			}

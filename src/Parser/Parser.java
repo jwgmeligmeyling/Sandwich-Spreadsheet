@@ -217,9 +217,12 @@ public class Parser {
 					break;
 				}
 				
-				Object reference = getReference();
+				Range reference = getReference();
 				if ( reference != null ) {
 					values.push(reference);
+					if ( cell != null ) {
+						cell.listen(reference);
+					}
 					break;
 				}
 
@@ -564,7 +567,7 @@ public class Parser {
 	 * @throws IllegalArgumentException
 	 *             When the input of the reference is malformed.
 	 */
-	private Object getReference() {
+	private Range getReference() {
 		/*
 		 * Current implementation only supports Cells (A1) or Ranges (A1:B2)
 		 * TODO Support for rows and columns (?)
@@ -590,7 +593,7 @@ public class Parser {
 				throw new IllegalArgumentException("Cross reference!");
 			} else {
 				index = peekIndex -1;
-				return a.getValue();
+				return sheet.getRange(a,a);
 			}
 		}
 		return null;

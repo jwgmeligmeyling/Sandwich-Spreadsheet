@@ -62,18 +62,17 @@ public class Window extends JFrame {
 	}
 	
 	private void fillSheet(Sheet sheet) {
-		sheet.createCell("bliep", 0, 0);
-		sheet.createCell("5", 0, 1);
-		sheet.createCell("=5", 0, 2);
-		sheet.createCell("=5*2", 1, 0);
-		sheet.createCell("=2+2*3", 1, 1);
-		sheet.createCell("=SUM(5,3)", 1, 2);
-		sheet.createCell("2+2", 2, 0);
-		sheet.createCell("=PRODUCT(3,5,2)",1,1);
-		sheet.createCell("", 2, 2);
+		sheet.createCell("SOM:", 0, 0);
+		sheet.createCell("=SUM(A2:T200)", 1, 0);
+		sheet.createCell("COUNT:", 3, 0);
+		sheet.createCell("=COUNT(A2:T200)", 4, 0);
+		sheet.createCell("COUNTIF>50:", 6, 0);
+		sheet.createCell("=COUNTIF(A2:T200;\">=\"&50))", 7, 0);
+		sheet.createCell("SUMIF>50:", 9, 0);
+		sheet.createCell("=SUMIF(A2:T200,\">\"&50)", 10, 0);
 		
-		for ( int i = 10; i < 20; i++ ) {
-			for ( int j = 10; j < 200; j++ ) {
+		for ( int i = 0; i < 20; i++ ) {
+			for ( int j = 1; j < 200; j++ ) {
 				sheet.createCell("=RANDBETWEEN(0,100)", i, j);
 			}
 		}

@@ -62,7 +62,6 @@ public class SpreadSheetFile {
 	 * @throws ParserConfigurationException 
 	 */
 	public void openFile(String filename, String filepath) throws ParserConfigurationException, SAXException, IOException {
-		Sheet sheet;
 		for(int i = 0; i < 10; i++){
 			XMLRead.read(filepath + "/" + filename);
 		}
