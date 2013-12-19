@@ -30,12 +30,12 @@ public class Window extends JFrame {
 		
 		tbMain = new SToolbar();
 		tabbedPane = new JTabbedPane();
+		statusbar = new SStatusBar(this);
 		setJMenuBar(new SMenuBar(this));
 		
 		formule = new FormuleBalk();
 		tbMain.add(formule);
 		
-		statusbar = new SStatusBar(this);
 		
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());

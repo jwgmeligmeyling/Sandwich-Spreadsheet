@@ -44,7 +44,7 @@ public class SMenuBar extends JMenuBar {
 		JMenu menu = new JMenu("File");
 		menu.setMnemonic(Mnemonic.FILE.value);
 		
-		menu.add(new MenuItem(Mnemonic.NEW, fileNew)); //  "New", icoNew, Mnemonic.NEW));
+		menu.add(new MenuItem(Mnemonic.NEW, fileNew));
 		menu.add(new MenuItem(Mnemonic.OPEN, fileOpen));
 		menu.add(new MenuItem(Mnemonic.SAVE, fileSave));
 		menu.add(new MenuItem(Mnemonic.SAVE_AS, fileSaveAs));
@@ -70,10 +70,9 @@ public class SMenuBar extends JMenuBar {
 	private void createViewMenu() {
 		JMenu menu = new JMenu("View");
 		menu.setMnemonic(Mnemonic.VIEW.value);
-		//menu.add(new MenuItem("Zoom in/out", Mnemonic.ZOOM));
-		menu.add(new JCheckBox("Show/hide statusbar")); //, Mnemonic.STATUS_BAR));
 		
 		JCheckBox jcbShowStatusBar = new JCheckBox("Show Status Bar");
+		jcbShowStatusBar.setSelected(statusbar != null && statusbar.isVisible());
 		jcbShowStatusBar.setAction(ViewShowStatusBar_Click);
 		menu.add(jcbShowStatusBar);
 		
@@ -255,8 +254,9 @@ public class SMenuBar extends JMenuBar {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			statusbar.setVisible(!statusbar.isVisible());
-			// TODO getting the value of jcbShowStatusBar (checkbox)!!?? How??
+			if ( statusbar != null ) {
+				statusbar.setVisible(((JCheckBox) e.getSource()).isSelected());
+			}
 		}
 	};
 	
