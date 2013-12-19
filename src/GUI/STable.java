@@ -46,12 +46,12 @@ public class STable extends JTable {
 
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		setCellSelectionEnabled(true);
+		gridColor = DEFAULT_GRID_COLOR;
+		selectionBackground = DEFAULT_SELECTION_COLOR;
+		selectionForeground = DEFAULT_SELECTION_TEXT;
+		autoResizeMode = AUTO_RESIZE_OFF;
 		
-		setGridColor(DEFAULT_GRID_COLOR);
-		setSelectionBackground(DEFAULT_SELECTION_COLOR);
-		setSelectionForeground(DEFAULT_SELECTION_TEXT);
-
-		getColumnModel().getColumn(0).setPreferredWidth(100);
+		getColumnModel().getColumn(0).setPreferredWidth(50);
 		getColumnModel().getColumn(0).setCellRenderer(new RowNumberRenderer());
 	}
 
