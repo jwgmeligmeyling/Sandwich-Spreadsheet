@@ -3,8 +3,6 @@ package GUI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
@@ -13,8 +11,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -27,18 +23,20 @@ import File.Sheet.Range;
 
 @SuppressWarnings("serial")
 public class STable extends JTable {
+	
 	private final Sheet sheet;
-	private final JTextField formule;
+	private final FormuleBalk formuleBalk;
+	private final STable table = this;
+	
 	private Range selectedRange;
 	private JTextField currentEditor;
-	private boolean formuleEditing = false;
 
 	private static final Color DEFAULT_GRID_COLOR = new Color(206,206,206);
 	private static final Color DEFAULT_SELECTION_COLOR = new Color(190, 220, 255);
 	private static final Color DEFAULT_SELECTION_TEXT = new Color(0,0,0);
 	
 	
-	public STable(final Sheet sheet, final JTextField formule) {
+	public STable(final Sheet sheet, FormuleBalk formule) {
 		super(new AbstractTableModel() {
 			public String getColumnName(int column) {
 				if (column == 0) {
@@ -111,74 +109,14 @@ public class STable extends JTable {
 		});
 
 		this.sheet = sheet;
-		this.formule = formule;
-
-		this.formule.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(formule.getText());
-				setValueAt(formule.getText(), getSelectedRow(),
-							getSelectedColumn());
-				removeEditor();
-				requestFocus();
-				
-			}
-
-		});
-		formule.getDocument().addDocumentListener(new DocumentListener() {
-			public void insertUpdate(DocumentEvent de) {
-				updateCellEditor();
-			}
-
-			public void changedUpdate(DocumentEvent de) {
-
-			}
-
-			public void removeUpdate(DocumentEvent de) {
-				updateCellEditor();
-			}
-
-			private void updateCellEditor() {
-				if (!formuleEditing) {
-					formuleEditing = true;
-					currentEditor.setText(formule.getText());
-					formuleEditing = false;
-				}
-			}
-		});
-
+		this.formuleBalk = formule;
 	}
 
 	@Override
 	public TableCellEditor getCellEditor(int row, int column) {
 		currentEditor = new JTextField();
-		currentEditor.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				Editing();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				Editing();
-			}
-			
-			private void Editing(){
-				if (!formuleEditing) {
-					formuleEditing = true;
-					System.out.println(currentEditor.getText());
-					formule.setText(currentEditor.getText());
-					formuleEditing = false;
-				}
-			}
-
-		});
+		formuleBalk.setCurrentTable(table);
+		formuleBalk.setCurrentEditor(currentEditor);
 		return new CustomTableCellEditor();
 	}
 
@@ -220,7 +158,7 @@ public class STable extends JTable {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if (e.getValueIsAdjusting()) {
-				formule.setText("");
+				formuleBalk.setText("");
 				return;
 			}
 			int[] selectedColumns = getSelectedColumns();
@@ -238,7 +176,7 @@ public class STable extends JTable {
 				int rowUp = selectedRows[0];
 				int colRight = selectedColumns[selectedColumnsCount - 1] - 1;
 				int rowDown = selectedRows[selectedRowsCount - 1];
-				if (colLeft == 0) {
+				if (colLeft == -1) {
 					return; // First column is reserved for row index
 				}
 
@@ -246,17 +184,10 @@ public class STable extends JTable {
 				if (!range.equals(selectedRange)) {
 					selectedRange = range;
 					System.out.println("Selected range: " + range.toString());
-
-					/*
-					 * TODO Liam formule.setText() -> cell.getInput() wanneer
-					 * range.isSingleCell(). Daarna kijken hoe we aanpassingen
-					 * in het formule tekstveld kunnen doorvoeren naar de cell.
-					 * ( range.getCellArray()[0] -> Cell.setInput(String) )
-					 */
 				}
 				if (range.isSingleCell()) {
 					Cell selectedCell = range.firstCell();
-					formule.setText(selectedCell.getInput());
+					formuleBalk.setText(selectedCell.getInput());
 				}
 
 			}

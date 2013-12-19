@@ -11,7 +11,7 @@ import File.SpreadSheetFile;
 public class Window extends JFrame {
 	
 	private JToolBar tbMain;
-	private JTextField formule;
+	private FormuleBalk formule;
 	private JTabbedPane tabbedPane;
 	
 	private static SpreadSheetFile newFile;
@@ -32,7 +32,7 @@ public class Window extends JFrame {
 		
 		tbMain = new SToolbar();
 		tabbedPane = new JTabbedPane();
-		formule = new JTextField();
+		formule = new FormuleBalk();
 		tbMain.add(formule);
 		
 		Container container = getContentPane();
