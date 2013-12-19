@@ -22,6 +22,7 @@ public class ParseTest {
 		B1 = sheet.createCell("=5*2", 1, 0);
 		B2 = sheet.createCell("=2+2*3", 1, 1);
 		B3 = sheet.createCell("=SUM(5,3)", 1, 2);
+		sheet.init();
 	}
 
 	@Test
