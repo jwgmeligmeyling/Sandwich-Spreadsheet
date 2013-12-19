@@ -14,6 +14,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -50,6 +51,9 @@ public class STable extends JTable {
 		selectionBackground = DEFAULT_SELECTION_COLOR;
 		selectionForeground = DEFAULT_SELECTION_TEXT;
 		autoResizeMode = AUTO_RESIZE_OFF;
+		
+		JTableHeader header = getTableHeader();
+		header.setDefaultRenderer(new HeaderNameRenderer(header.getDefaultRenderer()));
 		
 		getColumnModel().getColumn(0).setPreferredWidth(50);
 		getColumnModel().getColumn(0).setCellRenderer(new RowNumberRenderer());
@@ -179,17 +183,58 @@ public class STable extends JTable {
 			Component component = x
 					.getTableHeader()
 					.getDefaultRenderer()
-					.getTableCellRendererComponent(x, value, false, false,
-							-1, -2);
+					.getTableCellRendererComponent(x, value, false, false, -1, -2);
 			((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
 			if (selected) {
-				component
-						.setFont(component.getFont().deriveFont(Font.BOLD));
+				component.setFont(component.getFont().deriveFont(Font.BOLD));
 			} else {
-				component.setFont(component.getFont()
-						.deriveFont(Font.PLAIN));
+				component.setFont(component.getFont().deriveFont(Font.PLAIN));
 			}
 			return component;
+		}
+		
+	}
+	
+	/**
+	 * Override the header name renderer
+	 *
+	 */
+	private class HeaderNameRenderer implements TableCellRenderer {
+
+		 private TableCellRenderer delegate;
+
+		 /**
+		  * Constructor for the header name renderer
+		  * @param delegate
+		  */
+		 public HeaderNameRenderer(TableCellRenderer delegate) {
+		     this.delegate = delegate;
+		 } 
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component component = delegate.getTableCellRendererComponent(table,
+					value, false, false, row, column);
+			if (isSelected(column)) {
+				component.setFont(component.getFont().deriveFont(Font.BOLD));
+			}
+			return component;
+		}
+		
+		/**
+		 * Determine if a cell in the current column is selected
+		 * @param column
+		 * @return
+		 */
+		private boolean isSelected(int column) {
+			for ( int i : getSelectedColumns() ) {
+				if ( i == column ) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 	}
@@ -203,6 +248,8 @@ public class STable extends JTable {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
+			tableHeader.repaint();
+			
 			if (e.getValueIsAdjusting()) {
 				formuleBalk.setText("");
 				return;
