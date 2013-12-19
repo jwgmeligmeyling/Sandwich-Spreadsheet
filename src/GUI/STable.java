@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
@@ -26,6 +25,7 @@ import File.Cell;
 import File.Sheet;
 import File.Sheet.Range;
 
+@SuppressWarnings("serial")
 public class STable extends JTable {
 	private final Sheet sheet;
 	private final JTextField formule;
@@ -85,7 +85,7 @@ public class STable extends JTable {
 		setSelectionBackground(DEFAULT_SELECTION_COLOR);
 		setSelectionForeground(DEFAULT_SELECTION_TEXT);
 
-		getColumnModel().getColumn(0).setPreferredWidth(15);
+		getColumnModel().getColumn(0).setPreferredWidth(100);
 		getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
 
 			@Override
@@ -168,6 +168,7 @@ public class STable extends JTable {
 			public void removeUpdate(DocumentEvent e) {
 				Editing();
 			}
+			
 			private void Editing(){
 				if (!formuleEditing) {
 					formuleEditing = true;
@@ -213,8 +214,6 @@ public class STable extends JTable {
 			return value;
 		}
 	}
-
-	private Range previousRange;
 
 	class SelectionHandler implements ListSelectionListener {
 

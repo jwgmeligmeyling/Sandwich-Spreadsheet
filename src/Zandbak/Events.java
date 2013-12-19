@@ -1,7 +1,9 @@
-package GUI;
+package Zandbak;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+
+import GUI.Window;
 
 public class Events {
 	
@@ -79,7 +81,7 @@ public class Events {
 	}
 	
 	public static void InsertWorksheet_Click() {
-		Window.createSheet();
+	//	Window.createSheet();
 		//String st = "Insert>Worksheet";
 		//JOptionPane.showMessageDialog(null, st);
 	}
