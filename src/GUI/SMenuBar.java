@@ -208,7 +208,7 @@ public class SMenuBar extends JMenuBar {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			tabbedPane.setTabPlacement(JTabbedPane.TOP);		
+			tabbedPane.setTabPlacement(JTabbedPane.TOP);
 		}
 		
 	};
