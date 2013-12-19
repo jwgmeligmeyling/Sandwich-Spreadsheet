@@ -11,6 +11,7 @@ public class Window extends JFrame {
 	private JToolBar tbMain;
 	private FormuleBalk formule;
 	private JTabbedPane tabbedPane;
+	private SStatusBar statusbar;
 	
 	private static SpreadSheetFile newFile;
 	
@@ -30,12 +31,16 @@ public class Window extends JFrame {
 		tbMain = new SToolbar();
 		tabbedPane = new JTabbedPane();
 		setJMenuBar(new SMenuBar(this));
+		
 		formule = new FormuleBalk();
 		tbMain.add(formule);
+		
+		statusbar = new SStatusBar(this);
 		
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
 		container.add(tbMain, BorderLayout.PAGE_START);
+		container.add(statusbar, BorderLayout.PAGE_END);
 		
 		add(tabbedPane, BorderLayout.CENTER);
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
@@ -87,6 +92,13 @@ public class Window extends JFrame {
 		tabbedPane.setTabPlacement(setting);
 	}
 	
+	public JLabel getStatusBar() {
+		return statusbar;
+	}
+	
+	public void setStatusBarVisibility(boolean visible) {
+		statusbar.setVisible(visible);
+	}
 	
 	
 	public static void main(String[] args) {

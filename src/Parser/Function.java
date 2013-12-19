@@ -561,9 +561,7 @@ public enum Function {
 	RANDBETWEEN("Returns a random integer between the numbers you specify. A new random number is returned every time the sheet is calculated.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 2 ) {
-				throw new IllegalArgumentException("This function takes only two parameters!");
-			}
+			assertArguments(2, arguments.length);
 			int a = intValueOf(arguments[0]);
 			int b = intValueOf(arguments[1]);
 			return (int) (Math.random() * ( b - a + 1) + a);

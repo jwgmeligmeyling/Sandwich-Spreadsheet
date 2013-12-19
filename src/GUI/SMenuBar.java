@@ -7,6 +7,8 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -23,12 +25,14 @@ public class SMenuBar extends JMenuBar {
 	private static ImageIcon icoPrint = new ImageIcon("img/print.png", "Print");
 	
 	private JTabbedPane tabbedPane;
+	private JLabel statusbar;
 	private final Window window;
 
 	public SMenuBar(Window window) {
 		super();
 		this.window = window;
 		setTabbedPane(window.getTabbedPane());
+		setStatusBar(window.getStatusBar());
 		createFileMenu();
 		createEditMenu();
 		createViewMenu();
@@ -40,13 +44,12 @@ public class SMenuBar extends JMenuBar {
 		JMenu menu = new JMenu("File");
 		menu.setMnemonic(Mnemonic.FILE.value);
 		
-		menu.add(new MenuItem("New", icoNew, Mnemonic.NEW));
+		menu.add(new MenuItem(Mnemonic.NEW, fileNew)); //  "New", icoNew, Mnemonic.NEW));
 		menu.add(new MenuItem(Mnemonic.OPEN, fileOpen));
 		menu.add(new MenuItem(Mnemonic.SAVE, fileSave));
 		menu.add(new MenuItem(Mnemonic.SAVE_AS, fileSaveAs));
-		
 		menu.addSeparator();
-		menu.add(new MenuItem("Print", icoPrint, Mnemonic.PRINT));
+		menu.add(new MenuItem(Mnemonic.PRINT, filePrint));
 		menu.addSeparator();
 		menu.add(new MenuItem(Mnemonic.EXIT, exit));
 		
@@ -67,8 +70,12 @@ public class SMenuBar extends JMenuBar {
 	private void createViewMenu() {
 		JMenu menu = new JMenu("View");
 		menu.setMnemonic(Mnemonic.VIEW.value);
-		menu.add(new MenuItem("Zoom in/out", Mnemonic.ZOOM));
-		menu.add(new MenuItem("Show/hide statusbar", Mnemonic.STATUS_BAR));
+		//menu.add(new MenuItem("Zoom in/out", Mnemonic.ZOOM));
+		menu.add(new JCheckBox("Show/hide statusbar")); //, Mnemonic.STATUS_BAR));
+		
+		JCheckBox jcbShowStatusBar = new JCheckBox("Show Status Bar");
+		jcbShowStatusBar.setAction(ViewShowStatusBar_Click);
+		menu.add(jcbShowStatusBar);
 		
 		ButtonGroup jbgTabsTopBottom = new ButtonGroup();
 		JRadioButton jrbTabsTop = new JRadioButton("Tabs on top");
@@ -107,10 +114,32 @@ public class SMenuBar extends JMenuBar {
 		return tabbedPane;
 	}
 
-	public void setTabbedPane(JTabbedPane tabbedPane) {
-		this.tabbedPane = tabbedPane;
+	public void setTabbedPane(JTabbedPane tabbedPaneIn) {
+		this.tabbedPane = tabbedPaneIn;
 	}
-
+	
+	public JLabel getStatusbar() {
+		return statusbar;
+	}
+	
+	public void setStatusBar(JLabel statusbarIn) {
+		this.statusbar = statusbarIn;
+	}
+	
+	/*
+	 * File menu:
+	 */
+	
+	private AbstractAction fileNew = new AbstractAction("New file", icoNew) {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String st = "File>New";
+			JOptionPane.showMessageDialog(null, st);
+		}
+	};
+	
+	
 	private AbstractAction fileOpen = new AbstractAction("Open", icoOpen) {
 
 		@Override
@@ -141,20 +170,33 @@ public class SMenuBar extends JMenuBar {
 		
 	};
 	
+	private AbstractAction filePrint = new AbstractAction("Print", icoPrint) {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String st = "File>Print";
+			JOptionPane.showMessageDialog(null, st);
+		}
+	};
+	
+	
 	private AbstractAction exit = new AbstractAction("Exit") {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int answer = JOptionPane.showConfirmDialog(null,
-					"Are you sure you want to quit?", "Please confirm",
-					JOptionPane.YES_NO_OPTION);
+			int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Please confirm", JOptionPane.YES_NO_OPTION);
 			if (answer == JOptionPane.YES_OPTION) {
 				System.exit(0);
-			}		
+			}
 		}
 		
 	};
-
+	
+	
+	/*
+	 * Edit menu:
+	 */
+	
 	private AbstractAction undo = new AbstractAction("Undo") {
 
 		@Override
@@ -204,6 +246,20 @@ public class SMenuBar extends JMenuBar {
 		
 	};
 	
+	
+	/*
+	 * View menu:
+	 */
+	
+	private AbstractAction ViewShowStatusBar_Click = new AbstractAction("Show statusbar") {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			statusbar.setVisible(!statusbar.isVisible());
+			// TODO getting the value of jcbShowStatusBar (checkbox)!!?? How??
+		}
+	};
+	
 	private AbstractAction ViewTabsTop_Click = new AbstractAction("Tabs on top") {
 
 		@Override
@@ -213,20 +269,25 @@ public class SMenuBar extends JMenuBar {
 		
 	};
 	
-	private AbstractAction InsertWorksheet_Click = new AbstractAction("Create new Sheet") {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			window.createSheet();	
-		}
-		
-	};
-	
 	private AbstractAction ViewTabsBottom_Click = new AbstractAction("Tabs on bottom") {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);		
+		}
+		
+	};
+	
+	
+	/*
+	 * Insert menu:
+	 */
+	
+	private AbstractAction InsertWorksheet_Click = new AbstractAction("Create new Sheet") {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			window.createSheet();	
 		}
 		
 	};
