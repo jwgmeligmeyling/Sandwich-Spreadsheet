@@ -30,6 +30,9 @@ public class Cell implements Interfaces.Cell, Comparable<Cell> {
 	
 	private Color fColor;
 	private Color bColor;
+	private boolean bold;
+	private boolean italic;
+	private boolean underlined;
 
 	/**
 	 * Constructor voor Cell
@@ -135,8 +138,8 @@ public class Cell implements Interfaces.Cell, Comparable<Cell> {
 	}
 
 	@Override
-	public void setFColor(Color newFColor) {
-		fColor = newFColor;
+	public void setFColor(Color fColorIn) {
+		fColor = fColorIn;
 	}
 
 	@Override
@@ -145,8 +148,38 @@ public class Cell implements Interfaces.Cell, Comparable<Cell> {
 	}
 
 	@Override
-	public void setBColor(Color newBColor) {
-		bColor = newBColor;
+	public void setBColor(Color bColorIn) {
+		bColor = bColorIn;
+	}
+	
+	@Override
+	public boolean getBold() {
+		return bold;
+	}
+	
+	@Override
+	public void setBold(boolean boldIn) {
+		bold = boldIn;
+	}
+	
+	@Override
+	public boolean getItalic() {
+		return italic;
+	}
+	
+	@Override
+	public void setItalic(boolean italicIn) {
+		italic = italicIn;
+	}
+	
+	@Override
+	public boolean getUnderlined() {
+		return underlined;
+	}
+	
+	@Override
+	public void setUnderlined(boolean underlinedIn) {
+		underlined = underlinedIn;
 	}
 	
 	/**

@@ -44,7 +44,6 @@ public interface Cell {
 	 */
 	public void updateValue();
 	
-	
 	/**
 	 * @return the row index of the row (row 1 == index 0)
 	 */
@@ -56,7 +55,7 @@ public interface Cell {
 	public int getColumn();
 	
 	/**
-	 * @return the column in user friendly form (e.a.: "A", "F", "AF") (column A == column 1 == index 0)
+	 * @return the column in user friendly form (ea: "A", "F", "BK") (column A == column 1 == index 0)
 	 */
 	public String getColumnString();
 	
@@ -71,7 +70,7 @@ public interface Cell {
 	 * @see File.CelType
 	 * @param newType is the new data type
 	 */
-	public void setType(CelType newType);
+	public void setType(CelType typeIn);
 	
 	/**
 	 * Method to get the foreground-color.
@@ -86,14 +85,51 @@ public interface Cell {
 	public Color getBColor();
 	
 	/**
+	 * 
+	 * @return true if the cell is formatted bold, else return false
+	 */
+	public boolean getBold();
+	
+	/**
+	 * 
+	 * @return true if the cell is formatted italic, else return false
+	 */
+	public boolean getItalic();
+	
+	/**
+	 * 
+	 * @return true if the cell is formatted underlined, else return false
+	 */
+	public boolean getUnderlined();
+	
+	/**
 	 * Set the foreground-color for this cell.
 	 * @param newFColor is the new foreground color
 	 */
-	public void setFColor(Color newFColor);
+	public void setFColor(Color fColorIn);
 	
 	/**
 	 * Set the backgroud-color for this cell.
 	 * @param newBColor is the new backgroud color
 	 */
-	public void setBColor(Color newBColor);
+	public void setBColor(Color bColorIn);
+	
+	/**
+	 * 
+	 * @param boldIn
+	 */
+	public void setBold(boolean boldIn);
+	
+	/**
+	 * 
+	 * @param italicIn
+	 */
+	public void setItalic(boolean italicIn);
+	
+	/**
+	 * 
+	 * @param underlinedIn
+	 */
+	public void setUnderlined(boolean underlinedIn);
+	
 }
