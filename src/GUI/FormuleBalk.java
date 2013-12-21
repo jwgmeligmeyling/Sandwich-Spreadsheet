@@ -69,7 +69,7 @@ public class FormuleBalk extends JTextField implements ActionListener {
 		this.currentEditor = currentEditor;
 	
 		this.currentEditor.getDocument().addDocumentListener(new CurrentEditorListener());
-		this.setText(currentEditor.getText());
+		//this.setText(currentEditor.getText());
 	}
 	
 	/**
@@ -142,6 +142,7 @@ public class FormuleBalk extends JTextField implements ActionListener {
 			currentTable.removeEditor();
 			currentTable.requestFocus();
 			currentEditor = null;
+			currentTable.actionPerformed(e);
 		}
 	}
 
