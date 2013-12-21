@@ -163,7 +163,6 @@ public class STable extends JTable implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("Action performed!");
 		selectingRange = false;
 		editingStopped(null);
 	}
@@ -196,6 +195,7 @@ public class STable extends JTable implements ActionListener {
 					.getMinSelectionIndex() + x : columnModel.getSelectionModel()
 					.getMaxSelectionIndex() + x;
 			table.changeSelection(row, col, toggle, extend);
+			tableHeader.repaint();
 			updateCellEditor();
 		}
 		
@@ -315,13 +315,6 @@ public class STable extends JTable implements ActionListener {
 		public CustomTableCellEditor() {
 			super(currentEditor);
 			getComponent().setName("Table.editor");
-		}
-
-		@Override
-		public boolean stopCellEditing() {
-			return false;
-			// value = (String) super.getCellEditorValue();
-			// return super.stopCellEditing();
 		}
 
 		@Override
