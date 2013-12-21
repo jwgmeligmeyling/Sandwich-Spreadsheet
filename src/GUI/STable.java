@@ -94,8 +94,8 @@ public class STable extends JTable implements ActionListener {
 		tableHeader.setDefaultRenderer(new HeaderNameRenderer(tableHeader
 				.getDefaultRenderer()));
 
-		getColumnModel().getColumn(0).setPreferredWidth(50);
-		getColumnModel().getColumn(0).setCellRenderer(new RowNumberRenderer());
+		columnModel.getColumn(0).setPreferredWidth(50);
+		columnModel.getColumn(0).setCellRenderer(new RowNumberRenderer());
 	}
 
 	@Override
@@ -330,6 +330,14 @@ public class STable extends JTable implements ActionListener {
 		@Override
 		public Object getCellEditorValue() {
 			return currentEditor.getText();
+		}
+		
+		@Override
+		public boolean stopCellEditing() {
+			if ( ! selectingRange ) {
+				return super.stopCellEditing();
+			}
+			return false;
 		}
 	}
 
