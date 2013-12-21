@@ -96,7 +96,11 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 	 */
 	private void update(Cell cross) {
 		if ( changed ) {
-			value = Parser.parse(this);
+			try {
+				value = Parser.parse(this);
+			} catch ( Exception e ) {
+				value = "#VALUE";
+			}
 			changed = false;
 			
 			for ( Cell listener : listeners ) {
@@ -115,7 +119,11 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 	 */
 	public void update(AbstractTableModel tableModel) {
 		if ( changed ) {
-			value = Parser.parse(this);
+			try {
+				value = Parser.parse(this);
+			} catch ( Exception e ) {
+				value = "#VALUE";
+			}
 			changed = false;
 			tableModel.fireTableCellUpdated(getRow(), getColumn());
 			

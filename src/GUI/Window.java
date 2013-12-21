@@ -69,7 +69,7 @@ public class Window extends JFrame {
 	private void fillSheet(Sheet sheet) {
 		sheet.createCell("SOM:", 0, 0);
 		sheet.createCell("=SUM(A2:T200)", 1, 0);
-		//sheet.createCell("=B1+E1", 2,0);
+		sheet.createCell("=B1+E1", 2,0);
 		sheet.createCell("COUNT:", 3, 0);
 		sheet.createCell("=COUNT(A2:T200)", 4, 0);
 		sheet.createCell("COUNTIF>50:", 6, 0);
