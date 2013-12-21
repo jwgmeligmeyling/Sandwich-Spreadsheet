@@ -3,6 +3,12 @@ package GUI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
@@ -11,8 +17,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -22,13 +26,14 @@ import File.Sheet;
 import File.Sheet.Range;
 
 @SuppressWarnings("serial")
-public class STable extends JTable {
+public class STable extends JTable implements ActionListener {
 	
-	private final Sheet sheet;
-	private final FormuleBalk formuleBalk;
 	private final STable table = this;
+	private final FormuleBalk formuleBalk;
+	private final Sheet sheet;
 	
 	private Range selectedRange;
+	private boolean selectingRange;
 	private JTextField currentEditor;
 
 	private static final Color DEFAULT_GRID_COLOR = new Color(206,206,206);
@@ -37,13 +42,13 @@ public class STable extends JTable {
 	
 	public STable(Sheet sheet, FormuleBalk formule) {
 		super(new TableModel(sheet), null, null);
-		sheet.init();
+		
 		this.sheet = sheet;
 		this.formuleBalk = formule;
 		
-		SelectionHandler handler = new SelectionHandler();
-		getSelectionModel().addListSelectionListener(handler);
-		getColumnModel().getSelectionModel().addListSelectionListener(handler);
+		CustomMouseAdapter adapter = new CustomMouseAdapter();
+		addMouseListener(adapter);
+		addMouseMotionListener(adapter);
 
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		setCellSelectionEnabled(true);
@@ -57,15 +62,108 @@ public class STable extends JTable {
 		getColumnModel().getColumn(0).setPreferredWidth(50);
 		getColumnModel().getColumn(0).setCellRenderer(new RowNumberRenderer());
 	}
+	
+	@Override
+	public boolean editCellAt(int row, int column, EventObject e) {
+		if (! selectingRange ) {
+			return super.editCellAt(row, column, e);
+		}
+		return false;
+	}
 
 	@Override
 	public TableCellEditor getCellEditor(int row, int column) {
 		currentEditor = new JTextField();
+		currentEditor.addActionListener(this);
 		formuleBalk.setCurrentTable(table);
 		formuleBalk.setCurrentEditor(currentEditor);
 		return new CustomTableCellEditor();
 	}
+	
+	/**
+	 * Method to get the selected cells as <code>Range</code> object.
+	 * 
+	 * @return Range object containing the selected cells, or null if the
+	 *         selection was empty or contained the row headers.
+	 */
+	public Range getSelectedRange() {
+		int[] selectedColumns = getSelectedColumns();
+		int[] selectedRows = getSelectedRows();
 
+		if (selectedColumns.length == 0 || selectedRows.length == 0
+				|| selectedColumns[0] == 0) {
+			return null;
+		}
+
+		int colLeft = selectedColumns[0] - 1;
+		int rowUp = selectedRows[0];
+		int colRight = selectedColumns[selectedColumns.length - 1] - 1;
+		int rowDown = selectedRows[selectedRows.length - 1];
+
+		return sheet.getRange(colLeft, rowUp, colRight, rowDown);
+	}
+	
+	private class CustomMouseAdapter extends MouseAdapter {
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			tableHeader.repaint();
+			
+			if  (! selectingRange ) {
+				if ( isEditing() ) {
+					selectingRange = true; 
+				} else {
+					return;
+				}
+			}
+			
+			Point p = e.getPoint();
+			int row = table.rowAtPoint(p);
+			int column = table.columnAtPoint(p);
+			
+			table.changeSelection(row, column, false, false);
+			updateCellEditor();
+		}
+		
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        	tableHeader.repaint();
+        	
+        	if (! selectingRange ) {
+				return;
+			}
+        	
+        	Point p = e.getPoint();
+			int row = table.rowAtPoint(p);
+			int column = table.columnAtPoint(p);
+			
+			table.changeSelection(row, column, false, true);
+			updateCellEditor();
+        }
+        
+        private void updateCellEditor() {
+        	CustomTableCellEditor cellEditor = (CustomTableCellEditor) getCellEditor();
+        	Range range = getSelectedRange();
+        	
+			if  ( currentEditor != null && cellEditor != null && range != null ) { 
+				if (! range.equals(selectedRange) && ! range.contains(cellEditor.cell) )  {
+					String oldValue = (String) cellEditor.getCellEditorValue();
+					if (selectedRange != null) {
+						String oldRange = selectedRange.toString();
+						if (oldValue.endsWith(oldRange)) {
+							oldValue = oldValue.substring(0, oldValue.length()
+									- oldRange.length());
+						}
+					}
+		        	currentEditor.setText(oldValue + range.toString());
+		        	selectedRange = range;
+				}
+			}
+        	
+        }
+        
+    };
+	
 	/**
 	 * The custom TableCellEditor binds the <code>Sheet</code> class to this
 	 * current <code>STable</code> instance.
@@ -74,8 +172,8 @@ public class STable extends JTable {
 	 * 
 	 */
 	private class CustomTableCellEditor extends DefaultCellEditor {
-		private String value;
-
+		private Cell cell;
+		
 		/**
 		 * Constructor for the CustomTableCellEditor. Creates a new table cell
 		 * editor with the JTextField stored in the currentEditor variable.
@@ -87,16 +185,16 @@ public class STable extends JTable {
 
 		@Override
 		public boolean stopCellEditing() {
-			value = (String) super.getCellEditorValue();
-			return super.stopCellEditing();
+			return false;
+		//	value = (String) super.getCellEditorValue();
+		//	return super.stopCellEditing();
 		}
 
 		@Override
 		public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
-			Cell cell = sheet.getCellAt(column - 1, row);
+			cell = sheet.getCellAt(column - 1, row);
 			Object input = cell.getInput();
-			this.value = null;
 			((JComponent) getComponent())
 					.setBorder(new LineBorder(Color.black));
 			return super.getTableCellEditorComponent(table, input, isSelected,
@@ -105,7 +203,7 @@ public class STable extends JTable {
 
 		@Override
 		public Object getCellEditorValue() {
-			return value;
+			return currentEditor.getText();
 		}
 	}
 
@@ -126,6 +224,7 @@ public class STable extends JTable {
 		 */
 		private TableModel(Sheet sheet) {
 			this.sheet = sheet;
+			sheet.init();
 		}
 		
 		@Override
@@ -241,55 +340,9 @@ public class STable extends JTable {
 		
 	}
 
-	/**
-	 * The selection handler listens for new selected Ranges
-	 * @author Liam Clark
-	 *
-	 */
-	private class SelectionHandler implements ListSelectionListener {
-
-		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			tableHeader.repaint();
-			
-			if (e.getValueIsAdjusting()) {
-				formuleBalk.setText("");
-				return;
-			}
-			int[] selectedColumns = getSelectedColumns();
-			int[] selectedRows = getSelectedRows();
-
-			if (selectedColumns != null & selectedRows != null) {
-				int selectedColumnsCount = selectedColumns.length;
-				int selectedRowsCount = selectedRows.length;
-
-				if (selectedColumnsCount == 0 || selectedRowsCount == 0) {
-					return;
-				}
-
-				int colLeft = selectedColumns[0] - 1;
-				int rowUp = selectedRows[0];
-				int colRight = selectedColumns[selectedColumnsCount - 1] - 1;
-				int rowDown = selectedRows[selectedRowsCount - 1];
-				
-				if (colLeft == -1) {
-					return; // First column is reserved for row index
-				}
-
-				Range range = sheet.getRange(colLeft, rowUp, colRight, rowDown);
-				
-				if (!range.equals(selectedRange)) {
-					selectedRange = range;
-					System.out.println("Selected range: " + range.toString());
-				}
-				
-				if (range.isSingleCell()) {
-					Cell selectedCell = range.firstCell();
-					formuleBalk.setText(selectedCell.getInput());
-				}
-
-			}
-		}
-
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		selectingRange = false;
+		editingStopped(null);
 	}
 }

@@ -217,11 +217,16 @@ public class Parser {
 					break;
 				}
 				
-				Range reference = getReference();
+				Object reference = getReference();
 				if ( reference != null ) {
-					values.push(reference);
 					if ( cell != null ) {
-						cell.listen(reference);
+						if ( reference instanceof Range ) {
+							cell.listen( (Range) reference);
+							values.push(reference);
+						} else if ( reference instanceof Cell ) {
+							cell.listen( (Cell) reference);
+							values.push(((Cell) reference).getValue());
+						}
 					}
 					break;
 				}
@@ -245,6 +250,7 @@ public class Parser {
 		}
 
 		return values.pop();
+		
 	}
 
 	/**
@@ -567,7 +573,7 @@ public class Parser {
 	 * @throws IllegalArgumentException
 	 *             When the input of the reference is malformed.
 	 */
-	private Range getReference() {
+	private Object getReference() {
 		/*
 		 * Current implementation only supports Cells (A1) or Ranges (A1:B2)
 		 * TODO Support for rows and columns (?)
@@ -583,7 +589,6 @@ public class Parser {
 					Range range = sheet.getRange(a,b);
 					if ( cell != null && range.contains(cell) )
 						throw new IllegalArgumentException("Cross reference!");
-					// cell.startListening(range);
 					return sheet.getRange(a, b);
 				} else {
 					throw new IllegalArgumentException(
@@ -593,7 +598,7 @@ public class Parser {
 				throw new IllegalArgumentException("Cross reference!");
 			} else {
 				index = peekIndex -1;
-				return sheet.getRange(a,a);
+				return a;
 			}
 		}
 		return null;

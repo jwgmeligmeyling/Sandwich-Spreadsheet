@@ -237,7 +237,7 @@ public class Sheet implements Interfaces.Sheet {
 
 		@Override
 		public String toString() {
-			return topLeft + ":" + bottomRight;
+			return topLeft.toString() + (( isSingleCell() ) ? ""  : ":" + bottomRight.toString());
 		}
 
 		@Override
