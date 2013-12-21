@@ -20,6 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -83,6 +85,10 @@ public class STable extends JTable implements ActionListener {
 		addMouseListener(adapter);
 		addMouseMotionListener(adapter);
 		addKeyListener(new CustomKeyListener());
+		
+		SelectionHandler SH = new SelectionHandler();
+		selectionModel.addListSelectionListener(SH);
+		columnModel.getSelectionModel().addListSelectionListener(SH);
 
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		setCellSelectionEnabled(true);
@@ -135,8 +141,10 @@ public class STable extends JTable implements ActionListener {
 		int rowUp = selectedRows[0];
 		int colRight = selectedColumns[selectedColumns.length - 1] - 1;
 		int rowDown = selectedRows[selectedRows.length - 1];
-	
-		return sheet.getRange(colLeft, rowUp, colRight, rowDown);
+		
+		Range range = sheet.getRange(colLeft, rowUp, colRight, rowDown);
+
+		return range;
 	}
 
 	/**
@@ -199,7 +207,7 @@ public class STable extends JTable implements ActionListener {
 			updateCellEditor();
 		}
 		
-	};
+	}
 	
 	/**
 	 * Key listener that ensures that the new editor gets it's focus 
@@ -270,7 +278,7 @@ public class STable extends JTable implements ActionListener {
 			updateCellEditor();
 		}
 
-	};
+	}
 	
 	/**
 	 * Update the value of the current <code>CellEditor</code> to match the
@@ -475,7 +483,28 @@ public class STable extends JTable implements ActionListener {
 			}
 			return false;
 		}
+	}	
+	
+	/**
+	 * The selection handler listens for new selected Ranges
+	 * @author Liam Clark
+	 *
+	 */
+	private class SelectionHandler implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if (!isEditing() && getSelectedRowCount() == 1
+					&& columnModel.getSelectedColumnCount() == 1) {
+				Cell selectedCell = sheet.getCellAt(
+						columnModel.getSelectedColumns()[0] - 1,
+						getSelectedRow());
+				formuleBalk.setText(selectedCell.getInput());
+				;
+			}
+		}
 
 	}
+	
 
 }
