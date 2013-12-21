@@ -203,7 +203,6 @@ public class STable extends JTable implements ActionListener {
 					.getMinSelectionIndex() + x : columnModel.getSelectionModel()
 					.getMaxSelectionIndex() + x;
 			table.changeSelection(row, col, toggle, extend);
-			tableHeader.repaint();
 			updateCellEditor();
 		}
 		
@@ -244,8 +243,6 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			tableHeader.repaint();
-
 			if (!selectingRange) {
 				if (isEditing()) {
 					selectingRange = true;
@@ -264,8 +261,6 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			tableHeader.repaint();
-
 			if (!selectingRange) {
 				return;
 			}
@@ -494,13 +489,13 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
+			tableHeader.repaint();
 			if (!isEditing() && getSelectedRowCount() == 1
 					&& columnModel.getSelectedColumnCount() == 1) {
 				Cell selectedCell = sheet.getCellAt(
 						columnModel.getSelectedColumns()[0] - 1,
 						getSelectedRow());
 				formuleBalk.setText(selectedCell.getInput());
-				;
 			}
 		}
 
