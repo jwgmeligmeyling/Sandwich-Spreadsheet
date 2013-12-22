@@ -1,9 +1,7 @@
 package GUI;
 
 import javax.swing.*;
-
 import java.awt.*;
-
 import File.Cell;
 import File.Sheet;
 import File.SpreadSheetFile;
@@ -14,7 +12,7 @@ public class Window extends JFrame {
 	private JToolBar tbMain;
 	private FormuleBalk formule;
 	private JTabbedPane tabbedPane;
-	private SStatusBar statusbar;
+	private SStatusBar statusBar;
 	
 	private static SpreadSheetFile newFile;
 	
@@ -25,27 +23,26 @@ public class Window extends JFrame {
 	 */
 	public Window(String title) throws HeadlessException {
 		super(title);
-
-		setSize(700, 500);
+		
+		setSize(800, 450);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		
-		tbMain = new SToolbar();
-		tabbedPane = new JTabbedPane();
-		statusbar = new SStatusBar(this);
 		setJMenuBar(new SMenuBar(this));
 		
+		tbMain = new SToolbar();
+		tabbedPane = new JTabbedPane();
+		statusBar = new SStatusBar(this);
 		formule = new FormuleBalk();
 		tbMain.add(formule);
 		
-		
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
-		container.add(tbMain, BorderLayout.PAGE_START);
-		container.add(statusbar, BorderLayout.PAGE_END);
 		
-		add(tabbedPane, BorderLayout.CENTER);
+		container.add(tbMain, BorderLayout.PAGE_START);
+		container.add(statusBar, BorderLayout.PAGE_END);
+		container.add(tabbedPane, BorderLayout.CENTER);
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		
 		newFile = new SpreadSheetFile();
@@ -53,8 +50,8 @@ public class Window extends JFrame {
 	}
 	
 	public void createSheet() {
-		System.out.println("countSheets() = " + newFile.countSheets());
 		Sheet newSheet = newFile.newSheet("Sheet" + (newFile.countSheets() + 1));
+		System.out.println("countSheets() = " + newFile.countSheets());
 		
 		fillSheet(newSheet);
 		
@@ -99,11 +96,11 @@ public class Window extends JFrame {
 	}
 	
 	public JLabel getStatusBar() {
-		return statusbar;
+		return statusBar;
 	}
 	
 	public void setStatusBarVisibility(boolean visible) {
-		statusbar.setVisible(visible);
+		statusBar.setVisible(visible);
 	}
 	
 	

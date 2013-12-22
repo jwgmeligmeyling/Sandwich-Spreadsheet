@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.JColorChooser;
 
 @SuppressWarnings("serial")
 public class SToolbar extends JToolBar {
@@ -20,6 +22,8 @@ public class SToolbar extends JToolBar {
 	private static ImageIcon icoItalic = new ImageIcon("img/text-italic.png", "Italic");
 	private static ImageIcon icoUnderlined = new ImageIcon("img/text-underlined.png", "Underlined");
 	private static ImageIcon icoPrint = new ImageIcon("img/print.png", "Print");
+	
+	private static JColorChooser kleurkiezen = new JColorChooser();
 	
 	private int toolbarHeight = 25;
 	
@@ -34,6 +38,7 @@ public class SToolbar extends JToolBar {
 		addSeparator();
 		
 		add(new JButton("F Color"));
+		add(kleurkiezen);
 		add(new JButton("B Color"));
 		addSeparator();
 		
@@ -46,13 +51,13 @@ public class SToolbar extends JToolBar {
 	public int getToolbarHeight() {
 		return toolbarHeight;
 	}
-
+	
 	public void setToolbarHeight(int toolbarHeight) {
 		this.toolbarHeight = toolbarHeight;
 	}
-
+	
 	private AbstractAction fileNew = new AbstractAction(null, icoNew) {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>New";
@@ -72,7 +77,7 @@ public class SToolbar extends JToolBar {
 	};
 	
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>Save";
@@ -82,7 +87,7 @@ public class SToolbar extends JToolBar {
 	};
 	
 	private AbstractAction filePrint = new AbstractAction(null, icoPrint) {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>Print";
@@ -92,7 +97,7 @@ public class SToolbar extends JToolBar {
 	};
 	
 	private AbstractAction bold = new AbstractAction(null, icoBold) {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "Bold";
@@ -102,17 +107,17 @@ public class SToolbar extends JToolBar {
 	};
 	
 	private AbstractAction italic = new AbstractAction(null, icoItalic) {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "Italic";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
+	
 	};
 	
 	private AbstractAction underline = new AbstractAction(null, icoUnderlined) {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "Underline";
@@ -134,14 +139,13 @@ public class SToolbar extends JToolBar {
 		@Override
 		public Dimension getMaximumSize() {
 			return new Dimension(toolbarHeight, toolbarHeight);
-
 		}
-
+		
 		@Override
 		public Dimension getMinimumSize() {
 			return new Dimension(toolbarHeight, toolbarHeight);
 		}
-
+		
 		@Override
 		public Dimension getPreferredSize() {
 			return new Dimension(toolbarHeight, toolbarHeight);
@@ -157,18 +161,16 @@ public class SToolbar extends JToolBar {
 		@Override
 		public Dimension getMaximumSize() {
 			return new Dimension(toolbarHeight, toolbarHeight);
-
 		}
-
+		
 		@Override
 		public Dimension getMinimumSize() {
 			return new Dimension(toolbarHeight, toolbarHeight);
 		}
-
+		
 		@Override
 		public Dimension getPreferredSize() {
 			return new Dimension(toolbarHeight, toolbarHeight);
 		}
 	}
-	
 }
