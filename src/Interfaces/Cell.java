@@ -74,19 +74,19 @@ public interface Cell {
 	/**
 	 * Method to get the overlay data type of this cell.
 	 * @see File.CelType
-	 * @param newType is the new data type
+	 * @param typeIn is the new data type
 	 */
 	public void setType(CelType typeIn);
 
 	/**
 	 * Set the foreground-color for this cell.
-	 * @param newFColor is the new foreground color
+	 * @param fColorIn is the new foreground color
 	 */
 	public void setfColor(Color fColorIn);
 
 	/**
 	 * Set the backgroud-color for this cell.
-	 * @param newBColor is the new backgroud color
+	 * @param bColorIn is the new backgroud color
 	 */
 	public void setbColor(Color bColorIn);
 

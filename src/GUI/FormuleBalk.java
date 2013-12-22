@@ -21,7 +21,7 @@ public class FormuleBalk extends JTextField implements ActionListener {
 	private boolean preventLoop = false;
 	
 	/**
-	 * Constructor
+	 * Constructor for FormuleBalk
 	 */
 	public FormuleBalk() {
 		super();
@@ -31,7 +31,7 @@ public class FormuleBalk extends JTextField implements ActionListener {
 	
 	/**
 	 * Method to get the current table
-	 * @return
+	 * @return the STable that is the current/active table
 	 */
 	public STable getCurrentTable() {
 		return currentTable;
@@ -47,7 +47,7 @@ public class FormuleBalk extends JTextField implements ActionListener {
 
 	/**
 	 * Method to get the current editor
-	 * @return
+	 * @return the text field representing the current editor
 	 */
 	public JTextField getCurrentEditor() {
 		return currentEditor;
@@ -59,7 +59,7 @@ public class FormuleBalk extends JTextField implements ActionListener {
 	 * separate sheets. At last, set the current editor to the given editor, and
 	 * start listening for updates.
 	 * 
-	 * @param cellEditor
+	 * @param currentEditor
 	 */
 	public void setCurrentEditor(JTextField currentEditor) {		
 		if ( currentEditor != null ) {

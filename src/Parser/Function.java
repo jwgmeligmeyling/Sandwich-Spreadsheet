@@ -45,12 +45,8 @@ public enum Function {
 	SUM("Returns the sum of a set of values contained in a specified field on a query.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length == 0) {
-				throw new IllegalArgumentException("This function takes at least one parameters!");
-			}
-			
+			assertMinArguments(1, arguments.length);
 			double output = 0;
-			
 			for (Object argument : arguments) {
 				if (argument instanceof Range) {
 					for (Cell cell : ((Range) argument).getCellArray()) {
@@ -62,7 +58,6 @@ public enum Function {
 					output += doubleValueOf(argument);
 				}
 			}
-			
 			return convertToIntIfApplicable(output);
 		}
 	},
@@ -83,8 +78,8 @@ public enum Function {
 	 * <code>Integer</code> and the second and third arguments are instances of
 	 * <code>Double</code>, these arguments are rounded to the closest
 	 * <code>Integer</code>.<br>
-	 * When the input doesn't make any sense (adding a <code>String</code>
-	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
+	 * Booleans (TRUE/FALSE) are interpreted here as resp. 1 and 0.<br>
+	 * When the input doesn't make any sense (eg. adding a <code>String</code>) a IllegalArgumentException is thrown.
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -95,16 +90,11 @@ public enum Function {
 	SUBTRACT() {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length < 2) {
-				throw new IllegalArgumentException("This function takes at least two parameters!");
-			}
-			
+			assertMinArguments(2, arguments.length);
 			double output = doubleValueOf(arguments[0]);
-			
-			for ( int i = 1; i < arguments.length; i++ ) {
+			for (int i = 1; i < arguments.length; i++ ) {
 				output -= doubleValueOf(arguments[i]);
 			}
-			
 			return convertToIntIfApplicable(output);
 		}
 	},
@@ -135,15 +125,11 @@ public enum Function {
 	PRODUCT("The PRODUCT function multiplies all the numbers given as arguments and returns the product.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length < 2) {
-				throw new IllegalArgumentException("This function takes at least two parameters!");
-			}
+			assertMinArguments(2, arguments.length);
 			double output = doubleValueOf(arguments[0]);
-			
-			for ( int i = 1; i < arguments.length; i++ ) {
+			for (int i = 1; i < arguments.length; i++) {
 				output *= doubleValueOf(arguments[i]);
 			}
-			
 			return convertToIntIfApplicable(output);
 		}
 	},
@@ -177,15 +163,11 @@ public enum Function {
 	DIVIDE() {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length < 2) {
-				throw new IllegalArgumentException("This function takes at least two parameters!");
-			}
+			assertMinArguments(2, arguments.length);
 			double output = doubleValueOf(arguments[0]);
-			
-			for ( int i = 1; i < arguments.length; i++ ) {
+			for (int i = 1; i < arguments.length; i++) {
 				output /= doubleValueOf(arguments[i]);
 			}
-
 			return convertToIntIfApplicable(output);
 		}
 	},
@@ -215,12 +197,8 @@ public enum Function {
 	POWER("Returns the result of a number raised to a power.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 2) {
-				throw new IllegalArgumentException("This function takes two parameters!");
-			}
-			double output = Math.pow(doubleValueOf(arguments[0]), doubleValueOf(arguments[1]));
-
-			return convertToIntIfApplicable(output);
+			assertArguments(2, arguments.length);
+			return convertToIntIfApplicable(Math.pow(doubleValueOf(arguments[0]), doubleValueOf(arguments[1])));
 		}
 	},
 	
@@ -239,6 +217,7 @@ public enum Function {
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -274,7 +253,7 @@ public enum Function {
 			assertMinArguments(1, arguments.length);
 			int count = 0;
 			for(Object arg : arguments) {
-				assert arg instanceof Range : "Argument type error! All arguments in this function must be a Range.";
+				assertArgumentRange(arg);	// assert arg instanceof Range : "Argument type error! All arguments in this function must be a Range.";
 				Range rng = (Range)arg;
 				for (Cell cell : rng.getCellArray()) {
 					if ((Boolean) ISNUMBER.calculate(cell)) {
@@ -300,7 +279,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -315,9 +294,9 @@ public enum Function {
 			String criteria = arguments[1].toString();
 			
 			if ("<>!".indexOf(criteria.charAt(0)) == -1) {
-				criteria = "==".concat(criteria); // geen operator -> ==
+				criteria = "==".concat(criteria);	// geen operator -> ==
 			} else if ( criteria.charAt(0) == '=') {
-				criteria = "=".concat(criteria); // = -> ==
+				criteria = "=".concat(criteria);	// = -> ==
 			}
 			
 			for ( int i = 0; i < range.length; i++ ) {
@@ -327,7 +306,6 @@ public enum Function {
 					count++;
 				}
 			}
-			
 			return count;
 		}
 	},
@@ -346,16 +324,14 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * <li>Maarten Flikkema</li>
 	 * </ul>
 	 * </div>
 	 */
 	SUMIF {
 		@Override
 		Object calculate(Object... arguments) {
-			if (arguments.length < 2 || !(arguments[0] instanceof Range)) {
-				throw new IllegalArgumentException("This function takes two parameters!");
-			}
 			assertTwoArguments(2, 3, arguments.length);
 			assertArgumentRange(0, arguments);
 			if (arguments.length == 3) {
@@ -387,7 +363,6 @@ public enum Function {
 					}
 				}
 			}
-			
 			return convertToIntIfApplicable(sum);
 		}
 	},
@@ -414,9 +389,7 @@ public enum Function {
 	ISNUMBER("Returns the logical value TRUE if value is a number; otherwise, it returns FALSE.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 1 ) {
-				throw new IllegalArgumentException("This function takes only one parameter!");
-			}
+			assertArguments(1, arguments.length);
 			if (arguments[0] instanceof Range) {
 				return ISNUMBER.calculate(((Range)arguments[0]).getCellArray()[0]);
 			} else if (arguments[0] instanceof Cell) {
@@ -440,30 +413,23 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * <li>Maarten Flikkema</li>
 	 * </ul>
 	 * </div>
 	 */
 	ROUND("The ROUND function rounds a number to a specified number of digits.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length != 2 ) {
-				throw new IllegalArgumentException("This function takes only two parameters!");
-			}
-			
+			assertTwoArguments(1, 2, arguments.length);
 			double value = doubleValueOf(arguments[0]);
-			int decPlaces = intValueOf(arguments[1]);
-			
-			if (decPlaces == 0) {
-				return (int) Math.floor(value);
+			if (arguments.length == 1 || intValueOf(arguments[1]) == 0) {
+				return (int) Math.round(value);
 			} else {
-				return ((double) Math
-						.floor((Math.pow(10, decPlaces) * value) + 0.5d))
-						/ Math.pow(10, decPlaces);
+				int decPlaces = intValueOf(arguments[1]);
+				return ((double) Math.floor((Math.pow(10, decPlaces) * value) + 0.5d)) / Math.pow(10, decPlaces);
 			}
 		}
 	},
-	
 	
 	/**
 	 * <div>
@@ -473,7 +439,7 @@ public enum Function {
 	 * <ul><li>The integer portion of a number</li></ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
+	 * ...
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -481,7 +447,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	INT("Rounds a number down to the nearest integer.") {
+	INT("Returns the integer part/portion of a number.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -503,7 +469,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -554,7 +520,7 @@ public enum Function {
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
-	 * <li>[naam auteur]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -636,7 +602,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -662,7 +628,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -688,7 +654,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -702,7 +668,7 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>real number</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
@@ -714,11 +680,12 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Maarten Flikkema</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
-	DEGREE("Converts radians into degrees.") {
+	DEGREE("Converts radians to degrees.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -728,7 +695,7 @@ public enum Function {
 
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>real number</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
@@ -740,7 +707,8 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * <li>Maarten Flikkema</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -792,7 +760,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -818,7 +786,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -844,7 +812,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -870,7 +838,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -915,6 +883,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
+	 */
 	ABS("Returns a value of the same type that is passed to it specifying the absolute value of a number.") {
 		@Override
 		Object calculate(Object... arguments) {
@@ -923,11 +909,29 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
+	 */
 	MIN("Return the minimum of a set of values contained in a specified field on a query.") {
 		@Override
 		Object calculate(Object... arguments) {
+			assertMinArguments(1, arguments.length);
 			double min = 0;
-			
 			for ( int i = 0; i < arguments.length; i++ ) {
 				if ( arguments[i] instanceof String ) {
 					continue;
@@ -938,16 +942,33 @@ public enum Function {
 					}
 				}
 			}
-			
 			return convertToIntIfApplicable(min);
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
+	 */
 	MAX("Return the maximum of a set of values contained in a specified field on a query.") {
 		@Override
 		Object calculate(Object... arguments) {
+			assertMinArguments(1, arguments.length);
 			double max = 0;
-			
 			for ( int i = 0; i < arguments.length; i++ ) {
 				if ( arguments[i] instanceof String ) {
 					continue;
@@ -958,7 +979,6 @@ public enum Function {
 					}
 				}
 			}
-			
 			return convertToIntIfApplicable(max);
 		}
 	},
@@ -985,9 +1005,8 @@ public enum Function {
 	IF("Returns the second argument is the first argument is true, else returns the third argument.") {
 		@Override
 		Object calculate(Object... arguments) {
-			if ( arguments.length < 2 || arguments.length > 3 ) {
-				throw new IllegalArgumentException("This function takes 2 or 3 arguments");
-			} else if (booleanValueOf(arguments[0])) {
+			assertTwoArguments(2, 3, arguments.length);
+			if (booleanValueOf(arguments[0])) {
 				if (arguments.length >= 2) {
 					return arguments[1];
 				} else {
@@ -1018,7 +1037,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>Maarten</li>
+	 * <li>Maarten Flikkema</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -1067,6 +1086,24 @@ public enum Function {
 		}
 	},
 	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
+	 */
 	NOT("Reverses the value of its argument. Use NOT when you want to make sure a value is not equal to one particular value.") {
 		@Override
 		Object calculate(Object... arguments) {
@@ -1277,6 +1314,11 @@ public enum Function {
 		return Function.valueOf(value.toUpperCase());
 	}
 	
+	/**
+	 * Method to convert unnecessary doubles to integers
+	 * @param d is a double value
+	 * @return d has the same value as the input, but is converted to Integer is there is no decimal part behind the comma
+	 */
 	private static Object convertToIntIfApplicable(double d) {
 		if (Math.floor(d) == d) {
 			return (int) d;
@@ -1284,27 +1326,58 @@ public enum Function {
 		return d;
 	}
 	
+	/**
+	 * Checks if the number of arguments given to a function is equal to the number of arguments it requires.
+	 * @param count is the number of arguments the function should get
+	 * @param length is the number of arguments the function actualy got (arguments.length)
+	 */
 	private static void assertArguments(int count, int length) {
 		if (count != length) {
-			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " were supplied");
+			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " were supplied!");
 		}
 	}
 	
+	/**
+	 * Checks if the number of arguments given to a function is equal to either one of two valid numbers of required arguments.
+	 * @param count1 is the first number of arguments the function can handle
+	 * @param count2 is the second number of arguments the function can handle
+	 * @param length is the number of arguments the function actualy got (arguments.length)
+	 */
 	private static void assertTwoArguments(int count1, int count2, int length) {
 		if (count1 != length && count2 != length) {
-			throw new IllegalArgumentException("This function requires " + count1 + " or " + count2 + " arguments, but " + length + " were supplied");
-		}
-	}
-
-	private static void assertMinArguments(int min, int length) {
-		if (min > length) {
-			throw new IllegalArgumentException("This function requires at least " + min + "arguments, but " + length + " were supplied");
+			throw new IllegalArgumentException("This function requires " + count1 + " or " + count2 + " arguments, but " + length + " were supplied!");
 		}
 	}
 	
+	/**
+	 * Checks if the number of arguments given to a function is at least the minimum number of arguments the function requires.
+	 * @param min is the minimum number of argumens the function should get
+	 * @param length is the number of arguments the function actualy got (argument.length)
+	 */
+	private static void assertMinArguments(int min, int length) {
+		if (min > length) {
+			throw new IllegalArgumentException("This function requires at least " + min + "arguments, but " + length + " were supplied!");
+		}
+	}
+	
+	/**
+	 * Checks if a certain argument in the array of arguments given to a function is instance of Range.
+	 * @param index is the index of the argument in the array of arguments that must be a Range
+	 * @param args is the array of arguments supplied to the function
+	 */
 	private static void assertArgumentRange(int index, Object... args) {
 		if (!(args[index] instanceof Range)) {
-			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a reference, but is is not");
+			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a reference, but it is not!");
+		}
+	}
+	
+	/**
+	 * Checks if a certain argument given to a function is instance of Range.
+	 * @param arg is the argument that must be a Range
+	 */
+	private static void assertArgumentRange(Object arg) {
+		if (!(arg instanceof Range)) {
+			throw new IllegalArgumentException("This function requires a certain argument to be a cell reference, but it is not!");
 		}
 	}
 }

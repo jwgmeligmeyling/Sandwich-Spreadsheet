@@ -464,11 +464,11 @@ public class STable extends JTable implements ActionListener {
 			return component;
 		}
 
+		// TODO @JanWillem: klopt dat eerste zinnetje hier wel? Er wordt toch niet per cel gecheckt, maar per kolom?
 		/**
 		 * Determine if a cell in the current column is selected
-		 * 
 		 * @param column
-		 * @return
+		 * @return true if column is in the selected columns
 		 */
 		private boolean isSelected(int column) {
 			for (int i : getSelectedColumns()) {
