@@ -23,6 +23,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -80,6 +81,7 @@ public class STable extends JTable implements ActionListener {
 
 		this.sheet = sheet;
 		this.formuleBalk = formule;
+		this.setDefaultRenderer(Cell.class, new CustomCellRenderer());
 
 		CustomMouseAdapter adapter = new CustomMouseAdapter();
 		addMouseListener(adapter);
@@ -364,7 +366,11 @@ public class STable extends JTable implements ActionListener {
 			this.sheet = sheet;
 			sheet.init();
 		}
-
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+	        return Cell.class;
+	    }
+		
 		@Override
 		public String getColumnName(int column) {
 			if (column == 0) {
@@ -404,6 +410,26 @@ public class STable extends JTable implements ActionListener {
 			fireTableCellUpdated(row, col);
 		}
 
+	}
+	
+	private class CustomCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer{
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			Cell cell = sheet.getCellAt(column-1, row);
+			Component component = super.getTableCellRendererComponent(table, value, false, false, row, column);
+			if(isSelected	){
+				setBackground(DEFAULT_SELECTION_COLOR);
+				}
+			if(cell.getbColor()==null){
+				setBackground(table.getBackground());
+				}
+			else{
+				setBackground(cell.getbColor());
+			}
+			return component;
+		}
 	}
 
 	/**

@@ -1,7 +1,10 @@
 package GUI;
 
 import javax.swing.*;
+
 import java.awt.*;
+
+import File.Cell;
 import File.Sheet;
 import File.SpreadSheetFile;
 
@@ -70,7 +73,9 @@ public class Window extends JFrame {
 		sheet.createCell("SOM:", 0, 0);
 		sheet.createCell("=SUM(A2:T200)", 1, 0);
 		sheet.createCell("=B1+E1", 2,0);
-		sheet.createCell("COUNT:", 3, 0);
+		
+		Cell X = sheet.createCell("COUNT:", 3, 0);
+		X.setbColor(new Color(180,180,255));
 		sheet.createCell("=COUNT(A2:T200)", 4, 0);
 		sheet.createCell("COUNTIF>50:", 6, 0);
 		sheet.createCell("=COUNTIF(A2:T200;\">=\"&50))", 7, 0);
