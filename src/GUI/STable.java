@@ -10,7 +10,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
 import java.util.EventObject;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
@@ -422,12 +424,16 @@ public class STable extends JTable implements ActionListener {
 			if(isSelected	){
 				setBackground(DEFAULT_SELECTION_COLOR);
 				}
-			if(cell.getbColor()==null){
+			else if(cell.getbColor()==null){
 				setBackground(table.getBackground());
 				}
 			else{
 				setBackground(cell.getbColor());
 			}
+			Font font = component.getFont();
+			Map attributes = font.getAttributes();
+			attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+			component.setFont(font.deriveFont(attributes));
 			return component;
 		}
 	}
