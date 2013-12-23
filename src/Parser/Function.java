@@ -401,6 +401,58 @@ public enum Function {
 	
 	/**
 	 * <div>
+	 * <b>Expected arguments:</b> <code>value</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * If the value is not integer, it is truncated
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
+	ISEVEN("Returns true if the (truncated) value is an even number; otherwise, it returns FALSE.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return (intValueOf((int)arguments[0] % 2) == 0);
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>value</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * If the value is not integer, it is truncated
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
+	ISODD("Returns true if the (truncated) value is an odd number; otherwise, it returns FALSE.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return !(intValueOf((int)arguments[0] % 2) == 0);
+		}
+	},
+	
+	/**
+	 * <div>
 	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>decimals places</code> As Integer
 	 * </div><br>
 	 * <div><b>Returns:</b>
@@ -1114,6 +1166,45 @@ public enum Function {
 	
 	/**
 	 * <div>
+	 * <b>Expected arguments:</b> <code>value</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>TRUE if the value is instance of Boolean</li>
+	 * <li>FALSE if the value is not instance of Boolean</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
+	ISLOGICAL("") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			Object arg = arguments[0];
+			
+			if (arg instanceof Boolean) {
+				return true;
+			} else if (arg instanceof Range) {
+				return (((Range)arg).getCellArray()[0].getValue() instanceof Boolean);
+			} else {
+				return false;
+			}
+		}
+	},
+	
+	
+	
+	
+	
+	/**
+	 * <div>
 	 * <b>Expected arguments:</b> <code>format string</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
@@ -1207,8 +1298,8 @@ public enum Function {
 			return ((Number) obj).intValue();
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
-		} else if ( obj instanceof String ) {
-			return 0;
+		//} else if ( obj instanceof String ) {
+		//	return 0;
 		} else if ( obj instanceof Range ) {
 			return intValueOf(((Range) obj).getCellArray()[0]);
 		} else if ( obj instanceof Cell ) {
