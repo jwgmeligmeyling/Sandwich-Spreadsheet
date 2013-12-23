@@ -101,9 +101,8 @@ public class STable extends JTable implements ActionListener {
 		selectionForeground = DEFAULT_SELECTION_TEXT;
 		autoResizeMode = AUTO_RESIZE_OFF;
 
-		tableHeader.setDefaultRenderer(new HeaderNameRenderer(tableHeader
-				.getDefaultRenderer()));
-
+		tableHeader.setDefaultRenderer(new HeaderNameRenderer(tableHeader .getDefaultRenderer()));
+		
 		columnModel.getColumn(0).setPreferredWidth(50);
 		columnModel.getColumn(0).setCellRenderer(new RowNumberRenderer());
 	}
@@ -309,7 +308,8 @@ public class STable extends JTable implements ActionListener {
 	 * The custom TableCellEditor binds the <code>Sheet</code> class to this
 	 * current <code>STable</code> instance.
 	 * 
-	 * @author Jan-Willem Gmelig Meyling, Liam Clark
+	 * @author Jan-Willem Gmelig Meyling
+	 * @author Liam Clark
 	 * 
 	 */
 	private class CustomTableCellEditor extends DefaultCellEditor {
@@ -352,7 +352,8 @@ public class STable extends JTable implements ActionListener {
 	 * The custom TableCellEditor binds the <code>Sheet</code> class to this
 	 * current <code>STable</code> instance.
 	 * 
-	 * @author Jan-Willem Gmelig Meyling, Liam Clark
+	 * @author Jan-Willem Gmelig Meyling
+	 * @author Liam Clark
 	 * 
 	 */
 	private static class TableModel extends AbstractTableModel {
@@ -416,12 +417,9 @@ public class STable extends JTable implements ActionListener {
 	
 	private class CustomCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer{
 		@Override
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Cell cell = sheet.getCellAt(column - 1, row);
-			Component component = super.getTableCellRendererComponent(table,
-					value, false, false, row, column);
+			Component component = super.getTableCellRendererComponent(table, value, false, false, row, column);
 			if (isSelected) {
 				setBackground(DEFAULT_SELECTION_COLOR);
 			} else if (cell.getbColor() == null) {
@@ -448,7 +446,8 @@ public class STable extends JTable implements ActionListener {
 	/**
 	 * Renderer for the rowNumbers
 	 * 
-	 * @author Jan-willem Gmelig Meyling, Liam Clark
+	 * @author Jan-willem Gmelig Meyling
+	 * @author Liam Clark
 	 * 
 	 */
 	private class RowNumberRenderer implements TableCellRenderer {
@@ -457,14 +456,11 @@ public class STable extends JTable implements ActionListener {
 		public Component getTableCellRendererComponent(JTable x, Object value,
 				boolean isSelected, boolean hasFocus, int row, int column) {
 			boolean selected = getSelectionModel().isSelectedIndex(row);
-			Component component = x
-					.getTableHeader()
-					.getDefaultRenderer()
-					.getTableCellRendererComponent(x, value, false, false, -1,
-							-2);
+			Component component = x .getTableHeader() .getDefaultRenderer() .getTableCellRendererComponent(x, value, false, false, -1, -2);
 			((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
 			if (selected) {
 				component.setFont(component.getFont().deriveFont(Font.BOLD));
+				component.setBackground(new Color(255,192,111));
 			} else {
 				component.setFont(component.getFont().deriveFont(Font.PLAIN));
 			}
@@ -494,11 +490,11 @@ public class STable extends JTable implements ActionListener {
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
-			Component component = delegate.getTableCellRendererComponent(table,
-					value, false, false, row, column);
+			Component component = delegate.getTableCellRendererComponent(table, value, false, false, row, column);
 			((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
 			if (isSelected(column)) {
 				component.setFont(component.getFont().deriveFont(Font.BOLD));
+				component.setBackground(new Color(255,192,111));
 			}
 			return component;
 		}
