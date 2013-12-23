@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.event.ActionEvent;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
@@ -130,7 +129,6 @@ public class SMenuBar extends JMenuBar {
 	 */
 	
 	private AbstractAction fileNew = new AbstractAction("New file", icoNew) {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>New";
@@ -140,37 +138,30 @@ public class SMenuBar extends JMenuBar {
 	
 	
 	private AbstractAction fileOpen = new AbstractAction("Open", icoOpen) {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>Open";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
 	};
 	
 	private AbstractAction fileSave = new AbstractAction("Save", icoSave) {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>Save";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
 	};
 	
 	private AbstractAction fileSaveAs = new AbstractAction("Save as", icoSave) {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>SaveAs";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
 	};
 	
 	private AbstractAction filePrint = new AbstractAction("Print", icoPrint) {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>Print";
@@ -180,7 +171,6 @@ public class SMenuBar extends JMenuBar {
 	
 	
 	private AbstractAction exit = new AbstractAction("Exit") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Please confirm", JOptionPane.YES_NO_OPTION);
@@ -188,7 +178,6 @@ public class SMenuBar extends JMenuBar {
 				System.exit(0);
 			}
 		}
-		
 	};
 	
 	
@@ -197,52 +186,42 @@ public class SMenuBar extends JMenuBar {
 	 */
 	
 	private AbstractAction undo = new AbstractAction("Undo") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>undo";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
 	};
 	private AbstractAction redo = new AbstractAction("Redo") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>redo";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
 	};
 	
 	private AbstractAction cut = new AbstractAction("Cut") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>cut";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
 	};
 	
 	private AbstractAction copy = new AbstractAction("Copy") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>copy";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
 	};
 	
 	private AbstractAction paste = new AbstractAction("Paste") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>paste";
 			JOptionPane.showMessageDialog(null, st);			
 		}
-		
 	};
 	
 	

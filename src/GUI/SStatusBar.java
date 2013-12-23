@@ -1,18 +1,20 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Frame;
 import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
 public class SStatusBar extends JLabel {
 	
+	@SuppressWarnings("unused")
+	private static Frame window;
+	
 	private int statusbarHeight = 25;
 	
-	private final Window window;
-	
-	public SStatusBar(Window windowIn) {
+	public SStatusBar(Frame parent) {
 		super("Dit is de status bar");
-		this.window = windowIn;
+		window = parent;
 		//this.setBorder(new Border());
 		this.setBackground(new Color(100, 100, 200));
 		this.setVisible(true);

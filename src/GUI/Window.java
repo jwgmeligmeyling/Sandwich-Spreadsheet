@@ -31,7 +31,7 @@ public class Window extends JFrame {
 		
 		setJMenuBar(new SMenuBar(this));
 		
-		tbMain = new SToolbar();
+		tbMain = new SToolbar(this);
 		tabbedPane = new JTabbedPane();
 		statusBar = new SStatusBar(this);
 		formule = new FormuleBalk();
@@ -53,7 +53,7 @@ public class Window extends JFrame {
 		Sheet newSheet = newFile.newSheet("Sheet" + (newFile.countSheets() + 1));
 		System.out.println("countSheets() = " + newFile.countSheets());
 		
-		//fillSheet(newSheet);
+		fillSheet(newSheet);
 		
 		JTable table = new STable(newSheet, formule);
 		
@@ -69,17 +69,17 @@ public class Window extends JFrame {
 	private void fillSheet(Sheet sheet) {
 		sheet.createCell("SOM:", 0, 0);
 		sheet.createCell("=SUM(A2:T200)", 1, 0);
-		sheet.createCell("=B1+E1", 2,0);
-		
+		sheet.createCell("=B1+E1", 2, 0);
+
 		Cell X = sheet.createCell("COUNT:", 3, 0);
-		X.setbColor(new Color(180,180,255));
+		X.setbColor(new Color(180, 180, 255));
 		X.setBold(true);
 		sheet.createCell("=COUNT(A2:T200)", 4, 0);
 		sheet.createCell("COUNTIF>50:", 6, 0);
 		sheet.createCell("=COUNTIF(A2:T200;\">=\"&50))", 7, 0);
 		sheet.createCell("SUMIF>50:", 9, 0);
 		sheet.createCell("=SUMIF(A2:T200,\">\"&50)", 10, 0);
-		
+
 		for (int i = 0; i < 20; i++) {
 			for (int j = 1; j < 200; j++) {
 				sheet.createCell("=RANDBETWEEN(0,100)", i, j);
