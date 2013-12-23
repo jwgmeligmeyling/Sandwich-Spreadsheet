@@ -266,7 +266,8 @@ public class SMenuBar extends JMenuBar {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			window.createSheet();	
+			window.createSheet();
+			window.getTabbedPane().setSelectedIndex(window.getTabbedPane().getTabCount() - 1);
 		}
 		
 	};
