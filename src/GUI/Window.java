@@ -53,7 +53,7 @@ public class Window extends JFrame {
 		Sheet newSheet = newFile.newSheet("Sheet" + (newFile.countSheets() + 1));
 		System.out.println("countSheets() = " + newFile.countSheets());
 		
-		fillSheet(newSheet);
+		//fillSheet(newSheet);
 		
 		JTable table = new STable(newSheet, formule);
 		
@@ -80,8 +80,8 @@ public class Window extends JFrame {
 		sheet.createCell("SUMIF>50:", 9, 0);
 		sheet.createCell("=SUMIF(A2:T200,\">\"&50)", 10, 0);
 		
-		for ( int i = 0; i < 20; i++ ) {
-			for ( int j = 1; j < 200; j++ ) {
+		for (int i = 0; i < 20; i++) {
+			for (int j = 1; j < 200; j++) {
 				sheet.createCell("=RANDBETWEEN(0,100)", i, j);
 			}
 		}

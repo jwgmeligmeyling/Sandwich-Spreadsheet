@@ -8,9 +8,11 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JColorChooser;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 @SuppressWarnings("serial")
 public class SToolbar extends JToolBar {
@@ -24,6 +26,7 @@ public class SToolbar extends JToolBar {
 	private static ImageIcon icoPrint = new ImageIcon("img/print.png", "Print");
 	
 	private static JColorChooser kleurkiezen = new JColorChooser();
+	//private static ColorPicker kleurkiezer = newColorPicker(false, false);
 	
 	private int toolbarHeight = 25;
 	
@@ -38,7 +41,12 @@ public class SToolbar extends JToolBar {
 		addSeparator();
 		
 		add(new JButton("F Color"));
-		//add(kleurkiezen);
+		
+		add(kleurkiezen);
+		//AbstractColorChooserPanel[] panel = new AbstractColorChooserPanel[0];
+		//kleurkiezen.setChooserPanels(panel);
+		kleurkiezen.setPreviewPanel(new JPanel());
+		
 		add(new JButton("B Color"));
 		addSeparator();
 		

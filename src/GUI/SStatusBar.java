@@ -1,9 +1,7 @@
 package GUI;
 
 import java.awt.Color;
-
 import javax.swing.JLabel;
-import javax.swing.border.Border;
 
 @SuppressWarnings("serial")
 public class SStatusBar extends JLabel {
