@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -57,13 +58,11 @@ public class SToolbar extends JToolBar {
 	}
 
 	private AbstractAction fileNew = new AbstractAction(null, icoNew) {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>New";
 			JOptionPane.showMessageDialog(null, st);
 		}
-
 	};
 
 	private AbstractAction fileOpen = new AbstractAction(null, icoOpen) {
@@ -114,12 +113,11 @@ public class SToolbar extends JToolBar {
 		}
 	};
 	
-	
 	private AbstractAction formatBColor = new AbstractAction(null, icoBColor) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new SColorPicker(window, "Choose a background color", false);
-			
+			Color oldColor = new Color(50, 200, 160);
+			new SColorPicker("Choose a background color", oldColor);
 			//TODO bColor van selected cells instellen
 		}
 	};
@@ -127,8 +125,8 @@ public class SToolbar extends JToolBar {
 	private AbstractAction formatFColor = new AbstractAction(null, icoFColor) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new SColorPicker(window, "Choose a text color", false);
-			
+			Color oldColor = new Color(50, 200, 160);
+			new SColorPicker("Choose a text color", oldColor);
 			//TODO fColor van selected cells instellen
 		}
 	};
