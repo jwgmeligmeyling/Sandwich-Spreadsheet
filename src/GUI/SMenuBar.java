@@ -124,9 +124,7 @@ public class SMenuBar extends JMenuBar {
 		this.statusbar = statusbarIn;
 	}
 	
-	/*
-	 * File menu:
-	 */
+	// File menu
 	
 	private AbstractAction fileNew = new AbstractAction("New file", icoNew) {
 		@Override
@@ -180,10 +178,7 @@ public class SMenuBar extends JMenuBar {
 		}
 	};
 	
-	
-	/*
-	 * Edit menu:
-	 */
+	// Edit menu:
 	
 	private AbstractAction undo = new AbstractAction("Undo") {
 		@Override
@@ -192,6 +187,7 @@ public class SMenuBar extends JMenuBar {
 			JOptionPane.showMessageDialog(null, st);			
 		}
 	};
+	
 	private AbstractAction redo = new AbstractAction("Redo") {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -224,13 +220,9 @@ public class SMenuBar extends JMenuBar {
 		}
 	};
 	
-	
-	/*
-	 * View menu:
-	 */
+	// View menu:
 	
 	private AbstractAction ViewShowStatusBar_Click = new AbstractAction("Show statusbar") {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ( statusbar != null ) {
@@ -240,47 +232,36 @@ public class SMenuBar extends JMenuBar {
 	};
 	
 	private AbstractAction ViewTabsTop_Click = new AbstractAction("Tabs on top") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			tabbedPane.setTabPlacement(JTabbedPane.TOP);
+			tabbedPane.setTabPlacement(JTabbedPane.TOP);		// TODO Hier gaat wat mis, geen idee wat!?!?!?! - Maarten
 		}
-		
 	};
-	
+
 	private AbstractAction ViewTabsBottom_Click = new AbstractAction("Tabs on bottom") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);		
+			tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		}
-		
 	};
-	
-	
+
 	/*
 	 * Insert menu:
 	 */
 	
 	private AbstractAction InsertWorksheet_Click = new AbstractAction("Create new Sheet") {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			window.createSheet();
 			window.getTabbedPane().setSelectedIndex(window.getTabbedPane().getTabCount() - 1);
 		}
-		
 	};
 	
 	public static enum Mnemonic {
 		FILE('f'), NEW('n'), OPEN('o'), SAVE('s'), SAVE_AS('a'), PRINT('p'), EXIT('e'),
-	
 		EDIT('e'), UNDO('z'), REDO('y'), CUT('x'), COPY('c'), PASTE('v'),
-		
 		VIEW('v'), ZOOM('z'), STATUS_BAR('s'),
-		
 		INSERT('i'), INSERT_FUNCTION('F'), CREATE_GRAPH('g'), CREATE_SHEET('s'),
-		
 		HELP('h'), GET_HELP('h'), ABOUT('a');
 		
 		private final char value;
@@ -307,7 +288,6 @@ public class SMenuBar extends JMenuBar {
 			setMnemonic(mnemonic.value);
 		}
 		
-		
 		@Deprecated
 		private MenuItem(String text, Icon icon, Mnemonic mnemonic) {
 			super(text, icon);
@@ -322,7 +302,5 @@ public class SMenuBar extends JMenuBar {
 			super(action);
 			setMnemonic(mnemonic.value);
 		}
-		
 	}
-
 }
