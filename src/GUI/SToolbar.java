@@ -38,7 +38,7 @@ public class SToolbar extends JToolBar {
 		addSeparator();
 		
 		add(new JButton("F Color"));
-		add(kleurkiezen);
+		//add(kleurkiezen);
 		add(new JButton("B Color"));
 		addSeparator();
 		
