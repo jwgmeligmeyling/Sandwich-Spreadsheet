@@ -421,7 +421,7 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
-			return (intValueOf((int)arguments[0] % 2) == 0);
+			return (intValueOf(arguments[0]) % 2 == 0);
 		}
 	},
 	
@@ -447,7 +447,7 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
-			return !(intValueOf((int)arguments[0] % 2) == 0);
+			return !(intValueOf(arguments[0]) % 2 == 0);
 		}
 	},
 	
