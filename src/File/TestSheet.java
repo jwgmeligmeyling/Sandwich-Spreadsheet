@@ -1,12 +1,6 @@
 package File;
 
 import static org.junit.Assert.*;
-
-import java.io.IOException;
-
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLStreamException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,40 +49,31 @@ public class TestSheet {
 
 	@Test
 	public void testGetRangeSingle() {
-		assertArrayEquals(new Cell[] { A1 }, sheet.getRange(0, 0, 0, 0)
-				.getCellArray());
+		assertArrayEquals(new Cell[] { A1 }, sheet.getRange(0, 0, 0, 0).getCellArray());
 	}
 
 	@Test
 	public void testGetRangeSingleByCell() {
-		assertArrayEquals(new Cell[] { A1 }, sheet.getRange(A1, A1)
-				.getCellArray());
+		assertArrayEquals(new Cell[] { A1 }, sheet.getRange(A1, A1).getCellArray());
 	}
 
 	@Test
 	public void testGetRangeMulti() {
-		assertArrayEquals(new Cell[] { A2, A3, B2, B3 },
-				sheet.getRange(0, 1, 1, 2).getCellArray());
+		assertArrayEquals(new Cell[] { A2, A3, B2, B3 }, sheet.getRange(0, 1, 1, 2).getCellArray());
 	}
 
 	@Test
 	public void testGetRangeMultiByCell() {
-		assertArrayEquals(new Cell[] { A2, A3, B2, B3 },
-				sheet.getRange(A2, B3).getCellArray());
+		assertArrayEquals(new Cell[] { A2, A3, B2, B3 }, sheet.getRange(A2, B3).getCellArray());
 	}
 
 	@Test
 	public void testGetColumnCells() {
-		assertArrayEquals(new Cell[] { B1, B2, B3 }, sheet.getColumn(1)
-				.getCellArray());
-
+		assertArrayEquals(new Cell[] { B1, B2, B3 }, sheet.getColumn(1).getCellArray());
 	}
 
 	@Test
 	public void testGetRowCells() {
-		assertArrayEquals(new Cell[] { A2, B2 }, sheet.getRow(1)
-				.getCellArray());
-
+		assertArrayEquals(new Cell[] { A2, B2 }, sheet.getRow(1).getCellArray());
 	}
-	
 }

@@ -1,7 +1,9 @@
 package Parser;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+
 import File.Cell;
 import File.Sheet.Range;
 
@@ -160,17 +162,20 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	DIVIDE() {
+	DIVIDE("The DIVIDE function divides the first argument by the second. If more arguments are given, the value is again divided by the next argument and so on.") {
 		@Override
 		Object calculate(Object... arguments) {
 			assertMinArguments(2, arguments.length);
 			double output = doubleValueOf(arguments[0]);
 			for (int i = 1; i < arguments.length; i++) {
+				assertArgumentSingleRange(arguments[i]);
 				output /= doubleValueOf(arguments[i]);
 			}
 			return convertToIntIfApplicable(output);
 		}
 	},
+	
+
 
 	/**
 	 * <div>
@@ -229,6 +234,102 @@ public enum Function {
 		}
 	},
 	
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>[real number...]</code> As Double
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Average of all the numerical values in the given range(s).</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	MEDIAN("Returns the median of the arguments") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertMinArguments(1, arguments.length);
+			
+			ArrayList<Double> countNumbersList = new ArrayList<Double>();
+			
+			for(Object arg : arguments) {
+				if (arg instanceof Range) {
+					for (Cell cell : ((Range) arg).getCellArray()) {
+						countNumbersList.add(doubleValueOf(cell));
+					}
+				} else {
+					countNumbersList.add(doubleValueOf(arg));
+				}
+			}
+			
+			double[] numbersList = new double[countNumbersList.size()];
+			
+			for(int i = 0; i < numbersList.length; i++) {
+				numbersList[i] = countNumbersList.get(i);
+			}
+			
+			Arrays.sort(numbersList);
+			
+			double median;
+			
+			if (numbersList.length % 2 == 0) {
+				median = ((double) numbersList[numbersList.length / 2 - 1] + (double) numbersList[numbersList.length / 2]) / 2;
+			} else {
+				median = (double) numbersList[(int)Math.floor(numbersList.length / 2.0)];
+			}
+			
+			return convertToIntIfApplicable(median);
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>[real number...]</code> As Double
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Average of all the numerical values in the given range(s).</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	MODE("Returns the mode of the arguments") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertMinArguments(1, arguments.length);
+			
+			ArrayList<Double> countNumbersList = new ArrayList<Double>();
+			
+			for(Object arg : arguments) {
+				if (arg instanceof Range) {
+					for (Cell cell : ((Range) arg).getCellArray()) {
+						countNumbersList.add(doubleValueOf(cell));
+					}
+				} else {
+					countNumbersList.add(doubleValueOf(arg));
+				}
+			}
+
+			
+			return null; //convertToIntIfApplicable(mode);
+		}
+	},
+	
 	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>range</code>, <code>[range...]</code>
@@ -257,6 +358,42 @@ public enum Function {
 				Range rng = (Range)arg;
 				for (Cell cell : rng.getCellArray()) {
 					if ((Boolean) ISNUMBER.calculate(cell)) {
+						count++;
+					}
+				}	
+			}
+			return count;
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>range</code>, <code>[range...]</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Number of cells in the given range(s) that are not empty</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	COUNTA("Returns the number of not empty cells in the arguments.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertMinArguments(1, arguments.length);
+			int count = 0;
+			for(Object arg : arguments) {
+				assertArgumentRange(arg);	// assert arg instanceof Range : "Argument type error! All arguments in this function must be a Range.";
+				Range rng = (Range)arg;
+				for (Cell cell : rng.getCellArray()) {
+					if (!cell.getValue().equals("")) {
 						count++;
 					}
 				}	
@@ -352,13 +489,16 @@ public enum Function {
 			} else if ( criteria.charAt(0) == '=') {
 				criteria = "=".concat(criteria); // = -> ==
 			}
-			
-			for ( int i = 0; i < range.length; i++ ) {
+
+			for (int i = 0; i < range.length; i++) {
 				Cell cell = range[i];
 				Cell valueCell = sum_range[i];
-				if ( cell == null || valueCell == null ) continue;
-				if ((Boolean) new Parser(null, cell.toString() + criteria).parse()) {
-					if (!(valueCell.getValue() instanceof String) ) {
+				if (cell == null || valueCell == null) {
+					continue;
+				}
+				if ((Boolean) new Parser(null, cell.toString() + criteria)
+						.parse()) {
+					if (!(valueCell.getValue() instanceof String)) {
 						sum += doubleValueOf(valueCell);
 					}
 				}
@@ -391,9 +531,10 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			if (arguments[0] instanceof Range) {
-				return ISNUMBER.calculate(((Range)arguments[0]).getCellArray()[0]);
+				return ISNUMBER
+						.calculate(((Range) arguments[0]).getCellArray()[0]);
 			} else if (arguments[0] instanceof Cell) {
-				return ISNUMBER.calculate(((Cell)arguments[0]).getValue());
+				return ISNUMBER.calculate(((Cell) arguments[0]).getValue());
 			}
 			return (arguments[0] instanceof Number);
 		}
@@ -485,6 +626,84 @@ public enum Function {
 	
 	/**
 	 * <div>
+	 * <b>Expected arguments:</b> <code>number</code> As Double, <code>num_digits</code> As Integer
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	ROUNDDOWN("Rounds a number down, toward zero, at a given number of digits.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertTwoArguments(1, 2, arguments.length);
+			
+			int sign = (int) SIGN.calculate(arguments[0]);
+			double value = Math.abs(doubleValueOf(arguments[0]));
+			int decPlaces = 0;
+			
+			if (arguments.length == 2) {
+				decPlaces = intValueOf(arguments[1]);
+			}
+			
+			value = ((double) Math.floor((Math.pow(10, decPlaces) * value))) / Math.pow(10, decPlaces);
+			
+			return convertToIntIfApplicable(sign * value);
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>number</code> As Double, <code>num_digits</code> As Integer
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	ROUNDUP("Rounds a number up, away from zero, at a given number of digits.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertTwoArguments(1, 2, arguments.length);
+			
+			int sign = (int) SIGN.calculate(arguments[0]);
+			double value = Math.abs(doubleValueOf(arguments[0]));
+			int decPlaces = 0;
+			
+			if (arguments.length == 2) {
+				decPlaces = intValueOf(arguments[1]);
+			}
+			
+			if (Math.round(value * Math.pow(10, decPlaces)) != (value * Math.pow(10, decPlaces))) {
+				value = ((double) Math.floor((Math.pow(10, decPlaces) * value)) + 1d) / Math.pow(10, decPlaces);
+			} else {
+				value = ((double) Math.floor((Math.pow(10, decPlaces) * value))) / Math.pow(10, decPlaces);
+			}
+			
+			return convertToIntIfApplicable(sign * value);
+		}
+	},
+	
+	/**
+	 * <div>
 	 * <b>Expected arguments:</b> <code>number</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
@@ -506,6 +725,107 @@ public enum Function {
 			return (int) Math.floor(doubleValueOf(arguments[0]));
 		}
 	},
+	
+	
+	
+	
+	
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>string</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul><li>The given string in lower case</li></ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * ...
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	LOWER("Converts the input to lower case") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return stringValueOf(arguments[0]).toLowerCase(); 
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>string</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul><li>The given string with all characters following a not-letter upper case and all others lower case.</li></ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * ...
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	PROPER("Capitalizes the first letter in a text string and any other letters in text that follow any character other than a letter. Converts all other letters to lowercase letters.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			
+			String strIn = stringValueOf(arguments[0]);
+			char[] result = new char[strIn.length()];
+			result[0] = Character.toUpperCase(strIn.charAt(0));
+			
+			for(int i = 1; i < result.length; i++) {
+				char temp = strIn.charAt(i);
+				
+				if(isLetter(strIn.charAt(i-1))) {
+					result[i] = Character.toLowerCase(temp);
+				} else {
+					result[i] = Character.toUpperCase(temp);
+				}
+			}
+			return new String(result);
+		}
+		
+		boolean isLetter(char charIn) {
+			return (charIn >= 'a' && charIn <= 'z');
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>string</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul><li>The given string in upper case</li></ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * ...
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	UPPER("Converts the input to upper case") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return stringValueOf(arguments[0]).toUpperCase(); 
+		}
+	},
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * <div>
@@ -582,7 +902,7 @@ public enum Function {
 			assertArguments(2, arguments.length);
 			int a = intValueOf(arguments[0]);
 			int b = intValueOf(arguments[1]);
-			return (int) (Math.random() * ( b - a + 1) + a);
+			return (int) (Math.random() * (b - a + 1) + a);
 		}
 	},
 	
@@ -1373,10 +1693,7 @@ public enum Function {
 	
 	/**
 	 * 
-	 * 
-	 * 
-	 * @param obj
-	 * 				Object to convert
+	 * @param obj Object to convert
 	 * @return <code>boolean</code> value to calculate with
 	 */
 	public static String stringValueOf(Object obj) {
@@ -1388,7 +1705,7 @@ public enum Function {
 			return obj.toString();
 		}
 	}
-
+	
 	/**
 	 * Get a function value by name. The name is converted to uppercase automatically
 	 * 
@@ -1408,7 +1725,7 @@ public enum Function {
 	/**
 	 * Method to convert unnecessary doubles to integers
 	 * @param d is a double value
-	 * @return d has the same value as the input, but is converted to Integer is there is no decimal part behind the comma
+	 * @return the same value as the input, but is converted to Integer if there is no significant decimal part behind the comma
 	 */
 	private static Object convertToIntIfApplicable(double d) {
 		if (Math.floor(d) == d) {
@@ -1469,6 +1786,16 @@ public enum Function {
 	private static void assertArgumentRange(Object arg) {
 		if (!(arg instanceof Range)) {
 			throw new IllegalArgumentException("This function requires a certain argument to be a cell reference, but it is not!");
+		}
+	}
+	
+	/**
+	 * Checks if a certain argument given to a function is not ins
+	 * @param arg is the argument that must be a Range
+	 */
+	private static void assertArgumentSingleRange(Object arg) {
+		if ((arg instanceof Range) && ((Range)arg).getCellArray().length > 1) {
+			throw new IllegalArgumentException("This function cannot handle ranges bigger than one cell.");
 		}
 	}
 }
