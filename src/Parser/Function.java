@@ -647,7 +647,7 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			assertTwoArguments(1, 2, arguments.length);
 			
-			int sign = (int) SIGN.calculate(arguments[0]);
+			int sign = intValueOf(SIGN.calculate(arguments[0]));
 			double value = Math.abs(doubleValueOf(arguments[0]));
 			int decPlaces = 0;
 			
@@ -684,7 +684,7 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			assertTwoArguments(1, 2, arguments.length);
 			
-			int sign = (int) SIGN.calculate(arguments[0]);
+			int sign = intValueOf(SIGN.calculate(arguments[0]));
 			double value = Math.abs(doubleValueOf(arguments[0]));
 			int decPlaces = 0;
 			
