@@ -1,9 +1,7 @@
 package Interfaces;
 
 import java.awt.Color;
-
 import File.CelType;
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -118,20 +116,27 @@ public interface Cell {
 	 */
 	public int getColumn();
 	
+	/**
+	 * @return the sheet this Cell is in
+	 */
 	public Sheet getSheet();
 	
 	/**
-	 * Check of de input van de cel een formule bevat.
+	 * Check if the input of the cel contains a function.
 	 * @return true als er een functie/formule in de input staat.
 	 */
 	public boolean isFunction();
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getPositionString();
 	
 	/**
 	 * Method to write a cell to the XML-file
-	 * @param writer XMLStreamWriter
-	 * @throws XMLStreamException 
+	 * @param writer is a XMLStreamWriter
+	 * @throws XMLStreamException
 	 */
 	public void write(XMLStreamWriter writer) throws XMLStreamException;
 	
