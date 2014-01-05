@@ -10,8 +10,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.plaf.SeparatorUI;
 
 @SuppressWarnings("serial")
 public class SColorPicker extends JFrame implements ActionListener {
@@ -19,20 +21,35 @@ public class SColorPicker extends JFrame implements ActionListener {
 	JColorChooser colorPicker;
 	JButton jbnOk;
 	JButton jbnCancel;
+	JPanel jpExamplePanel;
+	JLabel jlbExampleBackground;
+	JLabel jlbExampleText;
 	
 	public SColorPicker(String title, Color oldColor) {
 		//super(owner, title, modal);
 		super(title);
 		
+		jpExamplePanel = new JPanel();
+		jpExamplePanel.setLayout(new FlowLayout());
+		
+		jlbExampleText = new JLabel("Example text");
+		jlbExampleBackground = new JLabel("Example background");
+		jlbExampleBackground.setSize(50, 15);
+		
+		jpExamplePanel.add(jlbExampleText);
+		jpExamplePanel.add(jlbExampleBackground);
+		
 		colorPicker = new JColorChooser(oldColor);
-		colorPicker.setPreviewPanel(new JPanel());
+		colorPicker.setPreviewPanel(jpExamplePanel);
 		
 		jbnOk = new JButton("OK");
 		jbnOk.addActionListener(this);
 		jbnCancel = new JButton("Cancel");
 		jbnCancel.addActionListener(this);
 		
-		setSize(600, 300);
+		//jlbExampleLabel = new JLabel("Example:");
+		
+		setSize(600, 350);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setAlwaysOnTop(false);
@@ -42,6 +59,8 @@ public class SColorPicker extends JFrame implements ActionListener {
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
+		//buttonPanel.add(jlbExampleLabel);
+		//buttonPanel.add(jlbExample);
 		buttonPanel.add(jbnCancel);
 		buttonPanel.add(jbnOk);
 		
@@ -54,6 +73,14 @@ public class SColorPicker extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		// TODO Er is blijkbaar geen ActionEvent door de colorPicker, dit is een probleem omdat er nu geen example wordt getoond.
+		//if (e.getSource() == colorPicker) {
+			jlbExampleBackground.setBackground(colorPicker.getColor());
+			jlbExampleText.setForeground(colorPicker.getColor());
+			System.out.println(colorPicker.getColor().toString());
+		//}
+		
 		if (e.getSource() == jbnCancel) {
 			JOptionPane.showMessageDialog(this, "Pressed Cancel");
 			

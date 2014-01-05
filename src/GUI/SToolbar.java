@@ -25,16 +25,17 @@ public class SToolbar extends JToolBar {
 	private static ImageIcon icoPrint = new ImageIcon("img/print.png", "Print");
 	private static ImageIcon icoBColor = new ImageIcon("img/backcolor.gif", "Background color");
 	private static ImageIcon icoFColor = new ImageIcon("img/forecolor.gif", "Text color");
-
+	private static ImageIcon icoFunction = new ImageIcon("img/function.gif", "Insert function dialog");
+	
 	private static Frame window;
 	
 	private int toolbarHeight = 25;
-
+	
 	public SToolbar(Frame parent) {
 		super();
 		window = parent;
 		setFloatable(false);
-
+		
 		add(new ToolBarButton(fileNew));
 		add(new ToolBarButton(fileOpen));
 		add(new ToolBarButton(fileSave));
@@ -47,6 +48,7 @@ public class SToolbar extends JToolBar {
 		add(new ToolBarToggleButton(formatItalic));
 		add(new ToolBarToggleButton(formatUnderline));
 		addSeparator();
+		add(new ToolBarButton(insertFunction));
 	}
 
 	public int getToolbarHeight() {
@@ -131,6 +133,15 @@ public class SToolbar extends JToolBar {
 		}
 	};
 	
+	private AbstractAction insertFunction = new AbstractAction(null, icoFunction) {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String st = "Insert Function";
+			JOptionPane.showMessageDialog(null, st);
+			//TODO toon Insert Function dialog!
+		}
+	};
+	
 	
 	
 	public class ToolBarButton extends JButton {
@@ -138,10 +149,12 @@ public class SToolbar extends JToolBar {
 			super(action);
 		}
 
+		/*
 		@Deprecated
 		public ToolBarButton(String string) {
 			super(string);
 		}
+		*/
 
 		@Override
 		public Dimension getMaximumSize() {
