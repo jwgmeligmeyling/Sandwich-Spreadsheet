@@ -129,7 +129,7 @@ public interface Cell {
 	
 	/**
 	 * 
-	 * @return
+	 * @return the position as a String
 	 */
 	public String getPositionString();
 	

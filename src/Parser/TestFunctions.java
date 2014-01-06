@@ -8,7 +8,7 @@ import File.*;
 public class TestFunctions {
 
 	public Sheet sheet;
-	public Cell A1, A2, A3, B1, B2, B3, C1, C2, C3;
+	public Cell A1, A2, A3, B1, B2, B3, C1, C2, C3, D1, D2, D3;
 
 	@Before
 	public void setUp() throws Exception {
@@ -20,10 +20,13 @@ public class TestFunctions {
 		B2 = sheet.createCell("=2+2*3", 1, 1);
 		B3 = sheet.createCell("=SUM(5,3)", 1, 2);
 		C1 = sheet.createCell("2+2", 2, 0);
-		C2 = sheet.createCell("=PRODUCT(3,5,2)", 1, 1);
+		C2 = sheet.createCell("=PRODUCT(3,5,2)", 2, 1);
 		C3 = sheet.createCell("", 2, 2);
+		D1 = sheet.createCell("TRUE", 2, 0);
+		D2 = sheet.createCell("FALSE", 2, 1);
+		D3 = sheet.createCell("true", 2, 2);
 	}
-
+	
 	@Test
 	public void testSum() {
 		assertEquals(10, Function.SUM.calculate(5, 5));
@@ -318,6 +321,40 @@ public class TestFunctions {
 		Function.UPPER.calculate();
 	}
 
+	@Test
+	public void testBooleanValueOfBool() {
+		assertEquals(false, Function.booleanValueOf(false));
+	}
+
+	@Test
+	public void testBooleanValueOfRangeTrue() {
+		assertEquals(true, Function.booleanValueOf(D1));
+	}
+
+	@Test
+	public void testBooleanValueOfRangeFalse() {
+		assertEquals(false, Function.booleanValueOf(D2));
+	}
+
+	@Test
+	public void testBooleanValueOfInt() {
+		assertEquals(true, Function.booleanValueOf(1));
+	}
+
+	@Test
+	public void testBooleanValueOfStringBoolFalse() {
+		assertEquals(false, Function.booleanValueOf(0));
+	}
+
+	@Test
+	public void testBooleanValueOfString() {
+		assertEquals(false, Function.booleanValueOf(""));
+	}
+
+	@Test
+	public void testBooleanValueOfStringBool() {
+		assertEquals(true, Function.booleanValueOf("TRUE"));
+	}
 	/*
 	 * @Test public void testCount() { assertEquals(4, Parser.parse(sheet,
 	 * "=COUNT(A1:B3)")); }
