@@ -29,10 +29,12 @@ public class Window extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		
-		setJMenuBar(new SMenuBar(this));
-		
 		tbMain = new SToolbar(this);
 		tabbedPane = new JTabbedPane();
+		SMenuBar smenubar = new SMenuBar(this);
+		setJMenuBar(smenubar);
+		smenubar.setTabbedPane(tabbedPane);
+		
 		statusBar = new SStatusBar(this);
 		formule = new FormuleBalk();
 		tbMain.add(formule);

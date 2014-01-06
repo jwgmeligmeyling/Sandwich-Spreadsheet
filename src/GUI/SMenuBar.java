@@ -234,7 +234,7 @@ public class SMenuBar extends JMenuBar {
 	private AbstractAction ViewTabsTop_Click = new AbstractAction("Tabs on top") {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			tabbedPane.setTabPlacement(JTabbedPane.TOP);		// TODO Hier gaat wat mis, geen idee wat!?!?!?! - Maarten
+			tabbedPane.setTabPlacement(JTabbedPane.TOP);
 		}
 	};
 
