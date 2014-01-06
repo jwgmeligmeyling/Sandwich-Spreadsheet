@@ -1,14 +1,12 @@
 package Parser;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import File.Cell;
 import File.Sheet;
 
-public class ParseTest {
+public class TestParser {
 
 	public Sheet sheet;
 	public Cell A1, A2, A3, B1, B2, B3;
