@@ -1,14 +1,18 @@
 package Parser;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import File.*;
+import File.Sheet.Range;
 
 public class TestFunctions {
 
 	public Sheet sheet;
 	public Cell A1, A2, A3, B1, B2, B3, C1, C2, C3, D1, D2, D3;
+	public Range r1, r2, r3;
 
 	@Before
 	public void setUp() throws Exception {
@@ -25,8 +29,14 @@ public class TestFunctions {
 		D1 = sheet.createCell("TRUE", 2, 0);
 		D2 = sheet.createCell("FALSE", 2, 1);
 		D3 = sheet.createCell("true", 2, 2);
+		
+		// TODO: Wat gaat hier verkeerd????????
+		
+		r1 = new Range(0, 0, 3, 3);	// A1:D3 (alles)
+		r2 = new Range(1, 0, 2, 1);	// B1:C2 (numbers)
+		r3 = new Range(3, 0, 3, 2);	// D1:D3 (booleans)
 	}
-	
+
 	@Test
 	public void testSum() {
 		assertEquals(10, Function.SUM.calculate(5, 5));
@@ -95,6 +105,10 @@ public class TestFunctions {
 	public void testIntMoreArgs() {
 		assertEquals(5, Function.INT.calculate(5.2, 6.9));
 	}
+
+	/*
+	 * Test arg-needing function behavior when no arguments are supplied.
+	 */
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testAverageNoArgs() {
@@ -321,6 +335,12 @@ public class TestFunctions {
 		Function.UPPER.calculate();
 	}
 
+	/*
+	 * Test not-function methods
+	 */
+
+	// booleanValueOf()
+
 	@Test
 	public void testBooleanValueOfBool() {
 		assertEquals(false, Function.booleanValueOf(false));
@@ -355,6 +375,46 @@ public class TestFunctions {
 	public void testBooleanValueOfStringBool() {
 		assertEquals(true, Function.booleanValueOf("TRUE"));
 	}
+
+	// intValueOf()
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIntValueOfString() {
+		Function.intValueOf("hi");
+	}
+
+	@Test
+	public void testIntValueOfInt() {
+		assertEquals(5, Function.intValueOf(5));
+	}
+
+	@Test
+	public void testIntValueOfBoolFalse() {
+		assertEquals(0, Function.intValueOf(false));
+	}
+
+	@Test
+	public void testIntValueOfBoolTrue() {
+		assertEquals(1, Function.intValueOf(true));
+	}
+	
+	// stringValueOf()
+	
+	@Test
+	public void testStringValueOfString() {
+		assertEquals("This is a string", Function.stringValueOf("This is a string"));
+	}
+	
+	@Test
+	public void testStringValueOfCell() {
+		assertEquals("bliep", Function.stringValueOf(A1));
+	}
+	
+	@Test
+	public void testStringValueOfRange() {
+		assertEquals("bliep", Function.stringValueOf(r1));
+	}
+	
 	/*
 	 * @Test public void testCount() { assertEquals(4, Parser.parse(sheet,
 	 * "=COUNT(A1:B3)")); }
