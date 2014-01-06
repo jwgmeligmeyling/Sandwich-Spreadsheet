@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.plaf.SeparatorUI;
 
 @SuppressWarnings("serial")
 public class SColorPicker extends JFrame implements ActionListener {

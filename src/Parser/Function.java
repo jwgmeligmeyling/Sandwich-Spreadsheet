@@ -209,6 +209,32 @@ public enum Function {
 	
 	/**
 	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>[Auteur naam]</li>
+	 * </ul>
+	 * </div>
+	 */
+	MOD("Returns the modulo of the division of the first argument by the second argument.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(2, arguments.length);
+			return doubleValueOf(arguments[0]) % doubleValueOf(arguments[1]);
+		}
+	},
+	
+	/**
+	 * <div>
 	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>[real number...]</code> As Double
 	 * </div><br>
 	 * <div><b>Returns:</b>
@@ -233,7 +259,6 @@ public enum Function {
 			return convertToIntIfApplicable(doubleValueOf(SUM.calculate(arguments)) / doubleValueOf(COUNT.calculate(arguments)));
 		}
 	},
-	
 	
 	/**
 	 * <div>
@@ -308,6 +333,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
+	/*
 	MODE("Returns the mode of the arguments") {
 		@Override
 		Object calculate(Object... arguments) {
@@ -324,11 +350,11 @@ public enum Function {
 					countNumbersList.add(doubleValueOf(arg));
 				}
 			}
-
 			
 			return null; //convertToIntIfApplicable(mode);
 		}
 	},
+	*/
 	
 	/**
 	 * <div>
@@ -908,7 +934,7 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>number</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
@@ -933,6 +959,38 @@ public enum Function {
 			return convertToIntIfApplicable(output);
 		}
 	},
+	
+	
+	
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>real number</code>, <code>real root-base number</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	ROOT("Returns the second argument-root of the first argument.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(2, arguments.length);
+			double output = Math.pow(doubleValueOf(arguments[0]), 1 / doubleValueOf(arguments[1]));
+			return convertToIntIfApplicable(output);
+		}
+	},
+	
+	
 	
 	/**
 	 * <div>
@@ -1143,6 +1201,63 @@ public enum Function {
 			return Math.tan(doubleValueOf(arguments[0]));			
 		}
 	},
+	
+	
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	PI("Returns a Double value of pi.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(0, arguments.length);
+			return Math.PI;		
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>real power value</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	EXP("Returns a Double value of e to the power of the given argument.") {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return convertToIntIfApplicable(Math.exp(doubleValueOf(arguments[0])));
+			//convertToIntIfApplicable is alleen nodig in het geval van argument[0] == 0
+		}
+	},
+	
+	
 	
 	/**
 	 * <div>

@@ -27,6 +27,7 @@ public class SToolbar extends JToolBar {
 	private static ImageIcon icoFColor = new ImageIcon("img/forecolor.gif", "Text color");
 	private static ImageIcon icoFunction = new ImageIcon("img/function.gif", "Insert function dialog");
 	
+	@SuppressWarnings("unused")
 	private static Frame window;
 	
 	private int toolbarHeight = 25;
