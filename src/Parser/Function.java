@@ -1813,7 +1813,8 @@ public enum Function {
 	 */
 	public static String stringValueOf(Object obj) {
 		if (obj instanceof Range) {
-			return stringValueOf(((Range) obj).getCellArray()[0].getValue());
+			Range range = (Range) obj;
+			return stringValueOf(range.firstCell());
 		} else if (obj instanceof Cell) {
 			return ((Cell) obj).getValue().toString();
 		} else {

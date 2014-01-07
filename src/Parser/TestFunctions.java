@@ -26,13 +26,19 @@ public class TestFunctions {
 		C1 = sheet.createCell("2+2", 2, 0);
 		C2 = sheet.createCell("=PRODUCT(3,5,2)", 2, 1);
 		C3 = sheet.createCell("", 2, 2);
-		D1 = sheet.createCell("TRUE", 2, 0);
-		D2 = sheet.createCell("FALSE", 2, 1);
-		D3 = sheet.createCell("true", 2, 2);
+		D1 = sheet.createCell("TRUE", 3, 0);
+		D2 = sheet.createCell("FALSE", 3, 1);
+		D3 = sheet.createCell("true", 3, 2);
 				
-		r1 = sheet.getRange(A1, D3); // Alles
+		r1 = sheet.getRange(A1, D3); // All types
 		r2 = sheet.getRange(B1, C2); // Numbers
 		r3 = sheet.getRange(D1, D3); // Booleans
+		
+		/*
+		 * Jan-Willem:
+		 * Initialize sheet such that values are calculated based on current input
+		 */
+		sheet.init();
 	}
 
 	@Test

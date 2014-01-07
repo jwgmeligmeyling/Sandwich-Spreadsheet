@@ -136,12 +136,18 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 
 	@Override
 	public String getInput() {
-		return input;
+		if ( input != null ) {
+			return input;
+		}
+		return "";
 	}
 
 	@Override
 	public Object getValue() {
-		return value;
+		if (value != null) {
+			return value;
+		}
+		return getInput();
 	}
 
 	@Override
@@ -230,7 +236,7 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 
 	@Override
 	public String toString() {
-		return value.toString();
+		return position.toString() + " " + (( value == null ) ? input : value.toString());
 	}
 
 	@Override
