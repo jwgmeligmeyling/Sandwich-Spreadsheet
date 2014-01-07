@@ -196,7 +196,7 @@ public class Sheet implements Interfaces.Sheet {
 		 *             When the indexes are negative values or the down right
 		 *             values are not higher than the up left values.
 		 */
-		public Range(int colLeft, int rowUp, int colRight, int rowDown) {		// Door Maarten veranderd in public ivm testen in andere package!
+		Range(int colLeft, int rowUp, int colRight, int rowDown) {
 			this(new Position(colLeft, rowUp), new Position(colRight, rowDown));
 		}
 

@@ -29,12 +29,10 @@ public class TestFunctions {
 		D1 = sheet.createCell("TRUE", 2, 0);
 		D2 = sheet.createCell("FALSE", 2, 1);
 		D3 = sheet.createCell("true", 2, 2);
-		
-		// TODO: Wat gaat hier verkeerd????????
-		
-		r1 = sheet.new Range(0, 0, 3, 3);	// A1:D3 (alles)
-		r2 = sheet.new Range(1, 0, 2, 1);	// B1:C2 (numbers)
-		r3 = sheet.new Range(3, 0, 3, 2);	// D1:D3 (booleans)
+				
+		r1 = sheet.getRange(A1, D3); // Alles
+		r2 = sheet.getRange(B1, C2); // Numbers
+		r3 = sheet.getRange(D1, D3); // Booleans
 	}
 
 	@Test
