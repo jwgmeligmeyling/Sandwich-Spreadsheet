@@ -447,6 +447,7 @@ public enum Function {
 	 * </div>
 	 */
 	COUNTIF("Counts the number of cells within a range that meet the given criteria.") {
+		@SuppressWarnings("deprecation")
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);

@@ -10,6 +10,7 @@ public class ParseTyper {
 	 * Run and type!
 	 * @param args
 	 */
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		System.out.println("Start to type expressions!");
 		System.out.println();
@@ -23,6 +24,7 @@ public class ParseTyper {
 		sheet.createCell("=5*2", 1, 0);
 		sheet.createCell("=2+2*3", 1, 1);
 		sheet.createCell("=SUM(5,3)", 1, 2);
+		sheet.init();
 		
 		Scanner sc = new Scanner(System.in);
 		sc.useDelimiter("\n");

@@ -223,6 +223,10 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 	public void setUnderlined(boolean underlined) {
 		this.underlined = underlined;
 	}
+	
+	public Position getPosition() {
+		return position;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

@@ -153,6 +153,10 @@ public class Sheet implements Interfaces.Sheet {
 				return false;
 			return true;
 		}
+		
+		public boolean equals(int colIndex, int rowIndex) {
+			return this.colIndex == colIndex && this.rowIndex == rowIndex;
+		}
 
 		@Override
 		public String toString() {

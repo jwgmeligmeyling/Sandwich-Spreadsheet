@@ -15,6 +15,7 @@ import java.util.EventObject;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -28,6 +29,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.Highlight;
 
 import File.Cell;
 import File.Sheet;
@@ -227,7 +231,7 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-
+			
 		}
 
 		@Override
@@ -283,25 +287,37 @@ public class STable extends JTable implements ActionListener {
 	 * selected cells.
 	 */
 	private void updateCellEditor() {
-		CustomTableCellEditor cellEditor = (CustomTableCellEditor) getCellEditor();
+		if ( this.currentEditor == null ) {
+			return;
+		}
+		
 		Range range = getSelectedRange();
+		if ( range.equals(this.selectedRange) || range.firstCell().getPosition().equals(this.editingColumn - 1, this.editingRow)) {
+			return;
+		} else {
+			this.selectedRange = range;
+		}
+		
+		String value = currentEditor.getText();
+		int start = this.currentEditor.getSelectionStart();
+		int end = this.currentEditor.getSelectionEnd();
+		int length = value.length();
 
-		if (currentEditor != null && cellEditor != null && range != null) {
-			if (!range.equals(selectedRange)
-					&& !range.contains(cellEditor.cell)) {
-				String oldValue = (String) cellEditor.getCellEditorValue();
-				if (selectedRange != null) {
-					String oldRange = selectedRange.toString();
-					if (oldValue.endsWith(oldRange)) {
-						oldValue = oldValue.substring(0, oldValue.length()
-								- oldRange.length());
-					}
-				}
-				currentEditor.setText(oldValue + range.toString());
-				selectedRange = range;
-			}
+		if (!(value.length() > 0 && value.charAt(0) == '=' && ((start < end) || (start < 2 || value
+				.charAt(start - 1) == '(')))) {
+			this.cellEditor.stopCellEditing();
+			return;
 		}
 
+		String head = value.substring(0, start);
+		String tail = value.substring(end, length);
+		String rangeStr = range.toString();
+		
+		value = head + rangeStr + tail;
+
+		this.currentEditor.setText(value);
+		this.currentEditor.setSelectionStart(start);
+		this.currentEditor.setSelectionEnd(start + rangeStr.length());
 	}
 
 	/**
