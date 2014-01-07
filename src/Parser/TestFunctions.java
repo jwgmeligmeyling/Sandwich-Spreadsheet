@@ -32,9 +32,9 @@ public class TestFunctions {
 		
 		// TODO: Wat gaat hier verkeerd????????
 		
-		r1 = new Range(0, 0, 3, 3);	// A1:D3 (alles)
-		r2 = new Range(1, 0, 2, 1);	// B1:C2 (numbers)
-		r3 = new Range(3, 0, 3, 2);	// D1:D3 (booleans)
+		r1 = sheet.new Range(0, 0, 3, 3);	// A1:D3 (alles)
+		r2 = sheet.new Range(1, 0, 2, 1);	// B1:C2 (numbers)
+		r3 = sheet.new Range(3, 0, 3, 2);	// D1:D3 (booleans)
 	}
 
 	@Test
