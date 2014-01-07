@@ -1,0 +1,33 @@
+Jullie zitten nu zo te zien in een Centralized Workflow:
+https://www.atlassian.com/git/workflows#!workflow-centralized
+
+En een veel 'nettere' manier is een Feature Branch Workflow:
+https://www.atlassian.com/git/workflows#!workflow-feature-branch
+
+De workflow is dan als volgt.
+
+Situatie: Er is een stabiele (compilerende, werkende, geteste) master branch.
+Intentie: Een nieuwe feature implementeren, testen, en integreren.
+Acties:
+	- Creeër een nieuwe branch 'newfeature' voor deze feature, gebaseerd op de huidige 'master' branch: 
+			git checkout -b newfeature master
+	- Programmeer de feature, met tussendoor commits elke keer als je een stukje af hebt
+			git add <some-file>
+			git commit
+	- Test de feature, en commit alle testcases en verbeteringen
+			git add <some-file>
+			git commit
+	- (Elke keer dat je stopt met werken) push de huidige status van de feature naar de repository (die heet vaak 'origin')
+			git push -u origin newfeature
+	
+	- (Als de functie helemaal af is en werkt) merge de feature terug in de master branch
+			git checkout master
+			git pull
+			git pull origin newfeature
+			git push
+
+
+			
+Het kan zijn dat je moet gaan mergen bij de laatste stap omdat er in 1 bestand meerdere wijzigingen zijn gekomen. Hiervoor zou ik een handige merge-tool vinden zoals Meld. In elk geval voorkom je dan dat er code in de master branch staat die niet af is of nog niet getest is. Dan is de master-branch altijd up-to-date.
+
+Als jullie iemand in je project hebben die goed is met git, kun je 1 persoon verantwoordelijk maken voor dingen terug-mergen in de master branch (de project maintainer).
