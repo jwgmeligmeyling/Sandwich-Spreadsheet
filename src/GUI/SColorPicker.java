@@ -23,11 +23,13 @@ public class SColorPicker extends JFrame implements ActionListener {
 	JLabel jlbExampleBackground;
 	JLabel jlbExampleText;
 	private Window window;
+	private boolean type;
 	
-	public SColorPicker(String title, Color oldColor,Window window) {
+	public SColorPicker(String title, Color oldColor,Window window,boolean t) {
 		//super(owner, title, modal);
 		super(title);
 		this.window=window;
+		type=t;
 		colorPicker = new JColorChooser(oldColor);
 		AbstractColorChooserPanel[] panels = colorPicker.getChooserPanels();
         for (AbstractColorChooserPanel accp : panels) {
@@ -85,10 +87,16 @@ public class SColorPicker extends JFrame implements ActionListener {
 			//JOptionPane.showMessageDialog(this, "Pressed OK. Selected color: " + colorPicker.getColor().toString());
 			Range range = window.getSelectedRange();
 			Cell[] selectedCells = range == null ? new Cell[0] : range.getCellArray();
+			if(type==true){
 			for ( Cell cell : selectedCells ) {
 				cell.setbColor(colorPicker.getColor());
 			}
-			
+			}
+			if(type==false){
+				for ( Cell cell : selectedCells ) {
+					cell.setfColor(colorPicker.getColor());
+				}
+			}
 			dispose();
 		}
 	}
