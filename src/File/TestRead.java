@@ -17,8 +17,9 @@ public class TestRead {
 	
 	@Test
 	public void TestReadNormalWholeBlock() throws ParserConfigurationException, SAXException, IOException{
-		path = "xml/oude xml.xml";
-		Sheet sheet = XMLRead.read(path);
+		SpreadSheetFile sheets = new SpreadSheetFile();
+		sheets.openFile("oude xml.xml", "xml");
+		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
 		
@@ -37,8 +38,9 @@ public class TestRead {
 
 	@Test
 	public void TestReadNormalSmallestBlock() throws ParserConfigurationException, SAXException, IOException{
-		path = "xml/oude xml.xml";
-		Sheet sheet = XMLRead.read(path);
+		SpreadSheetFile sheets = new SpreadSheetFile();
+		sheets.openFile("oude xml.xml", "xml");
+		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
 		
@@ -57,8 +59,9 @@ public class TestRead {
 	
 	@Test
 	public void TestReadNormalSpecificBlock() throws ParserConfigurationException, SAXException, IOException{
-		path = "xml/oude xml.xml";
-		Sheet sheet = XMLRead.read(path);
+		SpreadSheetFile sheets = new SpreadSheetFile();
+		sheets.openFile("oude xml.xml", "xml");
+		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
 		
@@ -77,8 +80,9 @@ public class TestRead {
 	
 	@Test
 	public void TestReadFoutWholeBlock() throws ParserConfigurationException, SAXException, IOException{
-		path = "xml/fout.xml";
-		Sheet sheet = XMLRead.read(path);
+		SpreadSheetFile sheets = new SpreadSheetFile();
+		sheets.openFile("oude xml.xml", "xml");
+		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
 		

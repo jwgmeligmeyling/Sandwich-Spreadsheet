@@ -61,11 +61,8 @@ public class SpreadSheetFile {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	public void openFile(String filename, String filepath) throws ParserConfigurationException, SAXException, IOException {
-		for(int i = 0; i < 10; i++){
-			XMLRead.read(filepath + "/" + filename);
-		}
-		
+	public static SpreadSheetFile openFile(String filename, String filepath) throws ParserConfigurationException, SAXException, IOException {
+		return XMLRead.read(filepath + "/" + filename);		
 	}
 	
 	/**
@@ -91,33 +88,28 @@ public class SpreadSheetFile {
 	 */
 	public static class XMLHandler extends DefaultHandler {
 		private final XMLReader reader;
-		private final Sheet sheet;
+		private final SpreadSheetFile sheets;
 
 		/**
 		 * Constructor for sheet parser
 		 * @param sheet
 		 * @param reader
 		 */
-		public XMLHandler(Sheet sheet, XMLReader reader) {
+		public XMLHandler(SpreadSheetFile sheets, XMLReader reader) {
 			this.reader = reader;
-			this.sheet = sheet;
+			this.sheets = sheets;
 		}
 		
 		@Override
 		public void startElement(String uri, String localName, String name,
 				Attributes attributes) throws SAXException {
-			
+					
 			if (name.equalsIgnoreCase("SPREADSHEET")) {
-				String sheetName = attributes.getValue("name");
-				
-				if ( sheetName == null ) {
-					sheet.setSheetName(sheetName);
-				}
-			} else if (name.equalsIgnoreCase("CELL")) {
-				DefaultHandler cellHandler = new Cell.XMLHandler(sheet);
-				reader.setContentHandler(cellHandler);
-				cellHandler.startElement(uri, localName, name, attributes);
+				DefaultHandler sheetHandler = new Sheet.XMLHandler(sheets, reader, this);
+				reader.setContentHandler(sheetHandler);
+				sheetHandler.startElement(uri, localName, name, attributes);
 			}
+			
 		}	
 	}
 	
@@ -157,4 +149,17 @@ public class SpreadSheetFile {
 		output.close();
 	}
 	
+	@Override
+	public boolean equals(Object other){
+		if(other instanceof SpreadSheetFile){
+			SpreadSheetFile sheets = (SpreadSheetFile) other;
+			return sheets.sheets.equals(this.sheets);
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString(){
+		return sheets.toString();
+	}
 }
