@@ -11,6 +11,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import GUI.STable;
+
 /**
  * The <code>Sheet</code> class is the main class for the spreadsheet
  * 
@@ -57,6 +59,16 @@ public class Sheet implements Interfaces.Sheet {
 	 * higher row index.
 	 */
 	private int rowCount = 0;
+	
+	private STable stable;
+	
+	public void setSTable(STable stable) {
+		this.stable = stable;
+	}
+	
+	public STable getSTable() {
+		return stable;
+	}
 
 	/**
 	 * Inner class for <code>Cell</code> positions. The <code>Position</code>
