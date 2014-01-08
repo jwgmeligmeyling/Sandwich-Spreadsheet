@@ -153,6 +153,13 @@ public class STable extends JTable implements ActionListener {
 
 		return range;
 	}
+	
+	/**
+	 * @return the {@code Sheet} for this {@code STable}
+	 */
+	public Sheet getSheet() {
+		return sheet;
+	}
 
 	/**
 	 * Register the key strokes for creating ranges from the <code>CellEditor</code>
