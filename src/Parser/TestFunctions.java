@@ -29,7 +29,7 @@ public class TestFunctions {
 		D1 = sheet.createCell("TRUE", 3, 0);
 		D2 = sheet.createCell("FALSE", 3, 1);
 		D3 = sheet.createCell("true", 3, 2);
-				
+		
 		r1 = sheet.getRange(A1, D3); // All types
 		r2 = sheet.getRange(B1, C2); // Numbers
 		r3 = sheet.getRange(D1, D3); // Booleans
@@ -48,9 +48,7 @@ public class TestFunctions {
 
 	@Test
 	public void testSumDoubles() {
-		assertEquals(7.3,
-				((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(),
-				1e-15);
+		assertEquals(7.3, ((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(), 1e-15);
 	}
 
 	@Test
@@ -60,9 +58,7 @@ public class TestFunctions {
 
 	@Test
 	public void testSumDoubleAndInt() {
-		assertEquals(7.125,
-				((Double) Function.SUM.calculate(6.125, 1)).doubleValue(),
-				1e-15);
+		assertEquals(7.125, ((Double) Function.SUM.calculate(6.125, 1)).doubleValue(), 1e-15);
 	}
 
 	@Test
