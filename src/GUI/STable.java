@@ -86,6 +86,7 @@ public class STable extends JTable implements ActionListener {
 		super(new TableModel(sheet), null, null);
 
 		this.sheet = sheet;
+		this.sheet.setSTable(this);
 		this.formuleBalk = formule;
 		this.setDefaultRenderer(Cell.class, new CustomCellRenderer());
 
@@ -320,8 +321,12 @@ public class STable extends JTable implements ActionListener {
 		String tail = value.substring(end, length);
 		String rangeStr = range.toString();
 		
+		if(value.length()== end || value.charAt(end+1)!=')'){
+			rangeStr+=")";
+		}
+		
 		value = head + rangeStr + tail;
-
+		
 		this.currentEditor.setText(value);
 		this.currentEditor.setSelectionStart(start);
 		this.currentEditor.setSelectionEnd(start + rangeStr.length());
@@ -462,6 +467,18 @@ public class STable extends JTable implements ActionListener {
 			if ( cell.isBold() ) { 
 				attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
 			}
+			if(cell.isUnderlined()){
+				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
+			}
+			
+			if(cell.isItalic()){
+				attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+			}
+			Color Fcolor=cell.getfColor();
+			if(Fcolor!=null){
+				attributes.put(TextAttribute.FOREGROUND, Fcolor);
+			}
+
 			component.setFont(font.deriveFont(attributes));
 		}
 	}

@@ -12,6 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import File.Cell;
+import Interfaces.Range;
 
 @SuppressWarnings("serial")
 public class SToolbar extends JToolBar {
@@ -27,14 +32,17 @@ public class SToolbar extends JToolBar {
 	private static ImageIcon icoFColor = new ImageIcon("img/forecolor.gif", "Text color");
 	private static ImageIcon icoFunction = new ImageIcon("img/function.gif", "Insert function dialog");
 	
-	@SuppressWarnings("unused")
-	private static Frame window;
+	private final Window window;
 	
 	private int toolbarHeight = 25;
 	
-	public SToolbar(Frame parent) {
+	private final ToolBarToggleButton Bold;
+	private final ToolBarToggleButton Italic;
+	private final ToolBarToggleButton Underlined;
+	
+	public SToolbar(Window parent) {
 		super();
-		window = parent;
+		this.window = parent;
 		setFloatable(false);
 		
 		add(new ToolBarButton(fileNew));
@@ -45,11 +53,29 @@ public class SToolbar extends JToolBar {
 		add(new ToolBarButton(formatFColor));
 		add(new ToolBarButton(formatBColor));
 		addSeparator();
-		add(new ToolBarToggleButton(formatBold));
-		add(new ToolBarToggleButton(formatItalic));
-		add(new ToolBarToggleButton(formatUnderline));
+		Bold=new ToolBarToggleButton(formatBold);
+		add(Bold);
+		Italic=new ToolBarToggleButton(formatItalic);
+		add(Italic);
+		Underlined=new ToolBarToggleButton(formatUnderline);
+		add(Underlined);
 		addSeparator();
 		add(new ToolBarButton(insertFunction));
+		
+	}
+	
+	public void createSelectionListener(STable table) {
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				// TODO Auto-generated method stub
+			Bold.setSelected(window.getSelectedRange().firstCell().isBold());
+			Italic.setSelected(window.getSelectedRange().firstCell().isItalic());
+			Underlined.setSelected(window.getSelectedRange().firstCell().isUnderlined());
+			}
+			
+		});
 	}
 
 	public int getToolbarHeight() {
@@ -95,24 +121,54 @@ public class SToolbar extends JToolBar {
 	private AbstractAction formatBold = new AbstractAction(null, icoBold) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "Bold";
-			JOptionPane.showMessageDialog(null, st);
+			Range range = window.getSelectedRange();
+			Cell[] selectedCells = range == null ? new Cell[0] : range.getCellArray();
+			
+			boolean value = ! selectedCells[0].isBold();
+			
+			for ( Cell cell : selectedCells ) {
+				cell.setBold(value);
+			}
+			
+			window.updateTable();
+			
+//			String st = "Bold";
+//			JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
 	private AbstractAction formatItalic = new AbstractAction(null, icoItalic) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "Italic";
-			JOptionPane.showMessageDialog(null, st);
+			Range range = window.getSelectedRange();
+			Cell[] selectedCells = range == null ? new Cell[0] : range.getCellArray();
+			
+			boolean value = ! selectedCells[0].isItalic();
+			
+			for ( Cell cell : selectedCells ) {
+				cell.setItalic(value);
+			}
+			
+			window.updateTable();
+			
+			//String st = "Italic";
+			//JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
 	private AbstractAction formatUnderline = new AbstractAction(null, icoUnderlined) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "Underline";
-			JOptionPane.showMessageDialog(null, st);
+			Range range = window.getSelectedRange();
+			Cell[] selectedCells = range == null ? new Cell[0] : range.getCellArray();
+			
+			boolean value = ! selectedCells[0].isUnderlined();
+			
+			for ( Cell cell : selectedCells ) {
+				cell.setUnderlined(value);
+			}
+			
+			window.updateTable();
 		}
 	};
 	

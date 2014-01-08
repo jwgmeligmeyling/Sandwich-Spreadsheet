@@ -1,15 +1,18 @@
 package GUI;
 
 import javax.swing.*;
+
 import java.awt.*;
+
 import File.Cell;
 import File.Sheet;
+import File.Sheet.Range;
 import File.SpreadSheetFile;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame {
 	
-	private JToolBar tbMain;
+	private SToolbar tbMain;
 	private FormuleBalk formule;
 	private JTabbedPane tabbedPane;
 	private SStatusBar statusBar;
@@ -49,6 +52,33 @@ public class Window extends JFrame {
 		
 		newFile = new SpreadSheetFile();
 		createSheet();
+		tbMain.createSelectionListener(getCurrentTable());
+	}
+	
+	public Sheet getCurrentSheet() {
+		return newFile.getSheet(tabbedPane.getSelectedIndex());
+	}
+	
+	public STable getCurrentTable() {
+		return getCurrentSheet().getSTable();
+	}
+	
+	public void updateTable() {
+		// TODO not sure if this is enough to update the table
+		getCurrentTable().updateUI();
+	}
+	
+	public Range getSelectedRange() {
+		return getCurrentTable().getSelectedRange();
+	}
+	
+	public Cell getSelectedCell() {
+		Range range = getSelectedRange();
+		if ( range.isSingleCell() ) {
+			return range.firstCell();
+		} else {
+			return null;
+		}
 	}
 	
 	public void createSheet() {
@@ -57,7 +87,7 @@ public class Window extends JFrame {
 		
 		fillSheet(newSheet);
 		
-		JTable table = new STable(newSheet, formule);
+		STable table = new STable(newSheet, formule);
 		
 		Box box = Box.createVerticalBox();
 		box.add(table.getTableHeader());
@@ -76,6 +106,10 @@ public class Window extends JFrame {
 		Cell X = sheet.createCell("COUNT:", 3, 0);
 		X.setbColor(new Color(180, 180, 255));
 		X.setBold(true);
+		Cell Y = sheet.createCell("test", 5, 0);
+		Y.setUnderlined(true);
+		Y.setItalic(true);
+		Y.setfColor(new Color(180,150,255));
 		sheet.createCell("=COUNT(A2:T200)", 4, 0);
 		sheet.createCell("COUNTIF>50:", 6, 0);
 		sheet.createCell("=COUNTIF(A2:T200;\">=\"&50))", 7, 0);
