@@ -15,7 +15,7 @@ import File.Sheet.Range;
  * <code>Range</code> and returns the result of the calculation as
  * <code>Number</code>.
  * 
- * @author Jan-Willem Gmelig Meyling <i>(functions, other)</i>
+ * @author Jan-Willem Gmelig Meyling <i>(functions & other methods)</i>
  * @author Maarten Flikkema <i>(functions)</i>
  */
 public enum Function {
@@ -1818,8 +1818,10 @@ public enum Function {
 			return stringValueOf(range.firstCell());
 		} else if (obj instanceof Cell) {
 			return ((Cell) obj).getValue().toString();
-		} else {
+		} else if (obj != null) {
 			return obj.toString();
+		} else {
+			throw new IllegalArgumentException("#VALUE");
 		}
 	}
 	
@@ -1844,7 +1846,7 @@ public enum Function {
 	 * @param d is a double value
 	 * @return the same value as the input, but is converted to Integer if there is no significant decimal part behind the comma
 	 */
-	private static Object convertToIntIfApplicable(double d) {
+	static Object convertToIntIfApplicable(double d) {
 		if (Math.floor(d) == d) {
 			return (int) d;
 		}
@@ -1856,7 +1858,7 @@ public enum Function {
 	 * @param count is the number of arguments the function should get
 	 * @param length is the number of arguments the function actualy got (arguments.length)
 	 */
-	private static void assertArguments(int count, int length) {
+	static void assertArguments(int count, int length) {
 		if (count != length) {
 			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " were supplied!");
 		}
@@ -1868,7 +1870,7 @@ public enum Function {
 	 * @param count2 is the second number of arguments the function can handle
 	 * @param length is the number of arguments the function actualy got (arguments.length)
 	 */
-	private static void assertTwoArguments(int count1, int count2, int length) {
+	static void assertTwoArguments(int count1, int count2, int length) {
 		if (count1 != length && count2 != length) {
 			throw new IllegalArgumentException("This function requires " + count1 + " or " + count2 + " arguments, but " + length + " were supplied!");
 		}
@@ -1879,7 +1881,7 @@ public enum Function {
 	 * @param min is the minimum number of argumens the function should get
 	 * @param length is the number of arguments the function actualy got (argument.length)
 	 */
-	private static void assertMinArguments(int min, int length) {
+	static void assertMinArguments(int min, int length) {
 		if (min > length) {
 			throw new IllegalArgumentException("This function requires at least " + min + "arguments, but " + length + " were supplied!");
 		}
@@ -1890,7 +1892,7 @@ public enum Function {
 	 * @param index is the index of the argument in the array of arguments that must be a Range
 	 * @param args is the array of arguments supplied to the function
 	 */
-	private static void assertArgumentRange(int index, Object... args) {
+	static void assertArgumentRange(int index, Object... args) {
 		if (!(args[index] instanceof Range)) {
 			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a reference, but it is not!");
 		}
@@ -1900,17 +1902,18 @@ public enum Function {
 	 * Checks if a certain argument given to a function is instance of Range.
 	 * @param arg is the argument that must be a Range
 	 */
-	private static void assertArgumentRange(Object arg) {
+	static void assertArgumentRange(Object arg) {
 		if (!(arg instanceof Range)) {
 			throw new IllegalArgumentException("This function requires a certain argument to be a cell reference, but it is not!");
 		}
 	}
 	
 	/**
-	 * Checks if a certain argument given to a function is not ins
+	 * Checks if a certain argument given to a function is not a range with more than one cell in it.
+	 * @throws an IllegalArgumentException only if the argument is instance of Range and contains more than 1 cell.
 	 * @param arg is the argument that must be a Range
 	 */
-	private static void assertArgumentSingleRange(Object arg) {
+	static void assertArgumentSingleRange(Object arg) {
 		if ((arg instanceof Range) && ((Range)arg).getCellArray().length > 1) {
 			throw new IllegalArgumentException("This function cannot handle ranges bigger than one cell.");
 		}
