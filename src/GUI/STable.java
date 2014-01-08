@@ -459,6 +459,18 @@ public class STable extends JTable implements ActionListener {
 			if ( cell.isBold() ) { 
 				attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
 			}
+			if(cell.isUnderlined()){
+				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
+			}
+			
+			if(cell.isItalic()){
+				attributes.put(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE);
+			}
+			Color Fcolor=cell.getfColor();
+			if(Fcolor!=null){
+				attributes.put(TextAttribute.FOREGROUND, Fcolor);
+			}
+
 			component.setFont(font.deriveFont(attributes));
 		}
 	}

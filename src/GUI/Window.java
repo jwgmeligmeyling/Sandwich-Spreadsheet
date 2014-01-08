@@ -76,6 +76,10 @@ public class Window extends JFrame {
 		Cell X = sheet.createCell("COUNT:", 3, 0);
 		X.setbColor(new Color(180, 180, 255));
 		X.setBold(true);
+		Cell Y = sheet.createCell("test", 5, 0);
+		Y.setUnderlined(true);
+		Y.setItalic(true);
+		Y.setfColor(new Color(180,150,255));
 		sheet.createCell("=COUNT(A2:T200)", 4, 0);
 		sheet.createCell("COUNTIF>50:", 6, 0);
 		sheet.createCell("=COUNTIF(A2:T200;\">=\"&50))", 7, 0);
