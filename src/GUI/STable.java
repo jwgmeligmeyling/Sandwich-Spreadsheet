@@ -313,8 +313,12 @@ public class STable extends JTable implements ActionListener {
 		String tail = value.substring(end, length);
 		String rangeStr = range.toString();
 		
+		if(value.length()== end || value.charAt(end+1)!=')'){
+			rangeStr+=")";
+		}
+		
 		value = head + rangeStr + tail;
-
+		
 		this.currentEditor.setText(value);
 		this.currentEditor.setSelectionStart(start);
 		this.currentEditor.setSelectionEnd(start + rangeStr.length());
