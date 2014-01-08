@@ -86,6 +86,7 @@ public class STable extends JTable implements ActionListener {
 		super(new TableModel(sheet), null, null);
 
 		this.sheet = sheet;
+		this.sheet.setSTable(this);
 		this.formuleBalk = formule;
 		this.setDefaultRenderer(Cell.class, new CustomCellRenderer());
 
