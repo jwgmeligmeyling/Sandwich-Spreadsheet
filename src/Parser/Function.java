@@ -799,6 +799,7 @@ public enum Function {
 	 * </div>
 	 */
 	PROPER("Capitalizes the first letter in a text string and any other letters in text that follow any character other than a letter. Converts all other letters to lowercase letters.") {
+		
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -810,7 +811,7 @@ public enum Function {
 			for(int i = 1; i < result.length; i++) {
 				char temp = strIn.charAt(i);
 				
-				if(isLetter(strIn.charAt(i-1))) {
+				if(Character.isLetter(strIn.charAt(i-1))) {
 					result[i] = Character.toLowerCase(temp);
 				} else {
 					result[i] = Character.toUpperCase(temp);
@@ -819,9 +820,6 @@ public enum Function {
 			return new String(result);
 		}
 		
-		boolean isLetter(char charIn) {
-			return (charIn >= 'a' && charIn <= 'z');
-		}
 	},
 	
 	/**
