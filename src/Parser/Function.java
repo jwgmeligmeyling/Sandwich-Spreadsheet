@@ -3,6 +3,7 @@ package Parser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import File.Cell;
 import File.Sheet.Range;
 
@@ -403,6 +404,7 @@ public enum Function {
 	 * </div>
 	 */
 	COUNTIF("Counts the number of cells within a range that meet the given criteria.") {
+		@SuppressWarnings("deprecation")
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
@@ -449,6 +451,7 @@ public enum Function {
 	 * </div>
 	 */
 	SUMIF {
+		@SuppressWarnings("deprecation")
 		@Override
 		Object calculate(Object... arguments) {
 			assertTwoArguments(2, 3, arguments.length);
@@ -509,6 +512,8 @@ public enum Function {
 	 * </div>
 	 */
 	ISNUMBER("Returns the logical value TRUE if value is a number; otherwise, it returns FALSE.") {
+		
+		@SuppressWarnings("deprecation")
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -760,7 +765,7 @@ public enum Function {
 			for (int i = 1; i < result.length; i++) {
 				char temp = strIn.charAt(i);
 				
-				if (isLetter(strIn.charAt(i - 1))) {
+				if (Character.isLetter(strIn.charAt(i - 1))) {
 					result[i] = Character.toLowerCase(temp);
 				} else {
 					result[i] = Character.toUpperCase(temp);
@@ -769,13 +774,6 @@ public enum Function {
 			return new String(result);
 		}
 		
-		/**
-		 * @param charIn is the char you want to test
-		 * @return true iif the char you put in is in a-z
-		 */
-		boolean isLetter(char charIn) {
-			return (charIn >= 'a' && charIn <= 'z');
-		}
 	},
 	
 	/**
@@ -1568,12 +1566,10 @@ public enum Function {
 			if (arg instanceof Boolean) {
 				return true;
 			} else if (arg instanceof Cell) {
-				System.out.println(((Cell)arg).getValue());
-				System.out.println(((Cell)arg).getValue().getClass().getName());
 				return (((Cell)arg).getValue() instanceof Boolean);
 			} else if (arg instanceof Range) {
 				for (Cell cell : ((Range)arg).getCellArray()) {
-					if ((boolean) ISLOGICAL.calculate(cell)) {
+					if (ISLOGICAL.calculate(cell).equals(Boolean.FALSE)) {
 						return false;
 					}
 				}

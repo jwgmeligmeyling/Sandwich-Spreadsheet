@@ -112,34 +112,12 @@ public class TestFunctions {
 	
 	@Test
 	public void testIsLogicalCell() {
-		System.out.println("val" + D2.getValue());
-		assertEquals(false, Function.ISLOGICAL.calculate(D2));
+		assertEquals(true, Function.ISLOGICAL.calculate(D2));
 	}
 	@Test
 	public void testIsLogicalRange() {
 		assertEquals(true, Function.ISLOGICAL.calculate(r3));
-	}
-	
-	
-	/*
-	ISLOGICAL() {
-		@Override
-		Object calculate(Object... arguments) {
-			assertArguments(1, arguments.length);
-			Object arg = arguments[0];
-			assertArgumentSingleRange(arg);
-			
-			if (arg instanceof Boolean) {
-				return true;
-			} else if (arg instanceof Range) {
-				return (((Range)arg).getCellArray()[0].getValue() instanceof Boolean);
-			} else {
-				return false;
-			}
-		}
-		*/
-	
-	
+	}	
 	
 	@Test
 	public void testAddCalculateNegativeInt() {
@@ -148,13 +126,9 @@ public class TestFunctions {
 	
 	@Test
 	public void testAddCalculateNegativeDouble() {
-		assertEquals(-4.56, (double)Function.SUM.calculateNegative(2, 2.56), 0.001);
+		assertEquals(-4.56, ((Number) Function.SUM.calculateNegative(2, 2.56)).doubleValue(), 1e-15);
 	}
 	
-	/*
-	 * Test arg-needing function behavior when no arguments are supplied.
-	 */
-
 	@Test(expected = IllegalArgumentException.class)
 	public void testAverageNoArgs() {
 		Function.AVERAGE.calculate();
