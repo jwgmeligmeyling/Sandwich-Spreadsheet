@@ -3,7 +3,6 @@ package Parser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import File.Cell;
 import File.Sheet.Range;
 
@@ -404,7 +403,6 @@ public enum Function {
 	 * </div>
 	 */
 	COUNTIF("Counts the number of cells within a range that meet the given criteria.") {
-		@SuppressWarnings("deprecation")
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
@@ -451,7 +449,6 @@ public enum Function {
 	 * </div>
 	 */
 	SUMIF {
-		@SuppressWarnings("deprecation")
 		@Override
 		Object calculate(Object... arguments) {
 			assertTwoArguments(2, 3, arguments.length);
@@ -513,7 +510,6 @@ public enum Function {
 	 */
 	ISNUMBER("Returns the logical value TRUE if value is a number; otherwise, it returns FALSE.") {
 		
-		@SuppressWarnings("deprecation")
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);

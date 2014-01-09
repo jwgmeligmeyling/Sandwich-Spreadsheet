@@ -11,8 +11,8 @@ import javax.swing.event.DocumentListener;
 /**
  * A class for the formula JTextField container
  * This class implements ActionListener because it listens to itself for changes
- * @author Jan-Willem Gmelig Meyling, Liam Clark
- *
+ * @author Jan-Willem Gmelig Meyling
+ * @author Liam Clark
  */
 public class FormuleBalk extends JTextField implements ActionListener {
 	
