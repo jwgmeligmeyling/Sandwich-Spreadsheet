@@ -464,7 +464,6 @@ public class Sheet implements Interfaces.Sheet {
 	public static class XMLHandler extends DefaultHandler {
 		private final XMLReader reader;
 		private final SpreadSheetFile sheets;
-		private final Sheet sheet;
 		private final DefaultHandler fileHandler;
 		/**
 		 * Constructor for sheet parser
@@ -474,15 +473,17 @@ public class Sheet implements Interfaces.Sheet {
 		public XMLHandler(SpreadSheetFile sheets, XMLReader reader, DefaultHandler fileHandler) {
 			this.reader = reader;
 			this.sheets = sheets;
-			this.sheet = new Sheet();
 			this.fileHandler = fileHandler;
 		}
+		
+		private Sheet sheet;
 		
 		@Override
 		public void startElement(String uri, String localName, String name,
 				Attributes attributes) throws SAXException {
 			
 			if (name.equalsIgnoreCase("SPREADSHEET")) {
+				sheet = new Sheet();
 				String sheetName = attributes.getValue("name");
 				if ( sheetName == null ) {
 					sheet.setSheetName(sheetName);

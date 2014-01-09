@@ -340,7 +340,7 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 				throws SAXException {
 			if (name.equalsIgnoreCase("CELL")) {
 				sheet.createCell(content.toString(), colIndex, rowIndex);
-			}else{
+			}else if(name.equalsIgnoreCase("SPREADSHEET")||name.equalsIgnoreCase("WORKBOOK")){
 				sheetHandler.endElement(uri, localName, name);
 				reader.setContentHandler(sheetHandler);
 			}

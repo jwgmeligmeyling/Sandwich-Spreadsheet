@@ -18,7 +18,7 @@ public class TestRead {
 	@Test
 	public void TestReadNormalWholeBlock() throws ParserConfigurationException, SAXException, IOException{
 		SpreadSheetFile sheets = new SpreadSheetFile();
-		sheets.openFile("oude xml.xml", "xml");
+		sheets = SpreadSheetFile.openFile("oude xml.xml", "xml");
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -39,7 +39,7 @@ public class TestRead {
 	@Test
 	public void TestReadNormalSmallestBlock() throws ParserConfigurationException, SAXException, IOException{
 		SpreadSheetFile sheets = new SpreadSheetFile();
-		sheets.openFile("oude xml.xml", "xml");
+		sheets = SpreadSheetFile.openFile("oude xml.xml", "xml");
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -60,7 +60,7 @@ public class TestRead {
 	@Test
 	public void TestReadNormalSpecificBlock() throws ParserConfigurationException, SAXException, IOException{
 		SpreadSheetFile sheets = new SpreadSheetFile();
-		sheets.openFile("oude xml.xml", "xml");
+		sheets = SpreadSheetFile.openFile("oude xml.xml", "xml");
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -78,10 +78,11 @@ public class TestRead {
 		assertArrayEquals(lijst2, lijst);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void TestReadFoutWholeBlock() throws ParserConfigurationException, SAXException, IOException{
 		SpreadSheetFile sheets = new SpreadSheetFile();
-		sheets.openFile("oude xml.xml", "xml");
+		sheets = SpreadSheetFile.openFile("fout.xml", "xml");
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -95,6 +96,9 @@ public class TestRead {
 		
 		Cell[] lijst = sheet.getRange(1,1,10,10).getCellArray();
 		Cell[] lijst2 = csheet.getRange(1,1,10,10).getCellArray();
+		
+		System.out.println(sheet.toString());
+		System.out.println(csheet.toString());
 		
 		assertArrayEquals(lijst2, lijst);		
 	}
