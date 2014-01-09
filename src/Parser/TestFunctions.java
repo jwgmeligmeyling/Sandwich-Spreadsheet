@@ -59,10 +59,31 @@ public class TestFunctions {
 	public void testSum() {
 		assertEquals(10, Function.SUM.calculate(5, 5));
 	}
+	
+	@Test
+	public void testSubtract() {
+		assertEquals(5, Function.SUBTRACT.calculate(8,3));
+	}
+	
+	@Test
+	public void testDivideInteger() {
+		// We could expect 1 here (3/2 integer division, but Excel always divides as Double)
+		assertEquals(1.5, ((Number) Function.DIVIDE.calculate(3, 2)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testDivideDouble() {
+		assertEquals(2.5, ((Number) Function.DIVIDE.calculate(5.0, 2.0)).doubleValue(), 1e-15);
+	}
 
 	@Test
 	public void testSumDoubles() {
 		assertEquals(7.3, ((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testPower() {
+		assertEquals(8, Function.POWER.calculate(2, 3));
 	}
 
 	@Test
@@ -142,6 +163,16 @@ public class TestFunctions {
 	@Test
 	public void testAddCalculateNegativeDouble() {
 		assertEquals(-4.56, ((Number) Function.SUM.calculateNegative(2, 2.56)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testMod() {
+		assertEquals(1, Function.MOD.calculate(3,2));
+	}
+	
+	@Test
+	public void testAverage() {
+		assertEquals(16, Function.AVERAGE.calculate(r2));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
