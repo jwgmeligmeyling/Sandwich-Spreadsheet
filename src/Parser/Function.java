@@ -15,8 +15,8 @@ import File.Sheet.Range;
  * <code>Range</code> and returns the result of the calculation as
  * <code>Number</code>.
  * 
- * @author Jan-Willem Gmelig Meyling <i>(functions & other methods)</i>
- * @author Maarten Flikkema <i>(functions)</i>
+ * @author Jan-Willem Gmelig Meyling
+ * @author Maarten Flikkema
  */
 public enum Function {
 	
@@ -114,7 +114,7 @@ public enum Function {
 	 * arguments, and returns the result in the type of the first argument. For
 	 * example: if the first argument is an instance of <code>Integer</code> and
 	 * the second and third arguments are instances of <code>Double</code>,
-	 * these arguments are rounded to the closest <code>Integer</code>.<br>
+	 * these arguments are rounded to the closest <code>Integer</code>.<br/>
 	 * When the input doesn't make any sense (adding a <code>String</code>
 	 * or <code>Boolean</code>) a IllegalArgumentException is thrown.
 	 * </div><br>
@@ -175,8 +175,6 @@ public enum Function {
 		}
 	},
 	
-
-
 	/**
 	 * <div>
 	 * <b>Arguments:</b> <code>base</code>, <code>power</code>
@@ -317,47 +315,6 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>[real number...]</code> As Double
-	 * </div><br>
-	 * <div><b>Returns:</b>
-	 * <ul>
-	 * <li>Average of all the numerical values in the given range(s).</li>
-	 * </ul>
-	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
-	 * <div><b>Authors:</b>
-	 * <ul>
-	 * <li>Maarten Flikkema</li>
-	 * </ul>
-	 * </div>
-	 */
-	/*
-	MODE("Returns the mode of the arguments") {
-		@Override
-		Object calculate(Object... arguments) {
-			assertMinArguments(1, arguments.length);
-			
-			ArrayList<Double> countNumbersList = new ArrayList<Double>();
-			
-			for(Object arg : arguments) {
-				if (arg instanceof Range) {
-					for (Cell cell : ((Range) arg).getCellArray()) {
-						countNumbersList.add(doubleValueOf(cell));
-					}
-				} else {
-					countNumbersList.add(doubleValueOf(arg));
-				}
-			}
-			
-			return null; //convertToIntIfApplicable(mode);
-		}
-	},
-	*/
-	
-	/**
-	 * <div>
 	 * <b>Expected arguments:</b> <code>range</code>, <code>[range...]</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
@@ -447,7 +404,6 @@ public enum Function {
 	 * </div>
 	 */
 	COUNTIF("Counts the number of cells within a range that meet the given criteria.") {
-		@SuppressWarnings("deprecation")
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
@@ -753,11 +709,6 @@ public enum Function {
 		}
 	},
 	
-	
-	
-	
-	
-	
 	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>string</code>
@@ -806,11 +757,11 @@ public enum Function {
 			String strIn = stringValueOf(arguments[0]);
 			char[] result = new char[strIn.length()];
 			result[0] = Character.toUpperCase(strIn.charAt(0));
-			
-			for(int i = 1; i < result.length; i++) {
+
+			for (int i = 1; i < result.length; i++) {
 				char temp = strIn.charAt(i);
-				
-				if(isLetter(strIn.charAt(i-1))) {
+
+				if (isLetter(strIn.charAt(i - 1))) {
 					result[i] = Character.toLowerCase(temp);
 				} else {
 					result[i] = Character.toUpperCase(temp);
@@ -819,6 +770,11 @@ public enum Function {
 			return new String(result);
 		}
 		
+		/**
+		 * 
+		 * @param charIn is the char you want to test
+		 * @return true iif the char you put in is in a-z
+		 */
 		boolean isLetter(char charIn) {
 			return (charIn >= 'a' && charIn <= 'z');
 		}
@@ -847,12 +803,6 @@ public enum Function {
 			return stringValueOf(arguments[0]).toUpperCase(); 
 		}
 	},
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * <div>
@@ -961,9 +911,6 @@ public enum Function {
 		}
 	},
 	
-	
-	
-	
 	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>real number</code>, <code>real root-base number</code>
@@ -990,8 +937,6 @@ public enum Function {
 			return convertToIntIfApplicable(output);
 		}
 	},
-	
-	
 	
 	/**
 	 * <div>
@@ -1203,8 +1148,6 @@ public enum Function {
 		}
 	},
 	
-	
-	
 	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
@@ -1257,8 +1200,6 @@ public enum Function {
 			//convertToIntIfApplicable is alleen nodig in het geval van argument[0] == 0
 		}
 	},
-	
-	
 	
 	/**
 	 * <div>
@@ -1601,43 +1542,49 @@ public enum Function {
 	},
 	
 	/**
-	 * <div>
-	 * <b>Expected arguments:</b> <code>value</code>
-	 * </div><br>
+	 * <div> <b>Expected arguments:</b> <code>value</code>,
+	 * <code>[value...]</code> </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
 	 * <li>TRUE if the value is instance of Boolean</li>
 	 * <li>FALSE if the value is not instance of Boolean</li>
 	 * </ul>
-	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
+	 * </div> <div><b>Comments:</b><br>
+	 * If more arguments are supplied, or a range containing more than one cell,
+	 * all the cells are checked for logical values and <code>true</code> is
+	 * only returned if all cells got a logical value.
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
-	 * <li>[Auteur naam]</li>
+	 * <li>Maarten Flikkema</li>
 	 * </ul>
 	 * </div>
 	 */
-	ISLOGICAL("") {
+	ISLOGICAL() {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			Object arg = arguments[0];
+			//assertArgumentSingleRange(arg);
 			
 			if (arg instanceof Boolean) {
 				return true;
+			} else if (arg instanceof Cell) {
+				System.out.println(((Cell)arg).getValue());
+				System.out.println(((Cell)arg).getValue().getClass().getName());
+				return (((Cell)arg).getValue() instanceof Boolean);
 			} else if (arg instanceof Range) {
-				return (((Range)arg).getCellArray()[0].getValue() instanceof Boolean);
+				for (Cell cell : ((Range)arg).getCellArray()) {
+					if ((boolean) ISLOGICAL.calculate(cell)) {
+						return false;
+					}
+				}
+				return true;
 			} else {
 				return false;
 			}
 		}
 	},
-	
-	
-	
-	
 	
 	/**
 	 * <div>
@@ -1665,8 +1612,14 @@ public enum Function {
 		}
 	};
 	
+	/**
+	 * Description of a function to be used in the function dialog.
+	 */
 	private final String description;
 	
+	/**
+	 * @return description
+	 */
 	public String getDescription() {
 		return description;
 	}
@@ -1713,7 +1666,7 @@ public enum Function {
 			return new Integer(-intValueOf(result));
 		}
 	}
-
+	
 	/**
 	 * Get the <code>integer</code> value of an object. Values of the type
 	 * <code>Double</code> will be rounded to the closest <code>integer</code>

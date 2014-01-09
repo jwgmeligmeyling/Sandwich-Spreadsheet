@@ -1,8 +1,10 @@
 package Parser;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import File.*;
 import File.Sheet.Range;
 
@@ -103,6 +105,53 @@ public class TestFunctions {
 	@Test(expected = IllegalArgumentException.class)
 	public void testIntMoreArgs() {
 		assertEquals(5, Function.INT.calculate(5.2, 6.9));
+	}
+
+
+	@Test
+	public void testIsLogicalBoolean() {
+		assertEquals(true, Function.ISLOGICAL.calculate(true));
+	}
+	
+	@Test
+	public void testIsLogicalCell() {
+		System.out.println("val" + D2.getValue());
+		assertEquals(false, Function.ISLOGICAL.calculate(D2));
+	}
+	@Test
+	public void testIsLogicalRange() {
+		assertEquals(true, Function.ISLOGICAL.calculate(r3));
+	}
+	
+	
+	/*
+	ISLOGICAL() {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			Object arg = arguments[0];
+			assertArgumentSingleRange(arg);
+			
+			if (arg instanceof Boolean) {
+				return true;
+			} else if (arg instanceof Range) {
+				return (((Range)arg).getCellArray()[0].getValue() instanceof Boolean);
+			} else {
+				return false;
+			}
+		}
+		*/
+	
+	
+	
+	@Test
+	public void testAddCalculateNegativeInt() {
+		assertEquals(-9, Function.SUM.calculateNegative(5, 4));
+	}
+	
+	@Test
+	public void testAddCalculateNegativeDouble() {
+		assertEquals(-4.56, (double)Function.SUM.calculateNegative(2, 2.56), 0.001);
 	}
 	
 	/*
@@ -333,12 +382,19 @@ public class TestFunctions {
 	public void testUpperNoArgs() {
 		Function.UPPER.calculate();
 	}
-
+	
 	/*
-	 * Test not-function methods
+	 * Test not-function methodes
 	 */
-
-
+	
+	@Test
+	public void testGetDescription() {
+		assertEquals("Returns the sum of a set of values contained in a specified field on a query.", Function.SUM.getDescription());
+	}
+	
+	/*
+	 * Test valueOf methods
+	 */
 	
 	// doubleValueOf()
 
@@ -454,6 +510,16 @@ public class TestFunctions {
 	@Test
 	public void testIntValueOfBoolTrue() {
 		assertEquals(1, Function.intValueOf(true));
+	}
+	
+	@Test
+	public void testIntValueOfRange() {
+		assertEquals(10, Function.intValueOf(r2));
+	}
+	
+	@Test
+	public void testIntValueOfCell() {
+		assertEquals(8, Function.intValueOf(B2));
 	}
 	
 	// stringValueOf()
