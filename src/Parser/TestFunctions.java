@@ -112,7 +112,7 @@ public class TestFunctions {
 	
 	@Test
 	public void testIsLogicalCell() {
-		assertEquals(false, Function.ISLOGICAL.calculate(D2));
+		assertEquals(true, Function.ISLOGICAL.calculate(D2));
 	}
 	@Test
 	public void testIsLogicalRange() {
