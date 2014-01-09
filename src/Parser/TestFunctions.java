@@ -31,7 +31,7 @@ public class TestFunctions {
 		r1 = sheet.getRange(A1, D3); // All types
 		r2 = sheet.getRange(B1, C2); // Numbers
 		r3 = sheet.getRange(D1, D3); // Booleans
-		r4 = sheet.getRange(A2, A2);
+		r4 = sheet.getRange(A2, A2); // Cell A2 ( =5);
 		
 		/*
 		 * Jan-Willem:
@@ -39,7 +39,22 @@ public class TestFunctions {
 		 */
 		sheet.init();
 	}
+	
+	@Test
+	public void testSumRangeWithNumbers() {
+		assertEquals(48, Function.SUM.calculate(r2));
+	}
+	
+	@Test
+	public void testsumRangeWithBooles() {
+		assertEquals(2, Function.SUM.calculate(r3));
+	}
 
+	@Test
+	public void testSumRangeWithStrings() {
+		assertEquals(68, Function.SUM.calculate(r1));
+	}
+	
 	@Test
 	public void testSum() {
 		assertEquals(10, Function.SUM.calculate(5, 5));
@@ -102,7 +117,7 @@ public class TestFunctions {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testIntMoreArgs() {
-		assertEquals(5, Function.INT.calculate(5.2, 6.9));
+		Function.INT.calculate(5.2, 6.9);
 	}
 	
 	@Test

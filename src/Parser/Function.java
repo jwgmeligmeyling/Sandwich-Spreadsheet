@@ -54,8 +54,6 @@ public enum Function {
 					for (Cell cell : ((Range) argument).getCellArray()) {
 						output += doubleValueOf(cell.getValue());
 					}
-				} else if (argument instanceof String) {
-					output += 0;
 				} else {
 					output += doubleValueOf(argument);
 				}
