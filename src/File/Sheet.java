@@ -21,7 +21,7 @@ import GUI.STable;
  * @version 1.1
  * 
  */
-public class Sheet implements Interfaces.Sheet {
+public class Sheet implements Interfaces.Sheet, Cloneable {
 	/*
 	 * Class log: v1.0 Maarten Flikkema Sheet stub, with getters/setters and
 	 * Interface implementation
@@ -506,6 +506,20 @@ public class Sheet implements Interfaces.Sheet {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		Sheet kloon = new Sheet(sheetName + " (Kopie)");
+		
+		for ( Cell cell : cells.values() ) {
+			kloon.createCell(cell.getInput(), cell.position.colIndex, cell.position.rowIndex);
+		}
+		
+		return kloon;
+	}
+
 	@Override
 	public boolean equals(Object other){
 		if(other instanceof Sheet){

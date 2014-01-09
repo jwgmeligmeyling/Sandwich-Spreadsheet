@@ -1,8 +1,11 @@
 package File;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import File.Sheet.Range;
 
 public class TestSheet {
 
@@ -24,6 +27,50 @@ public class TestSheet {
 		B1 = sheet.createCell("=5*2", 1, 0);
 		B2 = sheet.createCell("=2+2*3", 1, 1);
 		B3 = sheet.createCell("=ADD(5,3)", 1, 2);
+	}
+	
+	@Test
+	public void sheetEquals() throws CloneNotSupportedException {
+		Sheet clone = (Sheet) sheet.clone();
+		assertEquals(clone, sheet);
+		assertNotEquals(new Sheet(), sheet);
+		assertNotEquals(new Sheet(), clone);
+		assertNotEquals(null, sheet);
+		assertNotEquals(new Object(), sheet);
+	}
+	
+	@Test
+	public void testColumnCount() {
+		assertEquals(2, sheet.getColumnCount());
+	}
+	
+	@Test 
+	public void testRowCount() {
+		assertEquals(3, sheet.getRowCount());
+	}
+	
+	@Test
+	public void testRangeEquals() {
+		Range a = sheet.getRange(A1, B3);
+		Range b = sheet.getRange(A1, B3);
+		assertEquals(a,b);
+	}
+	
+	@Test
+	public void rangeContains() {
+		Range range = sheet.getRange(A2, B2);
+		assertTrue(range.contains(B2));
+		assertTrue(range.contains(A2));
+		assertFalse(range.contains(A1));
+		assertFalse(range.contains(B1));
+		assertFalse(range.contains(B3));
+		assertFalse(range.contains(A3));
+	}
+	
+	@Test
+	public void rangeToString() {
+		assertEquals("A1:B2", sheet.getRange(A1,B2).toString());
+		assertEquals("A1", sheet.getRange(A1, A1).toString());
 	}
 
 	@Test
