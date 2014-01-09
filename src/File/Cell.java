@@ -9,6 +9,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 import File.Sheet.Position;
@@ -297,16 +298,20 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 	    private final Sheet sheet;
 	    private int colIndex;
 	    private int rowIndex;
-
+	    private XMLReader reader;
+	    private DefaultHandler sheetHandler;
+	    
 		/**
 		 * Constructor for Cell parser
 		 * 
 		 * @param sheet
 		 *            The <code>sheet</code> to put this <code>Cell</code> in
 		 */
-		public XMLHandler(Sheet sheet) {
+		public XMLHandler(Sheet sheet, XMLReader reader, DefaultHandler sheetHandler) {
 			this.sheet = sheet;
 			this.content = new StringBuilder();
+			this.reader = reader;
+			this.sheetHandler = sheetHandler;
 		}
 
 		@Override
@@ -335,6 +340,9 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 				throws SAXException {
 			if (name.equalsIgnoreCase("CELL")) {
 				sheet.createCell(content.toString(), colIndex, rowIndex);
+			}else{
+				sheetHandler.endElement(uri, localName, name);
+				reader.setContentHandler(sheetHandler);
 			}
 		}
 	}
