@@ -7,12 +7,11 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
+
+import File.Cell;
+import Interfaces.Range;
 
 @SuppressWarnings("serial")
 public class SColorPicker extends JFrame implements ActionListener {
@@ -23,35 +22,37 @@ public class SColorPicker extends JFrame implements ActionListener {
 	JPanel jpExamplePanel;
 	JLabel jlbExampleBackground;
 	JLabel jlbExampleText;
+	private Window window;
+	private boolean type;
 	
-	public SColorPicker(String title, Color oldColor) {
+	public SColorPicker(String title, Color oldColor,Window window,boolean t) {
 		//super(owner, title, modal);
 		super(title);
-		
-		jpExamplePanel = new JPanel();
-		jpExamplePanel.setLayout(new FlowLayout());
-		
-		jlbExampleText = new JLabel("Example text");
-		jlbExampleBackground = new JLabel("Example background");
-		jlbExampleBackground.setSize(50, 15);
-		
-		jpExamplePanel.add(jlbExampleText);
-		jpExamplePanel.add(jlbExampleBackground);
-		
+		this.window=window;
+		type=t;
 		colorPicker = new JColorChooser(oldColor);
-		colorPicker.setPreviewPanel(jpExamplePanel);
+		AbstractColorChooserPanel[] panels = colorPicker.getChooserPanels();
+        for (AbstractColorChooserPanel accp : panels) {
+            if (accp.getDisplayName().equals("Swatches")) {
+                AbstractColorChooserPanel[] panels2 ={panels[0]};
+                colorPicker.setChooserPanels(panels2);
+            }
+            }
+	
+		colorPicker.setPreviewPanel(new JPanel());
 		
 		jbnOk = new JButton("OK");
 		jbnOk.addActionListener(this);
 		jbnCancel = new JButton("Cancel");
 		jbnCancel.addActionListener(this);
 		
+		
 		//jlbExampleLabel = new JLabel("Example:");
 		
-		setSize(600, 350);
+		setSize(450, 180);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setAlwaysOnTop(false);
+		setAlwaysOnTop(true);
 		
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
@@ -73,24 +74,29 @@ public class SColorPicker extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		// TODO Er is blijkbaar geen ActionEvent door de colorPicker, dit is een probleem omdat er nu geen example wordt getoond.
-		//if (e.getSource() == colorPicker) {
-			jlbExampleBackground.setBackground(colorPicker.getColor());
-			jlbExampleText.setForeground(colorPicker.getColor());
-			System.out.println(colorPicker.getColor().toString());
-		//}
+	
 		
 		if (e.getSource() == jbnCancel) {
-			JOptionPane.showMessageDialog(this, "Pressed Cancel");
+			//JOptionPane.showMessageDialog(this, "Pressed Cancel");
 			
 			
 			dispose();
 		}
 		
 		if (e.getSource() == jbnOk) {
-			JOptionPane.showMessageDialog(this, "Pressed OK. Selected color: " + colorPicker.getColor().toString());
-			
-			
+			//JOptionPane.showMessageDialog(this, "Pressed OK. Selected color: " + colorPicker.getColor().toString());
+			Range range = window.getSelectedRange();
+			Cell[] selectedCells = range == null ? new Cell[0] : range.getCellArray();
+			if(type==true){
+			for ( Cell cell : selectedCells ) {
+				cell.setbColor(colorPicker.getColor());
+			}
+			}
+			if(type==false){
+				for ( Cell cell : selectedCells ) {
+					cell.setfColor(colorPicker.getColor());
+				}
+			}
 			dispose();
 		}
 	}

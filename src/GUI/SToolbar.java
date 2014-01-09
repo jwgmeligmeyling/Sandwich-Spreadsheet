@@ -176,7 +176,8 @@ public class SToolbar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Color oldColor = new Color(50, 200, 160);
-			new SColorPicker("Choose a background color", oldColor);
+			
+			new SColorPicker("Choose a background color", oldColor,window,true);
 			//TODO bColor van selected cells instellen
 		}
 	};
@@ -185,7 +186,7 @@ public class SToolbar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Color oldColor = new Color(50, 200, 160);
-			new SColorPicker("Choose a text color", oldColor);
+			new SColorPicker("Choose a text color", oldColor,window,false);
 			//TODO fColor van selected cells instellen
 		}
 	};

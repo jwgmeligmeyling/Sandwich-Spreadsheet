@@ -1,10 +1,8 @@
 package Parser;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import File.*;
 import File.Sheet.Range;
 
@@ -106,8 +104,7 @@ public class TestFunctions {
 	public void testIntMoreArgs() {
 		assertEquals(5, Function.INT.calculate(5.2, 6.9));
 	}
-
-
+	
 	@Test
 	public void testIsLogicalBoolean() {
 		assertEquals(true, Function.ISLOGICAL.calculate(true));
