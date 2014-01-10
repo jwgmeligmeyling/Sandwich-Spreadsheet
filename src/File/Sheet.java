@@ -21,7 +21,7 @@ import GUI.STable;
  * @version 1.1
  * 
  */
-public class Sheet implements Interfaces.Sheet {
+public class Sheet implements Interfaces.Sheet, Cloneable {
 	/*
 	 * Class log: v1.0 Maarten Flikkema Sheet stub, with getters/setters and
 	 * Interface implementation
@@ -463,31 +463,74 @@ public class Sheet implements Interfaces.Sheet {
 	 */
 	public static class XMLHandler extends DefaultHandler {
 		private final XMLReader reader;
-		private final Sheet sheet;
-
+		private final SpreadSheetFile sheets;
+		private final DefaultHandler fileHandler;
 		/**
 		 * Constructor for sheet parser
 		 * @param sheet
 		 * @param reader
 		 */
-		public XMLHandler(Sheet sheet, XMLReader reader) {
+		public XMLHandler(SpreadSheetFile sheets, XMLReader reader, DefaultHandler fileHandler) {
 			this.reader = reader;
-			this.sheet = sheet;
+			this.sheets = sheets;
+			this.fileHandler = fileHandler;
 		}
+		
+		private Sheet sheet;
 		
 		@Override
 		public void startElement(String uri, String localName, String name,
 				Attributes attributes) throws SAXException {
+			
 			if (name.equalsIgnoreCase("SPREADSHEET")) {
+				sheet = new Sheet();
 				String sheetName = attributes.getValue("name");
 				if ( sheetName == null ) {
 					sheet.setSheetName(sheetName);
 				}
 			} else if (name.equalsIgnoreCase("CELL")) {
-				DefaultHandler cellHandler = new Cell.XMLHandler(sheet);
+				DefaultHandler cellHandler = new Cell.XMLHandler(sheet, reader, this);
 				reader.setContentHandler(cellHandler);
 				cellHandler.startElement(uri, localName, name, attributes);
 			}
 		}
+		
+		@Override
+		public void endElement(String uri, String localName, String name) throws SAXException{
+			if(name.equalsIgnoreCase("SPREADSHEET")){
+				sheets.addSheet(sheet);
+			} else {
+				fileHandler.endElement(uri, localName, name);
+				reader.setContentHandler(fileHandler);
+			}
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		Sheet kloon = new Sheet(sheetName + " (Kopie)");
+		
+		for ( Cell cell : cells.values() ) {
+			kloon.createCell(cell.getInput(), cell.position.colIndex, cell.position.rowIndex);
+		}
+		
+		return kloon;
+	}
+
+	@Override
+	public boolean equals(Object other){
+		if(other instanceof Sheet){
+			Sheet sheet = (Sheet) other;
+			return sheet.cells.equals(cells);
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString(){
+		return cells.values().toString();
 	}
 }

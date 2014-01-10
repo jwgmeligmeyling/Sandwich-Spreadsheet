@@ -53,8 +53,6 @@ public enum Function {
 					for (Cell cell : ((Range) argument).getCellArray()) {
 						output += doubleValueOf(cell.getValue());
 					}
-				} else if (argument instanceof String) {
-					output += 0;
 				} else {
 					output += doubleValueOf(argument);
 				}
@@ -226,7 +224,7 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
-			return doubleValueOf(arguments[0]) % doubleValueOf(arguments[1]);
+			return convertToIntIfApplicable(doubleValueOf(arguments[0]) % doubleValueOf(arguments[1]));
 		}
 	},
 	

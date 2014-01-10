@@ -49,19 +49,51 @@ public class TestSpreadsheetFile {
 		BufferedReader reader = new BufferedReader(new FileReader("xml/output.xml"));
 		String one = reader.readLine();
 		
-		reader = new BufferedReader(new FileReader("xml/testvoorbeeld.xml"));
-		String two = reader.readLine();
-		
 		System.out.println(one);
+		
+		String two = "<WORKBOOK><SPREADSHEET><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
 		System.out.println(two);
 		
 		assertEquals(one.equals(two),true);
 	}
 	
+	
 	@Test
-	public void testReadFile() throws ParserConfigurationException, SAXException, IOException, XMLStreamException, FactoryConfigurationError{
-		sheets2.openFile("output.xml", "xml");
-		sheets2.saveFile("output.xml", "xml");
+	public void testReadFileMultipleSheets() throws ParserConfigurationException, SAXException, IOException, XMLStreamException, FactoryConfigurationError{
+		SpreadSheetFile file = new SpreadSheetFile();
+		Sheet sheet = new Sheet();
+		Sheet sheet2 = new Sheet();
+		
+		sheet.createCell("test", 1, 1);
+		sheet.createCell("test2",2,2);
+		
+		sheet2.createCell("test3",3,3);
+		sheet2.createCell("test4", 4, 4);
+		
+		file.addSheet(sheet);
+		file.addSheet(sheet2);
+		
+		SpreadSheetFile file2 = SpreadSheetFile.openFile("test2.xml", "xml/Test XML bestanden (Niet aankomen)");
+		
+		assertEquals(file,file2);
+		
+		
+
+	}
+	
+	@Test
+	public void testRead() throws ParserConfigurationException, SAXException, IOException{
+		SpreadSheetFile file = new SpreadSheetFile();
+		Sheet sheet = new Sheet();
+		
+		file.addSheet(sheet);
+		
+		sheet.createCell("test", 1, 1);
+		
+		SpreadSheetFile file2 = SpreadSheetFile.openFile("test.xml", "xml/Test XML bestanden (Niet aankomen)");
+		
+		assertEquals(file,file2);
+		
 	}
 
 }

@@ -31,7 +31,7 @@ public class TestFunctions {
 		r1 = sheet.getRange(A1, D3); // All types
 		r2 = sheet.getRange(B1, C2); // Numbers
 		r3 = sheet.getRange(D1, D3); // Booleans
-		r4 = sheet.getRange(A2, A2);
+		r4 = sheet.getRange(A2, A2); // Cell A2 ( =5);
 		
 		/*
 		 * Jan-Willem:
@@ -39,15 +39,51 @@ public class TestFunctions {
 		 */
 		sheet.init();
 	}
+	
+	@Test
+	public void testSumRangeWithNumbers() {
+		assertEquals(48, Function.SUM.calculate(r2));
+	}
+	
+	@Test
+	public void testsumRangeWithBooles() {
+		assertEquals(2, Function.SUM.calculate(r3));
+	}
 
+	@Test
+	public void testSumRangeWithStrings() {
+		assertEquals(68, Function.SUM.calculate(r1));
+	}
+	
 	@Test
 	public void testSum() {
 		assertEquals(10, Function.SUM.calculate(5, 5));
+	}
+	
+	@Test
+	public void testSubtract() {
+		assertEquals(5, Function.SUBTRACT.calculate(8,3));
+	}
+	
+	@Test
+	public void testDivideInteger() {
+		// We could expect 1 here (3/2 integer division, but Excel always divides as Double)
+		assertEquals(1.5, ((Number) Function.DIVIDE.calculate(3, 2)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testDivideDouble() {
+		assertEquals(2.5, ((Number) Function.DIVIDE.calculate(5.0, 2.0)).doubleValue(), 1e-15);
 	}
 
 	@Test
 	public void testSumDoubles() {
 		assertEquals(7.3, ((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testPower() {
+		assertEquals(8, Function.POWER.calculate(2, 3));
 	}
 
 	@Test
@@ -102,7 +138,7 @@ public class TestFunctions {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testIntMoreArgs() {
-		assertEquals(5, Function.INT.calculate(5.2, 6.9));
+		Function.INT.calculate(5.2, 6.9);
 	}
 	
 	@Test
@@ -127,6 +163,16 @@ public class TestFunctions {
 	@Test
 	public void testAddCalculateNegativeDouble() {
 		assertEquals(-4.56, ((Number) Function.SUM.calculateNegative(2, 2.56)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testMod() {
+		assertEquals(1, Function.MOD.calculate(3,2));
+	}
+	
+	@Test
+	public void testAverage() {
+		assertEquals(16, Function.AVERAGE.calculate(r2));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

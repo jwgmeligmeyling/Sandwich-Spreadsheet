@@ -28,7 +28,7 @@ public class XMLRead {
 	 * @throws IOException
 	 *             If any IO errors occur.
 	 */
-	public static Sheet read(String path) throws ParserConfigurationException,
+	public static SpreadSheetFile read(String path) throws ParserConfigurationException,
 			SAXException, IOException {
 		/*
 		 * Volgens de instructies van SAX dienen we eerst een SAXParser aan te
@@ -38,12 +38,12 @@ public class XMLRead {
 		 */
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
-		Sheet sheet = new Sheet();
+		SpreadSheetFile sheets = new SpreadSheetFile();
 		
-		DefaultHandler handler = new SpreadSheetFile.XMLHandler(sheet,
+		DefaultHandler handler = new SpreadSheetFile.XMLHandler(sheets,
 				saxParser.getXMLReader());
 		saxParser.parse(path, handler);
 
-		return sheet;
+		return sheets;
 	}
 }
