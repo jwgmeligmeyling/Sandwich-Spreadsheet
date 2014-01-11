@@ -10,7 +10,6 @@ public class ParseTyper {
 	 * Run and type!
 	 * @param args
 	 */
-	@SuppressWarnings("deprecation")
 	public static void main(String[] args) {
 		System.out.println("Start to type expressions!");
 		System.out.println();

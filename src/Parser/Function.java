@@ -507,13 +507,11 @@ public enum Function {
 	 * </div>
 	 */
 	ISNUMBER("Returns the logical value TRUE if value is a number; otherwise, it returns FALSE.") {
-		
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			if (arguments[0] instanceof Range) {
-				return ISNUMBER
-						.calculate(((Range) arguments[0]).getCellArray()[0]);
+				return ISNUMBER.calculate(((Range) arguments[0]).getCellArray()[0]);
 			} else if (arguments[0] instanceof Cell) {
 				return ISNUMBER.calculate(((Cell) arguments[0]).getValue());
 			}
@@ -1213,13 +1211,13 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
-			return Math.log10(doubleValueOf(arguments[0]));
+			return convertToIntIfApplicable(Math.log10(doubleValueOf(arguments[0])));
 		}
 	},
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>value</code>, <code>base value</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
@@ -1239,7 +1237,7 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
-			return Math.log(doubleValueOf(arguments[0])) / Math.log(intValueOf(arguments[1]));			
+			return convertToIntIfApplicable(Math.log10(doubleValueOf(arguments[0])) / Math.log10(intValueOf(arguments[1])));			
 		}
 	},
 	
@@ -1265,7 +1263,7 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
-			return Math.log(doubleValueOf(arguments[0]));			
+			return convertToIntIfApplicable(Math.log(doubleValueOf(arguments[0])));			
 		}
 	},
 	
@@ -1317,6 +1315,7 @@ public enum Function {
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * <li>Maarten Flikkema</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -1324,7 +1323,7 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
-			return Math.abs(doubleValueOf(arguments[0]));
+			return convertToIntIfApplicable(Math.abs(doubleValueOf(arguments[0])));
 		}
 	},
 	
@@ -1351,12 +1350,12 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			double min = 0;
-			for ( int i = 0; i < arguments.length; i++ ) {
-				if ( arguments[i] instanceof String ) {
+			for (int i = 0; i < arguments.length; i++) {
+				if (arguments[i] instanceof String) {
 					continue;
 				} else {
 					double d = doubleValueOf(arguments[i]);
-					if ( i == 0 || d < min ) {
+					if (i == 0 || d < min) {
 						min = d;
 					}
 				}
@@ -1424,7 +1423,8 @@ public enum Function {
 	IF("Returns the second argument is the first argument is true, else returns the third argument.") {
 		@Override
 		Object calculate(Object... arguments) {
-			assertTwoArguments(2, 3, arguments.length);
+			assertMinArguments(1, arguments.length);
+			assertMaxArguments(3, arguments.length);
 			if (booleanValueOf(arguments[0])) {
 				if (arguments.length >= 2) {
 					return arguments[1];
@@ -1660,11 +1660,9 @@ public enum Function {
 	 * <code>Double</code> will be rounded to the closest <code>integer</code>
 	 * and <code>Booleans</code> will be converted to their <code>integer</code>
 	 * value: <code>1</code> for <code>true</code> and <code>0</code> for
-	 * <code>false</code>. Values of the type <code>String</code> will always be
-	 * converted to <code>0</code>.
-	 * 
-	 * @param obj
-	 *            Object to convert
+	 * <code>false</code>. <!--Values of the type <code>String</code> will always be
+	 * converted to <code>0</code>. -->
+	 * @param obj Object to convert
 	 * @return <code>integer</code> value to calculate with
 	 */
 	public static int intValueOf(Object obj) {
@@ -1677,9 +1675,9 @@ public enum Function {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
 		//} else if ( obj instanceof String ) {
 		//	return 0;
-		} else if ( obj instanceof Range ) {
+		} else if (obj instanceof Range) {
 			return intValueOf(((Range) obj).getCellArray()[0]);
-		} else if ( obj instanceof Cell ) {
+		} else if (obj instanceof Cell) {
 			return intValueOf(((Cell) obj).getValue());
 		}
 		throw new IllegalArgumentException("#VALUE");
@@ -1801,7 +1799,7 @@ public enum Function {
 	 */
 	static void assertArguments(int count, int length) {
 		if (count != length) {
-			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " were supplied!");
+			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " where supplied!");
 		}
 	}
 	
@@ -1813,7 +1811,7 @@ public enum Function {
 	 */
 	static void assertTwoArguments(int count1, int count2, int length) {
 		if (count1 != length && count2 != length) {
-			throw new IllegalArgumentException("This function requires " + count1 + " or " + count2 + " arguments, but " + length + " were supplied!");
+			throw new IllegalArgumentException("This function requires " + count1 + " or " + count2 + " arguments, but " + length + " where supplied!");
 		}
 	}
 	
@@ -1824,7 +1822,18 @@ public enum Function {
 	 */
 	static void assertMinArguments(int min, int length) {
 		if (min > length) {
-			throw new IllegalArgumentException("This function requires at least " + min + "arguments, but " + length + " were supplied!");
+			throw new IllegalArgumentException("This function requires at least " + min + "arguments, but " + length + " where supplied!");
+		}
+	}
+	
+	/**
+	 * Checks if the number of arguments given to a function is not more than the function can handle.
+	 * @param max is the maximum number of argumens the function should get
+	 * @param length is the number of arguments the function actualy got (argument.length)
+	 */
+	static void assertMaxArguments(int max, int length) {
+		if (length > max) {
+			throw new IllegalArgumentException("This function cannot handle more than " + max + "arguments, but " + length + " where supplied!");
 		}
 	}
 	

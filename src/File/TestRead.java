@@ -78,7 +78,6 @@ public class TestRead {
 		assertArrayEquals(lijst2, lijst);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void TestReadFoutWholeBlock() throws ParserConfigurationException, SAXException, IOException{
 		SpreadSheetFile sheets = new SpreadSheetFile();

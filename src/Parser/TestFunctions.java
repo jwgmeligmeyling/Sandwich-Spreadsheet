@@ -1,16 +1,18 @@
 package Parser;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import File.*;
 import File.Sheet.Range;
 
 public class TestFunctions {
 
 	public Sheet sheet;
-	public Cell A1, A2, A3, B1, B2, B3, C1, C2, C3, D1, D2, D3;
-	public Range r1, r2, r3, r4;
+	public Cell A1, A2, A3, B1, B2, B3, C1, C2, C3, D1, D2, D3, E1, E2, E3;
+	public Range r1, r2, r3, r4, r5, r6;
 
 	@Before
 	public void setUp() throws Exception {
@@ -27,11 +29,16 @@ public class TestFunctions {
 		D1 = sheet.createCell("TRUE", 3, 0);
 		D2 = sheet.createCell("FALSE", 3, 1);
 		D3 = sheet.createCell("true", 3, 2);
+		E1 = sheet.createCell("2.65", 4, 0);
+		E2 = sheet.createCell("0", 4, 1);
+		E3 = sheet.createCell("-3.2", 4, 2);
 		
 		r1 = sheet.getRange(A1, D3); // All types
 		r2 = sheet.getRange(B1, C2); // Numbers
 		r3 = sheet.getRange(D1, D3); // Booleans
-		r4 = sheet.getRange(A2, A2); // Cell A2 ( =5);
+		r4 = sheet.getRange(A2, A2); // Cell A2 (=5)
+		r5 = sheet.getRange(A2, C2); // Numbers
+		r6 = sheet.getRange(E1, E3); // Doubles
 		
 		/*
 		 * Jan-Willem:
@@ -41,44 +48,17 @@ public class TestFunctions {
 	}
 	
 	@Test
-	public void testSumRangeWithNumbers() {
-		assertEquals(48, Function.SUM.calculate(r2));
-	}
-	
-	@Test
-	public void testsumRangeWithBooles() {
-		assertEquals(2, Function.SUM.calculate(r3));
-	}
-
-	@Test
-	public void testSumRangeWithStrings() {
-		assertEquals(68, Function.SUM.calculate(r1));
-	}
-	
-	@Test
-	public void testSum() {
-		assertEquals(10, Function.SUM.calculate(5, 5));
-	}
-	
-	@Test
 	public void testSubtract() {
 		assertEquals(5, Function.SUBTRACT.calculate(8,3));
 	}
 	
 	@Test
 	public void testDivideInteger() {
-		// We could expect 1 here (3/2 integer division, but Excel always divides as Double)
 		assertEquals(1.5, ((Number) Function.DIVIDE.calculate(3, 2)).doubleValue(), 1e-15);
 	}
-	
 	@Test
 	public void testDivideDouble() {
 		assertEquals(2.5, ((Number) Function.DIVIDE.calculate(5.0, 2.0)).doubleValue(), 1e-15);
-	}
-
-	@Test
-	public void testSumDoubles() {
-		assertEquals(7.3, ((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(), 1e-15);
 	}
 	
 	@Test
@@ -87,10 +67,29 @@ public class TestFunctions {
 	}
 
 	@Test
+	public void testSumRangeWithNumbers() {
+		assertEquals(48, Function.SUM.calculate(r2));
+	}
+	@Test
+	public void testSumRangeWithBooles() {
+		assertEquals(2, Function.SUM.calculate(r3));
+	}
+	@Test
+	public void testSumRangeWithStrings() {
+		assertEquals(68, Function.SUM.calculate(r1));
+	}
+	@Test
+	public void testSum() {
+		assertEquals(10, Function.SUM.calculate(5, 5));
+	}
+	@Test
+	public void testSumDoubles() {
+		assertEquals(7.3, ((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(), 1e-15);
+	}
+	@Test
 	public void testSumIntAndDouble() {
 		assertEquals(7.25, Function.SUM.calculate(6, 1.25));
 	}
-
 	@Test
 	public void testSumDoubleAndInt() {
 		assertEquals(7.125, ((Double) Function.SUM.calculate(6.125, 1)).doubleValue(), 1e-15);
@@ -100,7 +99,6 @@ public class TestFunctions {
 	public void testAndTrue() {
 		assertTrue((Boolean) Function.AND.calculate(true, true));
 	}
-
 	@Test
 	public void testAndFalse() {
 		assertFalse((Boolean) Function.AND.calculate(true, false));
@@ -110,7 +108,6 @@ public class TestFunctions {
 	public void testOrTrue() {
 		assertTrue((Boolean) Function.OR.calculate(false, false, true));
 	}
-
 	@Test
 	public void testOrFalse() {
 		assertFalse((Boolean) Function.OR.calculate(false, false));
@@ -120,7 +117,10 @@ public class TestFunctions {
 	public void testRoundToInt() {
 		assertEquals(5, Function.ROUND.calculate(5.4589, 0));
 	}
-
+	@Test
+	public void testRoundDecPlaceMissing() {
+		assertEquals(5, Function.ROUND.calculate(5.4589));
+	}
 	@Test
 	public void testRoundTo1DecPlace() {
 		assertEquals(7.3, Function.ROUND.calculate(7.250001, 1));
@@ -130,39 +130,180 @@ public class TestFunctions {
 	public void testIntPositive() {
 		assertEquals(15, Function.INT.calculate(15.9));
 	}
-
 	@Test
 	public void testIntNegative() {
 		assertEquals(-9, Function.INT.calculate(-8.2));
 	}
-
 	@Test(expected = IllegalArgumentException.class)
 	public void testIntMoreArgs() {
 		Function.INT.calculate(5.2, 6.9);
 	}
 	
 	@Test
+	public void testLower() {
+		assertEquals("mixed case string", Function.LOWER.calculate("MiXed CASe sTRIng"));
+	}
+	
+	@Test
+	public void testUpper() {
+		assertEquals("MIXED CASE STRING", Function.UPPER.calculate("mixED caSe strING"));
+	}
+	
+	@Test
+	public void testProper() {
+		assertEquals("This Is8Ni_Ce/Ly Done", Function.PROPER.calculate("thIS is8nI_cE/LY done"));
+	}
+	
+	
+	@Test
 	public void testIsLogicalBoolean() {
 		assertEquals(true, Function.ISLOGICAL.calculate(true));
 	}
-	
 	@Test
 	public void testIsLogicalCell() {
 		assertEquals(true, Function.ISLOGICAL.calculate(D2));
 	}
 	@Test
-	public void testIsLogicalRange() {
+	public void testIsLogicalRangeTrue() {
 		assertEquals(true, Function.ISLOGICAL.calculate(r3));
 	}	
-	
 	@Test
-	public void testAddCalculateNegativeInt() {
-		assertEquals(-9, Function.SUM.calculateNegative(5, 4));
+	public void testIsLogicalRangeFalse1() {
+		assertEquals(false, Function.ISLOGICAL.calculate(r1));
+	}	
+	@Test
+	public void testIsLogicalRangeFalse2() {
+		assertEquals(false, Function.ISLOGICAL.calculate(r2));
+	}
+	@Test
+	public void testIsLogicalOther() {
+		assertEquals(false, Function.ISLOGICAL.calculate("string"));
+	}
+
+	@Test
+	public void testNotBooleanTrue() {
+		assertEquals(false, Function.NOT.calculate(true));
+	}
+	@Test
+	public void testNotBooleanFalse() {
+		assertEquals(true, Function.NOT.calculate(false));
+	}
+	@Test
+	public void testNotCell() {
+		assertEquals(true, Function.NOT.calculate(D2));
+	}
+	@Test
+	public void testNotRange() {
+		assertEquals(false, Function.NOT.calculate(r3));
+	}
+	@Test
+	public void testNotString() {
+		assertEquals(false, Function.NOT.calculate("string"));
+	}
+
+	@Test
+	public void testIfTrue() {
+		assertEquals("this is true", Function.IF.calculate(true, "this is true", "nope"));
+	}
+	@Test
+	public void testIfFalse() {
+		assertEquals("nope", Function.IF.calculate(false, "this is true", "nope"));
+	}
+	@Test
+	public void testIfFalseNoValIfFalse() {
+		assertEquals(false, Function.IF.calculate(false, "this is true"));
+	}
+	@Test
+	public void testIfTrueNoVals() {
+		assertEquals(true, Function.IF.calculate(true));
+	}
+	@Test
+	public void testIfFalseNoVals() {
+		assertEquals(false, Function.IF.calculate(false));
 	}
 	
 	@Test
-	public void testAddCalculateNegativeDouble() {
-		assertEquals(-4.56, ((Number) Function.SUM.calculateNegative(2, 2.56)).doubleValue(), 1e-15);
+	public void testMaxInt() {
+		assertEquals(8, Function.MAX.calculate(5, 5, 6, 0, -10, 8));
+	}
+	@Test
+	public void testMaxDouble() {
+		assertEquals(6.7, Function.MAX.calculate(-254.02355, 6.7, 2, 5.55));
+	}
+	@Test
+	public void testMaxIntOnlyDoubles() {
+		assertEquals(6, Function.MAX.calculate(3.5, 6.0, 5.0, 4.2));
+	}
+	@Test
+	public void testMaxNegative() {
+		assertEquals(-1, Function.MAX.calculate(-5, -1, -100));
+	}
+	@Test
+	public void testMaxString() {
+		assertEquals(125, Function.MAX.calculate("string", 50.2, 125, 100));
+	}
+	
+	@Test
+	public void testMinInt() {
+		assertEquals(-10, Function.MIN.calculate(5, 20, 6, 0, -10, 8));
+	}
+	@Test
+	public void testMinDouble() {
+		assertEquals(-254.02355, Function.MIN.calculate(-254.02355, 6.7, 2, 5.55));
+	}
+	@Test
+	public void testMinIntOnlyDoubles() {
+		assertEquals(3, Function.MIN.calculate(3.0, 6.0, 5.0, 4.2));
+	}
+	@Test
+	public void testMinString() {
+		assertEquals(50, Function.MIN.calculate(50, "hi", 125, 100.2));
+	}
+	@Test
+	public void testMinStringFirst() {
+		//TODO assertEquals(50, Function.MIN.calculate("hi", 50, 125));
+	}
+
+	@Test
+	public void testAbsIntPos() {
+		assertEquals(50, Function.ABS.calculate(50));
+	}
+	@Test
+	public void testAbsIntNeg() {
+		assertEquals(50, Function.ABS.calculate(-50));
+	}
+	@Test
+	public void testAbsIntZero() {
+		assertEquals(0, Function.ABS.calculate(0));
+	}
+	@Test
+	public void testAbsDoublePos() {
+		assertEquals(21.65, Function.ABS.calculate(21.65));
+	}
+	@Test
+	public void testAbsDoubleNeg() {
+		assertEquals(21.65, Function.ABS.calculate(-21.65));
+	}
+	@Test
+	public void testAbsString() {
+		assertEquals(0, Function.ABS.calculate("string"));
+	}
+	
+	@Test
+	public void testSignPos() {
+		assertEquals(1, Function.SIGN.calculate(25.2));
+	}
+	@Test
+	public void testSignNeg() {
+		assertEquals(-1, Function.SIGN.calculate(-5));
+	}
+	@Test
+	public void testSignString() {
+		assertEquals(0, Function.SIGN.calculate("string"));
+	}
+	@Test
+	public void testSignZero() {
+		assertEquals(0, Function.SIGN.calculate(0));
 	}
 	
 	@Test
@@ -174,6 +315,152 @@ public class TestFunctions {
 	public void testAverage() {
 		assertEquals(16, Function.AVERAGE.calculate(r2));
 	}
+	
+	@Test
+	public void testLnE() {
+		assertEquals(1, Function.LN.calculate(Math.E));
+	}
+	@Test
+	public void testLnE2() {
+		assertEquals(2, Function.LN.calculate(Math.pow(Math.E, 2)));
+	}
+	
+	@Test
+	public void testLog10w10() {
+		assertEquals(1, Function.LOG.calculate(10));
+	}
+	@Test
+	public void testLog10w1() {
+		assertEquals(0, Function.LOG.calculate(1));
+	}
+	
+	@Test
+	public void testLogBase2v8() {
+		assertEquals(3, Function.LOGBASE.calculate(8, 2));
+	}
+	@Test
+	public void testLogBase4v1() {
+		assertEquals(0, Function.LOGBASE.calculate(1, 4));
+	}
+	
+	@Test
+	public void testExp1() {
+		assertEquals(Math.E, ((Number) Function.EXP.calculate(1)).doubleValue() , 1e-10);
+	}
+	@Test
+	public void testExp0() {
+		assertEquals(1, Function.EXP.calculate(0));
+	}
+	@Test
+	public void testExp5() {
+		assertEquals(148.4131591, ((Number) Function.EXP.calculate(5)).doubleValue(), 1e-5);
+	}
+	
+	@Test
+	public void testPi() {
+		assertEquals(Math.PI, Function.PI.calculate());
+	}
+
+	@Test
+	public void testRandBetween0and5() {
+		for(int i = 0; i < 1000; i++) {
+			int temp = ((Number)Function.RANDBETWEEN.calculate(0, 5)).intValue();
+			assertTrue(temp >= 0 && temp <= 5);
+		}
+	}
+	@Test
+	public void testRandBetween7and7() {
+		for(int i = 0; i < 1000; i++) {
+			int temp = ((Number)Function.RANDBETWEEN.calculate(7, 7)).intValue();
+			assertTrue(temp == 7);
+		}
+	}
+	@Test
+	public void testRandBetweenNegative() {
+		for(int i = 0; i < 1000; i++) {
+			int temp = ((Number)Function.RANDBETWEEN.calculate(-2, -5)).intValue();
+			assertTrue(temp >= -5 && temp <= -2);
+		}
+	}
+	@Test
+	public void testRandBetweenSemiNegative() {
+		for(int i = 0; i < 1000; i++) {
+			int temp = ((Number)Function.RANDBETWEEN.calculate(-3, 5)).intValue();
+			assertTrue(temp >= -3 && temp <= 5);
+		}
+	}
+	@Test
+	public void testRandBetweenDoubles() {
+		for(int i = 0; i < 1000; i++) {
+			int temp = ((Number)Function.RANDBETWEEN.calculate(0.6, 3.6)).intValue();
+			assertTrue(temp >= 0 && temp <= 3);
+		}
+	}
+	
+	@Test
+	public void testMedianOdd() {
+		assertEquals(5, Function.MEDIAN.calculate(2, 5, -3, 6.5, 10));
+	}
+	@Test
+	public void testMedianEven() {
+		assertEquals(5.5, Function.MEDIAN.calculate(9.254, -32.2, 5, 6));
+	}
+	@Test
+	public void testMedianRangeOdd() {
+		assertEquals(8, Function.MEDIAN.calculate(r5));
+	}
+	@Test
+	public void testMedianRangeEven() {
+		assertEquals(9, Function.MEDIAN.calculate(r2));
+	}
+
+	@Test
+	public void testIsNumberRangeInt() {
+		assertEquals(true, Function.ISNUMBER.calculate(r2));
+	}
+	@Test
+	public void testIsNumberRangeDouble() {
+		assertEquals(true, Function.ISNUMBER.calculate(r6));
+	}
+	@Test
+	public void testIsNumberRangeBool() {
+		assertEquals(false, Function.ISNUMBER.calculate(r3));
+	}
+	@Test
+	public void testIsNumberRangeString() {
+		assertEquals(false, Function.ISNUMBER.calculate(r1));
+	}
+	
+	@Test
+	public void testIsEvenTrue() {
+		assertEquals(true, Function.ISEVEN.calculate(6));
+	}
+	@Test
+	public void testIsEvenFalse() {
+		assertEquals(false, Function.ISEVEN.calculate(9));
+	}
+	@Test
+	public void testIsEvenZero() {
+		assertEquals(true, Function.ISEVEN.calculate(0));
+	}
+	
+	@Test
+	public void testIsOddTrue() {
+		assertEquals(true, Function.ISODD.calculate(351));
+	}
+	@Test
+	public void testIsOddFalse() {
+		assertEquals(false, Function.ISODD.calculate(-500));
+	}
+	@Test
+	public void testIsOddZero() {
+		assertEquals(false, Function.ISODD.calculate(0));
+	}
+	
+	/*
+	 * Test Exception behavior when no arguments are supplied
+	 * Only on functions which need at least one argument.
+	 */
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testAverageNoArgs() {
@@ -271,12 +558,12 @@ public class TestFunctions {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testRounddownNoArgs() {
+	public void testRoundDownNoArgs() {
 		Function.ROUNDDOWN.calculate();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testRoundupNoArgs() {
+	public void testRoundUpNoArgs() {
 		Function.ROUNDUP.calculate();
 	}
 
@@ -399,6 +686,21 @@ public class TestFunctions {
 	public void testUpperNoArgs() {
 		Function.UPPER.calculate();
 	}
+	
+	
+	/*
+	 * Test calculateNegative method on Add function
+	 */
+	
+	@Test
+	public void testAddCalculateNegativeInt() {
+		assertEquals(-9, Function.SUM.calculateNegative(5, 4));
+	}
+	@Test
+	public void testAddCalculateNegativeDouble() {
+		assertEquals(-4.56, ((Number) Function.SUM.calculateNegative(2, 2.56)).doubleValue(), 1e-15);
+	}
+	
 	
 	/*
 	 * Test not-function methodes
@@ -572,6 +874,19 @@ public class TestFunctions {
 	@Test
 	public void testAssertMinArgumentsOk() {
 		Function.assertMinArguments(1, 1);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testAssertMaxArgumentsError() {
+		Function.assertMaxArguments(3, 4);
+	}
+	@Test
+	public void testAssertMaxArgumentsOk1() {
+		Function.assertMaxArguments(3, 3);
+	}
+	@Test
+	public void testAssertMaxArgumentsOk2() {
+		Function.assertMaxArguments(3, 0);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
