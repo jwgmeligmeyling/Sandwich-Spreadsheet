@@ -3,8 +3,6 @@ package Zandbak;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
-import GUI.Window;
-
 public class Events {
 	
 	public static void FileOpen_Click() {
