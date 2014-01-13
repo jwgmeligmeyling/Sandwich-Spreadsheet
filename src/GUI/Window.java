@@ -126,5 +126,7 @@ public class Window extends JFrame {
 		new Window("Sandwich Spreadsheet", ssheet);
 	}
 	
-	
+	public JTextField getCurrentEditor(){
+		return (JTextField) getCurrentTable().getEditorComponent();
+	}
 }

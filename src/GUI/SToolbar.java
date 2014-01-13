@@ -257,7 +257,7 @@ public class SToolbar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "Insert Function";
-			JOptionPane.showMessageDialog(null, st);
+			 new SFormulePicker( window ).show();;
 			//TODO toon Insert Function dialog!
 		}
 	};
