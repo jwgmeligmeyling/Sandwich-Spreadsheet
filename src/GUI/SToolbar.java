@@ -3,18 +3,28 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
+
+import org.xml.sax.SAXException;
 
 import File.Cell;
+import File.SpreadSheetFile;
+import File.XMLRead;
 import Interfaces.Range;
 
 @SuppressWarnings("serial")
@@ -38,6 +48,10 @@ public class SToolbar extends JToolBar {
 	private final ToolBarToggleButton Bold;
 	private final ToolBarToggleButton Italic;
 	private final ToolBarToggleButton Underlined;
+	
+	private final JFileChooser fc = new JFileChooser();
+	//private final FileNameExtensionFilter filter = new FileNameExtensionFilter("xml");
+	
 	
 	public SToolbar(Window parent) {
 		super();
@@ -64,17 +78,22 @@ public class SToolbar extends JToolBar {
 	}
 	
 	public void createSelectionListener(STable table) {
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		if ( table == null )
+			return;
+		ListSelectionModel lsm = table.getSelectionModel();
+		if ( lsm == null )
+			return;
+		lsm.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
-				// TODO Auto-generated method stub
-			Bold.setSelected(window.getSelectedRange().firstCell().isBold());
-			Italic.setSelected(window.getSelectedRange().firstCell().isItalic());
-			Underlined.setSelected(window.getSelectedRange().firstCell().isUnderlined());
+				Bold.setSelected(window.getSelectedRange().firstCell().isBold());
+				Italic.setSelected(window.getSelectedRange().firstCell().isItalic());
+				Underlined.setSelected(window.getSelectedRange().firstCell().isUnderlined());
 			}
 			
 		});
+		
 	}
 
 	public int getToolbarHeight() {
@@ -88,24 +107,68 @@ public class SToolbar extends JToolBar {
 	private AbstractAction fileNew = new AbstractAction(null, icoNew) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>New";
-			JOptionPane.showMessageDialog(null, st);
+			new Window("Sandwich Spreadsheet", new SpreadSheetFile());
 		}
 	};
 
 	private AbstractAction fileOpen = new AbstractAction(null, icoOpen) {
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>Open";
-			JOptionPane.showMessageDialog(null, st);
+			// Open een dialog
+			//fc.setFileFilter(filter);
+			int returnVal = fc.showOpenDialog(window);
+			
+			// Wanneer niet op cancel gedrukt:
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				String path = fc.getSelectedFile().getPath();
+				
+				try {
+					// Nieuwe sheetfile aanmaken vanuit de XML
+					SpreadSheetFile sheetfile = XMLRead.read(path);
+					new Window("Sandwich Spreadsheet", sheetfile);
+					
+				} catch (ParserConfigurationException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				} catch (SAXException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				}
+		    }	    
 		}
 	};
 
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>Save";
-			JOptionPane.showMessageDialog(null, st);
+			int returnVal = fc.showSaveDialog(window);
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				String path = fc.getSelectedFile().getPath();
+
+				System.out.println("You chose to save to this location: "
+						+ path);
+
+				SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
+
+				try {
+
+					sheetfile.write(path);
+
+				} catch (XMLStreamException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				} catch (FactoryConfigurationError e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				}
+		    }
 		}
 	};
 

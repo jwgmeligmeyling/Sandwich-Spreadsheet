@@ -50,7 +50,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * automatically increments when a <code>Cell</code> is inserted with a
 	 * higher column index.
 	 */
-	private int columnCount = 0;
+	private int columnCount = 50;
 
 	/**
 	 * The amount of rows used in this sheet. This is used to limit the amount
@@ -58,18 +58,10 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * automatically increments when a <code>Cell</code> is inserted with a
 	 * higher row index.
 	 */
-	private int rowCount = 0;
+	private int rowCount = 200;
 	
 	private STable stable;
 	
-	public void setSTable(STable stable) {
-		this.stable = stable;
-	}
-	
-	public STable getSTable() {
-		return stable;
-	}
-
 	/**
 	 * Inner class for <code>Cell</code> positions. The <code>Position</code>
 	 * class holds a unique column and row index. Uniqueness is ensured by
@@ -349,6 +341,9 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		sheetName = nameIn;
 	}
 	
+	/**
+	 * Update all cells in this sheet based on current input
+	 */
 	public void init() {
 		for ( Cell cell : cells.values() ) {
 			cell.update();
@@ -360,37 +355,13 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * @param index
 	 * @return column letter
 	 */
-	public String getColumnLetter(int index) {
+	public static String getColumnLetter(int index) {
 		int quotient = (index) / 26;
 		if (quotient > 0) {
 			return getColumnLetter(quotient - 1) + (char) ((index % 26) + 65);
 		} else {
 			return "" + (char) ((index % 26) + 65);
 		}
-	}
-
-	/**
-	 * The function that writes the sheet to a XML file.
-	 * <div><b>Author:</b><br>
-	 * <ul>
-	 * <li>Jim Hommes</li>
-	 * </ul>
-	 * </div>
-	 * 
-	 * @param writer
-	 *            ...
-	 * @throws XMLStreamException
-	 *             If there was an error processing the XML stream
-	 */
-	public void write(XMLStreamWriter writer) throws XMLStreamException {
-		writer.writeStartElement("SPREADSHEET");
-			
-		for (Cell cell : cells.values()) {
-			cell.write(writer);
-		}
-		
-		writer.writeEndElement();
-		
 	}
 
 	@Override
@@ -403,14 +374,47 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		sheetName = newSheetName;
 	}
 
+	/**
+	 * @return amount of columns in this {@code Sheet}
+	 */
 	public int getColumnCount() {
 		return columnCount + 1;
 	}
+	
+	/**
+	 *  Ensure column count, to extend this {@code Sheet}
+	 * @param columnCount
+	 */
+	public void ensureColumnCount(int columnCount) {
+		if ( columnCount > this.columnCount ) {
+			this.columnCount = columnCount;
+		}
+	}
 
+	/** 
+	 * @return amount of rows in this {@code Sheet}
+	 */
 	public int getRowCount() {
 		return rowCount + 1;
 	}
+	
+	/**
+	 * Ensure row count, to extend this {@code Sheet}
+	 * @param rowCount
+	 */
+	public void ensureRowCount(int rowCount) {
+		if ( rowCount > this.rowCount ) {
+			this.rowCount = rowCount;
+		}
+	}
 
+	/**
+	 * Alias for sheet.new Cell().
+	 * @param value
+	 * @param colIndex
+	 * @param rowIndex
+	 * @return newly created {@code Cell} object
+	 */
 	public Cell createCell(String value, int colIndex, int rowIndex) {
 		Position position = new Position(colIndex, rowIndex);
 		Cell cell = new Cell(this, position, value);
@@ -457,6 +461,46 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	}
 
 	/**
+	 * Setter for the STable instance referencing to this Sheet
+	 * @param stable
+	 */
+	public void setSTable(STable stable) {
+		this.stable = stable;
+	}
+
+	/**
+	 * Getter for the STable instance referencing to this Sheet
+	 * @return
+	 */
+	public STable getSTable() {
+		return stable;
+	}
+
+	/**
+	 * The function that writes the sheet to a XML file.
+	 * <div><b>Author:</b><br>
+	 * <ul>
+	 * <li>Jim Hommes</li>
+	 * </ul>
+	 * </div>
+	 * 
+	 * @param writer
+	 *            ...
+	 * @throws XMLStreamException
+	 *             If there was an error processing the XML stream
+	 */
+	public void write(XMLStreamWriter writer) throws XMLStreamException {
+		writer.writeStartElement("SPREADSHEET");
+			
+		for (Cell cell : cells.values()) {
+			cell.write(writer);
+		}
+		
+		writer.writeEndElement();
+		
+	}
+
+	/**
 	 * XML Handler for SAX Parsing of Sheets
 	 * @author Jim Hommes
 	 *
@@ -485,7 +529,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 			if (name.equalsIgnoreCase("SPREADSHEET")) {
 				sheet = new Sheet();
 				String sheetName = attributes.getValue("name");
-				if ( sheetName == null ) {
+				if ( sheetName != null ) {
 					sheet.setSheetName(sheetName);
 				}
 			} else if (name.equalsIgnoreCase("CELL")) {

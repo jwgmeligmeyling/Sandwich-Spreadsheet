@@ -24,7 +24,7 @@ public class Window extends JFrame {
 	 * @param title is the title of the window.
 	 * @throws HeadlessException
 	 */
-	public Window(String title) throws HeadlessException {
+	public Window(String title, SpreadSheetFile spreadsheet) throws HeadlessException {
 		super(title);
 		
 		setSize(800, 450);
@@ -50,13 +50,17 @@ public class Window extends JFrame {
 		container.add(tabbedPane, BorderLayout.CENTER);
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		
-		newFile = new SpreadSheetFile();
+		newFile = spreadsheet;
 		createSheet();
 		tbMain.createSelectionListener(getCurrentTable());
 	}
 	
 	public Sheet getCurrentSheet() {
 		return newFile.getSheet(tabbedPane.getSelectedIndex());
+	}
+	
+	public SpreadSheetFile getCurrentSpreadSheetFile(){
+		return newFile;
 	}
 	
 	public STable getCurrentTable() {
@@ -82,47 +86,25 @@ public class Window extends JFrame {
 	}
 	
 	public void createSheet() {
-		Sheet newSheet = newFile.newSheet("Sheet" + (newFile.countSheets() + 1));
-		System.out.println("countSheets() = " + newFile.countSheets());
+		if ( newFile.countSheets() == 0 ) {
+			newFile.newSheet("Sheet" + (newFile.countSheets() + 1));
+		}
 		
-		fillSheet(newSheet);
-		
-		STable table = new STable(newSheet, formule);
-		
-		Box box = Box.createVerticalBox();
-		box.add(table.getTableHeader());
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setPreferredSize(new Dimension(700,500));
-		box.add(scrollPane);
-		
-		tabbedPane.addTab(newSheet.getSheetName(), box);
-	}
-	
-	private void fillSheet(Sheet sheet) {
-		sheet.createCell("SOM:", 0, 0);
-		sheet.createCell("=SUM(A2:T200)", 1, 0);
-		sheet.createCell("=B1+E1", 2, 0);
-
-		Cell X = sheet.createCell("COUNT:", 3, 0);
-		X.setbColor(new Color(180, 180, 255));
-		X.setBold(true);
-		Cell Y = sheet.createCell("test", 5, 0);
-		Y.setUnderlined(true);
-		Y.setItalic(true);
-		Y.setfColor(new Color(180,150,255));
-		sheet.createCell("=COUNT(A2:T200)", 4, 0);
-		sheet.createCell("COUNTIF>50:", 6, 0);
-		sheet.createCell("=COUNTIF(A2:T200;\">=\"&50))", 7, 0);
-		sheet.createCell("SUMIF>50:", 9, 0);
-		sheet.createCell("=SUMIF(A2:T200,\">\"&50)", 10, 0);
-
-		for (int i = 0; i < 20; i++) {
-			for (int j = 1; j < 200; j++) {
-				sheet.createCell("=RANDBETWEEN(0,100)", i, j);
-			}
+		for(Sheet sheet: newFile.getSheets()){
+			sheet.init();
+			
+			STable table = new STable(sheet, formule);
+			
+			Box box = Box.createVerticalBox();
+			box.add(table.getTableHeader());
+			JScrollPane scrollPane = new JScrollPane(table);
+			scrollPane.setPreferredSize(new Dimension(700,500));
+			box.add(scrollPane);
+			
+			tabbedPane.addTab(sheet.getSheetName(), box);
 		}
 	}
-
+	
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
@@ -141,6 +123,9 @@ public class Window extends JFrame {
 	
 	
 	public static void main(String[] args) {
-		new Window("Sandwich Spreadsheet");
+		SpreadSheetFile ssheet = new SpreadSheetFile();
+		new Window("Sandwich Spreadsheet", ssheet);
 	}
+	
+	
 }

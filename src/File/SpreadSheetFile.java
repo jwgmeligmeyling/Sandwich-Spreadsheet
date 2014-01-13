@@ -59,7 +59,7 @@ public class SpreadSheetFile {
 	 * Reads xml file
 	 * @throws IOException 
 	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
+	 * @throws ParserConfigurationException
 	 */
 	public static SpreadSheetFile openFile(String filename, String filepath) throws ParserConfigurationException, SAXException, IOException {
 		return XMLRead.read(filepath + "/" + filename);		
