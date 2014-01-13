@@ -3,18 +3,29 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
+
+import org.xml.sax.SAXException;
 
 import File.Cell;
+import File.Sheet;
+import File.SpreadSheetFile;
+import File.XMLRead;
 import Interfaces.Range;
 
 @SuppressWarnings("serial")
@@ -38,6 +49,10 @@ public class SToolbar extends JToolBar {
 	private final ToolBarToggleButton Bold;
 	private final ToolBarToggleButton Italic;
 	private final ToolBarToggleButton Underlined;
+	
+	private final JFileChooser fc = new JFileChooser();
+	//private final FileNameExtensionFilter filter = new FileNameExtensionFilter("xml");
+	
 	
 	public SToolbar(Window parent) {
 		super();
@@ -64,7 +79,7 @@ public class SToolbar extends JToolBar {
 	}
 	
 	public void createSelectionListener(STable table) {
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		/*table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
@@ -74,7 +89,7 @@ public class SToolbar extends JToolBar {
 			Underlined.setSelected(window.getSelectedRange().firstCell().isUnderlined());
 			}
 			
-		});
+		});*/
 	}
 
 	public int getToolbarHeight() {
@@ -89,14 +104,38 @@ public class SToolbar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>New";
+			new Window("Sandwich Spreadsheet", new SpreadSheetFile());
 			JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
 	private AbstractAction fileOpen = new AbstractAction(null, icoOpen) {
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>Open";
+			//fc.setFileFilter(filter);
+			int returnVal = fc.showOpenDialog(window);				//Geen idee wat ik hier doe
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+		       System.out.println("You chose to open this file: " +
+		            fc.getSelectedFile().getPath());
+		    }
+		    
+		    SpreadSheetFile sheetfile = new SpreadSheetFile();
+			try {
+				sheetfile = SpreadSheetFile.openFile("", fc.getSelectedFile().getPath());
+			} catch (ParserConfigurationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SAXException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		    new Window("Sandwich Spreadsheet", sheetfile);
+			
 			JOptionPane.showMessageDialog(null, st);
 		}
 	};
@@ -105,6 +144,27 @@ public class SToolbar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String st = "File>Save";
+			int returnVal = fc.showSaveDialog(window);				//Geen idee wat ik hier doe
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+		       System.out.println("You chose to save to this location: " +
+		            fc.getSelectedFile().getPath());
+		    }
+		    
+		    SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
+		    try {
+				sheetfile.write(fc.getSelectedFile().getPath());
+			} catch (XMLStreamException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (FactoryConfigurationError e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		    
+			
 			JOptionPane.showMessageDialog(null, st);
 		}
 	};

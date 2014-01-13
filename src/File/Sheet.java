@@ -50,7 +50,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * automatically increments when a <code>Cell</code> is inserted with a
 	 * higher column index.
 	 */
-	private int columnCount = 0;
+	private int columnCount = 50;
 
 	/**
 	 * The amount of rows used in this sheet. This is used to limit the amount
@@ -58,7 +58,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * automatically increments when a <code>Cell</code> is inserted with a
 	 * higher row index.
 	 */
-	private int rowCount = 0;
+	private int rowCount = 50;
 	
 	private STable stable;
 	

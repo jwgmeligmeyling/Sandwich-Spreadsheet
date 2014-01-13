@@ -24,7 +24,7 @@ public class Window extends JFrame {
 	 * @param title is the title of the window.
 	 * @throws HeadlessException
 	 */
-	public Window(String title) throws HeadlessException {
+	public Window(String title, SpreadSheetFile spreadsheet) throws HeadlessException {
 		super(title);
 		
 		setSize(800, 450);
@@ -50,13 +50,17 @@ public class Window extends JFrame {
 		container.add(tabbedPane, BorderLayout.CENTER);
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		
-		newFile = new SpreadSheetFile();
+		newFile = spreadsheet;
 		createSheet();
 		tbMain.createSelectionListener(getCurrentTable());
 	}
 	
 	public Sheet getCurrentSheet() {
 		return newFile.getSheet(tabbedPane.getSelectedIndex());
+	}
+	
+	public SpreadSheetFile getCurrentSpreadSheetFile(){
+		return newFile;
 	}
 	
 	public STable getCurrentTable() {
@@ -82,10 +86,24 @@ public class Window extends JFrame {
 	}
 	
 	public void createSheet() {
+		for(Sheet sheet: newFile.getSheets()){
+			sheet.init();
+			
+			STable table = new STable(sheet, formule);
+			
+			Box box = Box.createVerticalBox();
+			box.add(table.getTableHeader());
+			JScrollPane scrollPane = new JScrollPane(table);
+			scrollPane.setPreferredSize(new Dimension(700,500));
+			box.add(scrollPane);
+			
+			tabbedPane.addTab(sheet.getSheetName(), box);
+		
+		}
 		Sheet newSheet = newFile.newSheet("Sheet" + (newFile.countSheets() + 1));
 		System.out.println("countSheets() = " + newFile.countSheets());
 		
-		fillSheet(newSheet);
+		//fillSheet(newSheet);
 		
 		STable table = new STable(newSheet, formule);
 		
@@ -122,7 +140,7 @@ public class Window extends JFrame {
 			}
 		}
 	}
-
+	
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
@@ -141,6 +159,9 @@ public class Window extends JFrame {
 	
 	
 	public static void main(String[] args) {
-		new Window("Sandwich Spreadsheet");
+		SpreadSheetFile ssheet = new SpreadSheetFile();
+		new Window("Sandwich Spreadsheet", ssheet);
 	}
+	
+	
 }
