@@ -13,9 +13,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -23,7 +23,6 @@ import javax.xml.stream.XMLStreamException;
 import org.xml.sax.SAXException;
 
 import File.Cell;
-import File.Sheet;
 import File.SpreadSheetFile;
 import File.XMLRead;
 import Interfaces.Range;
@@ -79,17 +78,22 @@ public class SToolbar extends JToolBar {
 	}
 	
 	public void createSelectionListener(STable table) {
-		/*table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		if ( table == null )
+			return;
+		ListSelectionModel lsm = table.getSelectionModel();
+		if ( lsm == null )
+			return;
+		lsm.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
-				// TODO Auto-generated method stub
-			Bold.setSelected(window.getSelectedRange().firstCell().isBold());
-			Italic.setSelected(window.getSelectedRange().firstCell().isItalic());
-			Underlined.setSelected(window.getSelectedRange().firstCell().isUnderlined());
+				Bold.setSelected(window.getSelectedRange().firstCell().isBold());
+				Italic.setSelected(window.getSelectedRange().firstCell().isItalic());
+				Underlined.setSelected(window.getSelectedRange().firstCell().isUnderlined());
 			}
 			
-		});*/
+		});
+		
 	}
 
 	public int getToolbarHeight() {
@@ -103,9 +107,7 @@ public class SToolbar extends JToolBar {
 	private AbstractAction fileNew = new AbstractAction(null, icoNew) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>New";
 			new Window("Sandwich Spreadsheet", new SpreadSheetFile());
-			JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
@@ -113,59 +115,60 @@ public class SToolbar extends JToolBar {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>Open";
+			// Open een dialog
 			//fc.setFileFilter(filter);
-			int returnVal = fc.showOpenDialog(window);				//Geen idee wat ik hier doe
-		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-		       System.out.println("You chose to open this file: " +
-		            fc.getSelectedFile().getPath());
-		    }
-		    
-		    SpreadSheetFile sheetfile = new SpreadSheetFile();
-			try {
-				sheetfile = SpreadSheetFile.openFile("", fc.getSelectedFile().getPath());
-			} catch (ParserConfigurationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SAXException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		    new Window("Sandwich Spreadsheet", sheetfile);
+			int returnVal = fc.showOpenDialog(window);
 			
-			JOptionPane.showMessageDialog(null, st);
+			// Wanneer niet op cancel gedrukt:
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				String path = fc.getSelectedFile().getPath();
+				
+				try {
+					// Nieuwe sheetfile aanmaken vanuit de XML
+					SpreadSheetFile sheetfile = XMLRead.read(path);
+					new Window("Sandwich Spreadsheet", sheetfile);
+					
+				} catch (ParserConfigurationException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				} catch (SAXException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				}
+		    }	    
 		}
 	};
 
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>Save";
-			int returnVal = fc.showSaveDialog(window);				//Geen idee wat ik hier doe
+			int returnVal = fc.showSaveDialog(window);
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-		       System.out.println("You chose to save to this location: " +
-		            fc.getSelectedFile().getPath());
+				String path = fc.getSelectedFile().getPath();
+
+				System.out.println("You chose to save to this location: "
+						+ path);
+
+				SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
+
+				try {
+
+					sheetfile.write(path);
+
+				} catch (XMLStreamException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				} catch (FactoryConfigurationError e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					e1.printStackTrace();
+				}
 		    }
-		    
-		    SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
-		    try {
-				sheetfile.write(fc.getSelectedFile().getPath());
-			} catch (XMLStreamException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (FactoryConfigurationError e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		    
-			
-			JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
