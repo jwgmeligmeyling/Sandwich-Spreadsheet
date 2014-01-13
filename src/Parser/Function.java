@@ -921,8 +921,7 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
-			double output = Math.pow(doubleValueOf(arguments[0]), 1 / doubleValueOf(arguments[1]));
-			return convertToIntIfApplicable(output);
+			return convertToIntIfApplicable(Math.pow(doubleValueOf(arguments[0]), 1.0 / doubleValueOf(arguments[1])));
 		}
 	},
 	
@@ -1164,15 +1163,15 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>real power value</code>
+	 * <b>Expected arguments:</b> <code>[real power value]</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>value of e to the power of <code>real power value</code></li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
+	 * If the power-arguments is not supplied, <code>EXP</code> will return the value of e (to the power 1)
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -1183,8 +1182,12 @@ public enum Function {
 	EXP("Returns a Double value of e to the power of the given argument.") {
 		@Override
 		Object calculate(Object... arguments) {
-			assertArguments(1, arguments.length);
-			return convertToIntIfApplicable(Math.exp(doubleValueOf(arguments[0])));
+			assertTwoArguments(0, 1, arguments.length);
+			double power = 1;
+			if(arguments.length > 0) {
+				power = doubleValueOf(arguments[0]);
+			}
+			return convertToIntIfApplicable(Math.exp(power));
 			//convertToIntIfApplicable is alleen nodig in het geval van argument[0] == 0
 		}
 	},

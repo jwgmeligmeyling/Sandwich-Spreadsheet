@@ -67,15 +67,15 @@ public class TestFunctions {
 	}
 
 	@Test
-	public void testSumRangeWithNumbers() {
+	public void testSumRangeNumber() {
 		assertEquals(48, Function.SUM.calculate(r2));
 	}
 	@Test
-	public void testSumRangeWithBooles() {
+	public void testSumRangeBoolean() {
 		assertEquals(2, Function.SUM.calculate(r3));
 	}
 	@Test
-	public void testSumRangeWithStrings() {
+	public void testSumRangeWithString() {
 		assertEquals(68, Function.SUM.calculate(r1));
 	}
 	@Test
@@ -83,7 +83,7 @@ public class TestFunctions {
 		assertEquals(10, Function.SUM.calculate(5, 5));
 	}
 	@Test
-	public void testSumDoubles() {
+	public void testSumDouble() {
 		assertEquals(7.3, ((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(), 1e-15);
 	}
 	@Test
@@ -95,6 +95,144 @@ public class TestFunctions {
 		assertEquals(7.125, ((Double) Function.SUM.calculate(6.125, 1)).doubleValue(), 1e-15);
 	}
 
+	@Test
+	public void testRoot27b3() {
+		assertEquals(3, Function.ROOT.calculate(27, 3));
+	}
+	@Test
+	public void testRoot64b2() {
+		assertEquals(8, Function.ROOT.calculate(64.0, 2));
+	}
+	@Test
+	public void testRoot64b4() {
+		assertEquals(4, ((Double)Function.ROOT.calculate(64.0, 3)).doubleValue(), 1e-15);
+	}
+	@Test
+	public void testSqrt9() {
+		assertEquals(3, Function.SQRT.calculate(9));
+	}
+	@Test
+	public void test64() {
+		assertEquals(8, Function.SQRT.calculate(64));
+	}
+	@Test
+	public void test144() {
+		assertEquals(12, Function.SQRT.calculate(144));
+	}
+	@Test
+	public void test0() {
+		assertEquals(0, Function.SQRT.calculate(0));
+	}
+	@Test
+	public void test1() {
+		assertEquals(1, Function.SQRT.calculate(1));
+	}
+	@Test
+	public void test_min1() {
+		assertEquals(Double.NaN, Function.SQRT.calculate(-1));
+	}
+
+	@Test
+	public void testTan45grad() {
+		assertEquals(1.0, ((Double)Function.TAN.calculate(0.25 * Math.PI)).doubleValue(), 1e-6);
+	}
+	@Test
+	public void testTan0grad() {
+		assertEquals(0.0, ((Double)Function.TAN.calculate(0)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testCos90grad() {
+		assertEquals(0.0, ((Double)Function.COS.calculate(0.5 * Math.PI)).doubleValue(), 1e-6);
+	}
+	@Test
+	public void testCos0grad() {
+		assertEquals(1.0, ((Double)Function.COS.calculate(0)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testSin90grad() {
+		assertEquals(1.0, ((Double)Function.SIN.calculate(0.5 * Math.PI)).doubleValue(), 1e-6);
+	}
+	@Test
+	public void testSin0grad() {
+		assertEquals(0, ((Double)Function.SIN.calculate(0)).doubleValue(), 1e-15);
+	}
+	
+	@Test
+	public void testASin90rad() {
+		assertEquals(Double.NaN, ((Double)Function.ASIN.calculate(0.5 * Math.PI)).doubleValue(), 1e-6);
+	}
+	@Test
+	public void testACos90rad() {
+		assertEquals(Double.NaN, ((Double)Function.ACOS.calculate(0.5 * Math.PI)).doubleValue(), 1e-6);
+	}
+	@Test
+	public void testATan1() {
+		assertEquals(0.25 * Math.PI, ((Double)Function.ATAN.calculate(1)).doubleValue(), 1e-6);
+	}
+	
+	@Test
+	public void testRadian0grad() {
+		assertEquals(0.0, Function.RADIAN.calculate(0.0));
+	}
+	@Test
+	public void testRadian45grad() {
+		assertEquals(0.25 * Math.PI, Function.RADIAN.calculate(45));
+	}
+	@Test
+	public void testRadian90grad() {
+		assertEquals(0.5 * Math.PI, Function.RADIAN.calculate(90));
+	}
+	@Test
+	public void testRadian180grad() {
+		assertEquals(Math.PI, Function.RADIAN.calculate(180));
+	}
+	@Test
+	public void testRadian270grad() {
+		assertEquals(1.5 * Math.PI, Function.RADIAN.calculate(270));
+	}
+	@Test
+	public void testRadian360grad() {
+		assertEquals(2.0 * Math.PI, Function.RADIAN.calculate(360));
+	}
+	@Test
+	public void testRadian405grad() {
+		assertEquals(2.25 * Math.PI, Function.RADIAN.calculate(405));
+	}
+	
+	@Test
+	public void testDegree0rad() {
+		assertEquals(0.0, ((Double)Function.DEGREE.calculate(0.0)).doubleValue(), 1e-10);
+	}
+	@Test
+	public void testDegree0_25rad() {
+		assertEquals(45.0, ((Double)Function.DEGREE.calculate(0.25 * Math.PI)).doubleValue(), 1e-10);
+	}
+	@Test
+	public void testDegree0_5rad() {
+		assertEquals(90.0, ((Double)Function.DEGREE.calculate(0.5 * Math.PI)).doubleValue(), 1e-10);
+	}
+	@Test
+	public void testDegree1rad() {
+		assertEquals(180.0, ((Double)Function.DEGREE.calculate(Math.PI)).doubleValue(), 1e-10);
+	}
+	@Test
+	public void testDegree1_5rad() {
+		assertEquals(270.0, ((Double)Function.DEGREE.calculate(1.5 * Math.PI)).doubleValue(), 1e-10);
+	}
+	@Test
+	public void testDegree2rad() {
+		assertEquals(360.0, ((Double)Function.DEGREE.calculate(2.0 * Math.PI)).doubleValue(), 1e-10);
+	}
+	@Test
+	public void testDegree2_25rad() {
+		assertEquals(405.0, ((Double)Function.DEGREE.calculate(2.25 * Math.PI)).doubleValue(), 1e-10);
+	}
+
+	
+	
+	
 	@Test
 	public void testAndTrue() {
 		assertTrue((Boolean) Function.AND.calculate(true, true));
@@ -344,6 +482,10 @@ public class TestFunctions {
 	}
 	
 	@Test
+	public void testExpNoArgs() {
+		assertEquals(Math.E, ((Number) Function.EXP.calculate()).doubleValue() , 1e-10);
+	}
+	@Test
 	public void testExp1() {
 		assertEquals(Math.E, ((Number) Function.EXP.calculate(1)).doubleValue() , 1e-10);
 	}
@@ -359,6 +501,14 @@ public class TestFunctions {
 	@Test
 	public void testPi() {
 		assertEquals(Math.PI, Function.PI.calculate());
+	}
+	
+	@Test
+	public void testRand() {
+		for(int i = 0; i < 1000; i++) {
+			double temp = ((Double)Function.RAND.calculate()).doubleValue();
+			assertTrue(temp >= 0 && temp <= 1);
+		}
 	}
 
 	@Test
@@ -466,12 +616,12 @@ public class TestFunctions {
 	public void testAverageNoArgs() {
 		Function.AVERAGE.calculate();
 	}
-
+/*
 	@Test(expected = IllegalArgumentException.class)
 	public void testCountNoArgs() {
 		Function.COUNT.calculate();
 	}
-
+*/
 	@Test(expected = IllegalArgumentException.class)
 	public void testCountaNoArgs() {
 		Function.COUNTA.calculate();
@@ -673,12 +823,7 @@ public class TestFunctions {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testExpNoArgs() {
-		Function.EXP.calculate();
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testIsoddNoArgs() {
+	public void testIsOddNoArgs() {
 		Function.ISODD.calculate();
 	}
 
