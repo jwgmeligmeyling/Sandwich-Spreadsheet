@@ -16,8 +16,7 @@ public class Window extends JFrame {
 	private FormuleBalk formule;
 	private JTabbedPane tabbedPane;
 	private SStatusBar statusBar;
-	
-	private static SpreadSheetFile newFile;
+	private SpreadSheetFile newFile;
 	
 	/**
 	 * Constructor for the GUI.
