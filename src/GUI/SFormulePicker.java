@@ -20,11 +20,10 @@ import Parser.Function;
 @SuppressWarnings("serial")
 public class SFormulePicker extends JDialog implements ActionListener {
 	// Implements action listener voor de clicks in je list
-	private final JList<Function> lijst;
+	private final JList lijst;
 	private final Window window;
 
 	// constructor
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SFormulePicker(Window window) {
 		super(window, "Formules", true);
 		this.window = window;

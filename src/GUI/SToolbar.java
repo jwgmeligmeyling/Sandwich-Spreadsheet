@@ -110,61 +110,14 @@ public class SToolbar extends JToolBar {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// Open een dialog
-			//fc.setFileFilter(filter);
-			int returnVal = fc.showOpenDialog(window);
-			
-			// Wanneer niet op cancel gedrukt:
-		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-				File file = fc.getSelectedFile();
-				
-				try {
-					// Nieuwe sheetfile aanmaken vanuit de XML
-					new Window(new SpreadSheetFile(file));
-					
-				} catch (ParserConfigurationException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				} catch (SAXException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				}
-		    }	    
+		window.FileOpen();	    
 		}
 	};
 
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
-	    	File file = sheetfile.getFile();
-	    	
-	    	if ( file == null ) {
-				int returnVal = fc.showSaveDialog(window);
-			    if(returnVal == JFileChooser.APPROVE_OPTION) {
-					file = fc.getSelectedFile();
-			    }
-	    	}
-	    	
-	    	if ( file == null ) {
-	    		return;
-	    	}
-	    	
-	    	try {
-				sheetfile.write(file);
-			} catch (XMLStreamException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage());
-				e1.printStackTrace();
-			} catch (FactoryConfigurationError e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage());
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage());
-				e1.printStackTrace();
-			}
+			window.FileSave();
 		}
 	};
 

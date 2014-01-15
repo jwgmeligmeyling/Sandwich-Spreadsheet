@@ -1,8 +1,15 @@
 package GUI;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
+
+import org.xml.sax.SAXException;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 import File.Cell;
 import File.Sheet;
@@ -178,6 +185,61 @@ public class Window extends JFrame {
 	 */
 	public static void main(String[] args) {
 		new Window();
+	}
+	public void FileOpen(){
+		// Open een dialog
+		//fc.setFileFilter(filter);
+		JFileChooser fc = new JFileChooser();
+		int returnVal = fc.showOpenDialog(this);
+		
+		// Wanneer niet op cancel gedrukt:
+	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			
+			try {
+				// Nieuwe sheetfile aanmaken vanuit de XML
+				new Window(new SpreadSheetFile(file));
+				
+			} catch (ParserConfigurationException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+				e1.printStackTrace();
+			} catch (SAXException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+				e1.printStackTrace();
+			}
+	    }	    
+	}
+	public void FileSave(){
+		JFileChooser fc = new JFileChooser();
+		SpreadSheetFile sheetfile = this.getCurrentSpreadSheetFile();
+    	File file = sheetfile.getFile();
+    	
+    	if ( file == null ) {
+			int returnVal = fc.showSaveDialog(this);
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				file = fc.getSelectedFile();
+		    }
+    	}
+    	
+    	if ( file == null ) {
+    		return;
+    	}
+    	
+    	try {
+			sheetfile.write(file);
+		} catch (XMLStreamException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage());
+			e1.printStackTrace();
+		} catch (FactoryConfigurationError e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage());
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage());
+			e1.printStackTrace();
+		}
 	}
 
 }
