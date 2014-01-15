@@ -1,22 +1,26 @@
 package Parser;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import File.*;
 import File.Sheet.Range;
 
 public class TestFunctions {
 
-	public Sheet sheet;
+	public Sheet sheet, tsheet;
 	public Cell A1, A2, A3, B1, B2, B3, C1, C2, C3, D1, D2, D3, E1, E2, E3;
+	public Cell tA1, tA2, tA3, tA4, tA5, tB1, tB2, tB3, tB4, tB5, tC1, tC2, tC3, tC4, tC5;
 	public Range r1, r2, r3, r4, r5, r6;
+	public Range table1, table2, tBools, tValS, tValB;
 
 	@Before
 	public void setUp() throws Exception {
-		sheet = new Sheet();
+		
+		SpreadSheetFile workbook = new SpreadSheetFile();
+		Sheet sheet = workbook.createSheet();
+		Sheet tsheet = workbook.createSheet();
+		
 		A1 = sheet.createCell("bliep", 0, 0);
 		A2 = sheet.createCell("5", 0, 1);
 		A3 = sheet.createCell("=5", 0, 2);
@@ -40,11 +44,37 @@ public class TestFunctions {
 		r5 = sheet.getRange(A2, C2); // Numbers
 		r6 = sheet.getRange(E1, E3); // Doubles
 		
+		
+		tA1 = tsheet.createCell("true", 0, 0);
+		tA2 = tsheet.createCell("false", 0, 0);
+		tA3 = tsheet.createCell("true", 0, 0);
+		tA4 = tsheet.createCell("true", 0, 0);
+		tA5 = tsheet.createCell("false", 0, 0);
+
+		tB1 = tsheet.createCell("5", 0, 0);
+		tB2 = tsheet.createCell("-2", 0, 0);
+		tB3 = tsheet.createCell("4", 0, 0);
+		tB4 = tsheet.createCell("8", 0, 0);
+		tB5 = tsheet.createCell("3.5", 0, 0);
+		      
+		tC1 = tsheet.createCell("20", 0, 0);
+		tC2 = tsheet.createCell("78", 0, 0);
+		tC3 = tsheet.createCell("2.05", 0, 0);
+		tC4 = tsheet.createCell("16", 0, 0);
+		tC5 = tsheet.createCell("-5", 0, 0);
+		
+		table1 = tsheet.getRange(A1, A3);
+		//table2 = tsheet.getRange(A1, A3);
+		tBools = tsheet.getRange(tA1, tA5);
+		tValS = tsheet.getRange(tB1, tB5);
+		tValB = tsheet.getRange(tC1, tC5);
+		
 		/*
 		 * Jan-Willem:
 		 * Initialize sheet such that values are calculated based on current input
 		 */
 		sheet.init();
+		tsheet.init();
 	}
 	
 	@Test
@@ -94,6 +124,62 @@ public class TestFunctions {
 	public void testSumDoubleAndInt() {
 		assertEquals(7.125, ((Double) Function.SUM.calculate(6.125, 1)).doubleValue(), 1e-15);
 	}
+	
+	@Test
+	public void testSumIf2args() {
+		// TODO assertEquals(38.05, Function.SUMIF.calculate(tValB, ">10"));
+	}
+	@Test
+	public void testSumIf3args() {
+		// TODO assertEquals(38.05, Function.SUMIF.calculate(tBools, true, tValB));
+	}
+	
+	@Test
+	public void testCountA() {
+		assertEquals(11, Function.COUNTA.calculate(r1));
+	}
+	
+	@Test
+	public void testCountIf() {
+		
+	}
+	
+
+	@Test
+	public void testRoundUp1() {
+		assertEquals(6, Function.ROUNDUP.calculate(5.2));
+	}
+	@Test
+	public void testRoundUp2() {
+		assertEquals(-6.9, Function.ROUNDUP.calculate(-6.82, 1));
+	}
+	@Test
+	public void testRoundUp3() {
+		assertEquals(100, Function.ROUNDUP.calculate(2, -2));
+	}
+	@Test
+	public void testRoundUp4() {
+		assertEquals(6, Function.ROUNDUP.calculate(5.2, 0));
+	}
+	@Test
+	public void testRoundUp5() {
+		assertEquals(6, Function.ROUNDUP.calculate(5.8));
+	}
+
+	@Test
+	public void testRoundDown1() {
+		assertEquals(5, Function.ROUNDDOWN.calculate(5.99));
+	}
+	@Test
+	public void testRoundDown2() {
+		assertEquals(-6.8, Function.ROUNDDOWN.calculate(-6.88, 1));
+	}
+	@Test
+	public void testRoundDown3() {
+		assertEquals(50, Function.ROUNDDOWN.calculate(59, -1));
+	}
+
+	
 
 	@Test
 	public void testRoot27b3() {
@@ -112,15 +198,15 @@ public class TestFunctions {
 		assertEquals(3, Function.SQRT.calculate(9));
 	}
 	@Test
-	public void test64() {
+	public void testSqrt64() {
 		assertEquals(8, Function.SQRT.calculate(64));
 	}
 	@Test
-	public void test144() {
+	public void testSqrt144() {
 		assertEquals(12, Function.SQRT.calculate(144));
 	}
 	@Test
-	public void test0() {
+	public void testSqrt0() {
 		assertEquals(0, Function.SQRT.calculate(0));
 	}
 	@Test
@@ -128,7 +214,7 @@ public class TestFunctions {
 		assertEquals(1, Function.SQRT.calculate(1));
 	}
 	@Test
-	public void test_min1() {
+	public void testSqrt_min1() {
 		assertEquals(Double.NaN, Function.SQRT.calculate(-1));
 	}
 
@@ -229,9 +315,6 @@ public class TestFunctions {
 	public void testDegree2_25rad() {
 		assertEquals(405.0, ((Double)Function.DEGREE.calculate(2.25 * Math.PI)).doubleValue(), 1e-10);
 	}
-
-	
-	
 	
 	@Test
 	public void testAndTrue() {
@@ -399,7 +482,7 @@ public class TestFunctions {
 	}
 	@Test
 	public void testMinStringFirst() {
-		//TODO assertEquals(50, Function.MIN.calculate("hi", 50, 125));
+		assertEquals(50, Function.MIN.calculate("hi", 50, 125));
 	}
 
 	@Test
@@ -616,12 +699,12 @@ public class TestFunctions {
 	public void testAverageNoArgs() {
 		Function.AVERAGE.calculate();
 	}
-/*
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testCountNoArgs() {
 		Function.COUNT.calculate();
 	}
-*/
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testCountaNoArgs() {
 		Function.COUNTA.calculate();

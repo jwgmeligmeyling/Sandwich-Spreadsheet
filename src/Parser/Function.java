@@ -451,6 +451,7 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			assertTwoArguments(2, 3, arguments.length);
 			assertArgumentRange(0, arguments);
+			
 			if (arguments.length == 3) {
 				assertArgumentRange(2, arguments);
 			}
@@ -476,8 +477,7 @@ public enum Function {
 				if (cell == null || valueCell == null) {
 					continue;
 				}
-				if ((Boolean) new Parser(null, cell.toString() + criteria)
-						.parse()) {
+				if ((Boolean) new Parser(null, cell.toString() + criteria).parse()) {
 					if (!(valueCell.getValue() instanceof String)) {
 						sum += doubleValueOf(valueCell);
 					}
