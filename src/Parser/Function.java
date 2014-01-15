@@ -1352,18 +1352,20 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
-			double min = 0;
+			boolean aValue = false;
+			double lowestValue = Double.MAX_VALUE;
 			for (int i = 0; i < arguments.length; i++) {
 				if (arguments[i] instanceof String) {
 					continue;
 				} else {
+					aValue = true;
 					double d = doubleValueOf(arguments[i]);
-					if (i == 0 || d < min) {
-						min = d;
+					if ( d < lowestValue) {
+						lowestValue = d;
 					}
 				}
 			}
-			return convertToIntIfApplicable(min);
+			return aValue ? convertToIntIfApplicable(lowestValue) : 0;
 		}
 	},
 	
