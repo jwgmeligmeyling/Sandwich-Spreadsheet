@@ -90,10 +90,7 @@ public class STable extends JTable implements ActionListener {
 		addMouseListener(adapter);
 		addMouseMotionListener(adapter);
 		addKeyListener(new CustomKeyListener());
-		
-		SelectionHandler SH = new SelectionHandler();
-		selectionModel.addListSelectionListener(SH);
-		columnModel.getSelectionModel().addListSelectionListener(SH);
+		addListSelectionListener(new SelectionHandler());
 
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		setCellSelectionEnabled(true);
@@ -106,6 +103,16 @@ public class STable extends JTable implements ActionListener {
 		
 		columnModel.getColumn(0).setPreferredWidth(50);
 		columnModel.getColumn(0).setCellRenderer(new RowNumberRenderer());
+	}
+	
+	/**
+	 * Listeners bound only to the selection model are not activated when
+	 * the selection changes vertically, thus we bind the ListSelectionListener
+	 * to the column model as well
+	 */
+	public void addListSelectionListener(ListSelectionListener listener) {
+		selectionModel.addListSelectionListener(listener);
+		columnModel.getSelectionModel().addListSelectionListener(listener);
 	}
 
 	@Override

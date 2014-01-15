@@ -58,7 +58,6 @@ public class Window extends JFrame {
 		container.add(tabbedPane, BorderLayout.CENTER);
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		
-		tbMain.createSelectionListener(getCurrentTable());
 		paintSheets();
 	}
 	
@@ -131,6 +130,7 @@ public class Window extends JFrame {
 		box.add(new JScrollPane(table));
 		
 		tabbedPane.addTab(sheet.getSheetName(), box);
+		tbMain.createSelectionListener(table);
 	}
 
 	/**
