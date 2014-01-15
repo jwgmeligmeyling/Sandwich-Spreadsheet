@@ -27,7 +27,9 @@ public class XMLRead {
 	 *             for SAX errors.
 	 * @throws IOException
 	 *             If any IO errors occur.
+	 * @deprecated
 	 */
+	@Deprecated
 	public static SpreadSheetFile read(String path) throws ParserConfigurationException,
 			SAXException, IOException {
 		/*

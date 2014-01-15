@@ -111,7 +111,6 @@ public class Parser {
 	 */
 	Stack<Operator> operators = new Stack<Operator>();
 
-	@Deprecated
 	/**
 	 * Public Parse constructor. Takes a <code>String</code> as argument.
 	 * @param sheet
@@ -758,7 +757,6 @@ public class Parser {
 		return input;
 	}
 
-	@Deprecated
 	/**
 	 * Static method to initiate parsing of an expression. Automatically slices
 	 * of the '=' character at the beginning, and removes spaces.

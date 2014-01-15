@@ -2,6 +2,7 @@ package File;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,8 +18,7 @@ public class TestRead {
 	
 	@Test
 	public void TestReadNormalWholeBlock() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile sheets = new SpreadSheetFile();
-		sheets = SpreadSheetFile.openFile("oude xml.xml", "xml");
+		SpreadSheetFile sheets = new SpreadSheetFile(new File("xml/oude xml.xml"));
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -38,8 +38,7 @@ public class TestRead {
 
 	@Test
 	public void TestReadNormalSmallestBlock() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile sheets = new SpreadSheetFile();
-		sheets = SpreadSheetFile.openFile("oude xml.xml", "xml");
+		SpreadSheetFile sheets = new SpreadSheetFile(new File("xml/oude xml.xml"));
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -59,8 +58,7 @@ public class TestRead {
 	
 	@Test
 	public void TestReadNormalSpecificBlock() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile sheets = new SpreadSheetFile();
-		sheets = SpreadSheetFile.openFile("oude xml.xml", "xml");
+		SpreadSheetFile sheets = new SpreadSheetFile(new File("xml/oude xml.xml"));
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -80,8 +78,7 @@ public class TestRead {
 	
 	@Test
 	public void TestReadFoutWholeBlock() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile sheets = new SpreadSheetFile();
-		sheets = SpreadSheetFile.openFile("fout.xml", "xml");
+		SpreadSheetFile sheets = new SpreadSheetFile(new File("xml/oude xml.xml"));
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();

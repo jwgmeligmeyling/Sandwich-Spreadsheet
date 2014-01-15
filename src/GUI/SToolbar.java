@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.AbstractAction;
@@ -24,7 +25,6 @@ import org.xml.sax.SAXException;
 
 import File.Cell;
 import File.SpreadSheetFile;
-import File.XMLRead;
 import Interfaces.Range;
 
 @SuppressWarnings("serial")
@@ -43,7 +43,7 @@ public class SToolbar extends JToolBar {
 	
 	private final Window window;
 	
-	private int toolbarHeight = 25;
+	private static int DEFAULT_TOOLBAR_HEIGHT = 25;
 	
 	private final ToolBarToggleButton Bold;
 	private final ToolBarToggleButton Italic;
@@ -52,7 +52,10 @@ public class SToolbar extends JToolBar {
 	private final JFileChooser fc = new JFileChooser();
 	//private final FileNameExtensionFilter filter = new FileNameExtensionFilter("xml");
 	
-	
+	/**
+	 * Construct a new SToobar
+	 * @param parent
+	 */
 	public SToolbar(Window parent) {
 		super();
 		this.window = parent;
@@ -96,18 +99,10 @@ public class SToolbar extends JToolBar {
 		
 	}
 
-	public int getToolbarHeight() {
-		return toolbarHeight;
-	}
-
-	public void setToolbarHeight(int toolbarHeight) {
-		this.toolbarHeight = toolbarHeight;
-	}
-
 	private AbstractAction fileNew = new AbstractAction(null, icoNew) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new Window("Sandwich Spreadsheet", new SpreadSheetFile());
+			new Window();
 		}
 	};
 
@@ -121,12 +116,11 @@ public class SToolbar extends JToolBar {
 			
 			// Wanneer niet op cancel gedrukt:
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-				String path = fc.getSelectedFile().getPath();
+				File file = fc.getSelectedFile();
 				
 				try {
 					// Nieuwe sheetfile aanmaken vanuit de XML
-					SpreadSheetFile sheetfile = XMLRead.read(path);
-					new Window("Sandwich Spreadsheet", sheetfile);
+					new Window(new SpreadSheetFile(file));
 					
 				} catch (ParserConfigurationException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -145,30 +139,32 @@ public class SToolbar extends JToolBar {
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int returnVal = fc.showSaveDialog(window);
-		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-				String path = fc.getSelectedFile().getPath();
-
-				System.out.println("You chose to save to this location: "
-						+ path);
-
-				SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
-
-				try {
-
-					sheetfile.write(path);
-
-				} catch (XMLStreamException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				} catch (FactoryConfigurationError e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				}
-		    }
+			SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
+	    	File file = sheetfile.getFile();
+	    	
+	    	if ( file == null ) {
+				int returnVal = fc.showSaveDialog(window);
+			    if(returnVal == JFileChooser.APPROVE_OPTION) {
+					file = fc.getSelectedFile();
+			    }
+	    	}
+	    	
+	    	if ( file == null ) {
+	    		return;
+	    	}
+	    	
+	    	try {
+				sheetfile.write(file);
+			} catch (XMLStreamException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+				e1.printStackTrace();
+			} catch (FactoryConfigurationError e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+				e1.printStackTrace();
+			}
 		}
 	};
 
@@ -254,11 +250,11 @@ public class SToolbar extends JToolBar {
 	};
 	
 	private AbstractAction insertFunction = new AbstractAction(null, icoFunction) {
+		@SuppressWarnings("deprecation")
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "Insert Function";
-			 new SFormulePicker( window ).show();;
 			//TODO toon Insert Function dialog!
+			new SFormulePicker( window ).show();
 		}
 	};
 	
@@ -278,17 +274,17 @@ public class SToolbar extends JToolBar {
 
 		@Override
 		public Dimension getMaximumSize() {
-			return new Dimension(toolbarHeight, toolbarHeight);
+			return new Dimension(DEFAULT_TOOLBAR_HEIGHT, DEFAULT_TOOLBAR_HEIGHT);
 		}
 
 		@Override
 		public Dimension getMinimumSize() {
-			return new Dimension(toolbarHeight, toolbarHeight);
+			return new Dimension(DEFAULT_TOOLBAR_HEIGHT, DEFAULT_TOOLBAR_HEIGHT);
 		}
 
 		@Override
 		public Dimension getPreferredSize() {
-			return new Dimension(toolbarHeight, toolbarHeight);
+			return new Dimension(DEFAULT_TOOLBAR_HEIGHT, DEFAULT_TOOLBAR_HEIGHT);
 		}
 	}
 
@@ -300,17 +296,17 @@ public class SToolbar extends JToolBar {
 
 		@Override
 		public Dimension getMaximumSize() {
-			return new Dimension(toolbarHeight, toolbarHeight);
+			return new Dimension(DEFAULT_TOOLBAR_HEIGHT, DEFAULT_TOOLBAR_HEIGHT);
 		}
 
 		@Override
 		public Dimension getMinimumSize() {
-			return new Dimension(toolbarHeight, toolbarHeight);
+			return new Dimension(DEFAULT_TOOLBAR_HEIGHT, DEFAULT_TOOLBAR_HEIGHT);
 		}
 
 		@Override
 		public Dimension getPreferredSize() {
-			return new Dimension(toolbarHeight, toolbarHeight);
+			return new Dimension(DEFAULT_TOOLBAR_HEIGHT, DEFAULT_TOOLBAR_HEIGHT);
 		}
 	}
 }

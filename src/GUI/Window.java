@@ -19,12 +19,20 @@ public class Window extends JFrame {
 	private SpreadSheetFile newFile;
 	
 	/**
+	 * Consturctor for the GUI
+	 */
+	public Window() {
+		this(new SpreadSheetFile(new Sheet()));
+	}
+	
+	/**
 	 * Constructor for the GUI.
 	 * @param title is the title of the window.
 	 * @throws HeadlessException
 	 */
-	public Window(String title, SpreadSheetFile spreadsheet) throws HeadlessException {
-		super(title);
+	public Window(SpreadSheetFile spreadsheet) throws HeadlessException {
+		super("Sandwich Spreadsheet - " + spreadsheet.getName());
+		newFile = spreadsheet;
 		
 		setSize(800, 450);
 		setLocationRelativeTo(null);
@@ -33,12 +41,10 @@ public class Window extends JFrame {
 		
 		tbMain = new SToolbar(this);
 		tabbedPane = new JTabbedPane();
-		SMenuBar smenubar = new SMenuBar(this);
-		setJMenuBar(smenubar);
-		smenubar.setTabbedPane(tabbedPane);
-		
 		statusBar = new SStatusBar(this);
 		formule = new FormuleBalk();
+		SMenuBar smenubar = new SMenuBar(this);
+		setJMenuBar(smenubar);
 		tbMain.add(formule);
 		
 		Container container = getContentPane();
@@ -49,9 +55,8 @@ public class Window extends JFrame {
 		container.add(tabbedPane, BorderLayout.CENTER);
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		
-		newFile = spreadsheet;
-		createSheet();
 		tbMain.createSelectionListener(getCurrentTable());
+		paintSheets();
 	}
 	
 	public Sheet getCurrentSheet() {
@@ -67,47 +72,76 @@ public class Window extends JFrame {
 	}
 	
 	public void updateTable() {
-		// TODO not sure if this is enough to update the table
 		getCurrentTable().updateUI();
 	}
 	
+	public Sheet createSheet() {
+		return newFile.createSheet();
+	}
+	
+	/**
+	 * @return The selected {@code  Range} or null if no selection
+	 */
 	public Range getSelectedRange() {
 		return getCurrentTable().getSelectedRange();
 	}
 	
+	/**
+	 * @return get the selected cell, returns null if no selected cell or
+	 *         multiple selected cell
+	 */
 	public Cell getSelectedCell() {
 		Range range = getSelectedRange();
-		if ( range.isSingleCell() ) {
+		if ( range != null &&  range.isSingleCell() ) {
 			return range.firstCell();
 		} else {
 			return null;
 		}
 	}
 	
-	public void createSheet() {
-		if ( newFile.countSheets() == 0 ) {
-			newFile.newSheet("Sheet" + (newFile.countSheets() + 1));
-		}
-		
+	/**
+	 * Go to a {@code Sheet}
+	 * @param sheet
+	 */
+	public void goToSheet(Sheet sheet) {
+		tabbedPane.setSelectedIndex(newFile.indexOf(sheet));
+	}
+	
+	/**
+	 * Construct (paint) all tabs for the sheets in the current Workbook
+	 */
+	private void paintSheets() {
 		for(Sheet sheet: newFile.getSheets()){
-			sheet.init();
-			
-			STable table = new STable(sheet, formule);
-			
-			Box box = Box.createVerticalBox();
-			box.add(table.getTableHeader());
-			JScrollPane scrollPane = new JScrollPane(table);
-			scrollPane.setPreferredSize(new Dimension(700,500));
-			box.add(scrollPane);
-			
-			tabbedPane.addTab(sheet.getSheetName(), box);
+			paintSheet(sheet);
 		}
 	}
 	
+	/**
+	 * Construct (paint) a tab in the tabbed pane for a new Sheet
+	 * @param sheet
+	 */
+	public void paintSheet(Sheet sheet) {
+		STable table = new STable(sheet, formule);
+		
+		Box box = Box.createVerticalBox();
+		box.add(table.getTableHeader());
+		box.add(new JScrollPane(table));
+		
+		tabbedPane.addTab(sheet.getSheetName(), box);
+	}
+
+	/**
+	 * @return the {@code JTabbedPane} for this {@code Window} such that
+	 * the actions can access it.
+	 */
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
 
+	/**
+	 * Set tab placement
+	 * @param setting
+	 */
 	public void setTabPlacement(int setting) {
 		tabbedPane.setTabPlacement(setting);
 	}
@@ -120,13 +154,12 @@ public class Window extends JFrame {
 		statusBar.setVisible(visible);
 	}
 	
-	
-	public static void main(String[] args) {
-		SpreadSheetFile ssheet = new SpreadSheetFile();
-		new Window("Sandwich Spreadsheet", ssheet);
-	}
-	
 	public JTextField getCurrentEditor(){
 		return (JTextField) getCurrentTable().getEditorComponent();
+	}	
+	
+	public static void main(String[] args) {
+		new Window();
 	}
+
 }

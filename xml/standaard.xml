@@ -1,140 +1,91 @@
-<SPREADSHEET>
-	<CELL row="1" column="1">
-		Table:
-	</CELL>
-	<CELL row="1" column="2">
-		0
-	</CELL>
-	<CELL row="1" column="3">
-		1
-	</CELL>
-	<CELL row="1" column="4">
-		2
-	</CELL>
-	<CELL row="1" column="5">
+<WORKBOOK><SPREADSHEET><CELL row="15" column="4" type="TEXT"></CELL><CELL row="16" column="4" type="TEXT"></CELL><CELL row="17" column="4" type="TEXT"></CELL><CELL row="11" column="4" type="TEXT"></CELL><CELL row="12" column="4" type="TEXT"></CELL><CELL row="13" column="4" type="TEXT"></CELL><CELL row="14" column="4" type="TEXT"></CELL><CELL row="7" column="4" type="TEXT"></CELL><CELL row="8" column="4" type="TEXT"></CELL><CELL row="9" column="4" type="TEXT"></CELL><CELL row="10" column="4" type="TEXT"></CELL><CELL row="3" column="4" type="TEXT"></CELL><CELL row="4" column="4" type="TEXT"></CELL><CELL row="5" column="4" type="TEXT"></CELL><CELL row="6" column="4" type="TEXT"></CELL><CELL row="1" column="5" type="TEXT">
 		3
-	</CELL>
-	<CELL row="1" column="6">
+	</CELL><CELL row="0" column="5" type="TEXT"></CELL><CELL row="3" column="5" type="TEXT">
+		X
+	</CELL><CELL row="2" column="5" type="TEXT">
+		X
+	</CELL><CELL row="16" column="5" type="TEXT"></CELL><CELL row="17" column="5" type="TEXT"></CELL><CELL row="14" column="5" type="TEXT"></CELL><CELL row="15" column="5" type="TEXT"></CELL><CELL row="12" column="5" type="TEXT"></CELL><CELL row="13" column="5" type="TEXT"></CELL><CELL row="10" column="5" type="TEXT">
+		X
+	</CELL><CELL row="11" column="5" type="TEXT"></CELL><CELL row="8" column="5" type="TEXT"></CELL><CELL row="9" column="5" type="TEXT">
+		X
+	</CELL><CELL row="6" column="5" type="TEXT">
+		X
+	</CELL><CELL row="7" column="5" type="TEXT">
+		X
+	</CELL><CELL row="4" column="5" type="TEXT">
+		X
+	</CELL><CELL row="5" column="5" type="TEXT"></CELL><CELL row="4" column="6" type="TEXT"></CELL><CELL row="3" column="6" type="TEXT"></CELL><CELL row="2" column="6" type="TEXT"></CELL><CELL row="1" column="6" type="TEXT">
 		4
-	</CELL>
-	<CELL row="1" column="7">
-		5
-	</CELL>
-	<CELL row="1" column="8">
-		6
-	</CELL>
-	<CELL row="1" column="9">
+	</CELL><CELL row="0" column="6" type="TEXT"></CELL><CELL row="9" column="2" type="TEXT"></CELL><CELL row="10" column="2" type="TEXT"></CELL><CELL row="4" column="11" type="TEXT">
+		X
+	</CELL><CELL row="11" column="2" type="TEXT"></CELL><CELL row="3" column="11" type="TEXT">
+		X
+	</CELL><CELL row="12" column="2" type="TEXT"></CELL><CELL row="13" column="2" type="TEXT"></CELL><CELL row="9" column="11" type="TEXT">
+		X
+	</CELL><CELL row="14" column="2" type="TEXT"></CELL><CELL row="15" column="2" type="TEXT"></CELL><CELL row="7" column="11" type="TEXT">
+		X
+	</CELL><CELL row="16" column="2" type="TEXT"></CELL><CELL row="1" column="2" type="TEXT">
+		0
+	</CELL><CELL row="2" column="2" type="TEXT"></CELL><CELL row="3" column="2" type="TEXT"></CELL><CELL row="4" column="2" type="TEXT"></CELL><CELL row="5" column="2" type="TEXT"></CELL><CELL row="6" column="2" type="TEXT"></CELL><CELL row="7" column="2" type="TEXT"></CELL><CELL row="8" column="2" type="TEXT"></CELL><CELL row="1" column="3" type="TEXT">
+		1
+	</CELL><CELL row="0" column="3" type="TEXT"></CELL><CELL row="17" column="2" type="TEXT"></CELL><CELL row="12" column="3" type="TEXT"></CELL><CELL row="13" column="3" type="TEXT"></CELL><CELL row="10" column="3" type="TEXT"></CELL><CELL row="11" column="3" type="TEXT"></CELL><CELL row="16" column="3" type="TEXT"></CELL><CELL row="17" column="3" type="TEXT"></CELL><CELL row="14" column="3" type="TEXT"></CELL><CELL row="15" column="3" type="TEXT"></CELL><CELL row="4" column="3" type="TEXT"></CELL><CELL row="5" column="3" type="TEXT">
+		X
+	</CELL><CELL row="2" column="3" type="TEXT"></CELL><CELL row="3" column="3" type="TEXT">
+		X
+	</CELL><CELL row="8" column="3" type="TEXT">
+		X
+	</CELL><CELL row="9" column="3" type="TEXT">
+		X
+	</CELL><CELL row="6" column="3" type="TEXT">
+		X
+	</CELL><CELL row="7" column="3" type="TEXT"></CELL><CELL row="2" column="4" type="TEXT">
+		X
+	</CELL><CELL row="1" column="4" type="TEXT">
+		2
+	</CELL><CELL row="0" column="4" type="TEXT"></CELL><CELL row="10" column="11" type="TEXT">
+		X
+	</CELL><CELL row="12" column="8" type="TEXT"></CELL><CELL row="11" column="8" type="TEXT"></CELL><CELL row="14" column="8" type="TEXT"></CELL><CELL row="13" column="8" type="TEXT"></CELL><CELL row="8" column="8" type="TEXT"></CELL><CELL row="7" column="8" type="TEXT"></CELL><CELL row="10" column="8" type="TEXT"></CELL><CELL row="9" column="8" type="TEXT"></CELL><CELL row="16" column="8" type="TEXT"></CELL><CELL row="15" column="8" type="TEXT"></CELL><CELL row="17" column="8" type="TEXT"></CELL><CELL row="4" column="9" type="TEXT"></CELL><CELL row="5" column="9" type="TEXT">
+		X
+	</CELL><CELL row="6" column="9" type="TEXT">
+		X
+	</CELL><CELL row="7" column="9" type="TEXT"></CELL><CELL row="0" column="9" type="TEXT"></CELL><CELL row="1" column="9" type="TEXT">
 		7
-	</CELL>
-	<CELL row="1" column="10">
-		8
-	</CELL>
-	<CELL row="1" column="10">
+	</CELL><CELL row="2" column="9" type="TEXT"></CELL><CELL row="3" column="9" type="TEXT">
+		X
+	</CELL><CELL row="15" column="9" type="TEXT"></CELL><CELL row="14" column="9" type="TEXT"></CELL><CELL row="13" column="9" type="TEXT"></CELL><CELL row="12" column="9" type="TEXT"></CELL><CELL row="11" column="9" type="TEXT">
+		X
+	</CELL><CELL row="10" column="9" type="TEXT"></CELL><CELL row="9" column="9" type="TEXT"></CELL><CELL row="8" column="9" type="TEXT">
+		X
+	</CELL><CELL row="17" column="9" type="TEXT"></CELL><CELL row="16" column="9" type="TEXT"></CELL><CELL row="1" column="10" type="TEXT">
 		9
-	</CELL>
-	<CELL row="2" column="1">
-		00
-	</CELL>
-	<CELL row="2" column="4">
+	</CELL><CELL row="2" column="10" type="TEXT">
 		X
-	</CELL>
-	<CELL row="2" column="5">
-		X
-	</CELL>
-	<CELL row="2" column="8">
-		X
-	</CELL>
-	<CELL row="2" column="10">
-		X
-	</CELL>
-	<CELL row="3" column="1">
-		10
-	</CELL>
-	<CELL row="3" column="3">
-		X
-	</CELL>
-	<CELL row="3" column="5">
-		X
-	</CELL>
-	<CELL row="3" column="9">
-		X
-	</CELL>
-	<CELL row="3" column="11">
-		X
-	</CELL>
-	<CELL row="4" column="1">
-		20
-	</CELL>
-	<CELL row="4" column="5">
-		X
-	</CELL>
-	<CELL row="4" column="11">
-		X
-	</CELL>
-	<CELL row="5" column="1">
-		30
-	</CELL>
-	<CELL row="5" column="3">
-		X
-	</CELL>
-	<CELL row="5" column="9">
-		X
-	</CELL>
-	<CELL row="6" column="1">
-		40
-	</CELL>
-	<CELL row="6" column="3">
-		X
-	</CELL>
-	<CELL row="6" column="5">
-		X
-	</CELL>
-	<CELL row="6" column="9">
-		X
-	</CELL>
-	<CELL row="7" column="1">
-		50
-	</CELL>
-	<CELL row="7" column="5">
-		X
-	</CELL>
-	<CELL row="7" column="11">
-		X
-	</CELL>
-	<CELL row="8" column="1">
-		60
-	</CELL>
-	<CELL row="8" column="3">
-		X
-	</CELL>
-	<CELL row="8" column="9">
-		X
-	</CELL>
-	<CELL row="9" column="1">
+	</CELL><CELL row="6" column="6" type="TEXT"></CELL><CELL row="5" column="6" type="TEXT"></CELL><CELL row="8" column="6" type="TEXT"></CELL><CELL row="7" column="6" type="TEXT"></CELL><CELL row="10" column="6" type="TEXT"></CELL><CELL row="9" column="6" type="TEXT"></CELL><CELL row="12" column="6" type="TEXT"></CELL><CELL row="11" column="6" type="TEXT"></CELL><CELL row="0" column="2" type="TEXT"></CELL><CELL row="16" column="1" type="TEXT"></CELL><CELL row="14" column="6" type="TEXT"></CELL><CELL row="17" column="1" type="TEXT"></CELL><CELL row="13" column="6" type="TEXT"></CELL><CELL row="16" column="6" type="TEXT"></CELL><CELL row="15" column="6" type="TEXT"></CELL><CELL row="17" column="6" type="TEXT"></CELL><CELL row="9" column="1" type="TEXT">
 		70
-	</CELL>
-	<CELL row="9" column="3">
-		X
-	</CELL>
-	<CELL row="9" column="5">
-		X
-	</CELL>
-	<CELL row="9" column="11">
-		X
-	</CELL>
-	<CELL row="10" column="1">
-		80
-	</CELL>
-	<CELL row="10" column="5">
-		X
-	</CELL>
-	<CELL row="10" column="11">
-		X
-	</CELL>
-	<CELL row="11" column="1">
+	</CELL><CELL row="8" column="1" type="TEXT">
+		60
+	</CELL><CELL row="11" column="1" type="TEXT">
 		90
-	</CELL>
-	<CELL row="11" column="9">
+	</CELL><CELL row="10" column="1" type="TEXT">
+		80
+	</CELL><CELL row="13" column="1" type="TEXT"></CELL><CELL row="12" column="1" type="TEXT"></CELL><CELL row="15" column="1" type="TEXT"></CELL><CELL row="14" column="1" type="TEXT"></CELL><CELL row="1" column="1" type="TEXT">
+		Table:
+	</CELL><CELL row="0" column="1" type="TEXT"></CELL><CELL row="3" column="1" type="TEXT">
+		10
+	</CELL><CELL row="0" column="7" type="TEXT"></CELL><CELL row="2" column="1" type="TEXT">
+		00
+	</CELL><CELL row="1" column="7" type="TEXT">
+		5
+	</CELL><CELL row="5" column="1" type="TEXT">
+		30
+	</CELL><CELL row="2" column="7" type="TEXT"></CELL><CELL row="4" column="1" type="TEXT">
+		20
+	</CELL><CELL row="3" column="7" type="TEXT"></CELL><CELL row="7" column="1" type="TEXT">
+		50
+	</CELL><CELL row="4" column="7" type="TEXT"></CELL><CELL row="6" column="1" type="TEXT">
+		40
+	</CELL><CELL row="5" column="7" type="TEXT"></CELL><CELL row="9" column="7" type="TEXT"></CELL><CELL row="8" column="7" type="TEXT"></CELL><CELL row="7" column="7" type="TEXT"></CELL><CELL row="6" column="7" type="TEXT"></CELL><CELL row="13" column="7" type="TEXT"></CELL><CELL row="12" column="7" type="TEXT"></CELL><CELL row="11" column="7" type="TEXT"></CELL><CELL row="10" column="7" type="TEXT"></CELL><CELL row="17" column="7" type="TEXT"></CELL><CELL row="17" column="0" type="TEXT"></CELL><CELL row="16" column="7" type="TEXT"></CELL><CELL row="15" column="7" type="TEXT"></CELL><CELL row="15" column="0" type="TEXT"></CELL><CELL row="16" column="0" type="TEXT"></CELL><CELL row="14" column="7" type="TEXT"></CELL><CELL row="10" column="0" type="TEXT"></CELL><CELL row="9" column="0" type="TEXT"></CELL><CELL row="8" column="0" type="TEXT"></CELL><CELL row="7" column="0" type="TEXT"></CELL><CELL row="14" column="0" type="TEXT"></CELL><CELL row="13" column="0" type="TEXT"></CELL><CELL row="12" column="0" type="TEXT"></CELL><CELL row="11" column="0" type="TEXT"></CELL><CELL row="1" column="8" type="TEXT">
+		6
+	</CELL><CELL row="2" column="0" type="TEXT">2</CELL><CELL row="2" column="8" type="TEXT">
 		X
-	</CELL>
-</SPREADSHEET>
+	</CELL><CELL row="1" column="0" type="TEXT"></CELL><CELL row="0" column="0" type="TEXT">12</CELL><CELL row="0" column="8" type="TEXT"></CELL><CELL row="5" column="8" type="TEXT"></CELL><CELL row="6" column="0" type="TEXT"></CELL><CELL row="5" column="0" type="TEXT"></CELL><CELL row="6" column="8" type="TEXT"></CELL><CELL row="3" column="8" type="TEXT"></CELL><CELL row="4" column="0" type="TEXT">4</CELL><CELL row="3" column="0" type="TEXT">3</CELL><CELL row="4" column="8" type="TEXT"></CELL></SPREADSHEET></WORKBOOK>

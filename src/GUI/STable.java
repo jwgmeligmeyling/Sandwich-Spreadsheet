@@ -403,7 +403,7 @@ public class STable extends JTable implements ActionListener {
 			if (column == 0) {
 				return "";
 			}
-			return sheet.getColumnLetter(column - 1);
+			return Sheet.getColumnLetter(column - 1);
 		}
 
 		@Override

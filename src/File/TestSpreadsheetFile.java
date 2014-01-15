@@ -3,6 +3,7 @@ package File;
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -45,7 +46,7 @@ public class TestSpreadsheetFile {
 	@SuppressWarnings("resource")
 	@Test
 	public void testSaveFile() throws XMLStreamException, FactoryConfigurationError, IOException {
-		sheets.saveFile("output.xml", "xml");
+		sheets.write(new File("xml/output.xml"));
 		BufferedReader reader = new BufferedReader(new FileReader("xml/output.xml"));
 		String one = reader.readLine();
 		
@@ -54,7 +55,7 @@ public class TestSpreadsheetFile {
 		String two = "<WORKBOOK><SPREADSHEET><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
 		System.out.println(two);
 		
-		assertEquals(one.equals(two),true);
+		assertEquals(one, two);
 	}
 	
 	
@@ -73,9 +74,9 @@ public class TestSpreadsheetFile {
 		file.addSheet(sheet);
 		file.addSheet(sheet2);
 		
-		SpreadSheetFile file2 = SpreadSheetFile.openFile("test2.xml", "xml/Test XML bestanden (Niet aankomen)");
+		SpreadSheetFile file2 = new SpreadSheetFile(new File("xml/Test XML bestanden (Niet aankomen)/test2.xml"));
 		
-		assertEquals(file,file2);
+		assertEquals(file, file2);
 		
 		
 
@@ -90,7 +91,7 @@ public class TestSpreadsheetFile {
 		
 		sheet.createCell("test", 1, 1);
 		
-		SpreadSheetFile file2 = SpreadSheetFile.openFile("test.xml", "xml/Test XML bestanden (Niet aankomen)");
+		SpreadSheetFile file2 = new SpreadSheetFile(new File("xml/Test XML bestanden (Niet aankomen)/test.xml"));
 		
 		assertEquals(file,file2);
 		

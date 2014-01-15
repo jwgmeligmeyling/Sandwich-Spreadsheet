@@ -8,6 +8,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -20,65 +22,116 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class SpreadSheetFile {
 	
-	private ArrayList<Sheet> sheets; 
+	private ArrayList<Sheet> sheets = new ArrayList<Sheet>();
+	
+	private File file;
+	private String name;
 	
 	/**
-	 * Constructor voor geopende en geparste (xml) file.
+	 * Create a new empty Spreadsheet file based
 	 */
 	public SpreadSheetFile() {
-		sheets = new ArrayList<Sheet>();
+		name = "Untitled.xml";
 	}
 	
-	
-	
-
-	public void addSheet(Sheet newSheet) {
-		sheets.add(newSheet);
+	public SpreadSheetFile(Sheet sheet) {
+		this();
+		sheets.add(sheet);
 	}
 	
-	public Sheet newSheet(String nameIn) {
-		Sheet newSheet = new Sheet(nameIn);
-		addSheet(newSheet);
-		return newSheet;
+	/**
+	 * Method to read from an XML file
+	 * @param path
+	 *            to XML-file
+	 * @return <code>Sheet</code> parsed from XML-file
+	 * @throws ParserConfigurationExceptionif
+	 *             a parser cannot be created which satisfies the requested
+	 *             configuration.
+	 * @throws SAXException
+	 *             for SAX errors.
+	 * @throws ParserConfigurationException 
+	 * @throws IOException
+	 *             If any IO errors occur.
+	 */
+	public SpreadSheetFile(File file) throws SAXException, ParserConfigurationException, IOException {
+		/*
+		 * Volgens de instructies van SAX dienen we eerst een SAXParser aan te
+		 * maken die ontstaat vanuit een SAXParser factory. De SAX zal alleen
+		 * het uiteindelijke werk verichten dmv een handler met alle
+		 * instructies. De handler is dus om te buigen naar onze hand.
+		 */
+		this.file = file;
+		this.name = file.getName();
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		SAXParser saxParser = factory.newSAXParser();
+		DefaultHandler handler = new SpreadSheetFile.XMLHandler(this, saxParser.getXMLReader());
+		saxParser.parse(file, handler);
+		init();
 	}
 	
+	/**
+	 * Calculate the values for the cells
+	 */
+	private void init() {
+		for ( Sheet sheet : sheets ) {
+			sheet.init();
+		}
+	}
+	
+	/**
+	 * Append a sheet to this spreadsheet file
+	 * @param sheet
+	 */
+	public void addSheet(Sheet sheet) {
+		sheets.add(sheet);
+	}
+	
+	/**
+	 * @return get the sheets
+	 */
 	public ArrayList<Sheet> getSheets() {
 		return sheets;
 	}
 	
+	/**
+	 * @return the path
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @return the file
+	 */
+	public File getFile() {
+		return file;
+	}
+	
+	/**
+	 * @return a new {@code Sheet} instance
+	 */
+	public Sheet createSheet() {
+		Sheet sheet = new Sheet("Werkblad " + countSheets());
+		addSheet(sheet);
+		return sheet;
+	}
+	
+	/**
+	 * @return amount of {@code Sheet} instances in this workbook
+	 */
 	public int countSheets() {
 		return sheets.size();
 	}
 	
+	/**
+	 * @param index
+	 * @return {@code Sheet} instance at given index, or {@code null} if none exists
+	 */
 	public Sheet getSheet(int index) {
-		return sheets.get(index);
-	}
-	
-	
-	/**
-	 * Reads xml file
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException
-	 */
-	public static SpreadSheetFile openFile(String filename, String filepath) throws ParserConfigurationException, SAXException, IOException {
-		return XMLRead.read(filepath + "/" + filename);		
-	}
-	
-	/**
-	 * Writes xml file
-	 * @param filename
-	 * @param filepath
-	 * @throws IOException 
-	 * @throws FactoryConfigurationError 
-	 * @throws XMLStreamException 
-	 */
-	public void saveFile(String filename, String filepath) throws XMLStreamException, FactoryConfigurationError, IOException {
-		
-		for(int i = 0; i < sheets.size(); i++){
-			write(filepath+"/"+filename);
+		if ( index == -1 ) {
+			index = 0;
 		}
-		
+		return sheets.get(index);
 	}
 	
 	/**
@@ -131,9 +184,9 @@ public class SpreadSheetFile {
 	 *             If there was an error writing the file in the correct
 	 *             encoding
 	 */
-	public void write(String path) throws XMLStreamException,
+	public void write(File file) throws XMLStreamException,
 			FactoryConfigurationError, IOException {
-		OutputStream output = new FileOutputStream(new File(path));
+		OutputStream output = new FileOutputStream(file);
 		XMLStreamWriter writer = XMLOutputFactory.newInstance()
 				.createXMLStreamWriter(new OutputStreamWriter(output, "UTF-8"));
 		
@@ -161,5 +214,12 @@ public class SpreadSheetFile {
 	@Override
 	public String toString(){
 		return sheets.toString();
+	}
+
+	/**
+	 * Get the index of the sheet in this workbook
+	 */
+	public int indexOf(Sheet sheet) {
+		return sheets.indexOf(sheet);
 	}
 }

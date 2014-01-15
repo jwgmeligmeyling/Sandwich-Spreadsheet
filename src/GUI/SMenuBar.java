@@ -1,19 +1,21 @@
 package GUI;
 
 import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
+
+import File.Sheet;
 
 @SuppressWarnings("serial")
 public class SMenuBar extends JMenuBar {
@@ -23,15 +25,11 @@ public class SMenuBar extends JMenuBar {
 	private static ImageIcon icoSave = new ImageIcon("img/save.png", "Save");
 	private static ImageIcon icoPrint = new ImageIcon("img/print.png", "Print");
 	
-	private JTabbedPane tabbedPane;
-	private JLabel statusbar;
 	private final Window window;
 
 	public SMenuBar(Window window) {
 		super();
 		this.window = window;
-		setTabbedPane(window.getTabbedPane());
-		setStatusBar(window.getStatusBar());
 		createFileMenu();
 		createEditMenu();
 		createViewMenu();
@@ -71,7 +69,7 @@ public class SMenuBar extends JMenuBar {
 		menu.setMnemonic(Mnemonic.VIEW.value);
 		
 		JCheckBox jcbShowStatusBar = new JCheckBox("Show Status Bar");
-		jcbShowStatusBar.setSelected(statusbar != null && statusbar.isVisible());
+		jcbShowStatusBar.setSelected(window.getStatusBar().isVisible());
 		jcbShowStatusBar.setAction(ViewShowStatusBar_Click);
 		menu.add(jcbShowStatusBar);
 		
@@ -107,24 +105,6 @@ public class SMenuBar extends JMenuBar {
 		menu.add(new MenuItem("About", Mnemonic.ABOUT));
 		this.add(menu);
 	}
-	
-	public JTabbedPane getTabbedPane() {
-		return tabbedPane;
-	}
-
-	public void setTabbedPane(JTabbedPane tabbedPaneIn) {
-		this.tabbedPane = tabbedPaneIn;
-	}
-	
-	public JLabel getStatusbar() {
-		return statusbar;
-	}
-	
-	public void setStatusBar(JLabel statusbarIn) {
-		this.statusbar = statusbarIn;
-	}
-	
-	// File menu
 	
 	private AbstractAction fileNew = new AbstractAction("New file", icoNew) {
 		@Override
@@ -225,23 +205,21 @@ public class SMenuBar extends JMenuBar {
 	private AbstractAction ViewShowStatusBar_Click = new AbstractAction("Show statusbar") {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ( statusbar != null ) {
-				statusbar.setVisible(((JCheckBox) e.getSource()).isSelected());
-			}
+			window.getStatusBar().setVisible(((JCheckBox) e.getSource()).isSelected());
 		}
 	};
 	
 	private AbstractAction ViewTabsTop_Click = new AbstractAction("Tabs on top") {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			tabbedPane.setTabPlacement(JTabbedPane.TOP);
+			window.getTabbedPane().setTabPlacement(JTabbedPane.TOP);
 		}
 	};
 
 	private AbstractAction ViewTabsBottom_Click = new AbstractAction("Tabs on bottom") {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
+			window.getTabbedPane().setTabPlacement(JTabbedPane.BOTTOM);
 		}
 	};
 
@@ -252,8 +230,11 @@ public class SMenuBar extends JMenuBar {
 	private AbstractAction InsertWorksheet_Click = new AbstractAction("Create new Sheet") {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			window.createSheet();
-			window.getTabbedPane().setSelectedIndex(window.getTabbedPane().getTabCount() - 1);
+			
+			Sheet sheet = window.createSheet();
+			window.paintSheet(sheet);
+			window.goToSheet(sheet);
+			
 		}
 	};
 	
