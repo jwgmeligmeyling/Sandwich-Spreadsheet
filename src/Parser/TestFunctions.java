@@ -127,11 +127,11 @@ public class TestFunctions {
 	
 	@Test
 	public void testSumIf2args() {
-		// TODO assertEquals(38.05, Function.SUMIF.calculate(tValB, ">10"));
+		assertEquals(38.05, Function.SUMIF.calculate(tValB, ">10"));
 	}
 	@Test
 	public void testSumIf3args() {
-		// TODO assertEquals(38.05, Function.SUMIF.calculate(tBools, true, tValB));
+		assertEquals(38.05, Function.SUMIF.calculate(tBools, true, tValB));
 	}
 	
 	@Test

@@ -451,13 +451,18 @@ public class STable extends JTable implements ActionListener {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Cell cell = sheet.getCellAt(column - 1, row);
 			Component component = super.getTableCellRendererComponent(table, value, false, false, row, column);
-			if (isSelected) {
-				setBackground(DEFAULT_SELECTION_COLOR);
-			} else if (cell.getbColor() == null) {
-				setBackground(table.getBackground());
-			} else {
-				setBackground(cell.getbColor());
+			
+			Color color = cell.getbColor();
+			boolean hasBColor = color != null;
+			if (!hasBColor ) color = table.getBackground();
+			
+			if ( isSelected ) {
+				color = new Color( Math.abs(255 - color.getRed() + DEFAULT_SELECTION_COLOR.getRed()) % 256,
+								   Math.abs(255 - color.getGreen() + DEFAULT_SELECTION_COLOR.getGreen()) % 256,
+								   Math.abs(255 - color.getBlue() + DEFAULT_SELECTION_COLOR.getBlue()) % 256);
 			}
+			
+			setBackground(color);
 			
 			alterFont(component, cell);
 			return component;

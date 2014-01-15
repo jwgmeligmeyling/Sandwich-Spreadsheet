@@ -410,16 +410,18 @@ public enum Function {
 			Cell[] range = ((Range) arguments[0]).getCellArray();
 			String criteria = arguments[1].toString();
 			
-			if ("<>!".indexOf(criteria.charAt(0)) == -1) {
+			if ("<>!=".indexOf(criteria.charAt(0)) == -1) {
 				criteria = "==".concat(criteria);	// geen operator -> ==
-			} else if ( criteria.charAt(0) == '=') {
+			} else if ( criteria.charAt(0) == '=' & criteria.charAt(1) != '=' ) {
 				criteria = "=".concat(criteria);	// = -> ==
 			}
 			
 			for ( int i = 0; i < range.length; i++ ) {
 				Cell cell = range[i];
-				if ( cell == null ) continue;
-				if ((Boolean) new Parser(null, cell.toString() + criteria).parse()) {
+				if ( cell == null )
+					continue;
+				if (new Parser(cell.getSheet(), cell.getPositionString()
+						+ criteria).parse().equals(Boolean.TRUE)) {
 					count++;
 				}
 			}
@@ -465,10 +467,10 @@ public enum Function {
 				throw new IllegalArgumentException("The sum range is too small.");
 			}
 			
-			if ("<>!".indexOf(criteria.charAt(0)) == -1) {
-				criteria = "==".concat(criteria); // geen operator -> ==
-			} else if ( criteria.charAt(0) == '=') {
-				criteria = "=".concat(criteria); // = -> ==
+			if ("<>!=".indexOf(criteria.charAt(0)) == -1) {
+				criteria = "==".concat(criteria);	// geen operator -> ==
+			} else if ( criteria.charAt(0) == '=' & criteria.charAt(1) != '=' ) {
+				criteria = "=".concat(criteria);	// = -> ==
 			}
 
 			for (int i = 0; i < range.length; i++) {
@@ -477,7 +479,8 @@ public enum Function {
 				if (cell == null || valueCell == null) {
 					continue;
 				}
-				if ((Boolean) new Parser(null, cell.toString() + criteria).parse()) {
+				if (new Parser(cell.getSheet(), cell.getPositionString()
+						+ criteria).parse().equals(Boolean.TRUE)) {
 					if (!(valueCell.getValue() instanceof String)) {
 						sum += doubleValueOf(valueCell);
 					}
