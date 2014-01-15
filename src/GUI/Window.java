@@ -9,6 +9,9 @@ import File.Sheet;
 import File.Sheet.Range;
 import File.SpreadSheetFile;
 
+/**
+ * The Window class
+ */
 @SuppressWarnings("serial")
 public class Window extends JFrame {
 	
@@ -146,18 +149,33 @@ public class Window extends JFrame {
 		tabbedPane.setTabPlacement(setting);
 	}
 	
+	/**
+	 * @return the {@code StatusBar} for this {@code Window}
+	 */
 	public JLabel getStatusBar() {
 		return statusBar;
 	}
 	
+	/**
+	 * Set the visibility for the statusbar
+	 * @param visible
+	 */
 	public void setStatusBarVisibility(boolean visible) {
 		statusBar.setVisible(visible);
 	}
 	
+	/**
+	 * @return the {@code JTextField} for the current editor,
+	 * or null if none exists
+	 */
 	public JTextField getCurrentEditor(){
 		return (JTextField) getCurrentTable().getEditorComponent();
 	}	
 	
+	/**
+	 * Open a new Window
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		new Window();
 	}
