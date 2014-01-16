@@ -410,16 +410,18 @@ public enum Function {
 			Cell[] range = ((Range) arguments[0]).getCellArray();
 			String criteria = arguments[1].toString();
 			
-			if ("<>!".indexOf(criteria.charAt(0)) == -1) {
+			if ("<>!=".indexOf(criteria.charAt(0)) == -1) {
 				criteria = "==".concat(criteria);	// geen operator -> ==
-			} else if ( criteria.charAt(0) == '=') {
+			} else if ( criteria.charAt(0) == '=' & criteria.charAt(1) != '=' ) {
 				criteria = "=".concat(criteria);	// = -> ==
 			}
 			
 			for ( int i = 0; i < range.length; i++ ) {
 				Cell cell = range[i];
-				if ( cell == null ) continue;
-				if ((Boolean) new Parser(null, cell.toString() + criteria).parse()) {
+				if ( cell == null )
+					continue;
+				if (new Parser(cell.getSheet(), cell.getPositionString()
+						+ criteria).parse().equals(Boolean.TRUE)) {
 					count++;
 				}
 			}
@@ -451,6 +453,7 @@ public enum Function {
 		Object calculate(Object... arguments) {
 			assertTwoArguments(2, 3, arguments.length);
 			assertArgumentRange(0, arguments);
+			
 			if (arguments.length == 3) {
 				assertArgumentRange(2, arguments);
 			}
@@ -464,10 +467,10 @@ public enum Function {
 				throw new IllegalArgumentException("The sum range is too small.");
 			}
 			
-			if ("<>!".indexOf(criteria.charAt(0)) == -1) {
-				criteria = "==".concat(criteria); // geen operator -> ==
-			} else if ( criteria.charAt(0) == '=') {
-				criteria = "=".concat(criteria); // = -> ==
+			if ("<>!=".indexOf(criteria.charAt(0)) == -1) {
+				criteria = "==".concat(criteria);	// geen operator -> ==
+			} else if ( criteria.charAt(0) == '=' & criteria.charAt(1) != '=' ) {
+				criteria = "=".concat(criteria);	// = -> ==
 			}
 
 			for (int i = 0; i < range.length; i++) {
@@ -476,8 +479,8 @@ public enum Function {
 				if (cell == null || valueCell == null) {
 					continue;
 				}
-				if ((Boolean) new Parser(null, cell.toString() + criteria)
-						.parse()) {
+				if (new Parser(cell.getSheet(), cell.getPositionString()
+						+ criteria).parse().equals(Boolean.TRUE)) {
 					if (!(valueCell.getValue() instanceof String)) {
 						sum += doubleValueOf(valueCell);
 					}
@@ -1352,18 +1355,20 @@ public enum Function {
 		@Override
 		Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
-			double min = 0;
+			boolean aValue = false;
+			double lowestValue = Double.MAX_VALUE;
 			for (int i = 0; i < arguments.length; i++) {
 				if (arguments[i] instanceof String) {
 					continue;
 				} else {
+					aValue = true;
 					double d = doubleValueOf(arguments[i]);
-					if (i == 0 || d < min) {
-						min = d;
+					if ( d < lowestValue) {
+						lowestValue = d;
 					}
 				}
 			}
-			return convertToIntIfApplicable(min);
+			return aValue ? convertToIntIfApplicable(lowestValue) : 0;
 		}
 	},
 	

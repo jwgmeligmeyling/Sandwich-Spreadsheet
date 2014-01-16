@@ -14,7 +14,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,9 +23,12 @@ import javax.xml.stream.XMLStreamException;
 import org.xml.sax.SAXException;
 
 import File.Cell;
+import File.Sheet.Range;
 import File.SpreadSheetFile;
-import Interfaces.Range;
 
+/**
+ * 
+ */
 @SuppressWarnings("serial")
 public class SToolbar extends JToolBar {
 	
@@ -81,18 +83,23 @@ public class SToolbar extends JToolBar {
 	}
 	
 	public void createSelectionListener(STable table) {
-		if ( table == null )
-			return;
-		ListSelectionModel lsm = table.getSelectionModel();
-		if ( lsm == null )
-			return;
-		lsm.addListSelectionListener(new ListSelectionListener() {
+		table.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
-				Bold.setSelected(window.getSelectedRange().firstCell().isBold());
-				Italic.setSelected(window.getSelectedRange().firstCell().isItalic());
-				Underlined.setSelected(window.getSelectedRange().firstCell().isUnderlined());
+				boolean bold = false, italic = false, underlined = false;
+				Range selection = window.getSelectedRange();
+				
+				if ( selection != null ) {
+					Cell first = selection.firstCell();
+					bold = first.isBold();
+					italic = first.isItalic();
+					underlined = first.isUnderlined();
+				}
+
+				Bold.setSelected(bold);
+				Italic.setSelected(italic);
+				Underlined.setSelected(underlined);
 			}
 			
 		});

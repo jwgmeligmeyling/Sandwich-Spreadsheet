@@ -218,14 +218,14 @@ public class Parser {
 				
 				Object reference = getReference();
 				if ( reference != null ) {
-					if ( cell != null ) {
-						if ( reference instanceof Range ) {
+					if ( reference instanceof Range ) {
+						if ( cell != null )
 							cell.listen( (Range) reference);
-							values.push(reference);
-						} else if ( reference instanceof Cell ) {
+						values.push(reference);
+					} else if ( reference instanceof Cell ) {
+						if ( cell != null )
 							cell.listen( (Cell) reference);
-							values.push(((Cell) reference).getValue());
-						}
+						values.push(((Cell) reference).getValue());
 					}
 					break;
 				}
