@@ -96,7 +96,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		 * @throws AssertionError
 		 *             When the indexes are negative values.
 		 */
-		Position(int colIndex, int rowIndex) {
+		public Position(int colIndex, int rowIndex) {
 			assert colIndex >= 0 && rowIndex >= 0;
 
 			this.colIndex = colIndex;
@@ -147,10 +147,6 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 				return false;
 			return true;
 		}
-		
-		public boolean equals(int colIndex, int rowIndex) {
-			return this.colIndex == colIndex && this.rowIndex == rowIndex;
-		}
 
 		@Override
 		public String toString() {
@@ -166,6 +162,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * 
 	 */
 	public class Range implements Interfaces.Range {
+		
 		/**
 		 * The start of the <code>Range</code>
 		 */
@@ -193,7 +190,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		 *             When the indexes are negative values or the down right
 		 *             values are not higher than the up left values.
 		 */
-		Range(int colLeft, int rowUp, int colRight, int rowDown) {
+		public Range(int colLeft, int rowUp, int colRight, int rowDown) {
 			this(new Position(colLeft, rowUp), new Position(colRight, rowDown));
 		}
 
@@ -205,7 +202,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		 *             When the indexes are negative values or the down right
 		 *             values are not higher than the up left values.
 		 */
-		Range(Position topLeft, Position bottomRight) {
+		public Range(Position topLeft, Position bottomRight) {
 			assert topLeft.colIndex <= bottomRight.colIndex;
 			assert topLeft.rowIndex <= bottomRight.rowIndex;
 
@@ -215,7 +212,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 			this.numColumns = bottomRight.colIndex - topLeft.colIndex + 1;
 			this.numRows = bottomRight.rowIndex - topLeft.rowIndex + 1;
 		}
-
+		
 		@Override
 		public Cell[] getCellArray() {
 			Cell[] output = new Cell[numColumns * numRows];
@@ -224,17 +221,39 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 			}
 			return output;
 		}
-		
-		/*
-		public Cell getCellAt(int colIndex, int rowIndex) {
-			Position position = new Position(colIndex, rowIndex);
-			Cell output = cells.get(position);
-			if (output == null ) {
-				output = new Cell(this, position, "");
-				cells.put(position, output);
+
+		@Override
+		public boolean contains(Cell cell) {
+			return cell != null && cell.position != null &&
+					cell.position.colIndex >= topLeft.colIndex &&
+					cell.position.colIndex <= bottomRight.colIndex &&
+					cell.position.rowIndex >= topLeft.rowIndex &&
+					cell.position.rowIndex <= bottomRight.rowIndex;
+		}
+
+		@Override
+		public boolean isSingleCell() {
+			return topLeft.equals(bottomRight);
+		}
+
+		@Override
+		public Cell firstCell() {
+			Cell[] cells = getCellArray();
+			if ( cells.length > 0 ) {
+				return cells[0];
 			}
-			return output;
-		}*/
+			return null;
+		}
+
+		@Override
+		public int getRowCount() {
+			return this.numRows;
+		}
+
+		@Override
+		public int getColumnCount() {
+			return this.numColumns;
+		}
 
 		@Override
 		public String toString() {
@@ -248,38 +267,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 				return topLeft.equals(other.topLeft)
 						&& bottomRight.equals(other.bottomRight);
 			}
-			return super.equals(obj);
-		}
-		
-		public boolean contains(Cell cell) {
-			return cell != null && cell.position != null &&
-					cell.position.colIndex >= topLeft.colIndex &&
-					cell.position.colIndex <= bottomRight.colIndex &&
-					cell.position.rowIndex >= topLeft.rowIndex &&
-					cell.position.rowIndex <= bottomRight.rowIndex;
-		}
-		
-		@Override
-		public boolean isSingleCell() {
-			return topLeft.equals(bottomRight);
-		}
-		
-		public Cell firstCell() {
-			Cell[] cells = getCellArray();
-			if ( cells.length > 0 ) {
-				return cells[0];
-			}
-			return null;
-		}
-		
-		public int getRowCount() {
-			//return (bottomRight.rowIndex - topLeft.rowIndex + 1);
-			return numRows;
-		}
-		
-		public int getColumnCount() {
-			//return (bottomRight.colIndex - topLeft.colIndex + 1);
-			return numColumns;
+			return false;
 		}
 	}
 
@@ -288,6 +276,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * @author Jan-Willem Gmelig Meyling
 	 */
 	public class Column extends Range {
+		
 		/**
 		 * The constructor for a <code>Column</code>. Takes a column index as
 		 * argument, and creates a <code>Range</code> with all the
@@ -295,7 +284,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		 * 
 		 * @param colIndex
 		 */
-		Column(int colIndex) {
+		public Column(int colIndex) {
 			super(colIndex, 0, colIndex, rowCount);
 		}
 	}
@@ -314,7 +303,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		 * 
 		 * @param rowIndex
 		 */
-		Row(int rowIndex) {
+		public Row(int rowIndex) {
 			super(0, rowIndex, columnCount, rowIndex);
 		}
 	}

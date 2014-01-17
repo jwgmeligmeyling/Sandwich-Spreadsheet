@@ -36,8 +36,8 @@ public interface Range {
 	public boolean isSingleCell();
 	
 	/**
-	 * Return the first <code>Cell</code> in this <code>Range</code>
-	 * @return cell
+	 * Return 
+	 * @return the first <code>Cell</code> in this <code>Range</code>, or null if empty
 	 */
 	public Cell firstCell();
 	
@@ -50,4 +50,10 @@ public interface Range {
 	 * @return the number of columns in a Range
 	 */
 	public int getColumnCount();
+
+	/**
+	 * @param Another {@code Cell}
+	 * @return true if this {@code Range} contains the {@code Cell}
+	 */
+	boolean contains(Cell cell);
 }

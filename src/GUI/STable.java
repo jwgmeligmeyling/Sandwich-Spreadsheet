@@ -303,7 +303,7 @@ public class STable extends JTable implements ActionListener {
 		}
 		
 		Range range = getSelectedRange();
-		if ( range.equals(this.selectedRange) || range.firstCell().getPosition().equals(this.editingColumn - 1, this.editingRow)) {
+		if ( range.equals(this.selectedRange) || range.firstCell().getPosition().equals(sheet.new Position(this.editingColumn - 1, this.editingRow))) {
 			return;
 		} else {
 			this.selectedRange = range;
