@@ -256,12 +256,11 @@ public class SToolbar extends JToolBar {
 		}
 	};
 	
-	private AbstractAction insertFunction = new AbstractAction(null, icoFunction) {
-		@SuppressWarnings("deprecation")
+	AbstractAction insertFunction = new AbstractAction(null, icoFunction) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//TODO toon Insert Function dialog!
-			new SFormulePicker( window ).show();
+			new SFormulePicker(window);
 		}
 	};
 	

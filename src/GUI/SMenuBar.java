@@ -92,17 +92,17 @@ public class SMenuBar extends JMenuBar {
 	private void createInsertMenu() {
 		JMenu menu = new JMenu("Insert");
 		menu.setMnemonic(Mnemonic.INSERT.value);
-		menu.add(new MenuItem("Insert Function", Mnemonic.INSERT_FUNCTION));
+		menu.add(new MenuItem(Mnemonic.INSERT_FUNCTION, InsertFunction_Click));
 		menu.add(new MenuItem("Create new Graph", Mnemonic.CREATE_GRAPH));
 		menu.add(new MenuItem(Mnemonic.CREATE_SHEET, InsertWorksheet_Click));
 		this.add(menu);
 	}
 	
 	private void createHelpMenu() {
-		JMenu menu = new JMenu("Help");
-		menu.setMnemonic(Mnemonic.HELP.value);
-		menu.add(new MenuItem("Help", Mnemonic.GET_HELP));
-		menu.add(new MenuItem("About", Mnemonic.ABOUT));
+		JMenu menu = new JMenu("About");
+		menu.setMnemonic(Mnemonic.ABOUT.value);
+		//menu.add(new MenuItem("Help", Mnemonic.GET_HELP));
+		menu.add(new MenuItem("Info", Mnemonic.INFO));
 		this.add(menu);
 	}
 	
@@ -230,11 +230,17 @@ public class SMenuBar extends JMenuBar {
 	private AbstractAction InsertWorksheet_Click = new AbstractAction("Create new Sheet") {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			Sheet sheet = window.createSheet();
 			window.paintSheet(sheet);
 			window.goToSheet(sheet);
-			
+		}
+	};
+	
+	private AbstractAction InsertFunction_Click = new AbstractAction("Insert Function") {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//TODO toon Insert Function dialog!
+			new SFormulePicker(window);
 		}
 	};
 	
@@ -243,7 +249,7 @@ public class SMenuBar extends JMenuBar {
 		EDIT('e'), UNDO('z'), REDO('y'), CUT('x'), COPY('c'), PASTE('v'),
 		VIEW('v'), ZOOM('z'), STATUS_BAR('s'),
 		INSERT('i'), INSERT_FUNCTION('F'), CREATE_GRAPH('g'), CREATE_SHEET('s'),
-		HELP('h'), GET_HELP('h'), ABOUT('a');
+		ABOUT('a'), GET_HELP('h'), INFO('i');
 		
 		private final char value;
 		

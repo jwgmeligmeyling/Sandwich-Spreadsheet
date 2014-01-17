@@ -49,6 +49,8 @@ public class SFormulePicker extends JDialog implements ActionListener {
 		setLayout(new BorderLayout());
 		container.add(listScroller, BorderLayout.CENTER);
 		container.add(buttonPanel, BorderLayout.PAGE_END);
+		
+		setVisible(true);
 	}
 
 	@Override

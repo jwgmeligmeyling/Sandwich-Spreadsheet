@@ -113,7 +113,7 @@ public class Window extends JFrame {
 	 * Construct (paint) all tabs for the sheets in the current Workbook
 	 */
 	private void paintSheets() {
-		for(Sheet sheet: newFile.getSheets()){
+		for(Sheet sheet : newFile.getSheets()){
 			paintSheet(sheet);
 		}
 	}
@@ -170,7 +170,7 @@ public class Window extends JFrame {
 	 */
 	public JTextField getCurrentEditor(){
 		return (JTextField) getCurrentTable().getEditorComponent();
-	}	
+	}
 	
 	/**
 	 * Open a new Window
@@ -179,5 +179,4 @@ public class Window extends JFrame {
 	public static void main(String[] args) {
 		new Window();
 	}
-
 }
