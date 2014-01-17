@@ -28,4 +28,26 @@ public interface Range {
 	 * @return array of <code>Cell</code> instances
 	 */
 	public Cell[] getCellArray();
+	
+	/**
+	 * Determine if the range contains a single <code>Cell</code>
+	 * @return true if this <code>Cell</code> contains only one <code>Cell</code>
+	 */
+	public boolean isSingleCell();
+	
+	/**
+	 * Return the first <code>Cell</code> in this <code>Range</code>
+	 * @return cell
+	 */
+	public Cell firstCell();
+	
+	/**
+	 * @return the number of rows in a Range
+	 */
+	public int getRowCount();
+	
+	/**
+	 * @return the number of columns in a Range
+	 */
+	public int getColumnCount();
 }

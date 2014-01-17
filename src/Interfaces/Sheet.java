@@ -1,8 +1,13 @@
 package Interfaces;
 
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+
 import File.Cell;
+import File.SpreadSheetFile;
 import File.Sheet.Column;
 import File.Sheet.Row;
+import GUI.STable;
 
 /**
  * @author Maarten Flikkema
@@ -67,4 +72,52 @@ public interface Sheet {
 	 * @return an array of cells with all the cells in the range from cell(rowUp, colLeft) to cell(rowDown, colRight)
 	 */
 	public Range getRange(int colLeft, int rowUp, int colRight, int rowDown);
+	
+	/**
+	 * Update all cells in this sheet based on current input
+	 */
+	public void init();
+	
+	/**
+	 * @return amount of columns in this {@code Sheet}
+	 */
+	public int getColumnCount();
+	
+	/**
+	 *  Ensure column count, to extend this {@code Sheet}
+	 * @param columnCount
+	 */
+	public void ensureColumnCount(int columnCount);
+
+	/** 
+	 * @return amount of rows in this {@code Sheet}
+	 */
+	public int getRowCount();
+	
+	/**
+	 * Ensure row count, to extend this {@code Sheet}
+	 * @param rowCount
+	 */
+	public void ensureRowCount(int rowCount);
+	
+	/**
+	 * Alias for sheet.new Cell().
+	 * @param value
+	 * @param colIndex
+	 * @param rowIndex
+	 * @return newly created {@code Cell} object
+	 */
+	public Cell createCell(String value, int colIndex, int rowIndex);
+	
+	/**
+	 * Setter for the STable instance referencing to this Sheet
+	 * @param stable
+	 */
+	public void setSTable(STable stable);
+	
+	/**
+	 * Getter for the STable instance referencing to this Sheet
+	 * @return stable
+	 */
+	public STable getSTable();
 }

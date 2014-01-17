@@ -15,20 +15,18 @@ import GUI.STable;
 
 /**
  * The <code>Sheet</code> class is the main class for the spreadsheet
- * 
  * @author Maarten Flikkema
  * @author Jan-Willem Gmelig Meyling
- * @version 1.1
- * 
  */
 public class Sheet implements Interfaces.Sheet, Cloneable {
 	/*
-	 * Class log: v1.0 Maarten Flikkema Sheet stub, with getters/setters and
-	 * Interface implementation
+	 * Class log:
+	 * v1.0 Maarten Flikkema Sheet stub, with getters/setters and
+	 * Interface implementation.
 	 * 
 	 * v1.1 Jan-Willem Gmelig Meyling Changed from ArrayLists to a HashMap with
 	 * a Position class, and implementation of Range, which is now also used by
-	 * the cell getters
+	 * the cell getters.
 	 */
 
 	/**
@@ -69,13 +67,10 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * </br> Cells can also be looked up by creating a new <code>Position</code>
 	 * object with the same parameters. For example, to get the first cell, you
 	 * could use the following code:
-	 * 
 	 * <pre>
 	 * return cells.get(new Position(0, 0));
 	 * </pre>
-	 * 
 	 * @author Jan-Willem Gmelig Meyling
-	 * 
 	 */
 	public class Position {
 		/**
@@ -119,15 +114,10 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		/**
 		 * Method to get a new <code>Position</code> from this
 		 * <code>Position</code> and the defined offset.
-		 * 
-		 * @param x
-		 *            Column offset
-		 * @param y
-		 *            Row offset
+		 * @param x Column offset
+		 * @param y Row offset
 		 * @return New <code>Position</code> instance
-		 * @throws AssertionError
-		 *             When the indexes with the applied offset are negative
-		 *             values.
+		 * @throws AssertionError When the indexes with the applied offset are negative values.
 		 */
 		public Position offset(int x, int y) {
 			return new Position(colIndex + x, rowIndex + y);
@@ -195,7 +185,6 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 
 		/**
 		 * Constructor for a <code>Range</code>
-		 * 
 		 * @param colLeft
 		 * @param rowUp
 		 * @param colRight
@@ -210,7 +199,6 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 
 		/**
 		 * Constructor for a <code>Range</code>
-		 * 
 		 * @param topLeft
 		 * @param bottomRight
 		 * @throws AssertionError
@@ -229,12 +217,6 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		}
 
 		@Override
-		/**
-		 * Method to get an array of <code>Cell</code> instances from this
-		 * <code>Range</code>
-		 * 
-		 * @return array of <code>Cell</code> instances
-		 */
 		public Cell[] getCellArray() {
 			Cell[] output = new Cell[numColumns * numRows];
 			for (int i = 0; i < output.length; i++) {
@@ -242,6 +224,17 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 			}
 			return output;
 		}
+		
+		/*
+		public Cell getCellAt(int colIndex, int rowIndex) {
+			Position position = new Position(colIndex, rowIndex);
+			Cell output = cells.get(position);
+			if (output == null ) {
+				output = new Cell(this, position, "");
+				cells.put(position, output);
+			}
+			return output;
+		}*/
 
 		@Override
 		public String toString() {
@@ -266,18 +259,11 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 					cell.position.rowIndex <= bottomRight.rowIndex;
 		}
 		
-		/**
-		 * Determine if the range contains a single <code>Cell</code>
-		 * @return true if this <code>Cell</code> contains only one <code>Cell</code>
-		 */
+		@Override
 		public boolean isSingleCell() {
 			return topLeft.equals(bottomRight);
 		}
 		
-		/**
-		 * Return the first <code>Cell</code> in this <code>Range</code>
-		 * @return cell
-		 */
 		public Cell firstCell() {
 			Cell[] cells = getCellArray();
 			if ( cells.length > 0 ) {
@@ -285,14 +271,21 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 			}
 			return null;
 		}
-
+		
+		public int getRowCount() {
+			//return (bottomRight.rowIndex - topLeft.rowIndex + 1);
+			return numRows;
+		}
+		
+		public int getColumnCount() {
+			//return (bottomRight.colIndex - topLeft.colIndex + 1);
+			return numColumns;
+		}
 	}
 
 	/**
 	 * A class for <code>Column</code> instances. Extends <code>Range</code>.
-	 * 
 	 * @author Jan-Willem Gmelig Meyling
-	 * 
 	 */
 	public class Column extends Range {
 		/**
@@ -330,21 +323,18 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * Constructor for declaring a new <code>Sheet</code>.
 	 */
 	public Sheet() {
-		this("New sheet...");
+		this("New sheet");	// TODO: misschien veranderen naar 'unnamed sheet' o.i.d.??
 	}
 
 	/**
 	 * Constructor for declaring a new <code>Sheet</code> with a name.
-	 * 
 	 * @param nameIn
 	 */
 	public Sheet(String nameIn) {
 		sheetName = nameIn;
 	}
 	
-	/**
-	 * Update all cells in this sheet based on current input
-	 */
+	@Override
 	public void init() {
 		for ( Cell cell : cells.values() ) {
 			cell.update();
@@ -375,47 +365,31 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		sheetName = newSheetName;
 	}
 
-	/**
-	 * @return amount of columns in this {@code Sheet}
-	 */
+	@Override
 	public int getColumnCount() {
 		return columnCount + 1;
 	}
 	
-	/**
-	 *  Ensure column count, to extend this {@code Sheet}
-	 * @param columnCount
-	 */
+	@Override
 	public void ensureColumnCount(int columnCount) {
 		if ( columnCount > this.columnCount ) {
 			this.columnCount = columnCount;
 		}
 	}
 
-	/** 
-	 * @return amount of rows in this {@code Sheet}
-	 */
+	@Override
 	public int getRowCount() {
 		return rowCount + 1;
 	}
 	
-	/**
-	 * Ensure row count, to extend this {@code Sheet}
-	 * @param rowCount
-	 */
+	@Override
 	public void ensureRowCount(int rowCount) {
 		if ( rowCount > this.rowCount ) {
 			this.rowCount = rowCount;
 		}
 	}
 
-	/**
-	 * Alias for sheet.new Cell().
-	 * @param value
-	 * @param colIndex
-	 * @param rowIndex
-	 * @return newly created {@code Cell} object
-	 */
+	@Override
 	public Cell createCell(String value, int colIndex, int rowIndex) {
 		Position position = new Position(colIndex, rowIndex);
 		Cell cell = new Cell(this, position, value);
@@ -455,24 +429,16 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	}
 
 	@Override
-	public Range getRange(int colLeft, int rowUp, int colRight,
-			int rowDown) {
-		return new Range(new Position(colLeft, rowUp), new Position(colRight,
-				rowDown));
+	public Range getRange(int colLeft, int rowUp, int colRight, int rowDown) {
+		return new Range(new Position(colLeft, rowUp), new Position(colRight, rowDown));
 	}
 
-	/**
-	 * Setter for the STable instance referencing to this Sheet
-	 * @param stable
-	 */
+	@Override
 	public void setSTable(STable stable) {
 		this.stable = stable;
 	}
 
-	/**
-	 * Getter for the STable instance referencing to this Sheet
-	 * @return
-	 */
+	@Override
 	public STable getSTable() {
 		return stable;
 	}
@@ -486,34 +452,30 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * </div>
 	 * 
 	 * @param writer
-	 *            ...
-	 * @throws XMLStreamException
-	 *             If there was an error processing the XML stream
+	 * @throws XMLStreamException If there was an error processing the XML stream
 	 */
 	public void write(XMLStreamWriter writer) throws XMLStreamException {
 		writer.writeStartElement("SPREADSHEET");
-			
 		for (Cell cell : cells.values()) {
 			cell.write(writer);
 		}
-		
 		writer.writeEndElement();
-		
 	}
 
 	/**
 	 * XML Handler for SAX Parsing of Sheets
 	 * @author Jim Hommes
-	 *
 	 */
 	public static class XMLHandler extends DefaultHandler {
 		private final XMLReader reader;
 		private final SpreadSheetFile sheets;
 		private final DefaultHandler fileHandler;
+		
 		/**
 		 * Constructor for sheet parser
-		 * @param sheet
+		 * @param sheets
 		 * @param reader
+		 * @param fileHandler
 		 */
 		public XMLHandler(SpreadSheetFile sheets, XMLReader reader, DefaultHandler fileHandler) {
 			this.reader = reader;
@@ -524,9 +486,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		private Sheet sheet;
 		
 		@Override
-		public void startElement(String uri, String localName, String name,
-				Attributes attributes) throws SAXException {
-			
+		public void startElement(String uri, String localName, String name, Attributes attributes) throws SAXException {
 			if (name.equalsIgnoreCase("SPREADSHEET")) {
 				sheet = new Sheet();
 				String sheetName = attributes.getValue("name");
@@ -541,7 +501,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		}
 		
 		@Override
-		public void endElement(String uri, String localName, String name) throws SAXException{
+		public void endElement(String uri, String localName, String name) throws SAXException {
 			if(name.equalsIgnoreCase("SPREADSHEET")){
 				sheets.addSheet(sheet);
 			} else {
@@ -557,11 +517,9 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		Sheet kloon = new Sheet(sheetName + " (Kopie)");
-		
 		for ( Cell cell : cells.values() ) {
 			kloon.createCell(cell.getInput(), cell.position.colIndex, cell.position.rowIndex);
 		}
-		
 		return kloon;
 	}
 

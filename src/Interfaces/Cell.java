@@ -46,19 +46,19 @@ public interface Cell {
 	public Color getbColor();
 
 	/**
-	 * 
+	 * Method to het whether the visible text in a cell is formatted bold.
 	 * @return true if the cell is formatted bold, else return false
 	 */
 	public boolean isBold();
 
 	/**
-	 * 
+	 * Method to het whether the visible text in a cell is formatted italic.
 	 * @return true if the cell is formatted italic, else return false
 	 */
 	public boolean isItalic();
 
 	/**
-	 * 
+	 * Method to het whether the visible text in a cell is formatted underlined.
 	 * @return true if the cell is formatted underlined, else return false
 	 */
 	public boolean isUnderlined();
@@ -89,19 +89,19 @@ public interface Cell {
 	public void setbColor(Color bColorIn);
 
 	/**
-	 * 
+	 * Sets the bold property of the cell.
 	 * @param boldIn
 	 */
 	public void setBold(boolean boldIn);
 
 	/**
-	 * 
+	 * Sets the italic property of the cell.
 	 * @param italicIn
 	 */
 	public void setItalic(boolean italicIn);
 
 	/**
-	 * 
+	 * Sets the underlined property of the cell.
 	 * @param underlinedIn
 	 */
 	public void setUnderlined(boolean underlinedIn);
@@ -139,5 +139,4 @@ public interface Cell {
 	 * @throws XMLStreamException
 	 */
 	public void write(XMLStreamWriter writer) throws XMLStreamException;
-	
 }

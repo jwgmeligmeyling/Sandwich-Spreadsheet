@@ -30,7 +30,7 @@ public class Window extends JFrame {
 	
 	/**
 	 * Constructor for the GUI.
-	 * @param title is the title of the window.
+	 * @param spreadsheet
 	 * @throws HeadlessException
 	 */
 	public Window(SpreadSheetFile spreadsheet) throws HeadlessException {

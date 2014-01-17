@@ -12,7 +12,7 @@ public class TestFunctions {
 	public Cell A1, A2, A3, B1, B2, B3, C1, C2, C3, D1, D2, D3, E1, E2, E3;
 	public Cell tA1, tA2, tA3, tA4, tA5, tB1, tB2, tB3, tB4, tB5, tC1, tC2, tC3, tC4, tC5;
 	public Range r1, r2, r3, r4, r5, r6;
-	public Range table1, table2, tBools, tValS, tValB;
+	public Range tBools, tValS, tValB, tValBwrong;
 
 	@Before
 	public void setUp() throws Exception {
@@ -46,28 +46,27 @@ public class TestFunctions {
 		
 		
 		tA1 = tsheet.createCell("true", 0, 0);
-		tA2 = tsheet.createCell("false", 0, 0);
-		tA3 = tsheet.createCell("true", 0, 0);
-		tA4 = tsheet.createCell("true", 0, 0);
-		tA5 = tsheet.createCell("false", 0, 0);
+		tA2 = tsheet.createCell("false", 0, 1);
+		tA3 = tsheet.createCell("true", 0, 2);
+		tA4 = tsheet.createCell("true", 0, 3);
+		tA5 = tsheet.createCell("false", 0, 4);
 
-		tB1 = tsheet.createCell("5", 0, 0);
-		tB2 = tsheet.createCell("-2", 0, 0);
-		tB3 = tsheet.createCell("4", 0, 0);
-		tB4 = tsheet.createCell("8", 0, 0);
-		tB5 = tsheet.createCell("3.5", 0, 0);
+		tB1 = tsheet.createCell("5", 1, 0);
+		tB2 = tsheet.createCell("-2", 1, 1);
+		tB3 = tsheet.createCell("4", 1, 2);
+		tB4 = tsheet.createCell("8", 1, 3);
+		tB5 = tsheet.createCell("3.5", 1, 4);
 		      
-		tC1 = tsheet.createCell("20", 0, 0);
-		tC2 = tsheet.createCell("78", 0, 0);
-		tC3 = tsheet.createCell("2.05", 0, 0);
-		tC4 = tsheet.createCell("16", 0, 0);
-		tC5 = tsheet.createCell("-5", 0, 0);
+		tC1 = tsheet.createCell("20", 2, 0);
+		tC2 = tsheet.createCell("78", 2, 1);
+		tC3 = tsheet.createCell("2.05", 2, 2);
+		tC4 = tsheet.createCell("16", 2, 3);
+		tC5 = tsheet.createCell("-5", 2, 4);
 		
-		table1 = tsheet.getRange(A1, A3);
-		//table2 = tsheet.getRange(A1, A3);
 		tBools = tsheet.getRange(tA1, tA5);
 		tValS = tsheet.getRange(tB1, tB5);
 		tValB = tsheet.getRange(tC1, tC5);
+		tValBwrong = tsheet.getRange(tC1, tC4);
 		
 		/*
 		 * Jan-Willem:
@@ -127,23 +126,57 @@ public class TestFunctions {
 	
 	@Test
 	public void testSumIf2args() {
-		assertEquals(38.05, Function.SUMIF.calculate(tValB, ">10"));
+		assertEquals(114, Function.SUMIF.calculate(tValB, ">10"));
 	}
 	@Test
-	public void testSumIf3args() {
+	public void testSumIf3args1() {
 		assertEquals(38.05, Function.SUMIF.calculate(tBools, true, tValB));
+	}
+	@Test
+	public void testSimIg3args2() {
+		assertEquals(80.05, Function.SUMIF.calculate(tValS, "<5", tValB));
+	}
+	@Test
+	public void testSumIf3argsNegative() {
+		// TODO negatieve getallen lijken het niet goed te doen hier
+		assertEquals(78, Function.SUMIF.calculate(tValS, "-2", tValB));
+	}
+	@Test
+	public void testSumIf3argsNegative2() {
+		// TODO ...
+		assertEquals(78, Function.SUMIF.calculate(tValS, "=-2", tValB));
+	}
+	@Test
+	public void testSumIf3argsPositive() {
+		assertEquals(16, Function.SUMIF.calculate(tValS, "8", tValB));
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testSumIf3argsDiffRngSize() {
+		Function.SUMIF.calculate(tValS, ">0", tValBwrong);
 	}
 	
 	@Test
 	public void testCountA() {
 		assertEquals(11, Function.COUNTA.calculate(r1));
 	}
-	
+
 	@Test
-	public void testCountIf() {
+	public void testCountIf1() {
+		// TODO
+	}
+	@Test
+	public void testCountIf2() {
+		
+	}
+	@Test
+	public void testCountIf3() {
 		
 	}
 	
+	@Test
+	public void testIndex() {
+		// TODO
+	}
 
 	@Test
 	public void testRoundUp1() {
@@ -178,8 +211,6 @@ public class TestFunctions {
 	public void testRoundDown3() {
 		assertEquals(50, Function.ROUNDDOWN.calculate(59, -1));
 	}
-
-	
 
 	@Test
 	public void testRoot27b3() {

@@ -464,7 +464,7 @@ public enum Function {
 			String criteria = arguments[1].toString();
 			
 			if ( sum_range.length < range.length ) {
-				throw new IllegalArgumentException("The sum range is too small.");
+				throw new IllegalArgumentException("The sum range must have at least the size of the condition range.");
 			}
 			
 			if ("<>!=".indexOf(criteria.charAt(0)) == -1) {
@@ -1606,6 +1606,49 @@ public enum Function {
 			assertArguments(1, arguments.length);
 			return (new SimpleDateFormat(arguments[0].toString())).format(System.currentTimeMillis());
 		}
+	},
+	
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>range</code>, <code>row_number</code>, <code>column_number</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Returns the value of the cell <code>row_number</code> rows down and <code>column_number</code> columns right,
+	 * relative to the given range.</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * If the rown and/or column number(s) do not fall within the given range, a #VALUE error is returned
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	INDEX() {
+		@Override
+		Object calculate(Object... arguments) {
+			assertArguments(3, arguments.length);
+			assertArgumentRange(0, arguments);
+			
+			Range matrix = ((Range)arguments[0]);
+			int height = matrix.getRowCount();
+			int width = matrix.getRowCount();
+			int row = intValueOf(arguments[1]);
+			int column = intValueOf(arguments[2]);
+			
+			if(row > height || column > width) {
+				throw new IllegalArgumentException("The cell at (row " + row + ", col " + column + ") does not intersect with the given range");
+			} else {
+				// TODO: sleep and finish this. return matrix.cellat???
+						
+			}
+			
+			return null;
+		}
 	};
 	
 	/**
@@ -1852,7 +1895,7 @@ public enum Function {
 	 */
 	static void assertArgumentRange(int index, Object... args) {
 		if (!(args[index] instanceof Range)) {
-			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a reference, but it is not!");
+			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a cell reference, but it is not!");
 		}
 	}
 	

@@ -41,17 +41,13 @@ public class SpreadSheetFile {
 	
 	/**
 	 * Method to read from an XML file
-	 * @param path
-	 *            to XML-file
-	 * @return <code>Sheet</code> parsed from XML-file
-	 * @throws ParserConfigurationExceptionif
-	 *             a parser cannot be created which satisfies the requested
+	 * @param file
+	 * @throws ParserConfigurationException
+	 * 			   If a parser cannot be created which satisfies the requested
 	 *             configuration.
-	 * @throws SAXException
-	 *             for SAX errors.
+	 * @throws SAXException for SAX errors.
 	 * @throws ParserConfigurationException 
-	 * @throws IOException
-	 *             If any IO errors occur.
+	 * @throws IOException If any IO errors occur.
 	 */
 	public SpreadSheetFile(File file) throws SAXException, ParserConfigurationException, IOException {
 		/*
@@ -145,7 +141,7 @@ public class SpreadSheetFile {
 
 		/**
 		 * Constructor for sheet parser
-		 * @param sheet
+		 * @param sheets
 		 * @param reader
 		 */
 		public XMLHandler(SpreadSheetFile sheets, XMLReader reader) {
@@ -174,8 +170,7 @@ public class SpreadSheetFile {
 	 * </ul>
 	 * </div>
 	 * 
-	 * @param path
-	 *            Path to file
+	 * @param file
 	 * @throws XMLStreamException
 	 *             If there was an error occurred writing XML
 	 * @throws FactoryConfigurationError
@@ -187,8 +182,7 @@ public class SpreadSheetFile {
 	public void write(File file) throws XMLStreamException,
 			FactoryConfigurationError, IOException {
 		OutputStream output = new FileOutputStream(file);
-		XMLStreamWriter writer = XMLOutputFactory.newInstance()
-				.createXMLStreamWriter(new OutputStreamWriter(output, "UTF-8"));
+		XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(output, "UTF-8"));
 		
 		writer.writeStartElement("WORKBOOK");
 		
