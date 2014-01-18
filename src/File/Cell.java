@@ -271,6 +271,11 @@ public class Cell implements Interfaces.Cell {
 		writer.writeAttribute("column", Integer.toString(getColumn()));
 		writer.writeAttribute("type", getType().toString());
 		
+		if ( fColor != null ) 
+			writer.writeAttribute("fcolor", "" + fColor.getRGB());
+		if ( bColor != null ) 
+			writer.writeAttribute("bcolor", "" + bColor.getRGB());
+		
 		writer.writeCharacters(getInput());
 		writer.writeEndElement();
 	}

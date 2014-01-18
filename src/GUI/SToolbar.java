@@ -82,6 +82,11 @@ public class SToolbar extends JToolBar {
 		
 	}
 	
+	/**
+	 * Create the selection listener, such that the toggles in the
+	 * toolbar are updated when the selection changes.
+	 * @param table
+	 */
 	public void createSelectionListener(STable table) {
 		table.addListSelectionListener(new ListSelectionListener() {
 
@@ -198,9 +203,6 @@ public class SToolbar extends JToolBar {
 			}
 			
 			window.updateTable();
-			
-//			String st = "Bold";
-//			JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
@@ -217,9 +219,6 @@ public class SToolbar extends JToolBar {
 			}
 			
 			window.updateTable();
-			
-			//String st = "Italic";
-			//JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
@@ -269,16 +268,10 @@ public class SToolbar extends JToolBar {
 	
 	
 	public class ToolBarButton extends JButton {
+		
 		public ToolBarButton(Action action) {
 			super(action);
 		}
-
-		/*
-		@Deprecated
-		public ToolBarButton(String string) {
-			super(string);
-		}
-		*/
 
 		@Override
 		public Dimension getMaximumSize() {

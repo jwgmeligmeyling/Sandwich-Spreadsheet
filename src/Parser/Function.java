@@ -1649,6 +1649,18 @@ public enum Function {
 				//matrix.get
 			}
 		}
+	},
+	
+	/**
+	 * The ANDY() is the most advanced feature in the Sandwitch spreadsheet application
+	 */
+	ANDY() {
+
+		@Override
+		public Object calculate(Object... arguments) {
+			return "Hoi Andy!";
+		}
+		
 	};
 	
 	/**
