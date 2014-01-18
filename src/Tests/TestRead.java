@@ -95,9 +95,6 @@ public class TestRead {
 		Cell[] lijst = sheet.getRange(1,1,10,10).getCellArray();
 		Cell[] lijst2 = csheet.getRange(1,1,10,10).getCellArray();
 		
-		System.out.println(sheet.toString());
-		System.out.println(csheet.toString());
-		
 		assertArrayEquals(lijst2, lijst);		
 	}
 }

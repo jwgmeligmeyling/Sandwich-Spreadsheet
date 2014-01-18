@@ -37,7 +37,11 @@ public interface Sheet {
 	 * Method to get the {@code Cell} at given row and column index
 	 * @param rowIndex is the index of the row the desired Cell is in
 	 * @param colIndex is the index of the column the desired Cell is in
+<<<<<<< HEAD
 	 * @return {@code Cell} at given {@code Position}
+=======
+	 * @return cell at given column and row indexes
+>>>>>>> branch 'master' of https://github.com/JWGmeligMeyling/OOP-Project-3A2.git
 	 */
 	Cell getCellAt(int colIndex, int rowIndex);
 	

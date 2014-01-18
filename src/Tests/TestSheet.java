@@ -11,24 +11,34 @@ import File.Sheet.Range;
 
 public class TestSheet {
 
-	public Sheet sheet;
-
-	public Cell A1;
-	public Cell A2;
-	public Cell A3;
-	public Cell B1;
-	public Cell B2;
-	public Cell B3;
+	public Sheet sheet, sheet2, sheet3;
+	public Cell A1,A2,A3,B1,B2,B3;
+	public Range r1, r2, r3, r4;
 
 	@Before
 	public void setUp() throws Exception {
 		sheet = new Sheet();
+		sheet2 = new Sheet();
+		sheet3 = new Sheet();
+		
 		A1 = sheet.createCell("bliep", 0, 0);
 		A2 = sheet.createCell("5", 0, 1);
 		A3 = sheet.createCell("=5", 0, 2);
 		B1 = sheet.createCell("=5*2", 1, 0);
 		B2 = sheet.createCell("=2+2*3", 1, 1);
 		B3 = sheet.createCell("=ADD(5,3)", 1, 2);
+		
+		sheet2.createCell("bliep", 0, 0);
+		sheet2.createCell("5", 0, 1);
+		sheet2.createCell("=5", 0, 2);
+		sheet2.createCell("=5*2", 1, 0);
+		sheet2.createCell("=2+2*3", 1, 1);
+		sheet2.createCell("=ADD(5,3)", 1, 2);
+		
+		r1 = sheet.getRange(A1, B3);
+		r2 = sheet.getRange(A1, B3);
+		r3 = sheet.getRange(A1, B2);
+		r4 = sheet.getRange(B1, B3);
 	}
 	
 	@Test
@@ -41,8 +51,58 @@ public class TestSheet {
 		assertNotEquals(new Object(), sheet);
 	}
 	
+	
+	@Test
+	public void testGetSheetName() {
+		assertEquals("New sheet", sheet.getSheetName());
+	}
+
+	@Test
+	public void testSheetEqualsTrue() {
+		assertEquals(sheet, sheet2);
+	}
+	@Test
+	public void testSheetEqualsFalse() {
+		assertNotEquals(sheet, sheet3);
+	}
+	@Test
+	public void testSheetEqualsOtherType() {
+		assertNotEquals(sheet, r2);
+	}
+	
+	@Test
+	public void testEnsureColumnCount() {
+		sheet.ensureColumnCount(100);
+		assertEquals(101, sheet.getColumnCount());
+	}
+	
+	@Test
+	public void testEnsureColumnCount2() {
+		sheet.ensureColumnCount(0);
+		assertEquals(2, sheet.getColumnCount());
+	}
+
+	@Test
+	public void testEnsureRowCount() {
+		sheet.ensureRowCount(1000);
+		assertEquals(1001, sheet.getRowCount());
+	}
+	
+	@Test
+	public void testEnsureRowCount2() {
+		sheet.ensureRowCount(0);
+		assertEquals(3, sheet.getRowCount());
+	}
+	
+	@Test
+	public void testSetSheetName() {
+		sheet.setSheetName("testing sheetname");
+		assertEquals("testing sheetname", sheet.getSheetName());
+	}
+	
 	@Test
 	public void testColumnCount() {
+		// TODO waarom gaat dit nou fout??
 		assertEquals(2, sheet.getColumnCount());
 	}
 	
@@ -84,6 +144,11 @@ public class TestSheet {
 	public void testGetCellAtFalse() {
 		assertNotEquals(A2, sheet.getCellAt(0, 0));
 	}
+	
+	@Test
+	public void testGetCellAtNull() {
+		assertNotEquals("bla", sheet.getCellAt(5, 5));
+	}
 
 	@Test
 	public void testGetCellHigher() {
@@ -120,9 +185,55 @@ public class TestSheet {
 	public void testGetColumnCells() {
 		assertArrayEquals(new Cell[] { B1, B2, B3 }, sheet.getColumn(1).getCellArray());
 	}
+	
+
+	@Test
+	public void testRangeGetRowCount() {
+		assertEquals(3, r1.getRowCount());
+	}
+	
+	@Test
+	public void testRangeGetColumnCount() {
+		assertEquals(2, r1.getColumnCount());
+	}
 
 	@Test
 	public void testGetRowCells() {
 		assertArrayEquals(new Cell[] { A2, B2 }, sheet.getRow(1).getCellArray());
+	}
+	
+	@Test
+	public void testRangeEqualsOtherType() {
+		assertNotEquals(r1, A2);
+	}
+	
+	@Test
+	public void testRangeEquals2() {
+		assertNotEquals(r1, r3);
+	}
+	
+	@Test
+	public void testRangeEquals3() {
+		assertNotEquals(r1, r4);
+	}
+	
+	@Test
+	public void testGetColumnLetter() {
+		assertEquals("A", Sheet.getColumnLetter(0));
+	}
+	
+	@Test
+	public void testGetColumnLetter2() {
+		assertEquals("AB", Sheet.getColumnLetter(27));
+	}
+	
+	@Test
+	public void testGetColumnLetter3() {
+		assertEquals("ZA", Sheet.getColumnLetter(676));
+	}
+	
+	@Test
+	public void testGetColumnLetter3_2() {
+		assertEquals("AAP", Sheet.getColumnLetter(717));
 	}
 }

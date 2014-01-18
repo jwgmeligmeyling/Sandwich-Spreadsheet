@@ -2,15 +2,12 @@ package File;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-
 import GUI.STable;
 
 /**
@@ -246,10 +243,8 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		@Override
 		public boolean contains(Cell cell) {
 			return cell != null && cell.position != null &&
-					cell.position.colIndex >= topLeft.colIndex &&
-					cell.position.colIndex <= bottomRight.colIndex &&
-					cell.position.rowIndex >= topLeft.rowIndex &&
-					cell.position.rowIndex <= bottomRight.rowIndex;
+					cell.position.colIndex >= topLeft.colIndex && cell.position.colIndex <= bottomRight.colIndex &&
+					cell.position.rowIndex >= topLeft.rowIndex && cell.position.rowIndex <= bottomRight.rowIndex;
 		}
 
 		@Override
@@ -286,8 +281,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		public boolean equals(Object obj) {
 			if (obj instanceof Range) {
 				Range other = (Range) obj;
-				return topLeft.equals(other.topLeft)
-						&& bottomRight.equals(other.bottomRight);
+				return topLeft.equals(other.topLeft) && bottomRight.equals(other.bottomRight);
 			}
 			return false;
 		}
@@ -369,7 +363,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	
 	@Override
 	public void ensureColumnCount(int columnCount) {
-		if ( columnCount > this.columnCount ) {
+		if (columnCount > this.columnCount) {
 			this.columnCount = columnCount;
 		}
 	}
