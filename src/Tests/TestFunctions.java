@@ -1,10 +1,13 @@
-package Parser;
+package Tests;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import File.*;
 import File.Sheet.Range;
+import Parser.Function;
 
 public class TestFunctions {
 
@@ -17,22 +20,26 @@ public class TestFunctions {
 	@Before
 	public void setUp() throws Exception {
 		
-		SpreadSheetFile workbook = new SpreadSheetFile();
+		Workbook workbook = new Workbook();
 		Sheet sheet = workbook.createSheet();
 		Sheet tsheet = workbook.createSheet();
 		
 		A1 = sheet.createCell("bliep", 0, 0);
 		A2 = sheet.createCell("5", 0, 1);
 		A3 = sheet.createCell("=5", 0, 2);
+		
 		B1 = sheet.createCell("=5*2", 1, 0);
 		B2 = sheet.createCell("=2+2*3", 1, 1);
 		B3 = sheet.createCell("=SUM(5,3)", 1, 2);
+		
 		C1 = sheet.createCell("2+2", 2, 0);
 		C2 = sheet.createCell("=PRODUCT(3,5,2)", 2, 1);
 		C3 = sheet.createCell("", 2, 2);
+		
 		D1 = sheet.createCell("TRUE", 3, 0);
 		D2 = sheet.createCell("FALSE", 3, 1);
 		D3 = sheet.createCell("true", 3, 2);
+		
 		E1 = sheet.createCell("2.65", 4, 0);
 		E2 = sheet.createCell("0", 4, 1);
 		E3 = sheet.createCell("-3.2", 4, 2);
@@ -43,7 +50,6 @@ public class TestFunctions {
 		r4 = sheet.getRange(A2, A2); // Cell A2 (=5)
 		r5 = sheet.getRange(A2, C2); // Numbers
 		r6 = sheet.getRange(E1, E3); // Doubles
-		
 		
 		tA1 = tsheet.createCell("true", 0, 0);
 		tA2 = tsheet.createCell("false", 0, 1);
@@ -99,6 +105,7 @@ public class TestFunctions {
 	public void testSumRangeNumber() {
 		assertEquals(48, Function.SUM.calculate(r2));
 	}
+	
 	@Test
 	public void testSumRangeBoolean() {
 		assertEquals(2, Function.SUM.calculate(r3));
@@ -107,18 +114,22 @@ public class TestFunctions {
 	public void testSumRangeWithString() {
 		assertEquals(68, Function.SUM.calculate(r1));
 	}
+	
 	@Test
 	public void testSum() {
 		assertEquals(10, Function.SUM.calculate(5, 5));
 	}
+	
 	@Test
 	public void testSumDouble() {
 		assertEquals(7.3, ((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(), 1e-15);
 	}
+	
 	@Test
 	public void testSumIntAndDouble() {
 		assertEquals(7.25, Function.SUM.calculate(6, 1.25));
 	}
+	
 	@Test
 	public void testSumDoubleAndInt() {
 		assertEquals(7.125, ((Double) Function.SUM.calculate(6.125, 1)).doubleValue(), 1e-15);
@@ -128,28 +139,32 @@ public class TestFunctions {
 	public void testSumIf2args() {
 		assertEquals(114, Function.SUMIF.calculate(tValB, ">10"));
 	}
+	
 	@Test
 	public void testSumIf3args1() {
 		assertEquals(38.05, Function.SUMIF.calculate(tBools, true, tValB));
 	}
+	
 	@Test
 	public void testSimIg3args2() {
 		assertEquals(80.05, Function.SUMIF.calculate(tValS, "<5", tValB));
 	}
+	
 	@Test
 	public void testSumIf3argsNegative() {
-		// TODO negatieve getallen lijken het niet goed te doen hier
-		assertEquals(78, Function.SUMIF.calculate(tValS, "-2", tValB));
+		assertEquals(0, Function.SUMIF.calculate(tValS, -2, tValB));
 	}
+	
 	@Test
 	public void testSumIf3argsNegative2() {
-		// TODO ...
-		assertEquals(78, Function.SUMIF.calculate(tValS, "=-2", tValB));
+		assertEquals(0, Function.SUMIF.calculate(tValS, -2, tValB));
 	}
+	
 	@Test
 	public void testSumIf3argsPositive() {
 		assertEquals(16, Function.SUMIF.calculate(tValS, "8", tValB));
 	}
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testSumIf3argsDiffRngSize() {
 		Function.SUMIF.calculate(tValS, ">0", tValBwrong);
@@ -164,19 +179,71 @@ public class TestFunctions {
 	public void testCountIf1() {
 		// TODO
 	}
+	
 	@Test
 	public void testCountIf2() {
 		
 	}
+	
 	@Test
 	public void testCountIf3() {
 		
 	}
-	
+
 	@Test
-	public void testIndex() {
-		// TODO
+	public void testIndex1() {
+		assertEquals(20, Function.INDEX.calculate(tValB, 1, 1));
 	}
+	@Test
+	public void testIndex2() {
+		// TODO: check deze methode.
+		assertEquals(-5, Integer.parseInt((String) Function.INDEX.calculate(tValB, 5, 1)));
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testIndexError1() {
+		Function.INDEX.calculate(tValB, 0, 1);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testIndexError2() {
+		Function.INDEX.calculate(tValB, 2, -1);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testIndexError3() {
+		Function.INDEX.calculate(tValB, 6, 1);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testIndexError4() {
+		Function.INDEX.calculate(tValB, 4, 2);
+	}
+	
+
+	@Test
+	public void testVLookup1() {
+		assertEquals("bliep", Function.VLOOKUP.calculate("bliep", r1, 1));
+	}
+	@Test
+	public void testVLookup2() {
+		assertEquals(10, Function.VLOOKUP.calculate(A1, r1, 2));
+	}
+	@Test
+	public void testVLookup3() {
+		assertEquals(false, Function.VLOOKUP.calculate("5", r1, 4));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testVLookupError1() {
+		Function.VLOOKUP.calculate(5, r1, 0);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testVLookupError2() {
+		Function.VLOOKUP.calculate("bliep", r1, 5);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testVLookupError3() {
+		Function.VLOOKUP.calculate("niet vindbaar", r1, 1);
+	}
+	
+	
 
 	@Test
 	public void testRoundUp1() {

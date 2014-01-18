@@ -303,7 +303,7 @@ public class STable extends JTable implements ActionListener {
 		}
 		
 		Range range = getSelectedRange();
-		if ( range.equals(this.selectedRange) || range.firstCell().getPosition().equals(sheet.new Position(this.editingColumn - 1, this.editingRow))) {
+		if ( range.equals(this.selectedRange) || range.getTopLeft().equals(sheet.new Position(this.editingColumn - 1, this.editingRow))) {
 			return;
 		} else {
 			this.selectedRange = range;
@@ -344,7 +344,6 @@ public class STable extends JTable implements ActionListener {
 	 * 
 	 */
 	private class CustomTableCellEditor extends DefaultCellEditor {
-		private Cell cell;
 
 		/**
 		 * Constructor for the CustomTableCellEditor. Creates a new table cell
@@ -358,8 +357,7 @@ public class STable extends JTable implements ActionListener {
 		@Override
 		public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
-			cell = sheet.getCellAt(column - 1, row);
-			Object input = cell.getInput();
+			String input = sheet.getInputAt(column - 1, row);
 			currentEditor.setBorder(new LineBorder(Color.black));
 			return super.getTableCellEditorComponent(table, input, isSelected,
 					row, column);
@@ -390,6 +388,9 @@ public class STable extends JTable implements ActionListener {
 	private static class TableModel extends AbstractTableModel {
 
 		private final Sheet sheet;
+		
+		private static final int DEFAULT_COLUMN_COUNT = 26;
+		private static final int DEFAULT_ROW_COUNT = 200;
 
 		/**
 		 * Constructor for the TableModel, sets a sheet variable.
@@ -415,12 +416,12 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public int getRowCount() {
-			return sheet.getRowCount();
+			return DEFAULT_ROW_COUNT;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return sheet.getColumnCount() + 1;
+			return DEFAULT_COLUMN_COUNT + 1;
 		}
 
 		@Override
@@ -428,7 +429,7 @@ public class STable extends JTable implements ActionListener {
 			if (col == 0) {
 				return row + 1;
 			}
-			return sheet.getCellAt(col - 1, row).getValue();
+			return sheet.getValueAt(col - 1, row);
 		}
 
 		@Override
@@ -438,9 +439,7 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public void setValueAt(Object value, int row, int col) {
-			Cell cell = sheet.getCellAt(col - 1, row);
-			cell.setInput(value.toString());
-			cell.update(this);
+			sheet.setValueAt(value, col - 1, row);
 			fireTableCellUpdated(row, col);
 		}
 
@@ -451,21 +450,23 @@ public class STable extends JTable implements ActionListener {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Cell cell = sheet.getCellAt(column - 1, row);
 			Component component = super.getTableCellRendererComponent(table, value, false, false, row, column);
-			
-			Color color = cell.getbColor();
-			boolean hasBColor = color != null;
-			if (!hasBColor ) color = table.getBackground();
-			
-			if ( isSelected ) {
-				color = new Color( Math.abs(255 - color.getRed() + DEFAULT_SELECTION_COLOR.getRed()) % 256,
-								   Math.abs(255 - color.getGreen() + DEFAULT_SELECTION_COLOR.getGreen()) % 256,
-								   Math.abs(255 - color.getBlue() + DEFAULT_SELECTION_COLOR.getBlue()) % 256);
-			}
-			
-			setBackground(color);
-			
-			alterFont(component, cell);
+			setBackground(getBackground(cell, isSelected));
+			if ( cell != null)
+				alterFont(component, cell);
 			return component;
+		}
+		
+		private Color getBackground(Cell cell, boolean selected) {
+			Color A = cell != null ? cell.getbColor() : null;
+			Color B = selected ? DEFAULT_SELECTION_COLOR : table.getBackground();
+			return mengKleuren(A,B);
+		}
+		
+		private Color mengKleuren(Color A, Color B) {
+			return A == null ? B : (B == null ? A : new Color(
+					(A.getRed() + B.getRed()) / 2,
+					(A.getGreen() + B.getGreen()) / 2,
+					(A.getBlue() + B.getBlue()) / 2));
 		}
 		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -575,10 +576,8 @@ public class STable extends JTable implements ActionListener {
 			tableHeader.repaint();
 			if (!isEditing() && getSelectedRowCount() == 1
 					&& columnModel.getSelectedColumnCount() == 1) {
-				Cell selectedCell = sheet.getCellAt(
-						columnModel.getSelectedColumns()[0] - 1,
-						getSelectedRow());
-				formuleBalk.setText(selectedCell.getInput());
+				String input = sheet.getInputAt(getSelectedColumn() - 1, getSelectedRow());
+				formuleBalk.setText(input);
 			}
 		}
 

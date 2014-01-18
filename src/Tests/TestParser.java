@@ -1,10 +1,13 @@
-package Parser;
+package Tests;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import File.Cell;
 import File.Sheet;
+import Parser.Parser;
 
 public class TestParser {
 
@@ -313,99 +316,32 @@ public class TestParser {
 		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=false||true"));
 	}
 	
-	/**
-	 * For each pair of parentheses 2 calls are pushed to the Stack, one
-	 * for {@link Parser.Parser#closeBracket closeBracket()} and one for
-	 * {@link Parser.Parser#parse()}. This method checks how deep you can
-	 * go with parentheses. Jan-Willem has succeeded to run this test with
-	 * a depth of 7400 parentheses (+/- 15000 calls) which ran in 0.390 s.
-	 */
 	@Test
-	public void testParenthesesDepth() {
-		// TODO: Gaan we nou niet net ver? Of wil je een Exception expecten?
-		int depth = 7400;
-		StringBuilder query = new StringBuilder(depth*2+2);
-		query.append('=');
-	
-		for ( int i = 0; i < depth; i++ ) 
-			query.append('(');
-		query.append('5');
-		for ( int i = 0; i < depth; i++ )
-			query.append(')');
-		
-		assertEquals(5, Parser.parse(sheet, query.toString()));
-	}
-	
-	/**
-	 * <p>This test concatenates some operators with 5, in the order such
-	 * that the returned result should be five:</p>
-	 * 
-	 * <pre> =5...+5*5/5-5... == 5.</pre>
-	 * 
-	 * <p>This doesn't really pushes the {@code Operator Stack} to it's
-	 * limit, because the +, -, / and * operators only have two
-	 * different precedences, so the average amount of elements in
-	 * both the value stack and the operator stack will be 2-3.</p>
-	 * 
-	 * <p>This test case doesn't really push the JVM stack as well, because
-	 * there is no recursion (or parentheses) in this function. This
-	 * test will just continue until the calculation is completed, or
-	 * the system runs out of memory.</p>
-	 * 
-	 * <p>Amount  5.000.000 (20.000.000 operators) runs in  9.485 seconds
-	 * Amount 10.000.000 (40.000.000 operators) runs in 17.717 seconds
-	 * -> We see a pattern here and I'm not patient enough to test it
-	 * with 100.000.000 runs.</p>
-	 */
-	@Test
-	public void testOperatorLimit() {
-		int amount = 10000000;
-		StringBuilder query = new StringBuilder(amount*3);
-		query.append('=');
-		query.append('5');
-		
-		for ( int i = 0; i < amount; i++ ) {
-			query.append('+');
-			query.append('5');
-			query.append('*');
-			query.append('5');
-			query.append('/');
-			query.append('5');
-			query.append('-');
-			query.append('5');
-		}
-		
-		assertEquals(5, Parser.parse(sheet, query.toString()));
-	}
-	
-	/**
-	 * This function creates a Parser input in the form of
-	 * {@code =...SUM(SUM(SUM(5,5),5),5)...} . Jan-Willem
-	 * tested this and could go to a depth of 14000 nested
-	 * functions, which ran in 2.827s and 16000 nested
-	 * functions which ran in 4.035 s.
-	 * TODO Why can we go further with these parentheses	<<<<<<
-	 * while they use the same recursion as in the previous
-	 * test case? Does the additional logic in the sum
-	 * function give the JVM some time to optimize/cache the
-	 * stack?
-	 */
-	@Test
-	public void testFunctionRecursionDepth() {
-		int depth = 16000;
-		StringBuilder query = new StringBuilder(depth*7+2);
-		query.append('=');
-	
-		// This creates a query string in the form of
-		// =...SUM(SUM(SUM(5,5),5),5)...;
-		
-		for ( int i = 0; i < depth; i++ ) 
-			query.append("SUM(");
-		query.append("5");
-		for ( int i = 0; i < depth; i++ )
-			query.append(",5)");
-		
-		assertEquals(5*depth+5, Parser.parse(sheet, query.toString()));
+	public void testLogicOperators() {
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=2<=2"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=2<=3"));
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=2<=1"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=2>=2"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=3>=2"));
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=1>=2"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=3!=2"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=3<>2"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=true!=false"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=true<>false"));
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=true!=true"));
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=true<>true"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=true||false"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=true||true"));
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=false||false"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=false||true"));
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=true&&false"));
+		assertEquals(Boolean.TRUE, Parser.parse(sheet, "=true&&true"));
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=false&&false"));
+		assertEquals(Boolean.FALSE, Parser.parse(sheet, "=false&&true"));
+		assertEquals(16, Parser.parse(sheet, "=2<<3"));
+		assertEquals(2, Parser.parse(sheet, "=16>>3"));
+		assertEquals(2, Parser.parse(sheet, "=2.1%4.4"));
+		assertEquals(2, Parser.parse(sheet, "=2%5"));
 	}
 	
 }

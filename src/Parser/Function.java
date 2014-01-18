@@ -48,7 +48,7 @@ public enum Function {
 	 */
 	SUM("Returns the sum of a set of values contained in a specified field on a query.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			double output = 0;
 			for (Object argument : arguments) {
@@ -91,7 +91,7 @@ public enum Function {
 	 */
 	SUBTRACT() {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(2, arguments.length);
 			double output = doubleValueOf(arguments[0]);
 			for (int i = 1; i < arguments.length; i++ ) {
@@ -126,7 +126,7 @@ public enum Function {
 	 */
 	PRODUCT("The PRODUCT function multiplies all the numbers given as arguments and returns the product.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(2, arguments.length);
 			double output = doubleValueOf(arguments[0]);
 			for (int i = 1; i < arguments.length; i++) {
@@ -164,7 +164,7 @@ public enum Function {
 	 */
 	DIVIDE("The DIVIDE function divides the first argument by the second. If more arguments are given, the value is again divided by the next argument and so on.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(2, arguments.length);
 			double output = doubleValueOf(arguments[0]);
 			for (int i = 1; i < arguments.length; i++) {
@@ -199,7 +199,7 @@ public enum Function {
 	 */
 	POWER("Returns the result of a number raised to a power.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
 			return convertToIntIfApplicable(Math.pow(doubleValueOf(arguments[0]), doubleValueOf(arguments[1])));
 		}
@@ -225,7 +225,7 @@ public enum Function {
 	 */
 	MOD("Returns the modulo of the division of the first argument by the second argument.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
 			return convertToIntIfApplicable(doubleValueOf(arguments[0]) % doubleValueOf(arguments[1]));
 		}
@@ -252,7 +252,7 @@ public enum Function {
 	 */
 	AVERAGE("Returns the average (arithmetic mean) of the arguments.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			return convertToIntIfApplicable(doubleValueOf(SUM.calculate(arguments)) / doubleValueOf(COUNT.calculate(arguments)));
 		}
@@ -278,7 +278,7 @@ public enum Function {
 	 */
 	MEDIAN("Returns the median of the arguments") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			
 			ArrayList<Double> countNumbersList = new ArrayList<Double>();
@@ -333,7 +333,7 @@ public enum Function {
 	 */
 	COUNT("Returns the number of numerical values of the arguments.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			int count = 0;
 			for(Object arg : arguments) {
@@ -369,7 +369,7 @@ public enum Function {
 	 */
 	COUNTA("Returns the number of not empty cells in the arguments.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			int count = 0;
 			for(Object arg : arguments) {
@@ -405,7 +405,7 @@ public enum Function {
 	 */
 	COUNTIF("Counts the number of cells within a range that meet the given criteria.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
 			assertArgumentRange(0, arguments);
 			
@@ -453,7 +453,7 @@ public enum Function {
 	 */
 	SUMIF {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertTwoArguments(2, 3, arguments.length);
 			assertArgumentRange(0, arguments);
 			
@@ -514,7 +514,7 @@ public enum Function {
 	 */
 	ISNUMBER("Returns the logical value TRUE if value is a number; otherwise, it returns FALSE.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			if (arguments[0] instanceof Range) {
 				return ISNUMBER.calculate(((Range) arguments[0]).getCellArray()[0]);
@@ -545,7 +545,7 @@ public enum Function {
 	 */
 	ISEVEN("Returns true if the (truncated) value is an even number; otherwise, it returns FALSE.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return (intValueOf(arguments[0]) % 2 == 0);
 		}
@@ -571,7 +571,7 @@ public enum Function {
 	 */
 	ISODD("Returns true if the (truncated) value is an odd number; otherwise, it returns FALSE.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return !(intValueOf(arguments[0]) % 2 == 0);
 		}
@@ -597,7 +597,7 @@ public enum Function {
 	 */
 	ROUND("The ROUND function rounds a number to a specified number of digits.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertTwoArguments(1, 2, arguments.length);
 			double value = doubleValueOf(arguments[0]);
 			if (arguments.length == 1 || intValueOf(arguments[1]) == 0) {
@@ -629,7 +629,7 @@ public enum Function {
 	 */
 	ROUNDDOWN("Rounds a number down, toward zero, at a given number of digits.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertTwoArguments(1, 2, arguments.length);
 			
 			int sign = intValueOf(SIGN.calculate(arguments[0]));
@@ -666,7 +666,7 @@ public enum Function {
 	 */
 	ROUNDUP("Rounds a number up, away from zero, at a given number of digits.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertTwoArguments(1, 2, arguments.length);
 			
 			int sign = intValueOf(SIGN.calculate(arguments[0]));
@@ -705,7 +705,7 @@ public enum Function {
 	 */
 	INT("Returns the integer part/portion of a number.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return (int) Math.floor(doubleValueOf(arguments[0]));
 		}
@@ -729,7 +729,7 @@ public enum Function {
 	 */
 	LOWER("Converts the input to lower case") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return stringValueOf(arguments[0]).toLowerCase(); 
 		}
@@ -753,7 +753,7 @@ public enum Function {
 	 */
 	PROPER("Capitalizes the first letter in a text string and any other letters in text that follow any character other than a letter. Converts all other letters to lowercase letters.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			
 			String strIn = stringValueOf(arguments[0]);
@@ -792,7 +792,7 @@ public enum Function {
 	 */
 	UPPER("Converts the input to upper case") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return stringValueOf(arguments[0]).toUpperCase(); 
 		}
@@ -818,7 +818,7 @@ public enum Function {
 	 */
 	RAW() {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			return Arrays.toString(arguments);
 		}
 	},
@@ -843,7 +843,7 @@ public enum Function {
 	 */
 	RAND("Returns an evenly distributed random number greater than or equal to 0 and less than 1. A new random number is returned every time the sheet is calculated.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			return Math.random();
 		}
 	},
@@ -869,7 +869,7 @@ public enum Function {
 	 */
 	RANDBETWEEN("Returns a random integer between the numbers you specify. A new random number is returned every time the sheet is calculated.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
 			int a = intValueOf(arguments[0]);
 			int b = intValueOf(arguments[1]);
@@ -898,7 +898,7 @@ public enum Function {
 	 */
 	SQRT("Returns the square root.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			double output = Math.sqrt(doubleValueOf(arguments[0]));
 			return convertToIntIfApplicable(output);
@@ -925,7 +925,7 @@ public enum Function {
 	 */
 	ROOT("Returns the second argument-root of the first argument.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
 			return convertToIntIfApplicable(Math.pow(doubleValueOf(arguments[0]), 1.0 / doubleValueOf(arguments[1])));
 		}
@@ -951,7 +951,7 @@ public enum Function {
 	 */
 	SIN("Returns a Double specifying the sine of an angle.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return Math.sin(doubleValueOf(arguments[0]));
 		}
@@ -977,7 +977,7 @@ public enum Function {
 	 */
 	ASIN("Returns the arcsine, or inverse sine, of a number. The arcsine is the angle whose sine is number. The returned angle is given in radians in the range -pi/2 to pi/2.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return Math.asin(doubleValueOf(arguments[0]));
 		}
@@ -1003,7 +1003,7 @@ public enum Function {
 	 */
 	ACOS("Returns the arccosine, or inverse cosine, of a number. The arccosine is the angle whose cosine is number. The returned angle is given in radians in the range 0 (zero) to pi.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return Math.acos(doubleValueOf(arguments[0]));
 		}
@@ -1029,7 +1029,7 @@ public enum Function {
 	 */
 	ATAN("Returns the arctangent, or inverse tangent, of a number. The arctangent is the angle whose tangent is number. The returned angle is given in radians in the range -pi/2 to pi/2.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return Math.atan(doubleValueOf(arguments[0]));
 		}
@@ -1056,7 +1056,7 @@ public enum Function {
 	 */
 	DEGREE("Converts radians to degrees.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return Math.toDegrees(doubleValueOf(arguments[0]));
 		}
@@ -1083,7 +1083,7 @@ public enum Function {
 	 */
 	RADIAN("Converts degrees to radians.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return Math.toRadians(doubleValueOf(arguments[0]));
 		}
@@ -1095,7 +1095,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>The cos of <code>real number</code></li>
+	 * <li>The cosine of <code>real number</code></li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
@@ -1109,7 +1109,7 @@ public enum Function {
 	 */
 	COS("Returns a Double specifying the cosine of an angle.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return Math.cos(doubleValueOf(arguments[0]));
 		}
@@ -1117,11 +1117,11 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>real number</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The tan of <code>real number</code></li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
@@ -1135,7 +1135,7 @@ public enum Function {
 	 */
 	TAN("Returns a Double specifying the tangent of an angle.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return Math.tan(doubleValueOf(arguments[0]));			
 		}
@@ -1143,11 +1143,11 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> none
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The value of Pi (3,1415...)</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
@@ -1161,7 +1161,7 @@ public enum Function {
 	 */
 	PI("Returns a Double value of pi.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(0, arguments.length);
 			return Math.PI;		
 		}
@@ -1177,7 +1177,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
-	 * If the power-arguments is not supplied, <code>EXP</code> will return the value of e (to the power 1)
+	 * If the power-arguments is not supplied, <code>EXP</code> will return the value of e (to the power 1).
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -1187,7 +1187,7 @@ public enum Function {
 	 */
 	EXP("Returns a Double value of e to the power of the given argument.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertTwoArguments(0, 1, arguments.length);
 			double power = 1;
 			if(arguments.length > 0) {
@@ -1218,7 +1218,7 @@ public enum Function {
 	 */
 	LOG("Returns the logarithm of a number to base 10.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return convertToIntIfApplicable(Math.log10(doubleValueOf(arguments[0])));
 		}
@@ -1244,7 +1244,7 @@ public enum Function {
 	 */
 	LOGBASE("Returns the logarithm of a number to the base you specify.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
 			return convertToIntIfApplicable(Math.log10(doubleValueOf(arguments[0])) / Math.log10(intValueOf(arguments[1])));			
 		}
@@ -1270,7 +1270,7 @@ public enum Function {
 	 */
 	LN("Returns a Double specifying the natural logarithm of a number.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return convertToIntIfApplicable(Math.log(doubleValueOf(arguments[0])));			
 		}
@@ -1298,7 +1298,7 @@ public enum Function {
 	 */
 	SIGN("Determines the sign of a number. Returns 1 if the number is positive, zero (0) if the number is 0, and -1 if the number is negative.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			if (doubleValueOf(arguments[0]) < 0) {
 				return -1;
@@ -1330,7 +1330,7 @@ public enum Function {
 	 */
 	ABS("Returns a value of the same type that is passed to it specifying the absolute value of a number.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return convertToIntIfApplicable(Math.abs(doubleValueOf(arguments[0])));
 		}
@@ -1356,7 +1356,7 @@ public enum Function {
 	 */
 	MIN("Return the minimum of a set of values contained in a specified field on a query.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			boolean aValue = false;
 			double lowestValue = Double.MAX_VALUE;
@@ -1395,7 +1395,7 @@ public enum Function {
 	 */
 	MAX("Return the maximum of a set of values contained in a specified field on a query.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			double max = 0;
 			for ( int i = 0; i < arguments.length; i++ ) {
@@ -1433,7 +1433,7 @@ public enum Function {
 	 */
 	IF("Returns the second argument is the first argument is true, else returns the third argument.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			assertMaxArguments(3, arguments.length);
 			if (booleanValueOf(arguments[0])) {
@@ -1473,7 +1473,7 @@ public enum Function {
 	 */
 	OR("Returns TRUE if any argument is TRUE; returns FALSE if all arguments are FALSE.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			for(Object argument : arguments) {
 				if (booleanValueOf(argument) == true) {
@@ -1505,7 +1505,7 @@ public enum Function {
 	 */
 	AND("Returns TRUE if all its arguments evaluate to TRUE; returns FALSE if one or more arguments evaluate to FALSE.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			for(Object argument : arguments) {
 				if (!booleanValueOf(argument)) {
@@ -1518,11 +1518,11 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>logical value</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>TRUE if the <code>logical value</code> is FALSE, and vice versa</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
@@ -1536,15 +1536,16 @@ public enum Function {
 	 */
 	NOT("Reverses the value of its argument. Use NOT when you want to make sure a value is not equal to one particular value.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return !booleanValueOf(arguments[0]);
 		}
 	},
 	
 	/**
-	 * <div> <b>Expected arguments:</b> <code>value</code>,
-	 * <code>[value...]</code> </div><br>
+	 * <div>
+	 * <b>Expected arguments:</b> <code>value</code>
+	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
 	 * <li>TRUE if the value is instance of Boolean</li>
@@ -1561,9 +1562,9 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ISLOGICAL() {
+	ISLOGICAL("Returns true if the given argument is a logical value (TRUE/FALSE).") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			Object arg = arguments[0];
 			//assertArgumentSingleRange(arg);
@@ -1605,7 +1606,7 @@ public enum Function {
 	 */
 	DATE() {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			return (new SimpleDateFormat(arguments[0].toString())).format(System.currentTimeMillis());
 		}
@@ -1623,7 +1624,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
-	 * If the rown and/or column number(s) do not fall within the given range, a #VALUE error is returned
+	 * If row or column number is greater then the size of the range, a <code>#VALUE</code> error is returned.
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -1631,32 +1632,103 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	INDEX() {
+	INDEX("Returns the value of the cell at the given row and column in a given table range.") {
 		@Override
-		Object calculate(Object... arguments) {
+		public Object calculate(Object... arguments) {
 			assertArguments(3, arguments.length);
 			assertArgumentRange(0, arguments);
 			
 			Range matrix = ((Range)arguments[0]);
-			int height = matrix.getRowCount();
-			int width = matrix.getRowCount();
 			int row = intValueOf(arguments[1]) - 1;
 			int column = intValueOf(arguments[2]) - 1;
+			int height = matrix.getRowCount();
+			int width = matrix.getColumnCount();
 			
-			if(row > height || column > width || row < 1 || column < 1) {
-				throw new IllegalArgumentException("The cell at (row " + row + ", col " + column + ") does not intersect with the given range");
+			if(row > height - 1 || column > width - 1 || row < 0 || column < 0) {
+				throw new IllegalArgumentException("The cell at (row " + (row + 1) + ", col " + (column + 1) + ") does not intersect with the given range");
 			} else {
 				row += matrix.firstCell().getRow();
 				column += matrix.firstCell().getColumn();
 				
-				/* TODO: Deze shiet moet de sheet zijn waarin de function staat... 
-				Sheet sheet = new Sheet();
+				Sheet sheet = matrix.firstCell().getSheet();
 				Position pos = sheet.new Position(column, row);
-				return sheet.getCellAt(column, row);
-				 */
-				return "(" + Sheet.getColumnLetter(column - 1) + row + ")";
+				return sheet.getCellAt(pos).getValue();
 			}
 		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>search value</code>, <code>table range</code>, <code>column offset</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>[return omschrijving]</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * If the column offset is greater then the width of the range, a <code>#VALUE</code> error is returned.
+	 * If the <code>search value</code> is not found in the first column of the <code>table range</code>, a <code>#VALUE</code> error is returned.
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	VLOOKUP() {
+		@Override
+		public Object calculate(Object... arguments) {
+			assertArguments(3, arguments.length);
+			assertArgumentRange(1, arguments);
+			
+			String searchVal = stringValueOf(arguments[0]);
+			Range matrix = ((Range)arguments[1]);
+			int width = matrix.getColumnCount();
+			int columnOffset = intValueOf(arguments[2]);
+			
+			if(columnOffset < 1 || columnOffset > width) {
+				throw new IllegalArgumentException("Column offset is not valid. Should be at least 1 and not greater then the width of the table range.");
+			} else {
+				int firstColumn = matrix.firstCell().getColumn();
+				for (Cell cell : matrix.getCellArray()) {
+					if(cell.getColumn() == firstColumn) {
+						//System.out.println("OK cel: (col=" + cell.getColumn() + ", row="+ cell.getRow() + ") value:=" + cell.getValue());
+						if(stringValueOf(cell.getValue()).equals(searchVal)) {
+							//System.out.println("TRUE");
+							return INDEX.calculate(matrix, cell.getRow() + 1, columnOffset);
+						}
+					}
+				}
+				throw new IllegalArgumentException("The search value was not found in the search range.");
+			}
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> none
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Surprise!</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * The ANDY() is the most advanced feature in the Sandwitch spreadsheet application
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
+	 */
+	ANDY("Returns a surprise!") {
+		@Override
+		public Object calculate(Object... arguments) {
+			return "Hoi Andy!";
+		}
+		
 	};
 	
 	/**
@@ -1690,7 +1762,7 @@ public enum Function {
 	 *            Optional additional arguments
 	 * @return <code>Object</code> of implemented type
 	 */
-	abstract Object calculate(Object... arguments);
+	public abstract Object calculate(Object... arguments);
 	
 	/**
 	 * Calculate the negative value for a function. This method takes at least
@@ -1703,7 +1775,7 @@ public enum Function {
 	 *            Optional additional arguments
 	 * @return <code>Object</code> of implemented type
 	 */
-	Object calculateNegative(Object... arguments) {
+	public Object calculateNegative(Object... arguments) {
 		Object result = calculate(arguments);
 		if (result instanceof Integer) {
 			return new Integer(-(Integer) result);
@@ -1719,21 +1791,15 @@ public enum Function {
 	 * <code>Double</code> will be rounded to the closest <code>integer</code>
 	 * and <code>Booleans</code> will be converted to their <code>integer</code>
 	 * value: <code>1</code> for <code>true</code> and <code>0</code> for
-	 * <code>false</code>. <!--Values of the type <code>String</code> will always be
-	 * converted to <code>0</code>. -->
+	 * <code>false</code>.
 	 * @param obj Object to convert
 	 * @return <code>integer</code> value to calculate with
 	 */
 	public static int intValueOf(Object obj) {
-		/*
-		 * TODO Numbers without '='
-		 */
 		if (obj instanceof Number) {
 			return ((Number) obj).intValue();
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
-		//} else if ( obj instanceof String ) {
-		//	return 0;
 		} else if (obj instanceof Range) {
 			return intValueOf(((Range) obj).getCellArray()[0]);
 		} else if (obj instanceof Cell) {
@@ -1754,9 +1820,6 @@ public enum Function {
 	 * @return <code>double</code> value to calculate with
 	 */
 	public static double doubleValueOf(Object obj) {
-		/*
-		 * TODO Numbers without '='
-		 */
 		if (obj instanceof Number) {
 			return ((Number) obj).doubleValue();
 		} else if ( obj instanceof String ) {
@@ -1844,7 +1907,7 @@ public enum Function {
 	 * @param d is a double value
 	 * @return the same value as the input, but is converted to Integer if there is no significant decimal part behind the comma
 	 */
-	static Object convertToIntIfApplicable(double d) {
+	public static Object convertToIntIfApplicable(double d) {
 		if (Math.floor(d) == d) {
 			return (int) d;
 		}
@@ -1856,7 +1919,7 @@ public enum Function {
 	 * @param count is the number of arguments the function should get
 	 * @param length is the number of arguments the function actualy got (arguments.length)
 	 */
-	static void assertArguments(int count, int length) {
+	public static void assertArguments(int count, int length) {
 		if (count != length) {
 			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " where supplied!");
 		}
@@ -1868,7 +1931,7 @@ public enum Function {
 	 * @param count2 is the second number of arguments the function can handle
 	 * @param length is the number of arguments the function actualy got (arguments.length)
 	 */
-	static void assertTwoArguments(int count1, int count2, int length) {
+	public static void assertTwoArguments(int count1, int count2, int length) {
 		if (count1 != length && count2 != length) {
 			throw new IllegalArgumentException("This function requires " + count1 + " or " + count2 + " arguments, but " + length + " where supplied!");
 		}
@@ -1879,7 +1942,7 @@ public enum Function {
 	 * @param min is the minimum number of argumens the function should get
 	 * @param length is the number of arguments the function actualy got (argument.length)
 	 */
-	static void assertMinArguments(int min, int length) {
+	public static void assertMinArguments(int min, int length) {
 		if (min > length) {
 			throw new IllegalArgumentException("This function requires at least " + min + "arguments, but " + length + " where supplied!");
 		}
@@ -1890,7 +1953,7 @@ public enum Function {
 	 * @param max is the maximum number of argumens the function should get
 	 * @param length is the number of arguments the function actualy got (argument.length)
 	 */
-	static void assertMaxArguments(int max, int length) {
+	public static void assertMaxArguments(int max, int length) {
 		if (length > max) {
 			throw new IllegalArgumentException("This function cannot handle more than " + max + "arguments, but " + length + " where supplied!");
 		}
@@ -1901,7 +1964,7 @@ public enum Function {
 	 * @param index is the index of the argument in the array of arguments that must be a Range
 	 * @param args is the array of arguments supplied to the function
 	 */
-	static void assertArgumentRange(int index, Object... args) {
+	public static void assertArgumentRange(int index, Object... args) {
 		if (!(args[index] instanceof Range)) {
 			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a cell reference, but it is not!");
 		}
@@ -1911,7 +1974,7 @@ public enum Function {
 	 * Checks if a certain argument given to a function is instance of Range.
 	 * @param arg is the argument that must be a Range
 	 */
-	static void assertArgumentRange(Object arg) {
+	public static void assertArgumentRange(Object arg) {
 		if (!(arg instanceof Range)) {
 			throw new IllegalArgumentException("This function requires a certain argument to be a cell reference, but it is not!");
 		}
@@ -1922,7 +1985,7 @@ public enum Function {
 	 * @throws an IllegalArgumentException only if the argument is instance of Range and contains more than 1 cell.
 	 * @param arg is the argument that must be a Range
 	 */
-	static void assertArgumentSingleRange(Object arg) {
+	public static void assertArgumentSingleRange(Object arg) {
 		if ((arg instanceof Range) && ((Range)arg).getCellArray().length > 1) {
 			throw new IllegalArgumentException("This function cannot handle ranges bigger than one cell.");
 		}

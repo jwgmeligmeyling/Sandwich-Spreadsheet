@@ -7,7 +7,7 @@ import java.awt.*;
 import File.Cell;
 import File.Sheet;
 import File.Sheet.Range;
-import File.SpreadSheetFile;
+import File.Workbook;
 
 /**
  * The Window class
@@ -15,17 +15,20 @@ import File.SpreadSheetFile;
 @SuppressWarnings("serial")
 public class Window extends JFrame {
 	
-	private SToolbar tbMain;
-	private FormuleBalk formule;
-	private JTabbedPane tabbedPane;
-	private SStatusBar statusBar;
-	private SpreadSheetFile newFile;
+	private final SToolbar tbMain;
+	private final FormuleBalk formule;
+	private final JTabbedPane tabbedPane;
+	private final SStatusBar statusBar;
+	private final Workbook newFile;
+	
+	private static final int DEFAULT_WIDTH = 800;
+	private static final int DEFAULT_HEIGHT = 450;
 	
 	/**
 	 * Consturctor for the GUI
 	 */
 	public Window() {
-		this(new SpreadSheetFile(new Sheet()));
+		this(new Workbook(new Sheet()));
 	}
 	
 	/**
@@ -33,11 +36,11 @@ public class Window extends JFrame {
 	 * @param spreadsheet
 	 * @throws HeadlessException
 	 */
-	public Window(SpreadSheetFile spreadsheet) throws HeadlessException {
+	public Window(Workbook spreadsheet) throws HeadlessException {
 		super("Sandwich Spreadsheet - " + spreadsheet.getName());
 		newFile = spreadsheet;
 		
-		setSize(800, 450);
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
@@ -61,22 +64,37 @@ public class Window extends JFrame {
 		paintSheets();
 	}
 	
+	/**
+	 * @return the {@code Sheet} instance in the active {@code JTabbledPane} tab
+	 */
 	public Sheet getCurrentSheet() {
 		return newFile.getSheet(tabbedPane.getSelectedIndex());
 	}
 	
-	public SpreadSheetFile getCurrentSpreadSheetFile(){
+	/**
+	 * @return the {@code Workbook} associated with this {@code Window}
+	 */
+	public Workbook getCurrentSpreadSheetFile(){
 		return newFile;
 	}
 	
+	/**
+	 * @return the {@code STable} instance in the active {@code JTabbledPane} tab
+	 */
 	public STable getCurrentTable() {
 		return getCurrentSheet().getSTable();
 	}
 	
+	/**
+	 * Update the active table
+	 */
 	public void updateTable() {
 		getCurrentTable().updateUI();
 	}
 	
+	/**
+	 * @return a new {@code Sheet} in this {@code Workbook}
+	 */
 	public Sheet createSheet() {
 		return newFile.createSheet();
 	}

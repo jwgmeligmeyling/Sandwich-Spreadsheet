@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
 
 import File.Cell;
 import File.Sheet.Range;
-import File.SpreadSheetFile;
+import File.Workbook;
 
 /**
  * 
@@ -82,6 +82,11 @@ public class SToolbar extends JToolBar {
 		
 	}
 	
+	/**
+	 * Create the selection listener, such that the toggles in the
+	 * toolbar are updated when the selection changes.
+	 * @param table
+	 */
 	public void createSelectionListener(STable table) {
 		table.addListSelectionListener(new ListSelectionListener() {
 
@@ -92,9 +97,11 @@ public class SToolbar extends JToolBar {
 				
 				if ( selection != null ) {
 					Cell first = selection.firstCell();
-					bold = first.isBold();
-					italic = first.isItalic();
-					underlined = first.isUnderlined();
+					if ( first != null ) {
+						bold = first.isBold();
+						italic = first.isItalic();
+						underlined = first.isUnderlined();
+					}
 				}
 
 				Bold.setSelected(bold);
@@ -127,7 +134,7 @@ public class SToolbar extends JToolBar {
 				
 				try {
 					// Nieuwe sheetfile aanmaken vanuit de XML
-					new Window(new SpreadSheetFile(file));
+					new Window(new Workbook(file));
 					
 				} catch (ParserConfigurationException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -146,7 +153,7 @@ public class SToolbar extends JToolBar {
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
+			Workbook sheetfile = window.getCurrentSpreadSheetFile();
 	    	File file = sheetfile.getFile();
 	    	
 	    	if ( file == null ) {
@@ -196,9 +203,6 @@ public class SToolbar extends JToolBar {
 			}
 			
 			window.updateTable();
-			
-//			String st = "Bold";
-//			JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
@@ -215,9 +219,6 @@ public class SToolbar extends JToolBar {
 			}
 			
 			window.updateTable();
-			
-			//String st = "Italic";
-			//JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
@@ -267,16 +268,10 @@ public class SToolbar extends JToolBar {
 	
 	
 	public class ToolBarButton extends JButton {
+		
 		public ToolBarButton(Action action) {
 			super(action);
 		}
-
-		/*
-		@Deprecated
-		public ToolBarButton(String string) {
-			super(string);
-		}
-		*/
 
 		@Override
 		public Dimension getMaximumSize() {

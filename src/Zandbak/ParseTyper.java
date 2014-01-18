@@ -1,8 +1,9 @@
-package Parser;
+package Zandbak;
 
 import java.util.Scanner;
 
 import File.Sheet;
+import Parser.Parser;
 
 public class ParseTyper {
 	

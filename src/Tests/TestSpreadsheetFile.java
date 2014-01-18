@@ -1,4 +1,4 @@
-package File;
+package Tests;
 
 import static org.junit.Assert.*;
 
@@ -15,20 +15,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import File.Sheet;
+import File.Workbook;
+
 public class TestSpreadsheetFile {
 	
-	public SpreadSheetFile sheets;
-	public SpreadSheetFile sheets2;
+	public Workbook sheets;
+	public Workbook sheets2;
 	public Sheet sheet1;
 	public Sheet sheet2;
 	public Sheet sheet3;
 	
-	
-	
 	@Before
 	public void voorbereidingen(){
-		sheets = new SpreadSheetFile();
-		sheets2 = new SpreadSheetFile();
+		sheets = new Workbook();
+		sheets2 = new Workbook();
 		
 		sheet1 = new Sheet();
 		sheet1.createCell("Hallo! Cell 1,1 Sheet 1", 1, 1);
@@ -49,19 +50,14 @@ public class TestSpreadsheetFile {
 		sheets.write(new File("xml/output.xml"));
 		BufferedReader reader = new BufferedReader(new FileReader("xml/output.xml"));
 		String one = reader.readLine();
-		
-		System.out.println(one);
-		
-		String two = "<WORKBOOK><SPREADSHEET><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
-		System.out.println(two);
-		
+		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
 		assertEquals(one, two);
 	}
 	
 	
 	@Test
 	public void testReadFileMultipleSheets() throws ParserConfigurationException, SAXException, IOException, XMLStreamException, FactoryConfigurationError{
-		SpreadSheetFile file = new SpreadSheetFile();
+		Workbook file = new Workbook();
 		Sheet sheet = new Sheet();
 		Sheet sheet2 = new Sheet();
 		
@@ -74,24 +70,21 @@ public class TestSpreadsheetFile {
 		file.addSheet(sheet);
 		file.addSheet(sheet2);
 		
-		SpreadSheetFile file2 = new SpreadSheetFile(new File("xml/Test XML bestanden (Niet aankomen)/test2.xml"));
+		Workbook file2 = new Workbook(new File("xml/Test XML bestanden (Niet aankomen)/test2.xml"));
 		
 		assertEquals(file, file2);
-		
-		
-
 	}
 	
 	@Test
 	public void testRead() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile file = new SpreadSheetFile();
+		Workbook file = new Workbook();
 		Sheet sheet = new Sheet();
 		
 		file.addSheet(sheet);
 		
 		sheet.createCell("test", 1, 1);
 		
-		SpreadSheetFile file2 = new SpreadSheetFile(new File("xml/Test XML bestanden (Niet aankomen)/test.xml"));
+		Workbook file2 = new Workbook(new File("xml/Test XML bestanden (Niet aankomen)/test.xml"));
 		
 		assertEquals(file,file2);
 		
