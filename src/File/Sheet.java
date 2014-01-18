@@ -40,7 +40,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * <code>Cell</code> instances. A <code>Position</code> holds a unique
 	 * column and row index.
 	 */
-	private final Map<Position, Cell> cells = new HashMap<Position, Cell>();
+	final Map<Position, Cell> cells = new HashMap<Position, Cell>();
 
 	/**
 	 * The amount of columns used in this sheet. This is used to limit the
@@ -48,7 +48,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * automatically increments when a <code>Cell</code> is inserted with a
 	 * higher column index.
 	 */
-	private int columnCount = 50;
+	private int columnCount = 0;
 
 	/**
 	 * The amount of rows used in this sheet. This is used to limit the amount
@@ -56,7 +56,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * automatically increments when a <code>Cell</code> is inserted with a
 	 * higher row index.
 	 */
-	private int rowCount = 200;
+	private int rowCount = 0;
 	
 	private STable stable;
 	
@@ -167,14 +167,17 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		 * The start of the <code>Range</code>
 		 */
 		private final Position topLeft;
+		
 		/**
 		 * The end of the <code>Range</code>
 		 */
 		private final Position bottomRight;
+		
 		/**
 		 * The amount of columns in this <code>Range</code>
 		 */
 		private final int numColumns;
+		
 		/**
 		 * The amount or rows in this <code>Range</code>
 		 */
@@ -211,6 +214,24 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 
 			this.numColumns = bottomRight.colIndex - topLeft.colIndex + 1;
 			this.numRows = bottomRight.rowIndex - topLeft.rowIndex + 1;
+			
+			createNullCells();
+		}
+		
+		/**
+		 * Some values for the {@code Cell} instances in this {@code Range}
+		 * might be {@code null}, because they are not initialised. This may
+		 * cause problems when calculating sums, or setting colors and text
+		 * enhancements. Thus, now it's about time to create these missing
+		 * {@code Cell} objects.
+		 */
+		private void createNullCells() {
+			for ( int i = 0, l = numColumns * numRows; i < l; i++ ) {
+				Position p = topLeft.offset(i / numRows, i % numRows);
+				if ( cells.get(p) == null ) {
+					new Cell(Sheet.this, p, "");
+				}
+			}
 		}
 		
 		@Override
@@ -238,11 +259,12 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 
 		@Override
 		public Cell firstCell() {
-			Cell[] cells = getCellArray();
-			if ( cells.length > 0 ) {
-				return cells[0];
-			}
-			return null;
+			return getCellAt(topLeft);
+		}
+		
+		@Override
+		public Position getTopLeft() {
+			return topLeft;
 		}
 
 		@Override
@@ -330,20 +352,6 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		}
 	}
 
-	/**
-	 * Method to get the letter for a column
-	 * @param index
-	 * @return column letter
-	 */
-	public static String getColumnLetter(int index) {
-		int quotient = (index) / 26;
-		if (quotient > 0) {
-			return getColumnLetter(quotient - 1) + (char) ((index % 26) + 65);
-		} else {
-			return "" + (char) ((index % 26) + 65);
-		}
-	}
-
 	@Override
 	public String getSheetName() {
 		return sheetName;
@@ -380,21 +388,50 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 
 	@Override
 	public Cell createCell(String value, int colIndex, int rowIndex) {
-		Position position = new Position(colIndex, rowIndex);
-		Cell cell = new Cell(this, position, value);
-		cells.put(position, cell);
-		return cell;
+		return  new Cell(this, new Position(colIndex, rowIndex), value);
 	}
 	
 	@Override
 	public Cell getCellAt(int colIndex, int rowIndex) {
-		Position position = new Position(colIndex, rowIndex);
-		Cell output = cells.get(position);
-		if (output == null ) {
-			output = new Cell(this, position, "");
-			cells.put(position, output);
+		return cells.get(new Position(colIndex, rowIndex));
+	}
+	
+	@Override
+	public Cell getCellAt(Position position) {
+		return cells.get(position);
+	}
+
+	@Override
+	public String getInputAt(int colIndex, int rowIndex) {
+		Cell cell = cells.get(new Position(colIndex, rowIndex));
+		if ( cell != null ) {
+			return cell.getInput();
 		}
-		return output;
+		return null;
+	}
+	
+	@Override
+	public Object getValueAt(int colIndex, int rowIndex) {
+		Cell cell = cells.get(new Position(colIndex, rowIndex));
+		if ( cell != null ) {
+			return cell.getValue();
+		}
+		return null;
+	}
+	
+	@Override
+	public void setValueAt(Object value, int colIndex, int rowIndex) {
+		Position position = new Position(colIndex, rowIndex);
+		Cell cell = cells.get(position);
+		
+		if ( cell == null ) {
+			cell = new Cell(this, position, value.toString());
+			cells.put(position, cell);
+		} else {
+			cell.setInput(value.toString());
+		}
+		
+		cell.update();
 	}
 	
 	@Override
@@ -432,23 +469,30 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		return stable;
 	}
 
-	/**
-	 * The function that writes the sheet to a XML file.
-	 * <div><b>Author:</b><br>
-	 * <ul>
-	 * <li>Jim Hommes</li>
-	 * </ul>
-	 * </div>
-	 * 
-	 * @param writer
-	 * @throws XMLStreamException If there was an error processing the XML stream
-	 */
+	@Override
 	public void write(XMLStreamWriter writer) throws XMLStreamException {
 		writer.writeStartElement("SPREADSHEET");
+		writer.writeAttribute("name", sheetName);
+		
 		for (Cell cell : cells.values()) {
 			cell.write(writer);
 		}
+		
 		writer.writeEndElement();
+	}
+
+	/**
+	 * Method to get the letter for a column
+	 * @param index
+	 * @return column letter
+	 */
+	public static String getColumnLetter(int index) {
+		int quotient = (index) / 26;
+		if (quotient > 0) {
+			return getColumnLetter(quotient - 1) + (char) ((index % 26) + 65);
+		} else {
+			return "" + (char) ((index % 26) + 65);
+		}
 	}
 
 	/**
@@ -457,7 +501,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 */
 	public static class XMLHandler extends DefaultHandler {
 		private final XMLReader reader;
-		private final SpreadSheetFile sheets;
+		private final Workbook sheets;
 		private final DefaultHandler fileHandler;
 		
 		/**
@@ -466,7 +510,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		 * @param reader
 		 * @param fileHandler
 		 */
-		public XMLHandler(SpreadSheetFile sheets, XMLReader reader, DefaultHandler fileHandler) {
+		public XMLHandler(Workbook sheets, XMLReader reader, DefaultHandler fileHandler) {
 			this.reader = reader;
 			this.sheets = sheets;
 			this.fileHandler = fileHandler;
@@ -504,7 +548,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 		Sheet kloon = new Sheet(sheetName + " (Kopie)");
 		for ( Cell cell : cells.values() ) {
 			kloon.createCell(cell.getInput(), cell.position.colIndex, cell.position.rowIndex);

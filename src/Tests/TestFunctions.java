@@ -1,10 +1,13 @@
-package Parser;
+package Tests;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import File.*;
 import File.Sheet.Range;
+import Parser.Function;
 
 public class TestFunctions {
 
@@ -17,7 +20,7 @@ public class TestFunctions {
 	@Before
 	public void setUp() throws Exception {
 		
-		SpreadSheetFile workbook = new SpreadSheetFile();
+		Workbook workbook = new Workbook();
 		Sheet sheet = workbook.createSheet();
 		Sheet tsheet = workbook.createSheet();
 		
@@ -99,6 +102,7 @@ public class TestFunctions {
 	public void testSumRangeNumber() {
 		assertEquals(48, Function.SUM.calculate(r2));
 	}
+	
 	@Test
 	public void testSumRangeBoolean() {
 		assertEquals(2, Function.SUM.calculate(r3));
@@ -107,18 +111,22 @@ public class TestFunctions {
 	public void testSumRangeWithString() {
 		assertEquals(68, Function.SUM.calculate(r1));
 	}
+	
 	@Test
 	public void testSum() {
 		assertEquals(10, Function.SUM.calculate(5, 5));
 	}
+	
 	@Test
 	public void testSumDouble() {
 		assertEquals(7.3, ((Double) Function.SUM.calculate(6.9, 0.4)).doubleValue(), 1e-15);
 	}
+	
 	@Test
 	public void testSumIntAndDouble() {
 		assertEquals(7.25, Function.SUM.calculate(6, 1.25));
 	}
+	
 	@Test
 	public void testSumDoubleAndInt() {
 		assertEquals(7.125, ((Double) Function.SUM.calculate(6.125, 1)).doubleValue(), 1e-15);
@@ -128,28 +136,32 @@ public class TestFunctions {
 	public void testSumIf2args() {
 		assertEquals(114, Function.SUMIF.calculate(tValB, ">10"));
 	}
+	
 	@Test
 	public void testSumIf3args1() {
 		assertEquals(38.05, Function.SUMIF.calculate(tBools, true, tValB));
 	}
+	
 	@Test
 	public void testSimIg3args2() {
 		assertEquals(80.05, Function.SUMIF.calculate(tValS, "<5", tValB));
 	}
+	
 	@Test
 	public void testSumIf3argsNegative() {
-		// TODO negatieve getallen lijken het niet goed te doen hier
-		assertEquals(78, Function.SUMIF.calculate(tValS, "-2", tValB));
+		assertEquals(0, Function.SUMIF.calculate(tValS, -2, tValB));
 	}
+	
 	@Test
 	public void testSumIf3argsNegative2() {
-		// TODO ...
-		assertEquals(78, Function.SUMIF.calculate(tValS, "=-2", tValB));
+		assertEquals(0, Function.SUMIF.calculate(tValS, -2, tValB));
 	}
+	
 	@Test
 	public void testSumIf3argsPositive() {
 		assertEquals(16, Function.SUMIF.calculate(tValS, "8", tValB));
 	}
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testSumIf3argsDiffRngSize() {
 		Function.SUMIF.calculate(tValS, ">0", tValBwrong);
@@ -164,10 +176,12 @@ public class TestFunctions {
 	public void testCountIf1() {
 		// TODO
 	}
+	
 	@Test
 	public void testCountIf2() {
 		
 	}
+	
 	@Test
 	public void testCountIf3() {
 		

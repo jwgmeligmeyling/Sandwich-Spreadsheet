@@ -1,4 +1,4 @@
-package File;
+package Tests;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import File.Cell;
+import File.Sheet;
+import File.Workbook;
 
 public class TestRead {
 	
@@ -18,7 +20,7 @@ public class TestRead {
 	
 	@Test
 	public void TestReadNormalWholeBlock() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile sheets = new SpreadSheetFile(new File("xml/oude xml.xml"));
+		Workbook sheets = new Workbook(new File("xml/oude xml.xml"));
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -38,7 +40,7 @@ public class TestRead {
 
 	@Test
 	public void TestReadNormalSmallestBlock() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile sheets = new SpreadSheetFile(new File("xml/oude xml.xml"));
+		Workbook sheets = new Workbook(new File("xml/oude xml.xml"));
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -58,7 +60,7 @@ public class TestRead {
 	
 	@Test
 	public void TestReadNormalSpecificBlock() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile sheets = new SpreadSheetFile(new File("xml/oude xml.xml"));
+		Workbook sheets = new Workbook(new File("xml/oude xml.xml"));
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
@@ -78,7 +80,7 @@ public class TestRead {
 	
 	@Test
 	public void TestReadFoutWholeBlock() throws ParserConfigurationException, SAXException, IOException{
-		SpreadSheetFile sheets = new SpreadSheetFile(new File("xml/oude xml.xml"));
+		Workbook sheets = new Workbook(new File("xml/oude xml.xml"));
 		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();

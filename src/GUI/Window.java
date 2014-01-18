@@ -7,7 +7,7 @@ import java.awt.*;
 import File.Cell;
 import File.Sheet;
 import File.Sheet.Range;
-import File.SpreadSheetFile;
+import File.Workbook;
 
 /**
  * The Window class
@@ -19,13 +19,13 @@ public class Window extends JFrame {
 	private FormuleBalk formule;
 	private JTabbedPane tabbedPane;
 	private SStatusBar statusBar;
-	private SpreadSheetFile newFile;
+	private Workbook newFile;
 	
 	/**
 	 * Consturctor for the GUI
 	 */
 	public Window() {
-		this(new SpreadSheetFile(new Sheet()));
+		this(new Workbook(new Sheet()));
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class Window extends JFrame {
 	 * @param spreadsheet
 	 * @throws HeadlessException
 	 */
-	public Window(SpreadSheetFile spreadsheet) throws HeadlessException {
+	public Window(Workbook spreadsheet) throws HeadlessException {
 		super("Sandwich Spreadsheet - " + spreadsheet.getName());
 		newFile = spreadsheet;
 		
@@ -65,7 +65,7 @@ public class Window extends JFrame {
 		return newFile.getSheet(tabbedPane.getSelectedIndex());
 	}
 	
-	public SpreadSheetFile getCurrentSpreadSheetFile(){
+	public Workbook getCurrentSpreadSheetFile(){
 		return newFile;
 	}
 	

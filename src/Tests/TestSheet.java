@@ -1,10 +1,12 @@
-package File;
+package Tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import File.Cell;
+import File.Sheet;
 import File.Sheet.Range;
 
 public class TestSheet {

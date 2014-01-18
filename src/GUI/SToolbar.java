@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
 
 import File.Cell;
 import File.Sheet.Range;
-import File.SpreadSheetFile;
+import File.Workbook;
 
 /**
  * 
@@ -92,9 +92,11 @@ public class SToolbar extends JToolBar {
 				
 				if ( selection != null ) {
 					Cell first = selection.firstCell();
-					bold = first.isBold();
-					italic = first.isItalic();
-					underlined = first.isUnderlined();
+					if ( first != null ) {
+						bold = first.isBold();
+						italic = first.isItalic();
+						underlined = first.isUnderlined();
+					}
 				}
 
 				Bold.setSelected(bold);
@@ -127,7 +129,7 @@ public class SToolbar extends JToolBar {
 				
 				try {
 					// Nieuwe sheetfile aanmaken vanuit de XML
-					new Window(new SpreadSheetFile(file));
+					new Window(new Workbook(file));
 					
 				} catch (ParserConfigurationException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -146,7 +148,7 @@ public class SToolbar extends JToolBar {
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			SpreadSheetFile sheetfile = window.getCurrentSpreadSheetFile();
+			Workbook sheetfile = window.getCurrentSpreadSheetFile();
 	    	File file = sheetfile.getFile();
 	    	
 	    	if ( file == null ) {
