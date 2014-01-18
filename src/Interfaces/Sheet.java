@@ -1,10 +1,6 @@
 package Interfaces;
 
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-
 import File.Cell;
-import File.SpreadSheetFile;
 import File.Sheet.Column;
 import File.Sheet.Row;
 import GUI.STable;
@@ -37,7 +33,7 @@ public interface Sheet {
 	 * Method to get the cell at given row and column index
 	 * @param rowIndex is the index of the row the desired Cell is in
 	 * @param colIndex is the index of the column the desired Cell is in
-	 * @return row at given indexes
+	 * @return cell at given column and row indexes
 	 */
 	public Cell getCellAt(int colIndex, int rowIndex);
 	

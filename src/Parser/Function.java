@@ -3,7 +3,9 @@ package Parser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import File.Cell;
+import File.Sheet;
 import File.Sheet.Range;
 
 /**
@@ -1640,14 +1642,12 @@ public enum Function {
 			int row = intValueOf(arguments[1]);
 			int column = intValueOf(arguments[2]);
 			
-			if(row > height || column > width) {
+			if(row > height || column > width || row < 1 || column < 1) {
 				throw new IllegalArgumentException("The cell at (row " + row + ", col " + column + ") does not intersect with the given range");
 			} else {
-				// TODO: sleep and finish this. return matrix.cellat???
-						
+				return "(" + Sheet.getColumnLetter(column - 1) + row + ")";
+				//matrix.get
 			}
-			
-			return null;
 		}
 	};
 	

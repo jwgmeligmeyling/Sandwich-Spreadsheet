@@ -256,7 +256,7 @@ public enum Operator {
 	/**
 	 *  Concatenate two Strings
 	 */
-	CONCAT(new char[] {'&' }, 6) {
+	CONCAT(new char[] { '&' }, 6) {
 		@Override
 		Object calculate(Object first, Object second) {
 			return first.toString() + second.toString();

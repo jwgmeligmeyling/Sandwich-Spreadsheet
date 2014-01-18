@@ -322,6 +322,7 @@ public class TestParser {
 	 */
 	@Test
 	public void testParenthesesDepth() {
+		// TODO: Gaan we nou niet net ver? Of wil je een Exception expecten?
 		int depth = 7400;
 		StringBuilder query = new StringBuilder(depth*2+2);
 		query.append('=');
@@ -383,7 +384,7 @@ public class TestParser {
 	 * tested this and could go to a depth of 14000 nested
 	 * functions, which ran in 2.827s and 16000 nested
 	 * functions which ran in 4.035 s.
-	 * TODO Why can we go further with these parentheses
+	 * TODO Why can we go further with these parentheses	<<<<<<
 	 * while they use the same recursion as in the previous
 	 * test case? Does the additional logic in the sum
 	 * function give the JVM some time to optimize/cache the
