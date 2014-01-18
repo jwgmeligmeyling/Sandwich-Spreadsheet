@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -26,13 +27,12 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Jan-Willem Gmelig Meyling
  * @author Maarten Flikkema
  * @Author Jim Hommes
- *
  */
-public class Workbook {
+public class Workbook implements Interfaces.Workbook {
 
 	private File file;
 	private String name;
-	private ArrayList<Sheet> sheets = new ArrayList<Sheet>();
+	private final ArrayList<Sheet> sheets = new ArrayList<Sheet>();
 	
 
 	/**
@@ -86,55 +86,39 @@ public class Workbook {
 		}
 	}
 	
-	/**
-	 * Append a sheet to this spreadsheet file
-	 * @param sheet
-	 */
+	@Override
 	public void addSheet(Sheet sheet) {
 		sheets.add(sheet);
 	}
 	
-	/**
-	 * @return get the sheets
-	 */
-	public ArrayList<Sheet> getSheets() {
+	@Override
+	public List<Sheet> getSheets() {
 		return sheets;
 	}
 	
-	/**
-	 * @return the path
-	 */
+	@Override
 	public String getName() {
 		return name;
 	}
 	
-	/**
-	 * @return the {@code File}
-	 */
+	@Override
 	public File getFile() {
 		return file;
 	}
 	
-	/**
-	 * @return a new {@code Sheet} instance
-	 */
+	@Override
 	public Sheet createSheet() {
 		Sheet sheet = new Sheet("Werkblad " + countSheets());
 		addSheet(sheet);
 		return sheet;
 	}
 	
-	/**
-	 * @return amount of {@code Sheet} instances in this workbook
-	 */
+	@Override
 	public int countSheets() {
 		return sheets.size();
 	}
 	
-	/**
-	 * @param index
-	 * @return {@code Sheet} instance at given index, or {@code null} if none exists
-	 */
+	@Override
 	public Sheet getSheet(int index) {
 		if ( index == -1 ) {
 			index = 0;
@@ -142,55 +126,12 @@ public class Workbook {
 		return sheets.get(index);
 	}
 	
-	/**
-	 * XML Handler for SAX Parsing of Sheets
-	 * @author Jim Hommes
-	 *
-	 */
-	public static class XMLHandler extends DefaultHandler {
-		private final XMLReader reader;
-		private final Workbook sheets;
-
-		/**
-		 * Constructor for sheet parser
-		 * @param sheets
-		 * @param reader
-		 */
-		public XMLHandler(Workbook sheets, XMLReader reader) {
-			this.reader = reader;
-			this.sheets = sheets;
-		}
-		
-		@Override
-		public void startElement(String uri, String localName, String name,
-				Attributes attributes) throws SAXException {
-					
-			if (name.equalsIgnoreCase("SPREADSHEET")) {
-				DefaultHandler sheetHandler = new Sheet.XMLHandler(sheets, reader, this);
-				reader.setContentHandler(sheetHandler);
-				sheetHandler.startElement(uri, localName, name, attributes);
-			}
-			
-		}	
+	@Override
+	public int indexOf(Sheet sheet) {
+		return sheets.indexOf(sheet);
 	}
-	
-	/**
-	 * The function that writes the sheet to a XML file.
-	 * <div><b>Author:</b><br>
-	 * <ul>
-	 * <li>Jim Hommes</li>
-	 * </ul>
-	 * </div>
-	 * 
-	 * @param file
-	 * @throws XMLStreamException
-	 *             If there was an error occurred writing XML
-	 * @throws FactoryConfigurationError
-	 *             if an instance of this factory cannot be loaded
-	 * @throws IOException
-	 *             If there was an error writing the file in the correct
-	 *             encoding
-	 */
+
+	@Override
 	public void write(File file) throws XMLStreamException,
 			FactoryConfigurationError, IOException {
 		OutputStream output = new FileOutputStream(file);
@@ -223,9 +164,34 @@ public class Workbook {
 	}
 
 	/**
-	 * Get the index of the sheet in this workbook
+	 * XML Handler for SAX Parsing of Sheets
+	 * @author Jim Hommes
+	 *
 	 */
-	public int indexOf(Sheet sheet) {
-		return sheets.indexOf(sheet);
+	public static class XMLHandler extends DefaultHandler {
+		private final XMLReader reader;
+		private final Workbook sheets;
+	
+		/**
+		 * Constructor for sheet parser
+		 * @param sheets
+		 * @param reader
+		 */
+		public XMLHandler(Workbook sheets, XMLReader reader) {
+			this.reader = reader;
+			this.sheets = sheets;
+		}
+		
+		@Override
+		public void startElement(String uri, String localName, String name,
+				Attributes attributes) throws SAXException {
+					
+			if (name.equalsIgnoreCase("SPREADSHEET")) {
+				DefaultHandler sheetHandler = new Sheet.XMLHandler(sheets, reader, this);
+				reader.setContentHandler(sheetHandler);
+				sheetHandler.startElement(uri, localName, name, attributes);
+			}
+			
+		}	
 	}
 }

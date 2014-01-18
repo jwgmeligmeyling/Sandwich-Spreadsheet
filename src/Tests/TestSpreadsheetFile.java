@@ -50,7 +50,7 @@ public class TestSpreadsheetFile {
 		sheets.write(new File("xml/output.xml"));
 		BufferedReader reader = new BufferedReader(new FileReader("xml/output.xml"));
 		String one = reader.readLine();
-		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
+		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
 		assertEquals(one, two);
 	}
 	

@@ -6,6 +6,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import File.Cell.CellType;
+import File.Sheet.Position;
 
 /**
  * Interface voor de klasse Cell.
@@ -42,7 +43,6 @@ public interface Cell {
 
 	/**
 	 * Method to get the overlay data type of this cell.
-	 * @see File.CelType
 	 */
 	CellType getType();
 
@@ -152,5 +152,10 @@ public interface Cell {
 	 * @throws XMLStreamException
 	 */
 	void write(XMLStreamWriter writer) throws XMLStreamException;
+
+	/**
+	 * @return the {@code Position} for this {@code Cell}
+	 */
+	Position getPosition();
 	
 }

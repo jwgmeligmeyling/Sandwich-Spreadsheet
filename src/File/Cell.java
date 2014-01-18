@@ -14,13 +14,12 @@ import org.xml.sax.helpers.DefaultHandler;
 import File.Sheet.Position;
 import File.Sheet.Range;
 import Parser.Parser;
-import Parser.Function;
 
 /**
  * Class for cells
  * @author Maarten Flikkema, Jan-Willem Gmelig Meyling
  */
-public class Cell implements Comparable<Cell>, Interfaces.Cell {
+public class Cell implements Interfaces.Cell {
 
 	final Sheet sheet;
 	final Position position;
@@ -217,28 +216,9 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 		this.underlined = underlined;
 	}
 	
+	@Override
 	public Position getPosition() {
 		return position;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Cell) {
-			Cell other = (Cell) obj;
-			return position.equals(other.position) && ( value == null || value.equals(other.value));
-		} else {
-			return super.equals(obj);
-		}
-	}
-
-	@Override
-	public String toString() {
-		return position.toString() + " " + (( value == null ) ? input : value.toString());
-	}
-
-	@Override
-	public int compareTo(Cell o) {
-		return (int) (Function.doubleValueOf(this) - Function.doubleValueOf(o));
 	}
 
 	@Override
@@ -266,6 +246,21 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 		return position.toString();
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Cell) {
+			Cell other = (Cell) obj;
+			return position.equals(other.position) && ( input == null || input.equals(other.input));
+		} else {
+			return super.equals(obj);
+		}
+	}
+
+	@Override
+	public String toString() {
+		return position.toString() + " " + (( value == null ) ? input : value.toString());
+	}
+
 	@Override
 	public void write(XMLStreamWriter writer) throws XMLStreamException {
 		/*
@@ -306,6 +301,7 @@ public class Cell implements Comparable<Cell>, Interfaces.Cell {
 		 * Show the value as Date
 		 */
 		DATE;
+		
 	}
 
 	/**

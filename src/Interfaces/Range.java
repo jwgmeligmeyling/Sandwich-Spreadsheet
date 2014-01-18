@@ -43,7 +43,7 @@ public interface Range {
 	int getColumnCount();
 
 	/**
-	 * @param Another {@code Cell}
+	 * @param cell {@code Cell}
 	 * @return true if this {@code Range} contains the {@code Cell}
 	 */
 	boolean contains(Cell cell);

@@ -163,12 +163,12 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		/**
 		 * The start of the <code>Range</code>
 		 */
-		private final Position topLeft;
+		protected final Position topLeft;
 		
 		/**
 		 * The end of the <code>Range</code>
 		 */
-		private final Position bottomRight;
+		protected final Position bottomRight;
 		
 		/**
 		 * The amount of columns in this <code>Range</code>
@@ -303,6 +303,11 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		public Column(int colIndex) {
 			super(colIndex, 0, colIndex, rowCount);
 		}
+		
+		@Override
+		public String toString() {
+			return topLeft.colIndex + ":" + topLeft.colIndex;
+		}
 	}
 
 	/**
@@ -312,6 +317,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * 
 	 */
 	public class Row extends Range {
+		
 		/**
 		 * The constructor for a <code>Row</code>. Takes a row index as
 		 * argument, and creates a <code>Range</code> with all the
@@ -321,6 +327,11 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		 */
 		public Row(int rowIndex) {
 			super(0, rowIndex, columnCount, rowIndex);
+		}
+		
+		@Override
+		public String toString() {
+			return topLeft.rowIndex + ":" + topLeft.rowIndex;
 		}
 	}
 

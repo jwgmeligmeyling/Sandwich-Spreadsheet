@@ -78,23 +78,4 @@ public class TestRead {
 		assertArrayEquals(lijst2, lijst);
 	}
 	
-	@Test
-	public void TestReadFoutWholeBlock() throws ParserConfigurationException, SAXException, IOException{
-		Workbook sheets = new Workbook(new File("xml/oude xml.xml"));
-		Sheet sheet = sheets.getSheet(0);
-		
-		Sheet csheet = new Sheet();
-		
-		csheet.createCell(" I wonder how you handle\nline breaks in a cell?",4,4);
-		csheet.createCell("Are doubly defined cells a problem for you?",1,10);
-		csheet.createCell("It appears you show the first one, when a cell is doubly defined.",2,10);
-		csheet.createCell("It appears you show the second one, when a cell is doubly defined.",2,10);
-		csheet.createCell("If I use encoded symbols such as < and > or &, how do they show?",1,2);
-		csheet.createCell("<VALUE>What if I define another xml tag in here?</VALUE>Or will only the text 'outside' of 'VALUE' show?",2,2);
-		
-		Cell[] lijst = sheet.getRange(1,1,10,10).getCellArray();
-		Cell[] lijst2 = csheet.getRange(1,1,10,10).getCellArray();
-		
-		assertArrayEquals(lijst2, lijst);		
-	}
 }
