@@ -1657,6 +1657,18 @@ public enum Function {
 		}
 	},
 	
+	FILL() {
+
+		@Override
+		public Object calculate(Object... arguments) {
+			for ( Cell cell : ((Range) arguments[0]).getCellArray() ) {
+				cell.setInput("=RANDBETWEEN(0,100)");
+			}
+			return "";
+		}
+		
+	},
+	
 	/**
 	 * <div>
 	 * <b>Expected arguments:</b> <code>search value</code>, <code>table range</code>, <code>column offset</code>

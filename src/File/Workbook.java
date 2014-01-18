@@ -134,6 +134,9 @@ public class Workbook implements Interfaces.Workbook {
 	@Override
 	public void write(File file) throws XMLStreamException,
 			FactoryConfigurationError, IOException {
+		this.file = file;
+		this.name = file.getName();
+		
 		OutputStream output = new FileOutputStream(file);
 		XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(new OutputStreamWriter(output, "UTF-8"));
 		
