@@ -84,7 +84,6 @@ public interface Cell {
 
 	/**
 	 * Method to get the overlay data type of this cell.
-	 * @see File.CelType
 	 * @param typeIn is the new data type
 	 */
 	void setType(CellType typeIn);

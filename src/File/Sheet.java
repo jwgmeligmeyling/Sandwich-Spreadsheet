@@ -377,7 +377,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * Method to get the letter ID for a column.
 	 * @param index
 	 * @return column letter
-	 * @author Jan-Willem Gmelig Meyling
+	 * Jan-Willem Gmelig Meyling
 	 */
 	public static String getColumnLetter(int index) {
 		int quotient = (index) / 26;

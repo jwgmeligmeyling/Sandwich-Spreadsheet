@@ -26,7 +26,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * A workbook can be bound to a {@code File} in the system.
  * @author Jan-Willem Gmelig Meyling
  * @author Maarten Flikkema
- * @Author Jim Hommes
+ * @author Jim Hommes
  */
 public class Workbook implements Interfaces.Workbook {
 
