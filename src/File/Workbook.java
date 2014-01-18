@@ -20,21 +20,33 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class SpreadSheetFile {
-	
-	private ArrayList<Sheet> sheets = new ArrayList<Sheet>();
-	
+/**
+ * The class for the {@code Workbook}. A workbook may contain several {@code Sheets}.
+ * A workbook can be bound to a {@code File} in the system.
+ * @author Jan-Willem Gmelig Meyling
+ * @author Maarten Flikkema
+ * @Author Jim Hommes
+ *
+ */
+public class Workbook {
+
 	private File file;
 	private String name;
+	private ArrayList<Sheet> sheets = new ArrayList<Sheet>();
 	
+
 	/**
-	 * Create a new empty Spreadsheet file based
+	 * Create a new empty workbook with the name Untitled.xml
 	 */
-	public SpreadSheetFile() {
+	public Workbook() {
 		name = "Untitled.xml";
 	}
 	
-	public SpreadSheetFile(Sheet sheet) {
+	/**
+	 * Create a new workbook with a sheet appended to it
+	 * @param sheet
+	 */
+	public Workbook(Sheet sheet) {
 		this();
 		sheets.add(sheet);
 	}
@@ -49,7 +61,7 @@ public class SpreadSheetFile {
 	 * @throws ParserConfigurationException 
 	 * @throws IOException If any IO errors occur.
 	 */
-	public SpreadSheetFile(File file) throws SAXException, ParserConfigurationException, IOException {
+	public Workbook(File file) throws SAXException, ParserConfigurationException, IOException {
 		/*
 		 * Volgens de instructies van SAX dienen we eerst een SAXParser aan te
 		 * maken die ontstaat vanuit een SAXParser factory. De SAX zal alleen
@@ -60,7 +72,7 @@ public class SpreadSheetFile {
 		this.name = file.getName();
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
-		DefaultHandler handler = new SpreadSheetFile.XMLHandler(this, saxParser.getXMLReader());
+		DefaultHandler handler = new Workbook.XMLHandler(this, saxParser.getXMLReader());
 		saxParser.parse(file, handler);
 		init();
 	}
@@ -97,7 +109,7 @@ public class SpreadSheetFile {
 	}
 	
 	/**
-	 * @return the file
+	 * @return the {@code File}
 	 */
 	public File getFile() {
 		return file;
@@ -137,14 +149,14 @@ public class SpreadSheetFile {
 	 */
 	public static class XMLHandler extends DefaultHandler {
 		private final XMLReader reader;
-		private final SpreadSheetFile sheets;
+		private final Workbook sheets;
 
 		/**
 		 * Constructor for sheet parser
 		 * @param sheets
 		 * @param reader
 		 */
-		public XMLHandler(SpreadSheetFile sheets, XMLReader reader) {
+		public XMLHandler(Workbook sheets, XMLReader reader) {
 			this.reader = reader;
 			this.sheets = sheets;
 		}
@@ -198,8 +210,8 @@ public class SpreadSheetFile {
 	
 	@Override
 	public boolean equals(Object other){
-		if(other instanceof SpreadSheetFile){
-			SpreadSheetFile sheets = (SpreadSheetFile) other;
+		if(other instanceof Workbook){
+			Workbook sheets = (Workbook) other;
 			return sheets.sheets.equals(this.sheets);
 		}
 		return false;

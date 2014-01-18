@@ -101,12 +101,7 @@ public enum Operator {
 		Object calculate(Object first, Object second) {
 			double output = Function.doubleValueOf(first);
 			output = Math.pow(output, Function.doubleValueOf(second));
-			
-			if ( Math.floor(output) == output ) {
-				return new Integer((int) output);
-			}
-
-			return output;
+			return Function.convertToIntIfApplicable(output);
 		}
 	},
 
