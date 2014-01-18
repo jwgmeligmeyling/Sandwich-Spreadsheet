@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import File.Cell;
 import File.Sheet;
+import File.Sheet.Position;
 import File.Sheet.Range;
 
 /**
@@ -1639,14 +1640,21 @@ public enum Function {
 			Range matrix = ((Range)arguments[0]);
 			int height = matrix.getRowCount();
 			int width = matrix.getRowCount();
-			int row = intValueOf(arguments[1]);
-			int column = intValueOf(arguments[2]);
+			int row = intValueOf(arguments[1]) - 1;
+			int column = intValueOf(arguments[2]) - 1;
 			
 			if(row > height || column > width || row < 1 || column < 1) {
 				throw new IllegalArgumentException("The cell at (row " + row + ", col " + column + ") does not intersect with the given range");
 			} else {
+				row += matrix.firstCell().getRow();
+				column += matrix.firstCell().getColumn();
+				
+				/* TODO: Deze shiet moet de sheet zijn waarin de function staat... 
+				Sheet sheet = new Sheet();
+				Position pos = sheet.new Position(column, row);
+				return sheet.getCellAt(column, row);
+				 */
 				return "(" + Sheet.getColumnLetter(column - 1) + row + ")";
-				//matrix.get
 			}
 		}
 	};
