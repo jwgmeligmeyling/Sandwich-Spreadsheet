@@ -1651,6 +1651,18 @@ public enum Function {
 		}
 	},
 	
+	FILL() {
+
+		@Override
+		public Object calculate(Object... arguments) {
+			for ( Cell cell : ((Range) arguments[0]).getCellArray() ) {
+				cell.setInput("=RANDBETWEEN(0,100)");
+			}
+			return "";
+		}
+		
+	},
+	
 	/**
 	 * The ANDY() is the most advanced feature in the Sandwitch spreadsheet application
 	 */

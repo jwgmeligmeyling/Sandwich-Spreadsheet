@@ -261,25 +261,6 @@ public class Cell implements Interfaces.Cell {
 		return position.toString() + " " + (( value == null ) ? input : value.toString());
 	}
 
-	@Override
-	public void write(XMLStreamWriter writer) throws XMLStreamException {
-		/*
-		 * Start the <CELL> element and append the attributes
-		 */
-		writer.writeStartElement("CELL");
-		writer.writeAttribute("row", Integer.toString(getRow()));
-		writer.writeAttribute("column", Integer.toString(getColumn()));
-		writer.writeAttribute("type", getType().toString());
-		
-		if ( fColor != null ) 
-			writer.writeAttribute("fcolor", "" + fColor.getRGB());
-		if ( bColor != null ) 
-			writer.writeAttribute("bcolor", "" + bColor.getRGB());
-		
-		writer.writeCharacters(getInput());
-		writer.writeEndElement();
-	}
-
 	/**
 	 * Enum for the various CellType a Cell can have
 	 * @author Jan-Willem Gmelig Meyling
@@ -309,18 +290,44 @@ public class Cell implements Interfaces.Cell {
 		
 	}
 
+	@Override
+	public void write(XMLStreamWriter writer) throws XMLStreamException {
+		/*
+		 * Start the <CELL> element and append the attributes
+		 */
+		writer.writeStartElement("CELL");
+		writer.writeAttribute("row", Integer.toString(getRow()));
+		writer.writeAttribute("column", Integer.toString(getColumn()));
+		writer.writeAttribute("type", getType().toString());
+		
+		if ( fColor != null ) 
+			writer.writeAttribute("fcolor", "" + fColor.getRGB());
+		if ( bColor != null ) 
+			writer.writeAttribute("bcolor", "" + bColor.getRGB());
+		if ( underlined )
+			writer.writeAttribute("underlined", "true");
+		if ( bold )
+			writer.writeAttribute("bold", "true");
+		if ( italic ) 
+			writer.writeAttribute("italic", "true");
+		
+		writer.writeCharacters(getInput());
+		writer.writeEndElement();
+	}
+
 	/**
 	 * XML Handler for SAX Parsing of Cells
 	 * @author Jim Hommes
 	 *
 	 */
 	public static class XMLHandler extends DefaultHandler {
-		private final StringBuilder content;
+		
+		private final StringBuilder content = new StringBuilder();
+	    private final XMLReader reader;
+	    private final DefaultHandler sheetHandler;
 	    private final Sheet sheet;
-	    private int colIndex;
-	    private int rowIndex;
-	    private XMLReader reader;
-	    private DefaultHandler sheetHandler;
+	    
+	    private Cell cell;
 	    
 		/**
 		 * Constructor for Cell parser
@@ -330,7 +337,6 @@ public class Cell implements Interfaces.Cell {
 		 */
 		public XMLHandler(Sheet sheet, XMLReader reader, DefaultHandler sheetHandler) {
 			this.sheet = sheet;
-			this.content = new StringBuilder();
 			this.reader = reader;
 			this.sheetHandler = sheetHandler;
 		}
@@ -350,18 +356,38 @@ public class Cell implements Interfaces.Cell {
 				Attributes attributes) throws SAXException {
 			content.setLength(0);
 			if (name.equalsIgnoreCase("CELL")) {
-				colIndex = Integer.parseInt(attributes.getValue("column"));
-				rowIndex = Integer.parseInt(attributes.getValue("row"));
+				int colIndex = Integer.parseInt(attributes.getValue("column"));
+				int rowIndex = Integer.parseInt(attributes.getValue("row"));
+				cell = new Cell(sheet, sheet.new Position(colIndex, rowIndex));
+				
+				String fcolor = attributes.getValue("fcolor");
+				if ( fcolor != null ) {
+					cell.setfColor(new Color(Integer.parseInt(fcolor)));
+				}
+				
+				String bcolor = attributes.getValue("bcolor");
+				if ( bcolor != null ) {
+					cell.setbColor(new Color(Integer.parseInt(bcolor)));
+				}
+				
+				// Be sure to make the expression this way, so
+				// a Null pointer exception is not thrown when the
+				// attribute for underlined is not set
+				if ("true".equalsIgnoreCase(attributes.getValue("underlined")))
+					cell.setUnderlined(true);
+				if ("true".equalsIgnoreCase(attributes.getValue("italic")))
+					cell.setItalic(true);
+				if ("true".equalsIgnoreCase(attributes.getValue("bold")))
+					cell.setBold(true);
 			}
-			// type?
 		}
 
 		@Override
 		public void endElement(String uri, String localName, String name)
 				throws SAXException {
 			if (name.equalsIgnoreCase("CELL")) {
-				sheet.createCell(content.toString(), colIndex, rowIndex);
-			}else if(name.equalsIgnoreCase("SPREADSHEET")||name.equalsIgnoreCase("WORKBOOK")){
+				cell.setInput(content.toString());
+			} else if (name.equalsIgnoreCase("SPREADSHEET") || name.equalsIgnoreCase("WORKBOOK")){
 				sheetHandler.endElement(uri, localName, name);
 				reader.setContentHandler(sheetHandler);
 			}
