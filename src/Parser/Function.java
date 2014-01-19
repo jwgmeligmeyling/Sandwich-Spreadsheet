@@ -1811,10 +1811,19 @@ public enum Function {
 		return description;
 	}
 	
+	private final static String DEFAULT_DESCRIPTION = "No description available for this function";
+	
+	/**
+	 * Function constructor for a Function without a description
+	 */
 	private Function() {
-		this("No description available for this function");
+		this(DEFAULT_DESCRIPTION);
 	}
 	
+	/**
+	 * Function constructor for a Function with a description
+	 * @param description
+	 */
 	private Function(String description) {
 		this.description = description;
 	}
