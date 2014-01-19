@@ -10,7 +10,9 @@ import org.junit.Test;
 import File.Cell;
 import File.Cell.CellType;
 import File.Sheet;
+import File.Sheet.Column;
 import File.Sheet.Range;
+import File.Sheet.Row;
 import GUI.STable;
 
 public class TestSheet {
@@ -305,5 +307,24 @@ public class TestSheet {
 	@Test
 	public void testGetColumnLetter3_2() {
 		assertEquals("AAP", Sheet.getColumnLetter(717));
+	}
+	
+	@Test
+	public void testGetInput() {
+		assertEquals("=COUNT(B1:B3)", C2.getInput());
+	}
+	
+	@Test
+	public void testColumn() {
+		Column column = sheet.new Column(0);
+		assertEquals(sheet.new Range(A1.getPosition(), A3.getPosition()), column);
+		assertEquals("A:A", column.toString());
+	}
+	
+	@Test
+	public void testRow() {
+		Row row = sheet.new Row(0);
+		assertEquals(sheet.new Range(A1.getPosition(), C1.getPosition()), row);
+		assertEquals("1:1", row.toString());
 	}
 }

@@ -325,7 +325,8 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		
 		@Override
 		public String toString() {
-			return topLeft.colIndex + ":" + topLeft.colIndex;
+			String columnLetter = getColumnLetter(topLeft.colIndex);
+			return columnLetter + ":" + columnLetter;
 		}
 	}
 
@@ -350,7 +351,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		
 		@Override
 		public String toString() {
-			return topLeft.rowIndex + ":" + topLeft.rowIndex;
+			return (topLeft.rowIndex + 1) + ":" + (topLeft.rowIndex + 1);
 		}
 	}
 
