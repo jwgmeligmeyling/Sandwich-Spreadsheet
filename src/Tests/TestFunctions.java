@@ -14,7 +14,7 @@ public class TestFunctions {
 	public Sheet sheet, tsheet;
 	public Cell A1, A2, A3, B1, B2, B3, C1, C2, C3, D1, D2, D3, E1, E2, E3;
 	public Cell tA1, tA2, tA3, tA4, tA5, tB1, tB2, tB3, tB4, tB5, tC1, tC2, tC3, tC4, tC5;
-	public Range r1, r2, r3, r4, r5, r6;
+	public Range r1, r2, r3, r4, r5, r6, r7;
 	public Range tBools, tValS, tValB, tValBwrong;
 
 	@Before
@@ -50,6 +50,7 @@ public class TestFunctions {
 		r4 = sheet.getRange(A2, A2); // Cell A2 (=5)
 		r5 = sheet.getRange(A2, C2); // Numbers
 		r6 = sheet.getRange(E1, E3); // Doubles
+		r7 = sheet.getRange(A1, E1); // Row (for Match function)
 		
 		tA1 = tsheet.createCell("true", 0, 0);
 		tA2 = tsheet.createCell("false", 0, 1);
@@ -240,6 +241,35 @@ public class TestFunctions {
 	@Test(expected = IllegalArgumentException.class)
 	public void testVLookupError3() {
 		Function.VLOOKUP.calculate("niet vindbaar", r1, 1);
+	}
+	
+	@Test
+	public void testMatchNumber() {
+		assertEquals(4, Function.MATCH.calculate(8, tValS));
+	}
+	@Test
+	public void testMatchMultiple1() {
+		assertEquals(1, Function.MATCH.calculate(true, tBools));
+	}
+	@Test
+	public void testMatchMultiple2() {
+		assertEquals(2, Function.MATCH.calculate(false, tBools));
+	}
+	@Test
+	public void testMatchString() {
+		assertEquals(1, Function.MATCH.calculate("bliep", r7));
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testMatchErrorSize1() {
+		Function.MATCH.calculate("maakt niet uit", r1);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testMatchErrorSize2() {
+		Function.MATCH.calculate("maakt niet uit", r7);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testMatchErrorNotFound() {
+		Function.MATCH.calculate("dit bestaat niet", tValB);
 	}
 	
 	@Test
@@ -558,6 +588,22 @@ public class TestFunctions {
 	public void testMaxString() {
 		assertEquals(125, Function.MAX.calculate("string", 50.2, 125, 100));
 	}
+	@Test
+	public void testMaxRange() {
+		assertEquals(2.65, Function.MAX.calculate(r6));
+	}
+	@Test
+	public void testMaxCellString() {
+		assertEquals(5, Function.MAX.calculate(A1, A2));
+	}
+	@Test
+	public void testMaxCellInt() {
+		assertEquals(8, Function.MAX.calculate(B2, A2));
+	}
+	@Test
+	public void testMaxMultipleRange() {
+		assertEquals(30, Function.MAX.calculate(r5, r6));
+	}
 	
 	@Test
 	public void testMinInt() {
@@ -573,10 +619,30 @@ public class TestFunctions {
 	}
 	@Test
 	public void testMinString() {
-		assertEquals(50, Function.MIN.calculate(50, "hi", 125, 100.2));
+		assertEquals(50, Function.MIN.calculate(50, "hi", A1, 100.2));
+	}
+	@Test
+	public void testMinCellInt() {
+		assertEquals(8, Function.MIN.calculate(B1, B2, B3));//TODO
+	}
+	@Test
+	public void testMinOnlyStrings() {
+		assertEquals(0, Function.MIN.calculate("string1", A1));
 	}
 	@Test
 	public void testMinStringFirst() {
+		assertEquals(50, Function.MIN.calculate("hi", 50, 125));
+	}
+	@Test
+	public void testMinRange() {
+		assertEquals(5, Function.MIN.calculate("hi", r5));
+	}
+	@Test
+	public void testMinMultipleRange() {
+		assertEquals(0, Function.MIN.calculate(r6, r5));
+	}
+	@Test
+	public void testMinNoNumbers() {
 		assertEquals(50, Function.MIN.calculate("hi", 50, 125));
 	}
 
@@ -783,6 +849,11 @@ public class TestFunctions {
 	@Test
 	public void testIsOddZero() {
 		assertEquals(false, Function.ISODD.calculate(0));
+	}
+	
+	@Test
+	public void testAndy() {
+		assertEquals("Hoi Andy!", Function.ANDY.calculate());
 	}
 	
 	/*

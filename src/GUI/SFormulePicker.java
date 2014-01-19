@@ -59,6 +59,8 @@ public class SFormulePicker extends JDialog implements ActionListener {
 		Object object = lijst.getSelectedValue();
 		if (object != null) {
 			Function functie = (Function) object;
+			System.out.println("descipt: " + functie.getDescription());
+			System.out.println("arglist: " + functie.getArgumentList());
 			JTextField veld = window.getCurrentEditor();
 			if (veld != null) {
 				String currentInput = veld.getText();
@@ -69,6 +71,5 @@ public class SFormulePicker extends JDialog implements ActionListener {
 			}
 			dispose();
 		}
-
 	}
 }
