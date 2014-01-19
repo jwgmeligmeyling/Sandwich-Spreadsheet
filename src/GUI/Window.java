@@ -48,7 +48,7 @@ public class Window extends JFrame implements ExceptionListener {
 		
 		tbMain = new SToolbar(this);
 		tabbedPane = new JTabbedPane();
-		statusBar = new SStatusBar(this);
+		statusBar = new SStatusBar();
 		formule = new FormuleBalk();
 		SMenuBar smenubar = new SMenuBar(this);
 		setJMenuBar(smenubar);
