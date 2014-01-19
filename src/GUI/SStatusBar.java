@@ -10,7 +10,7 @@ public class SStatusBar extends JLabel {
 	
 	public SStatusBar() {
 		super(" ");
-		this.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.GRAY, Color.DARK_GRAY));
+		this.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.GRAY));
 		this.setBackground(new Color(100, 100, 200));
 		this.setVisible(true);
 	}
