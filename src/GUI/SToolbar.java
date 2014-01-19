@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.print.PrinterException;
 import java.io.File;
 import java.io.IOException;
 
@@ -185,8 +186,11 @@ public class SToolbar extends JToolBar {
 	private AbstractAction filePrint = new AbstractAction(null, icoPrint) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>Print";
-			JOptionPane.showMessageDialog(null, st);
+			try {
+				window.getCurrentTable().print();
+			} catch (PrinterException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+			}
 		}
 	};
 
