@@ -13,7 +13,7 @@ public class SStatusBar extends JLabel {
 	private int statusbarHeight = 25;
 	
 	public SStatusBar(Frame parent) {
-		super("Dit is de status bar");
+		super(" ");
 		window = parent;
 		//this.setBorder(new Border());
 		this.setBackground(new Color(100, 100, 200));

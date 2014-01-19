@@ -8,12 +8,13 @@ import File.Cell;
 import File.Sheet;
 import File.Sheet.Range;
 import File.Workbook;
+import Interfaces.ExceptionListener;
 
 /**
  * The Window class
  */
 @SuppressWarnings("serial")
-public class Window extends JFrame {
+public class Window extends JFrame implements ExceptionListener {
 	
 	private final SToolbar tbMain;
 	private final FormuleBalk formule;
@@ -136,12 +137,16 @@ public class Window extends JFrame {
 		}
 	}
 	
+	public FormuleBalk getFormuleBalk() {
+		return formule;
+	}
+	
 	/**
 	 * Construct (paint) a tab in the tabbed pane for a new Sheet
 	 * @param sheet
 	 */
 	public void paintSheet(Sheet sheet) {
-		STable table = new STable(sheet, formule);
+		STable table = new STable(sheet, this);
 		
 		Box box = Box.createVerticalBox();
 		box.add(table.getTableHeader());
@@ -182,6 +187,19 @@ public class Window extends JFrame {
 		statusBar.setVisible(visible);
 	}
 	
+	/**
+	 * Set the contents for the statusbar
+	 * @param text
+	 */
+	public void setStatusBar(String text) {
+		statusBar.setText(text);
+	}
+	
+	@Override
+	public void onException(Exception e) {
+		setStatusBar(e.getMessage() == null ? "Unknown exception occured: " + e.toString() : e.getMessage());
+	}
+
 	/**
 	 * @return the {@code JTextField} for the current editor,
 	 * or null if none exists

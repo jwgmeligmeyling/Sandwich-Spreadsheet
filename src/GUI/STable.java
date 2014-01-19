@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
-
 import java.util.Map;
 
 import javax.swing.AbstractAction;
@@ -30,6 +29,7 @@ import javax.swing.table.TableCellRenderer;
 import File.Cell;
 import File.Sheet;
 import File.Sheet.Range;
+import Interfaces.ExceptionListener;
 
 @SuppressWarnings("serial")
 /**
@@ -38,25 +38,27 @@ import File.Sheet.Range;
  * @author Jan-Willem Gmelig Meyling
  *
  */
-public class STable extends JTable {
+public class STable extends JTable implements ExceptionListener {
 
-	/**
-	 * A reference to this <code>STable</code> instance for use in inner classes
-	 */
-	private final STable table = this;
-	/**
-	 * A reference to the <code>FormuleBalk</code> instance in the GUI.
-	 */
-	private final FormuleBalk formuleBalk;
 	/**
 	 * A reference to the <code>Sheet</code> instance used as data model for this
 	 * table instance.
 	 */
 	private final Sheet sheet;
 	
-	private boolean close = false;
+	/**
+	 * A reference to the {@code Window} containing this {@code STable}
+	 */
+	private final Window window;
 	
+	/**
+	 * A reference to the selected Range
+	 */
 	private Range selectedRange;
+	
+	/**
+	 * A reference to the current editor
+	 */
 	private JTextField currentEditor;
 
 	private static final Color DEFAULT_GRID_COLOR = new Color(206, 206, 206);
@@ -79,7 +81,7 @@ public class STable extends JTable {
 	 * @param sheet
 	 * @param formule
 	 */
-	public STable(Sheet sheet, FormuleBalk formule) {
+	public STable(Sheet sheet, Window window) {
 		/*
 		 * Call the super constructor with our custom TableModel
 		 * that uses a Sheet instance for the data
@@ -97,7 +99,7 @@ public class STable extends JTable {
 		 */
 		this.sheet = sheet;
 		this.sheet.setSTable(this);
-		this.formuleBalk = formule;
+		this.window = window;
 		/*
 		 * Set the default renderer for the STable
 		 */
@@ -178,8 +180,7 @@ public class STable extends JTable {
            int condition, boolean pressed) {
 		char keyChar = e.getKeyChar();
 		if ( keyChar == '\n' && isEditing() ) {
-			this.close = true;
-			this.cellEditor.stopCellEditing();
+			((CustomTableCellEditor) this.cellEditor).stopCellEditing(true);
 		} else if (  keyChar != '\n' && keyChar != KeyEvent.CHAR_UNDEFINED &&
 				this.hasFocus() && !isEditing() ) {
 			int leadRow = getSelectionModel().getLeadSelectionIndex();
@@ -219,11 +220,17 @@ public class STable extends JTable {
 	public TableCellEditor getCellEditor(int row, int column) {
 		currentEditor = new JTextField();
 		registerKeyStrokes();
-		formuleBalk.setCurrentTable(table);
+		FormuleBalk formuleBalk = window.getFormuleBalk();
+		formuleBalk.setCurrentTable(STable.this);
 		formuleBalk.setCurrentEditor(currentEditor);
 		return new CustomTableCellEditor();
 	}
 	
+	@Override
+	public void onException(Exception e) {
+		window.onException(e);
+	}
+
 	/**
 	 * Register the key strokes for creating ranges from the <code>CellEditor</code>
 	 */
@@ -260,6 +267,7 @@ public class STable extends JTable {
 			return;
 		} else {
 			this.selectedRange = range;
+			window.setStatusBar("Selected range: " + range.toString());
 		}
 		
 		this.currentEditor.setText(new SelectionUpdater().insertOrReplace(range.toString()));
@@ -374,7 +382,7 @@ public class STable extends JTable {
 			if ( currentEditor != null ) {
 				String text = currentEditor.getText();
 				if ( text != null && text.length() > 1 && text.charAt(0) != '=' ) {
-					table.getCellEditor().stopCellEditing();
+					STable.this.getCellEditor().stopCellEditing();
 				}
 			}
 			
@@ -387,7 +395,7 @@ public class STable extends JTable {
 			
 			if ( col == 0 ) return;
 			
-			table.changeSelection(row, col, toggle, extend);
+			STable.this.changeSelection(row, col, toggle, extend);
 			updateCellEditor();
 		}
 		
@@ -407,10 +415,10 @@ public class STable extends JTable {
 			}
 			
 			Point p = e.getPoint();
-			int row = table.rowAtPoint(p);
-			int column = table.columnAtPoint(p);
+			int row = STable.this.rowAtPoint(p);
+			int column = STable.this.columnAtPoint(p);
 
-			table.changeSelection(row, column, false, false);
+			STable.this.changeSelection(row, column, false, false);
 			updateCellEditor();
 		}
 
@@ -421,10 +429,10 @@ public class STable extends JTable {
 			}
 
 			Point p = e.getPoint();
-			int row = table.rowAtPoint(p);
-			int column = table.columnAtPoint(p);
+			int row = STable.this.rowAtPoint(p);
+			int column = STable.this.columnAtPoint(p);
 
-			table.changeSelection(row, column, false, true);
+			STable.this.changeSelection(row, column, false, true);
 			updateCellEditor();
 		}
 
@@ -452,12 +460,6 @@ public class STable extends JTable {
 		@Override
 		public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
-			try {
-				//throw new Exception();
-			} catch ( Exception e ) {
-				e.printStackTrace();
-			}
-			close = false;
 			String input = sheet.getInputAt(column - 1, row);
 			currentEditor.setBorder(new LineBorder(Color.black));
 			return super.getTableCellEditorComponent(table, input, isSelected,
@@ -470,7 +472,7 @@ public class STable extends JTable {
 		}
 		
 		private boolean maintainEditor() {
-			return currentEditor != null && !close &&
+			return currentEditor != null &&
 					currentEditor.getText().length() > 0 &&
 					currentEditor.getText().charAt(0) == '=';
 		}
@@ -478,6 +480,15 @@ public class STable extends JTable {
 		@Override
 		public boolean stopCellEditing() {
 			return maintainEditor() ? false : super.stopCellEditing();
+		}
+		
+		/**
+		 * Force close this editor
+		 * @param force
+		 * @return
+		 */
+		public boolean stopCellEditing(boolean force) {
+			return super.stopCellEditing();
 		}
 	}
 
@@ -574,7 +585,7 @@ public class STable extends JTable {
 		 */
 		private Color getBackground(Cell cell, boolean selected) {
 			Color A = cell != null ? cell.getbColor() : null;
-			Color B = selected ? DEFAULT_SELECTION_COLOR : table.getBackground();
+			Color B = selected ? DEFAULT_SELECTION_COLOR : STable.this.getBackground();
 			return mengKleuren(A,B);
 		}
 		
@@ -697,7 +708,7 @@ public class STable extends JTable {
 			if (!isEditing() && getSelectedRowCount() == 1
 					&& columnModel.getSelectedColumnCount() == 1) {
 				String input = sheet.getInputAt(getSelectedColumn() - 1, getSelectedRow());
-				formuleBalk.setText(input);
+				window.getFormuleBalk().setText(input);
 			}
 		}
 

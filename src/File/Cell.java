@@ -102,9 +102,7 @@ public class Cell implements Interfaces.Cell {
 				value = Parser.parse(this);
 			} catch ( Exception e ) {
 				value = "#VALUE";
-				// TODO: Statusbar krijgt e.getMessage()
-				System.out.println(e.getMessage());
-				//this.sheet.getSTable().getWindow().getStatusBar().setText(e.getMessage())
+				sheet.onException(e);
 			}
 			changed = false;
 			// Update the listeners recursively

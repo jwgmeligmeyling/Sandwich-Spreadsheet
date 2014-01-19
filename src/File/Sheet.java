@@ -2,13 +2,17 @@ package File;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
+
 import GUI.STable;
+import Interfaces.ExceptionListener;
 
 /**
  * The <code>Sheet</code> class is the main class for the spreadsheet
@@ -16,7 +20,8 @@ import GUI.STable;
  * @author Maarten Flikkema
  * @author Jan-Willem Gmelig Meyling
  */
-public class Sheet implements Interfaces.Sheet, Cloneable {
+public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
+	
 	/*
 	 * Class log: v1.0 Maarten Flikkema Sheet stub, with getters/setters and
 	 * Interface implementation.
@@ -24,6 +29,14 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	 * v1.1 Jan-Willem Gmelig Meyling Changed from ArrayLists to a HashMap with
 	 * a Position class, and implementation of Range, which is now also used by
 	 * the cell getters.
+	 * 
+	 * v1.2 Liam Clark The Sheet now has a crossreference to the current STable
+	 * 
+	 * v1.3 Jim Hommes The Sheet can now write and read XML
+	 * 
+	 * v1.4 Jan-Willem Gmelig Meyling  Moved documention to the interface and
+	 *  created exception event delegation
+	 * 
 	 */
 
 	/**
@@ -379,6 +392,16 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 		}
 	}
 
+	@Override
+	public void setSTable(STable stable) {
+		this.stable = stable;
+	}
+
+	@Override
+	public STable getSTable() {
+		return stable;
+	}
+
 	/**
 	 * Method to get the letter ID for a column.
 	 * @param index
@@ -509,13 +532,8 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	}
 
 	@Override
-	public void setSTable(STable stable) {
-		this.stable = stable;
-	}
-
-	@Override
-	public STable getSTable() {
-		return stable;
+	public void onException(Exception e) {
+		stable.onException(e);
 	}
 
 	/**
@@ -575,8 +593,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 					sheet.setSheetName(sheetName);
 				}
 			} else if (name.equalsIgnoreCase("CELL")) {
-				DefaultHandler cellHandler = new Cell.XMLHandler(sheet, reader,
-						this);
+				DefaultHandler cellHandler = new Cell.XMLHandler(sheet, reader, this);
 				reader.setContentHandler(cellHandler);
 				cellHandler.startElement(uri, localName, name, attributes);
 			}
@@ -622,4 +639,5 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 	public String toString() {
 		return cells.values().toString();
 	}
+
 }
