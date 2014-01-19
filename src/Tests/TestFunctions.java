@@ -216,7 +216,6 @@ public class TestFunctions {
 		Function.INDEX.calculate(tValB, 4, 2);
 	}
 	
-
 	@Test
 	public void testVLookup1() {
 		assertEquals("bliep", Function.VLOOKUP.calculate("bliep", r1, 1));
@@ -243,8 +242,6 @@ public class TestFunctions {
 		Function.VLOOKUP.calculate("niet vindbaar", r1, 1);
 	}
 	
-	
-
 	@Test
 	public void testRoundUp1() {
 		assertEquals(6, Function.ROUNDUP.calculate(5.2));

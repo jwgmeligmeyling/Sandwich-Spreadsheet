@@ -253,7 +253,7 @@ public class Cell implements Interfaces.Cell {
 	public boolean equals(Object obj) {
 		if (obj instanceof Cell) {
 			Cell other = (Cell) obj;
-			return position.equals(other.position) && ( input == null || input.equals(other.input));
+			return position.equals(other.position) && (input == null || input.equals(other.input));
 		} else {
 			return super.equals(obj);
 		}

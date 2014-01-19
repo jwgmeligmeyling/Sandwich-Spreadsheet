@@ -23,6 +23,34 @@ import File.Sheet.Range;
 public enum Function {
 	
 	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>range</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>The range that has been filled.</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * This function fills every cell in the <code>range</code> you specify with the RANDBETWEEN(0,100) function.
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
+	 */
+	FILL() {
+		@Override
+		public Object calculate(Object... arguments) {
+			for (Cell cell : ((Range) arguments[0]).getCellArray() ) {
+				cell.setInput("=RANDBETWEEN(0,100)");
+			}
+			return RAW.calculate(arguments);
+		}
+	},
+	
+	/**
 	 * <div> <b>Expected arguments:</b> <code>[argument]</code>,
 	 * <code>[oneindig argument]...</code> </div><br>
 	 * <div><b>Returns:</b>
@@ -1338,7 +1366,7 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>value</code>, <code>[value]...</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
@@ -1359,33 +1387,44 @@ public enum Function {
 		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			boolean aValue = false;
-			double lowestValue = Double.MAX_VALUE;
-			for (int i = 0; i < arguments.length; i++) {
-				if (arguments[i] instanceof String) {
+			double min = Double.MAX_VALUE;
+			System.out.println(min);
+			for (Object arg : arguments) {
+				if (arg instanceof String) {
 					continue;
+				} else if (arg instanceof Range) {
+					for (Cell cell : ((Range) arg).getCellArray()) {
+						//System.out.println("range: " + min);
+						double d = doubleValueOf(cell);
+						if (d < min) {
+							aValue = true;
+							min = d;
+						}
+					}
 				} else {
-					aValue = true;
-					double d = doubleValueOf(arguments[i]);
-					if ( d < lowestValue) {
-						lowestValue = d;
+					//System.out.println("other: " + min);
+					double d = doubleValueOf(arg);
+					if (d < min) {
+						aValue = true;
+						min = d;
 					}
 				}
 			}
-			return aValue ? convertToIntIfApplicable(lowestValue) : 0;
+			return aValue ? convertToIntIfApplicable(min) : 0;
 		}
 	},
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>value</code>, <code>[value]...</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The greatest value all the values supplied in the arguments</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
+	 * Arguments can also 
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -1397,16 +1436,27 @@ public enum Function {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
+			int counter = 0;
 			double max = 0;
-			for ( int i = 0; i < arguments.length; i++ ) {
-				if ( arguments[i] instanceof String ) {
+			
+			for (Object arg : arguments) {
+				if (arg instanceof String) {
 					continue;
+				} else if (arg instanceof Range) {
+					for (Cell cell : ((Range) arg).getCellArray()) {
+						double d = doubleValueOf(cell);
+						if (counter == 0 || d > max) {
+							max = d;
+						}
+						counter++;
+					}
 				} else {
-					double d = doubleValueOf(arguments[i]);
-					if ( i == 0 || d > max ) {
+					double d = doubleValueOf(arg);
+					if (counter == 0 || d > max) {
 						max = d;
 					}
 				}
+				counter++;
 			}
 			return convertToIntIfApplicable(max);
 		}
@@ -1462,9 +1512,6 @@ public enum Function {
 	 * <li><code>FALSE</code> if none of the logical values are true</li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * ...
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -1494,9 +1541,6 @@ public enum Function {
 	 * <li><code>FALSE</code> if none of the logical values are true</li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -1525,9 +1569,6 @@ public enum Function {
 	 * <li>TRUE if the <code>logical value</code> is FALSE, and vice versa</li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Jan-Willem Gmelig Meyling</li>
@@ -1645,7 +1686,7 @@ public enum Function {
 			int width = matrix.getColumnCount();
 			
 			if(row > height - 1 || column > width - 1 || row < 0 || column < 0) {
-				throw new IllegalArgumentException("The cell at (row " + (row + 1) + ", col " + (column + 1) + ") does not intersect with the given range");
+				throw new IllegalArgumentException("The cell at the given coördinates (R" + (row + 1) + "C" + (column + 1) + ") does not intersect with the given table range");
 			} else {
 				row += matrix.firstCell().getRow();
 				column += matrix.firstCell().getColumn();
@@ -1657,25 +1698,13 @@ public enum Function {
 		}
 	},
 	
-	FILL() {
-
-		@Override
-		public Object calculate(Object... arguments) {
-			for ( Cell cell : ((Range) arguments[0]).getCellArray() ) {
-				cell.setInput("=RANDBETWEEN(0,100)");
-			}
-			return "";
-		}
-		
-	},
-	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>search value</code>, <code>table range</code>, <code>column offset</code>
+	 * <b>Expected arguments:</b> <code>search value</code>, <code>table range</code>, <code>column_num</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The value of the cell <code>column_num</code> to the right of the cell in the first column of <code>table range</code> which is equal to <code>search value</code></li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
@@ -1697,18 +1726,17 @@ public enum Function {
 			String searchVal = stringValueOf(arguments[0]);
 			Range matrix = ((Range)arguments[1]);
 			int width = matrix.getColumnCount();
-			int columnOffset = intValueOf(arguments[2]);
+			int columnNum = intValueOf(arguments[2]);
 			
-			if(columnOffset < 1 || columnOffset > width) {
-				throw new IllegalArgumentException("Column offset is not valid. Should be at least 1 and not greater then the width of the table range.");
+			if(columnNum < 1 || columnNum > width) {
+				throw new IllegalArgumentException("Column number " + columnNum + " does not exist in the given table range.");
 			} else {
 				int firstColumn = matrix.firstCell().getColumn();
 				for (Cell cell : matrix.getCellArray()) {
 					if(cell.getColumn() == firstColumn) {
-						//System.out.println("OK cel: (col=" + cell.getColumn() + ", row="+ cell.getRow() + ") value:=" + cell.getValue());
 						if(stringValueOf(cell.getValue()).equals(searchVal)) {
-							//System.out.println("TRUE");
-							return INDEX.calculate(matrix, cell.getRow() + 1, columnOffset);
+							System.out.println("row:="+cell.getRow());
+							return INDEX.calculate(matrix, cell.getRow() + 1, columnNum);
 						}
 					}
 				}
@@ -1716,6 +1744,32 @@ public enum Function {
 			}
 		}
 	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>cell reference</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>Reference to the range specified by the string <code>cell reference</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * [opmerkingen]
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten</li>
+	 * </ul>
+	 * </div>
+	 *//*
+	INDIRECT() {
+		@Override
+		public Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return new Parser(thisSheet, stringValueOf(arguments[0])).getRange();
+		}
+	},*/
 	
 	/**
 	 * <div>
@@ -1740,7 +1794,6 @@ public enum Function {
 		public Object calculate(Object... arguments) {
 			return "Hoi Andy!";
 		}
-		
 	};
 	
 	/**
@@ -1817,7 +1870,7 @@ public enum Function {
 		} else if (obj instanceof Cell) {
 			return intValueOf(((Cell) obj).getValue());
 		}
-		throw new IllegalArgumentException("#VALUE");
+		throw new IllegalArgumentException("Convert to integer error!");
 	}
 
 	/**
@@ -1843,7 +1896,7 @@ public enum Function {
 		} else if (obj instanceof Cell) {
 			return doubleValueOf(((Cell) obj).getValue());
 		}
-		throw new IllegalArgumentException("#VALUE");
+		throw new IllegalArgumentException("Convert to double error!");
 	}
 
 	/**
@@ -1894,7 +1947,7 @@ public enum Function {
 		} else if (obj != null) {
 			return obj.toString();
 		} else {
-			throw new IllegalArgumentException("#VALUE");
+			throw new IllegalArgumentException("Covert to string error!");
 		}
 	}
 	
@@ -1933,7 +1986,7 @@ public enum Function {
 	 */
 	public static void assertArguments(int count, int length) {
 		if (count != length) {
-			throw new IllegalArgumentException("This function requires " + count + "arguments, but " + length + " where supplied!");
+			throw new IllegalArgumentException("This function requires " + count + " arguments, but " + length + " where supplied!");
 		}
 	}
 	
@@ -1956,7 +2009,7 @@ public enum Function {
 	 */
 	public static void assertMinArguments(int min, int length) {
 		if (min > length) {
-			throw new IllegalArgumentException("This function requires at least " + min + "arguments, but " + length + " where supplied!");
+			throw new IllegalArgumentException("This function requires at least " + min + " arguments, but " + length + " where supplied!");
 		}
 	}
 	
@@ -1967,7 +2020,7 @@ public enum Function {
 	 */
 	public static void assertMaxArguments(int max, int length) {
 		if (length > max) {
-			throw new IllegalArgumentException("This function cannot handle more than " + max + "arguments, but " + length + " where supplied!");
+			throw new IllegalArgumentException("This function cannot handle more than " + max + " arguments, but " + length + " where supplied!");
 		}
 	}
 	

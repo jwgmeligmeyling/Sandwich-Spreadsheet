@@ -577,7 +577,7 @@ public class Parser {
 	 * @throws IllegalArgumentException
 	 *             When the input of the reference is malformed.
 	 */
-	private Object getRange() {
+	Object getRange() {
 		/*
 		 * Current implementation only supports Cells (A1) or Ranges (A1:B2)
 		 * TODO Support for rows and columns (?)
