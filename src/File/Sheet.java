@@ -298,6 +298,11 @@ public class Sheet implements Interfaces.Sheet, Cloneable {
 			}
 			return false;
 		}
+		
+		@Override
+		public Sheet getSheet() {
+			return Sheet.this;
+		}
 	}
 
 	/**

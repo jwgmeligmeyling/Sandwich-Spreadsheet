@@ -1,6 +1,7 @@
 package Interfaces;
 
 import File.Cell;
+import File.Sheet;
 import File.Sheet.Position;
 
 /**
@@ -52,4 +53,9 @@ public interface Range {
 	 * @return the top left {@code Position} for this {@code Range}
 	 */
 	Position getTopLeft();
+
+	/**
+	 * @return the sheet for this Range
+	 */
+	Sheet getSheet();
 }

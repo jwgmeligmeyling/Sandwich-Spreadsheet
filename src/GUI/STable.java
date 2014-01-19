@@ -385,6 +385,8 @@ public class STable extends JTable {
 					.getMinSelectionIndex() + x : columnModel.getSelectionModel()
 					.getMaxSelectionIndex() + x;
 			
+			if ( col == 0 ) return;
+			
 			table.changeSelection(row, col, toggle, extend);
 			updateCellEditor();
 		}

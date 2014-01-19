@@ -8,6 +8,7 @@ import File.Cell;
 import File.Sheet;
 import File.Sheet.Position;
 import File.Sheet.Range;
+import GUI.STable;
 
 /**
  * Enumeration that binds functions to their function name.<br>
@@ -43,8 +44,10 @@ public enum Function {
 	FILL() {
 		@Override
 		public Object calculate(Object... arguments) {
+			Range range = (Range) arguments[0];
+			STable table = range.getSheet().getSTable();
 			for (Cell cell : ((Range) arguments[0]).getCellArray() ) {
-				cell.setInput("=RANDBETWEEN(0,100)");
+				table.setValueAt("=RANDBETWEEN(0,100)", cell.getRow(), cell.getColumn() + 1);
 			}
 			return RAW.calculate(arguments);
 		}
@@ -1686,7 +1689,7 @@ public enum Function {
 			int width = matrix.getColumnCount();
 			
 			if(row > height - 1 || column > width - 1 || row < 0 || column < 0) {
-				throw new IllegalArgumentException("The cell at the given coördinates (R" + (row + 1) + "C" + (column + 1) + ") does not intersect with the given table range");
+				throw new IllegalArgumentException("The cell at the given coordinates (R" + (row + 1) + "C" + (column + 1) + ") does not intersect with the given table range");
 			} else {
 				row += matrix.firstCell().getRow();
 				column += matrix.firstCell().getColumn();
