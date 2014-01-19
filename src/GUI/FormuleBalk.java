@@ -138,11 +138,12 @@ public class FormuleBalk extends JTextField implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ( currentTable != null ) {
-			currentTable.setValueAt(getText(), currentTable.getSelectedRow(), currentTable.getSelectedColumn());
-			currentTable.removeEditor();
+			if (! currentTable.isEditing() ) {
+				currentTable.setValueAt(this.getText(), currentTable.getSelectedRow(), currentTable.getSelectedColumn());
+			} else {
+				currentTable.getCellEditor().stopCellEditing();
+			}
 			currentTable.requestFocus();
-			currentEditor = null;
-			currentTable.actionPerformed(e);
 		}
 	}
 
