@@ -131,7 +131,7 @@ public class Parser {
 	public Parser(Cell cell) {
 		this.cell = cell;
 		this.sheet = cell.getSheet();
-		input = cell.getInput().replaceAll("\\s+", "");
+		input = cell.getInput();
 		length = input.length();
 		value = preparse();
 	}
