@@ -39,7 +39,16 @@ public class Cell implements Interfaces.Cell {
 	private boolean italic;
 	private boolean underlined;
 
+	/**
+	 * Maintain a Collection of listeners, so that listening
+	 * cells can be updated when the value for this cell changes
+	 */
 	protected Vector<Cell> listeners = new Vector<Cell>();
+	
+	/**
+	 * References to clear listeners when the value for this cell
+	 * changes
+	 */
 	protected Vector<Cell> references = new Vector<Cell>();
 	
 	/**

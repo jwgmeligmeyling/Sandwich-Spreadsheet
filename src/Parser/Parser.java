@@ -649,7 +649,7 @@ public class Parser {
 				break;
 			}
 		}
-		return colIndex - 1;
+		return colIndex;
 	}
 
 	/**

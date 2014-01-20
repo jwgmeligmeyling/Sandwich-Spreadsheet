@@ -52,11 +52,6 @@ public class STable extends JTable implements ExceptionListener {
 	private final Window window;
 	
 	/**
-	 * A reference to the selected Range
-	 */
-	private Range selectedRange;
-	
-	/**
 	 * A reference to the current editor
 	 */
 	private JTextField currentEditor;
@@ -142,14 +137,13 @@ public class STable extends JTable implements ExceptionListener {
 		int[] selectedColumns = getSelectedColumns();
 		int[] selectedRows = getSelectedRows();
 	
-		if (selectedColumns.length == 0 || selectedRows.length == 0
-				|| selectedColumns[0] == 0) {
+		if (selectedColumns.length == 0 || selectedRows.length == 0 ) {
 			return null;
 		}
 	
-		int colLeft = selectedColumns[0] - 1;
+		int colLeft = selectedColumns[0];
 		int rowUp = selectedRows[0];
-		int colRight = selectedColumns[selectedColumns.length - 1] - 1;
+		int colRight = selectedColumns[selectedColumns.length - 1];
 		int rowDown = selectedRows[selectedRows.length - 1];
 		
 		return sheet.getRange(colLeft, rowUp, colRight, rowDown);
@@ -230,7 +224,16 @@ public class STable extends JTable implements ExceptionListener {
 	public void onException(Exception e) {
 		window.onException(e);
 	}
-
+	
+	@Override
+	public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
+		super.changeSelection(rowIndex, columnIndex, toggle, extend);
+		Range range = window.getSelectedRange();
+		if ( range != null ) {
+			window.setStatusBar("Selected " + ( range.isSingleCell() ? "cell: " : "range: ") + window.getSelectedRange().toString());
+		}
+	}
+	
 	/**
 	 * Register the key strokes for creating ranges from the <code>CellEditor</code>
 	 */
@@ -254,6 +257,11 @@ public class STable extends JTable implements ExceptionListener {
 	}
 	
 	/**
+	 * A reference to the selected Range
+	 */
+	private Range selectedRange;
+	
+	/**
 	 * Update the value of the current <code>CellEditor</code> to match the
 	 * selected cells.
 	 */
@@ -263,11 +271,10 @@ public class STable extends JTable implements ExceptionListener {
 		}
 		
 		Range range = getSelectedRange();
-		if ( range.equals(this.selectedRange) || range.getTopLeft().equals(sheet.new Position(this.editingColumn - 1, this.editingRow))) {
+		if ( range != null && range.equals(this.selectedRange) || range.getTopLeft().equals(sheet.new Position(this.editingColumn, this.editingRow))) {
 			return;
 		} else {
 			this.selectedRange = range;
-			window.setStatusBar("Selected range: " + range.toString());
 		}
 		
 		this.currentEditor.setText(new SelectionUpdater().insertOrReplace(range.toString()));
@@ -405,8 +412,6 @@ public class STable extends JTable implements ExceptionListener {
 					.getMinSelectionIndex() + x : columnModel.getSelectionModel()
 					.getMaxSelectionIndex() + x;
 			
-			if ( col == 0 ) return;
-			
 			STable.this.changeSelection(row, col, toggle, extend);
 			updateCellEditor();
 		}
@@ -472,7 +477,7 @@ public class STable extends JTable implements ExceptionListener {
 		@Override
 		public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
-			String input = sheet.getInputAt(column - 1, row);
+			String input = sheet.getInputAt(column + 1, row);
 			currentEditor.setBorder(new LineBorder(Color.black));
 			return super.getTableCellEditorComponent(table, input, isSelected,
 					row, column);
@@ -556,7 +561,7 @@ public class STable extends JTable implements ExceptionListener {
 			if (col == 0) {
 				return row + 1;
 			}
-			return sheet.getValueAt(col - 1, row);
+			return sheet.getValueAt(col, row);
 		}
 
 		@Override
@@ -566,7 +571,7 @@ public class STable extends JTable implements ExceptionListener {
 
 		@Override
 		public void setValueAt(Object value, int row, int col) {
-			sheet.setValueAt(value, col - 1, row);
+			sheet.setValueAt(value, col, row);
 			fireTableCellUpdated(row, col);
 		}
 
@@ -582,7 +587,7 @@ public class STable extends JTable implements ExceptionListener {
 		
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-			Cell cell = sheet.getCellAt(column - 1, row);
+			Cell cell = sheet.getCellAt(column, row);
 			Component component = super.getTableCellRendererComponent(table, value, false, false, row, column);
 		
 			Color cellcolor = cell.getbColor();
@@ -709,7 +714,7 @@ public class STable extends JTable implements ExceptionListener {
 			tableHeader.repaint();
 			if (!isEditing() && getSelectedRowCount() == 1
 					&& columnModel.getSelectedColumnCount() == 1) {
-				String input = sheet.getInputAt(getSelectedColumn() - 1, getSelectedRow());
+				String input = sheet.getInputAt(getSelectedColumn() + 1, getSelectedRow());
 				window.getFormuleBalk().setText(input);
 			}
 		}
