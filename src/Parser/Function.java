@@ -25,42 +25,6 @@ import GUI.STable;
 public enum Function {
 	
 	/**
-	 * <div> <b>Expected arguments:</b> <code>range</code>,
-	 * <code>value As String</code> </div><br>
-	 * <div><b>Returns:</b>
-	 * <ul>
-	 * <li>The arguments you put in the FILL function</li>
-	 * </ul>
-	 * </div> <div><b>Comments:</b><br>
-	 * This function fills every cell in the <code>range</code> you specify with
-	 * the RANDBETWEEN(0,100) function.<br>
-	 * If you want to put a fuction in all the cells of a range, the function
-	 * needs to be in double quotes (as a String). If you don't put the function
-	 * in quotes, the result of the function will show as a constant. </div><br>
-	 * <div><b>Authors:</b>
-	 * <ul>
-	 * <li>Jan-Willem Gmelig Meyling</li>
-	 * </ul>
-	 * </div>
-	 */
-	FILL("Fills a given range with a given value or with the default value a random number between 0 and 100.", "range, [value/function string]") {
-		@Override
-		public Object calculate(Object... arguments) {
-			assertTwoArguments(1, 2, arguments.length);
-			Range range = (Range) arguments[0];
-			String function = "RANDBETWEEN(0,100)";
-			if(arguments.length > 1) {
-				function = stringValueOf(arguments[1]);
-			}
-			STable table = range.getSheet().getSTable();
-			for (Cell cell : ((Range) arguments[0]).getCellArray() ) {
-				table.setValueAt("=" + function, cell.getRow(), cell.getColumn() + 1);
-			}
-			return RAW.calculate(arguments);
-		}
-	},
-	
-	/**
 	 * <div> <b>Expected arguments:</b> <code>value</code>, <code>[value]...</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>

@@ -7,6 +7,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import File.Cell;
+
 @SuppressWarnings("serial")
 /**
  * A class for the formula JTextField container
@@ -139,7 +141,11 @@ public class FormuleBalk extends JTextField implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if ( currentTable != null ) {
 			if (! currentTable.isEditing() ) {
-				currentTable.setValueAt(this.getText(), currentTable.getSelectedRow(), currentTable.getSelectedColumn());
+				
+				for ( Cell cell : currentTable.getSelectedRange().getCellArray() ) {
+					cell.setInput(this.getText());
+				}
+				
 			} else {
 				currentTable.getCellEditor().stopCellEditing();
 			}
