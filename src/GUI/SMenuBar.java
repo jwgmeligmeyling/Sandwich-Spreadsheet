@@ -71,18 +71,18 @@ public class SMenuBar extends JMenuBar {
 		JCheckBox jcbShowStatusBar = new JCheckBox("Show Status Bar");
 		jcbShowStatusBar.setSelected(window.getStatusBar().isVisible());
 		jcbShowStatusBar.setAction(ViewShowStatusBar_Click);
+		
 		menu.add(jcbShowStatusBar);
 		
 		ButtonGroup jbgTabsTopBottom = new ButtonGroup();
 		JRadioButton jrbTabsTop = new JRadioButton("Tabs on top");
+		jbgTabsTopBottom.add(jrbTabsTop);
 		JRadioButton jrbTabsBottom = new JRadioButton("Tabs on bottom", true);
+		jbgTabsTopBottom.add(jrbTabsBottom);
 		
 		jrbTabsTop.setAction(ViewTabsTop_Click);
 		jrbTabsBottom.setAction(ViewTabsBottom_Click);
 		
-		jbgTabsTopBottom.add(jrbTabsTop);
-		jbgTabsTopBottom.add(jrbTabsBottom);
-
 		menu.add(jrbTabsTop);
 		menu.add(jrbTabsBottom);
 		

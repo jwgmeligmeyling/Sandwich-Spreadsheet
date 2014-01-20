@@ -1618,7 +1618,7 @@ public enum Function {
 
 			Position position = matrix.getTopLeft().offset(column, row);
 			
-			if ( !matrix.contains(position)) {
+			if (!matrix.contains(position)) {
 				throw new IllegalArgumentException("The cell at the given position (" + position.toString() + ") does not intersect with the given table range");
 			} else {
 				return matrix.getSheet().getCellAt(position).getValue();
