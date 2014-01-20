@@ -255,32 +255,39 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 
 		@Override
 		public Cell[] getCellArray() {
-			Cell[] output = new Cell[numColumns * numRows];
+			Cell[] output = new Cell[size()];
 			for (int i = 0; i < output.length; i++) {
 				output[i] = cells.get(topLeft.offset(i / numRows, i % numRows));
 			}
 			return output;
 		}
 		
+		@Override
 		public Object[] getValueArray() {
-			Object[] output = new Object[numColumns * numRows];
+			Object[] output = new Object[size()];
 			for (int i = 0; i < output.length; i++) {
 				output[i] = (Object) (cells.get(topLeft.offset(i / numRows, i % numRows))).getValue();
 			}
 			return output;
 		}
 		
+		@Override
 		public int size() {
 			return numColumns * numRows;
 		}
 
 		@Override
 		public boolean contains(Cell cell) {
-			return cell != null && cell.position != null
-					&& cell.position.colIndex >= topLeft.colIndex
-					&& cell.position.colIndex <= bottomRight.colIndex
-					&& cell.position.rowIndex >= topLeft.rowIndex
-					&& cell.position.rowIndex <= bottomRight.rowIndex;
+			return cell != null && this.contains(cell.position);
+		}
+		
+		@Override
+		public boolean contains(Position position) {
+			return position != null
+					&& position.colIndex >= topLeft.colIndex
+					&& position.colIndex <= bottomRight.colIndex
+					&& position.rowIndex >= topLeft.rowIndex
+					&& position.rowIndex <= bottomRight.rowIndex;
 		}
 
 		@Override

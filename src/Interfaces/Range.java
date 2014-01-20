@@ -23,6 +23,14 @@ public interface Range {
 	Cell[] getCellArray();
 	
 	/**
+	 * Method to get an array of the values in the Cells from this
+	 * <code>Range</code>
+	 * 
+	 * @return array of <code>Cell</code> instances
+	 */
+	Object[] getValueArray();
+
+	/**
 	 * Determine if the range contains a single <code>Cell</code>
 	 * @return true if this <code>Cell</code> contains only one <code>Cell</code>
 	 */
@@ -50,6 +58,12 @@ public interface Range {
 	boolean contains(Cell cell);
 
 	/**
+	 * @param position {@code Position}
+	 * @return true if this {@code Range} contains the {@code Position}
+	 */
+	boolean contains(Position position);
+
+	/**
 	 * @return the top left {@code Position} for this {@code Range}
 	 */
 	Position getTopLeft();
@@ -58,4 +72,9 @@ public interface Range {
 	 * @return the sheet for this Range
 	 */
 	Sheet getSheet();
+
+	/**
+	 * @return amount of cells in this {@code Range}
+	 */
+	int size();
 }
