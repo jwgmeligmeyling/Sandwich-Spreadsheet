@@ -1,6 +1,8 @@
 package File;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.xml.stream.XMLStreamException;
@@ -79,7 +81,6 @@ public class Cell implements Interfaces.Cell {
 				listen(cell);
 			}
 		}
-		
 	}
 	
 	/**
@@ -100,20 +101,46 @@ public class Cell implements Interfaces.Cell {
 			try {
 				// Parse the value
 				value = Parser.parse(this);
+				checkConflicts();
 			} catch ( Exception e ) {
 				value = "#VALUE";
+				this.clear();
 				if ( e != null && sheet != null ) 
 					sheet.onException(e);
-			}
-			changed = false;
-			// Update the listeners recursively
-			for ( Cell listener : listeners ) {
-				if ( listener == cross ) {
-					continue;
+			} finally {
+				changed = false;
+				// Update the listeners recursively
+				for ( Cell listener : listeners ) {
+					if ( listener == cross ) {
+						continue;
+					}
+					
+					listener.changed = true;
+					listener.update(cross);
 				}
-				
-				listener.changed = true;
-				listener.update(cross);
+			}
+		}
+	}
+	
+	private void checkConflicts() {
+		List<Object> rlisteners = new ArrayList<Object>(references);
+		
+		for ( int i = 0; i < rlisteners.size(); i++ ) {
+			Object listener = rlisteners.get(i);
+			if ( listener.equals(this) ) {
+				throw new IllegalArgumentException("Crossreference for cell " + position.toString());
+			} else if ( listener instanceof Cell ) {
+				for ( Object sublistener : ((Cell) listener).references ) {
+					if (! rlisteners.contains(sublistener)) {
+						rlisteners.add(sublistener);
+					}
+				}
+			} else if ( listener instanceof Range ) {
+				for ( Object rangecell : ((Range) listener).getCellArray() ) {
+					if ( ! rlisteners.contains(rangecell) ) {
+						rlisteners.add(rangecell);
+					}
+				}
 			}
 		}
 	}
@@ -181,11 +208,9 @@ public class Cell implements Interfaces.Cell {
 
 	@Override
 	public void setInput(String input) {
-		if ( ! input.equals(this.input) ) {
-			this.clear();
-			this.input = input;
-			this.changed = true;
-		}
+		this.clear();
+		this.input = input;
+		this.changed = true;
 	}
 
 	@Override

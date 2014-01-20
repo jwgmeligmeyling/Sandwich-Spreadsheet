@@ -579,7 +579,7 @@ public class Parser {
 	 * @throws IllegalArgumentException
 	 *             When the input of the reference is malformed.
 	 */
-	Object getRange() {
+	private Object getRange() {
 		/*
 		 * Current implementation only supports Cells (A1) or Ranges (A1:B2)
 		 * TODO Support for rows and columns (?)
@@ -593,15 +593,10 @@ public class Parser {
 				if (b != null) {
 					index = peekIndex -1;
 					Range range = sheet.new Range(a,b);
-					if ( cell != null && range.contains(cell) )
-						throw new IllegalArgumentException("Cross reference!");
 					return range;
 				} else {
-					throw new IllegalArgumentException(
-							"Expected a column reference after :");
+					throw new IllegalArgumentException("Expected a column reference after ':'");
 				}
-			} else if (cell != null && a.equals(cell.getPosition()) ) {
-				throw new IllegalArgumentException("Cross reference!");
 			} else {
 				index = peekIndex -1;
 				return a;
@@ -623,7 +618,11 @@ public class Parser {
 		if (colIndex != -1) {
 			int rowIndex = getRowIndex();
 			if (rowIndex != -1) {
-				return sheet.new Position(colIndex, rowIndex);
+				Position position = sheet.new Position(colIndex, rowIndex);
+				if ( cell != null && position.equals(cell.getPosition())) {
+					throw new IllegalArgumentException("Cross reference for " + position.toString());
+				}
+				return position;
 			}
 		}
 		return null;

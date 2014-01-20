@@ -149,7 +149,7 @@ public class TestFunctions {
 	
 	@Test
 	public void testSimIg3args2() {
-		assertEquals(80.05, Function.SUMIF.calculate(tValS, "<5", tValB));
+		assertEquals(75.05, Function.SUMIF.calculate(tValS, "<5", tValB));
 	}
 	
 	@Test

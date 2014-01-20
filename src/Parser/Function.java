@@ -3,6 +3,7 @@ package Parser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import File.Cell;
 import File.Sheet;
@@ -88,18 +89,26 @@ public enum Function {
 		public Object calculate(Object... arguments) {
 			assertMinArguments(1, arguments.length);
 			double output = 0;
+			
+			List<Object> values = new ArrayList<Object>(arguments.length);
+			values.addAll(Arrays.asList(arguments));
+						
 			for (Object argument : arguments) {
-				if ( argument instanceof String ) {
-					continue;
-				} else if (argument instanceof Range) {
-					for (Cell cell : ((Range) argument).getCellArray()) {
-						if ( cell.getValue() instanceof String ) continue;
-						output += doubleValueOf(cell.getValue());
-					}
-				} else {
-					output += doubleValueOf(argument);
+				if (argument instanceof Range) {
+					Range range = (Range) argument;
+					values.addAll(Arrays.asList(range.getValueArray()));
+					values.remove(range);
 				}
 			}
+			
+			for (Object value : values ) {
+				try {
+					output += doubleValueOf(value);
+				} catch ( NumberFormatException e ) {
+					// Ignore not parsable Strings
+				}
+			}
+			
 			return convertToIntIfApplicable(output);
 		}
 	},
@@ -522,9 +531,9 @@ public enum Function {
 				}
 				if (new Parser(cell.getSheet(), cell.getPositionString()
 						+ criteria).parse().equals(Boolean.TRUE)) {
-					if (!(valueCell.getValue() instanceof String)) {
+					try {
 						sum += doubleValueOf(valueCell);
-					}
+					} catch ( NumberFormatException e ) {}
 				}
 			}
 			return convertToIntIfApplicable(sum);
@@ -555,7 +564,7 @@ public enum Function {
 		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
 			if (arguments[0] instanceof Range) {
-				return ISNUMBER.calculate(((Range) arguments[0]).getCellArray()[0]);
+				return ISNUMBER.calculate(((Range) arguments[0]).firstCell());
 			} else if (arguments[0] instanceof Cell) {
 				return ISNUMBER.calculate(((Cell) arguments[0]).getValue());
 			}
@@ -1345,7 +1354,7 @@ public enum Function {
 			assertMinArguments(1, arguments.length);
 			boolean aValue = false;
 			double min = Double.MAX_VALUE;
-			System.out.println(min);
+			
 			for (Object arg : arguments) {
 				if (arg instanceof String) {
 					continue;
@@ -1696,7 +1705,6 @@ public enum Function {
 				for (Cell cell : matrix.getCellArray()) {
 					if(cell.getColumn() == firstColumn) {
 						if(stringValueOf(cell.getValue()).equals(searchVal)) {
-							//System.out.println("row:="+cell.getRow());
 							return INDEX.calculate(matrix, cell.getRow() - matrix.firstCell().getRow() + 1, columnNum);
 						}
 					}
@@ -1774,7 +1782,11 @@ public enum Function {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
-			return ((Range)new Parser(((Range)arguments[1]).firstCell().getSheet(), stringValueOf(arguments[0])).getRange()).firstCell();
+			Sheet sheet = ((Range) arguments[1]).firstCell().getSheet();
+			String cellref = stringValueOf(arguments[0]);
+			Parser parser = new Parser(sheet, cellref);
+			Object result = parser.parse();
+			return result;
 		}
 	},
 	

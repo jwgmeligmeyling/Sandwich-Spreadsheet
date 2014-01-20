@@ -261,6 +261,18 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 			}
 			return output;
 		}
+		
+		public Object[] getValueArray() {
+			Object[] output = new Object[numColumns * numRows];
+			for (int i = 0; i < output.length; i++) {
+				output[i] = (Object) (cells.get(topLeft.offset(i / numRows, i % numRows))).getValue();
+			}
+			return output;
+		}
+		
+		public int size() {
+			return numColumns * numRows;
+		}
 
 		@Override
 		public boolean contains(Cell cell) {
