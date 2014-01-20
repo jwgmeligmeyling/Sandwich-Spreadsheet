@@ -89,8 +89,11 @@ public enum Function {
 			assertMinArguments(1, arguments.length);
 			double output = 0;
 			for (Object argument : arguments) {
-				if (argument instanceof Range) {
+				if ( argument instanceof String ) {
+					continue;
+				} else if (argument instanceof Range) {
 					for (Cell cell : ((Range) argument).getCellArray()) {
+						if ( cell.getValue() instanceof String ) continue;
 						output += doubleValueOf(cell.getValue());
 					}
 				} else {
@@ -1916,12 +1919,18 @@ public enum Function {
 	 * and <code>Booleans</code> will be converted to their <code>integer</code>
 	 * value: <code>1</code> for <code>true</code> and <code>0</code> for
 	 * <code>false</code>.
+	 * 
+	 * An empty String will return 0. A non-empty String will be casted to
+	 * an integer, or throw a NumberFormatException.
 	 * @param obj Object to convert
 	 * @return <code>integer</code> value to calculate with
+	 * @throws NumberFormatException
 	 */
 	public static int intValueOf(Object obj) {
 		if (obj instanceof Number) {
 			return ((Number) obj).intValue();
+		} else if ( obj instanceof String ) {
+			return "".equals(obj) ? 0 : Integer.parseInt((String) obj);
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
 		} else if (obj instanceof Range) {
@@ -1936,18 +1945,21 @@ public enum Function {
 	 * Get the <code>double</code> value of an object. Values of the type
 	 * <code>Boolean</code> will be converted to their <code>integer</code>
 	 * value: <code>1</code> for <code>true</code> and <code>0</code> for
-	 * <code>false</code>. Values of the type <code>String</code> will always be
-	 * converted to <code>0</code>.
+	 * <code>false</code>.
+	 * 
+	 * An empty String will return 0. A non-empty String will be casted to
+	 * a double, or throw a NumberFormatException.
 	 * 
 	 * @param obj
 	 *            Object to convert
 	 * @return <code>double</code> value to calculate with
+	 * @throws NumberFormatException
 	 */
 	public static double doubleValueOf(Object obj) {
 		if (obj instanceof Number) {
 			return ((Number) obj).doubleValue();
 		} else if ( obj instanceof String ) {
-			return 0;
+			return "".equals(obj) ? 0 : Double.parseDouble((String) obj);
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
 		} else if (obj instanceof Range) {

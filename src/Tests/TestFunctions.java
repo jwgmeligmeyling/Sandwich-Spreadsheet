@@ -32,7 +32,7 @@ public class TestFunctions {
 		B2 = sheet.createCell("=2+2*3", 1, 1);
 		B3 = sheet.createCell("=SUM(5,3)", 1, 2);
 		
-		C1 = sheet.createCell("2+2", 2, 0);
+		C1 = sheet.createCell("=2+2", 2, 0);
 		C2 = sheet.createCell("=PRODUCT(3,5,2)", 2, 1);
 		C3 = sheet.createCell("", 2, 2);
 		
@@ -104,16 +104,17 @@ public class TestFunctions {
 
 	@Test
 	public void testSumRangeNumber() {
-		assertEquals(48, Function.SUM.calculate(r2));
+		assertEquals(52, Function.SUM.calculate(r2));
 	}
 	
 	@Test
 	public void testSumRangeBoolean() {
 		assertEquals(2, Function.SUM.calculate(r3));
 	}
+	
 	@Test
 	public void testSumRangeWithString() {
-		assertEquals(68, Function.SUM.calculate(r1));
+		assertEquals(72, Function.SUM.calculate(r1));
 	}
 	
 	@Test
@@ -153,12 +154,7 @@ public class TestFunctions {
 	
 	@Test
 	public void testSumIf3argsNegative() {
-		assertEquals(0, Function.SUMIF.calculate(tValS, -2, tValB));
-	}
-	
-	@Test
-	public void testSumIf3argsNegative2() {
-		assertEquals(0, Function.SUMIF.calculate(tValS, -2, tValB));
+		assertEquals(78, Function.SUMIF.calculate(tValS, -2, tValB));
 	}
 	
 	@Test
@@ -666,23 +662,26 @@ public class TestFunctions {
 	public void testAbsDoubleNeg() {
 		assertEquals(21.65, Function.ABS.calculate(-21.65));
 	}
-	@Test
+	@Test(expected=NumberFormatException.class)
 	public void testAbsString() {
-		assertEquals(0, Function.ABS.calculate("string"));
+		Function.ABS.calculate("string");
 	}
 	
 	@Test
 	public void testSignPos() {
 		assertEquals(1, Function.SIGN.calculate(25.2));
 	}
+	
 	@Test
 	public void testSignNeg() {
 		assertEquals(-1, Function.SIGN.calculate(-5));
 	}
-	@Test
+	
+	@Test(expected=NumberFormatException.class)
 	public void testSignString() {
-		assertEquals(0, Function.SIGN.calculate("string"));
+		Function.SIGN.calculate("string");
 	}
+	
 	@Test
 	public void testSignZero() {
 		assertEquals(0, Function.SIGN.calculate(0));
@@ -695,7 +694,7 @@ public class TestFunctions {
 	
 	@Test
 	public void testAverage() {
-		assertEquals(16, Function.AVERAGE.calculate(r2));
+		assertEquals(13, Function.AVERAGE.calculate(r2));
 	}
 	
 	@Test
@@ -803,6 +802,7 @@ public class TestFunctions {
 	public void testMedianRangeOdd() {
 		assertEquals(8, Function.MEDIAN.calculate(r5));
 	}
+	
 	@Test
 	public void testMedianRangeEven() {
 		assertEquals(9, Function.MEDIAN.calculate(r2));
@@ -1151,9 +1151,9 @@ public class TestFunctions {
 		assertEquals(0.0, Function.doubleValueOf(""), 0.01);
 	}
 
-	@Test
+	@Test(expected=NumberFormatException.class)
 	public void testDoubleValueOfString() {
-		assertEquals(0.0, Function.doubleValueOf("This is a string"), 0.01);
+		Function.doubleValueOf("This is a string");
 	}
 
 	// booleanValueOf()
