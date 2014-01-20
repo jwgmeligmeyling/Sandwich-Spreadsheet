@@ -533,7 +533,8 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 
 	@Override
 	public void onException(Exception e) {
-		stable.onException(e);
+		if ( stable != null )
+			stable.onException(e);
 	}
 
 	/**

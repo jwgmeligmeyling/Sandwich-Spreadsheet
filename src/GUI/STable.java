@@ -572,7 +572,20 @@ public class STable extends JTable implements ExceptionListener {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Cell cell = sheet.getCellAt(column - 1, row);
 			Component component = super.getTableCellRendererComponent(table, value, false, false, row, column);
-			setBackground(getBackground(cell, isSelected));
+		
+			Color cellcolor = cell.getbColor();
+			if ( isSelected ) {
+				if ( cellcolor != null ) {
+					cellcolor = cellcolor.brighter();
+				} else {
+					cellcolor = DEFAULT_SELECTION_COLOR;
+				}
+			} else if ( cellcolor == null ) {
+				cellcolor = STable.this.getBackground();
+			}
+			
+			this.setBackground(cellcolor);
+			
 			if ( cell != null)
 				alterFont(component, cell);
 			return component;
@@ -580,25 +593,13 @@ public class STable extends JTable implements ExceptionListener {
 		
 		/**
 		 * @param cell
-		 * @param selected
-		 * @return the background color for this cell
+		 * @return the cell color, or the background of the table
 		 */
-		private Color getBackground(Cell cell, boolean selected) {
-			Color A = cell != null ? cell.getbColor() : null;
-			Color B = selected ? DEFAULT_SELECTION_COLOR : STable.this.getBackground();
-			return mengKleuren(A,B);
-		}
-		
-		/**
-		 * @param A
-		 * @param B
-		 * @return a combination of the two colors
-		 */
-		private Color mengKleuren(Color A, Color B) {
-			return A == null ? B : (B == null ? A : new Color(
-					(A.getRed() + B.getRed()) / 2,
-					(A.getGreen() + B.getGreen()) / 2,
-					(A.getBlue() + B.getBlue()) / 2));
+		private Color getCellColor(Cell cell) {
+			if ( cell != null && cell.getbColor() != null ) {
+				return cell.getbColor();
+			}
+			return STable.this.getBackground();
 		}
 		
 		@SuppressWarnings({ "rawtypes", "unchecked" })

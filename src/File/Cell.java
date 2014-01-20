@@ -102,7 +102,8 @@ public class Cell implements Interfaces.Cell {
 				value = Parser.parse(this);
 			} catch ( Exception e ) {
 				value = "#VALUE";
-				sheet.onException(e);
+				if ( e != null && sheet != null ) 
+					sheet.onException(e);
 			}
 			changed = false;
 			// Update the listeners recursively
