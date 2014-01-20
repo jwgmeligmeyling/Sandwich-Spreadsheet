@@ -9,7 +9,6 @@ import File.Cell;
 import File.Sheet;
 import File.Sheet.Position;
 import File.Sheet.Range;
-import GUI.STable;
 
 /**
  * Enumeration that binds functions to their function name.<br>
