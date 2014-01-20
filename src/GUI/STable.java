@@ -477,7 +477,7 @@ public class STable extends JTable implements ExceptionListener {
 		@Override
 		public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
-			String input = sheet.getInputAt(column + 1, row);
+			String input = sheet.getInputAt(column, row);
 			currentEditor.setBorder(new LineBorder(Color.black));
 			return super.getTableCellEditorComponent(table, input, isSelected,
 					row, column);
@@ -561,7 +561,7 @@ public class STable extends JTable implements ExceptionListener {
 			if (col == 0) {
 				return row + 1;
 			}
-			return sheet.getValueAt(col, row);
+			return sheet.getValueAt(col - 1, row);
 		}
 
 		@Override
@@ -571,7 +571,7 @@ public class STable extends JTable implements ExceptionListener {
 
 		@Override
 		public void setValueAt(Object value, int row, int col) {
-			sheet.setValueAt(value, col, row);
+			sheet.setValueAt(value, col - 1, row);
 			fireTableCellUpdated(row, col);
 		}
 
@@ -714,7 +714,7 @@ public class STable extends JTable implements ExceptionListener {
 			tableHeader.repaint();
 			if (!isEditing() && getSelectedRowCount() == 1
 					&& columnModel.getSelectedColumnCount() == 1) {
-				String input = sheet.getInputAt(getSelectedColumn() + 1, getSelectedRow());
+				String input = sheet.getInputAt(getSelectedColumn(), getSelectedRow());
 				window.getFormuleBalk().setText(input);
 			}
 		}

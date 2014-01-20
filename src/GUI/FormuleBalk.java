@@ -69,9 +69,7 @@ public class FormuleBalk extends JTextField implements ActionListener {
 		}
 		
 		this.currentEditor = currentEditor;
-	
 		this.currentEditor.getDocument().addDocumentListener(new CurrentEditorListener());
-		//this.setText(currentEditor.getText());
 	}
 	
 	/**
