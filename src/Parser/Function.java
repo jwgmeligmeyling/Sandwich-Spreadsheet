@@ -1612,21 +1612,16 @@ public enum Function {
 			assertArguments(3, arguments.length);
 			assertArgumentRange(0, arguments);
 			
-			Range matrix = ((Range)arguments[0]);
-			int row = intValueOf(arguments[1]) - 1;
+			Range matrix = ((Range) arguments[0]);
 			int column = intValueOf(arguments[2]) - 1;
-			int height = matrix.getRowCount();
-			int width = matrix.getColumnCount();
+			int row = intValueOf(arguments[1]) - 1;
+
+			Position position = matrix.getTopLeft().offset(column, row);
 			
-			if(row > height - 1 || column > width - 1 || row < 0 || column < 0) {
-				throw new IllegalArgumentException("The cell at the given coordinates (R" + (row + 1) + "C" + (column + 1) + ") does not intersect with the given table range");
+			if ( !matrix.contains(position)) {
+				throw new IllegalArgumentException("The cell at the given position (" + position.toString() + ") does not intersect with the given table range");
 			} else {
-				row += matrix.firstCell().getRow();
-				column += matrix.firstCell().getColumn();
-				
-				Sheet sheet = matrix.firstCell().getSheet();
-				Position pos = sheet.new Position(column, row);
-				return sheet.getCellAt(pos).getValue();
+				return matrix.getSheet().getCellAt(position).getValue();
 			}
 		}
 	},

@@ -24,6 +24,7 @@ public class Window extends JFrame implements ExceptionListener {
 	
 	private static final int DEFAULT_WIDTH = 800;
 	private static final int DEFAULT_HEIGHT = 450;
+	private static final Color DEFAULT_BACKGROUND = new Color(240,240,240);
 	
 	/**
 	 * Consturctor for the GUI
@@ -150,7 +151,10 @@ public class Window extends JFrame implements ExceptionListener {
 		
 		Box box = Box.createVerticalBox();
 		box.add(table.getTableHeader());
-		box.add(new JScrollPane(table));
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBackground(DEFAULT_BACKGROUND);
+		new FixedColumnTable(1, scrollPane);
+		box.add(scrollPane);
 		
 		tabbedPane.addTab(sheet.getSheetName(), box);
 		tbMain.createSelectionListener(table);

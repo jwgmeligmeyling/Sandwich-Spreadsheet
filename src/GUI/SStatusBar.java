@@ -9,7 +9,7 @@ import javax.swing.border.BevelBorder;
 public class SStatusBar extends JLabel {
 	
 	public SStatusBar() {
-		super(" ");
+		super("Sandwich Spreadsheet");
 		this.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.GRAY));
 		this.setBackground(new Color(100, 100, 200));
 		this.setVisible(true);
