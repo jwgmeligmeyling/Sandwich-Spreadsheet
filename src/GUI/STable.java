@@ -591,17 +591,6 @@ public class STable extends JTable implements ExceptionListener {
 			return component;
 		}
 		
-		/**
-		 * @param cell
-		 * @return the cell color, or the background of the table
-		 */
-		private Color getCellColor(Cell cell) {
-			if ( cell != null && cell.getbColor() != null ) {
-				return cell.getbColor();
-			}
-			return STable.this.getBackground();
-		}
-		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private void alterFont(Component component, Cell cell) {
 			Font font = component.getFont();

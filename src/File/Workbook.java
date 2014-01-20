@@ -108,7 +108,7 @@ public class Workbook implements Interfaces.Workbook {
 	
 	@Override
 	public Sheet createSheet() {
-		Sheet sheet = new Sheet("Werkblad " + countSheets());
+		Sheet sheet = new Sheet("Werkblad " + countSheets() + 1);
 		addSheet(sheet);
 		return sheet;
 	}
