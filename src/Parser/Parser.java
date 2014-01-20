@@ -230,7 +230,8 @@ public class Parser {
 							other = new Cell(sheet, (Position) reference, "");
 						}
 						
-						cell.listen(other);
+						if ( cell != null )
+							cell.listen(other);
 						values.push(other.getValue());
 					}
 					break;
