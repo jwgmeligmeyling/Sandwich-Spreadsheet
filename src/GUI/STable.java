@@ -307,8 +307,20 @@ public class STable extends JTable implements ExceptionListener {
 				switch(c) {
 				case ',':
 				case ';':
-				case '=':
 				case '(':
+				case '<':
+				case '>':
+				case '^':
+				case '|':
+				case '&':
+				case '=':
+				case '!':
+				case '~':
+				case '+':
+				case '-':
+				case '*':
+				case '/':
+				case '%':
 					return i + 1;
 				}
 			}
