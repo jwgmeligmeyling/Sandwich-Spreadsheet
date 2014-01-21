@@ -92,7 +92,7 @@ public class SMenuBar extends JMenuBar {
 	private void createInsertMenu() {
 		JMenu menu = new JMenu("Insert");
 		menu.setMnemonic(Mnemonic.INSERT.value);
-		menu.add(new MenuItem(Mnemonic.INSERT_FUNCTION, InsertFunction_Click));
+		menu.add(new MenuItem(Mnemonic.INSERT_FUNCTION, insertFunction));
 		menu.add(new MenuItem("Create new Graph", Mnemonic.CREATE_GRAPH));
 		menu.add(new MenuItem(Mnemonic.CREATE_SHEET, InsertWorksheet_Click));
 		this.add(menu);
@@ -106,11 +106,20 @@ public class SMenuBar extends JMenuBar {
 		this.add(menu);
 	}
 	
+	private AbstractAction insertFunction = new AbstractAction("Insert function", null) {
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			new SFormulePicker( window ).show();
+		}
+		
+	};
+	
 	private AbstractAction fileNew = new AbstractAction("New file", icoNew) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>New";
-			JOptionPane.showMessageDialog(null, st);
+			new Window();
 		}
 	};
 	
@@ -118,24 +127,21 @@ public class SMenuBar extends JMenuBar {
 	private AbstractAction fileOpen = new AbstractAction("Open", icoOpen) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>Open";
-			JOptionPane.showMessageDialog(null, st);			
+			window.FileOpen();
 		}
 	};
 	
 	private AbstractAction fileSave = new AbstractAction("Save", icoSave) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>Save";
-			JOptionPane.showMessageDialog(null, st);			
+			window.FileSave();
 		}
 	};
 	
 	private AbstractAction fileSaveAs = new AbstractAction("Save as", icoSave) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>SaveAs";
-			JOptionPane.showMessageDialog(null, st);			
+			window.FileSave();			
 		}
 	};
 	
@@ -233,14 +239,6 @@ public class SMenuBar extends JMenuBar {
 			Sheet sheet = window.createSheet();
 			window.paintSheet(sheet);
 			window.goToSheet(sheet);
-		}
-	};
-	
-	private AbstractAction InsertFunction_Click = new AbstractAction("Insert Function") {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//TODO toon Insert Function dialog!
-			new SFormulePicker(window);
 		}
 	};
 	

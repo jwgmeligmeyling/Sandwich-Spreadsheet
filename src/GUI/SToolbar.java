@@ -4,28 +4,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.print.PrinterException;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLStreamException;
-
-import org.xml.sax.SAXException;
 
 import File.Cell;
 import File.Sheet.Range;
-import File.Workbook;
 
 /**
  * 
@@ -51,9 +42,6 @@ public class SToolbar extends JToolBar {
 	private final ToolBarToggleButton Bold;
 	private final ToolBarToggleButton Italic;
 	private final ToolBarToggleButton Underlined;
-	
-	private final JFileChooser fc = new JFileChooser();
-	//private final FileNameExtensionFilter filter = new FileNameExtensionFilter("xml");
 	
 	/**
 	 * Construct a new SToobar
@@ -125,62 +113,18 @@ public class SToolbar extends JToolBar {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// Open een dialog
-			//fc.setFileFilter(filter);
-			int returnVal = fc.showOpenDialog(window);
-			
-			// Wanneer niet op cancel gedrukt:
-		    if(returnVal == JFileChooser.APPROVE_OPTION) {
-				File file = fc.getSelectedFile();
-				
-				try {
-					// Nieuwe sheetfile aanmaken vanuit de XML
-					new Window(new Workbook(file));
-					
-				} catch (ParserConfigurationException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				} catch (SAXException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					e1.printStackTrace();
-				}
-		    }	    
+			window.FileOpen();
 		}
+		
 	};
 
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Workbook sheetfile = window.getCurrentSpreadSheetFile();
-	    	File file = sheetfile.getFile();
-	    	
-	    	if ( file == null ) {
-				int returnVal = fc.showSaveDialog(window);
-			    if(returnVal == JFileChooser.APPROVE_OPTION) {
-					file = fc.getSelectedFile();
-			    }
-	    	}
-	    	
-	    	if ( file == null ) {
-	    		return;
-	    	}
-	    	
-	    	try {
-				sheetfile.write(file);
-			} catch (XMLStreamException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage());
-				e1.printStackTrace();
-			} catch (FactoryConfigurationError e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage());
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage());
-				e1.printStackTrace();
-			}
+			window.FileSave();
 		}
+		
 	};
 
 	private AbstractAction filePrint = new AbstractAction(null, icoPrint) {
