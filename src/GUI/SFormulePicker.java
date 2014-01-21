@@ -33,9 +33,10 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 	private final JList lijst;
 	private final Window window;
 	private JLabel description;
+	private JLabel arguments;
 	
 	private final static int DEFAULT_WINDOW_WIDTH = 450;
-	private final static int DEFAULT_WINDOW_HEIGHT = 200;
+	private final static int DEFAULT_WINDOW_HEIGHT = 500;
 
 	/**
 	 * Constructor for the SFormulePicker
@@ -49,7 +50,7 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 		lijst = new JList(getSortedFunctions());
 
 		lijst.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		lijst.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		lijst.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane listScroller = new JScrollPane(lijst);
 		lijst.setVisibleRowCount(-1);
 		lijst.addListSelectionListener(this);
@@ -73,11 +74,12 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 		setLayout(new BorderLayout());
 		JPanel top= new JPanel();
 		JPanel bot= new JPanel();
-		description=new JLabel();
+		description=new JLabel("description:");
+		arguments=new JLabel("arguments:");
 		bot.setLayout(new BorderLayout());
-		bot.add(buttonPanel, BorderLayout.CENTER);
-		bot.add(description, BorderLayout.PAGE_START);
-		
+		bot.add(buttonPanel, BorderLayout.PAGE_START);
+		bot.add(description, BorderLayout.CENTER);
+		bot.add(arguments,BorderLayout.PAGE_END);
 		JLabel tekst=new JLabel("Kies je formule.");
 		top.add(tekst);
 		container.add(top,BorderLayout.PAGE_START);
@@ -90,6 +92,7 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 	public void valueChanged(ListSelectionEvent arg0) {
 		Function selected=(Function) lijst.getSelectedValue();
 		description.setText(selected.getDescription());
+		arguments.setText(selected.getArgumentList());
 	}
 
 	@Override
