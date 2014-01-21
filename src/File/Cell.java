@@ -40,14 +40,12 @@ public class Cell implements Interfaces.Cell {
 	private boolean underlined;
 
 	/**
-	 * Maintain a Collection of listeners, so that listening
-	 * cells can be updated when the value for this cell changes
+	 * Cells that listen to this cell
 	 */
 	protected Vector<Cell> listeners = new Vector<Cell>();
 	
 	/**
-	 * References to clear listeners when the value for this cell
-	 * changes
+	 * Cells that this cell listens to
 	 */
 	protected Vector<Cell> references = new Vector<Cell>();
 	
@@ -98,7 +96,7 @@ public class Cell implements Interfaces.Cell {
 	 * Cells to be calculated in the right order.
 	 */
 	void update() {
-		update((Cell) null);
+		update(this);
 	}
 	
 	/**
@@ -113,17 +111,23 @@ public class Cell implements Interfaces.Cell {
 				checkConflicts();
 			} catch ( Exception e ) {
 				value = "#VALUE";
-				this.clear();
+				// Clear the listeners for the current cell that caused
+				// the problem, the cell input needs to be updated anyways
+				if ( cross == this )
+					this.clear();
+				// Delegate the exception to the sheet
 				if ( e != null && sheet != null ) 
 					sheet.onException(e);
 			} finally {
 				changed = false;
 				// Update the listeners recursively
 				for ( Cell listener : listeners ) {
+					// We already updated the current cell. Thats why an
+					// exception is thrown before
 					if ( listener == cross ) {
 						continue;
 					}
-					
+					// Update the cell that is dependent on this cell
 					listener.changed = true;
 					listener.update(cross);
 				}
