@@ -36,7 +36,7 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 	private JLabel arguments;
 	
 	private final static int DEFAULT_WINDOW_WIDTH = 450;
-	private final static int DEFAULT_WINDOW_HEIGHT = 500;
+	private final static int DEFAULT_WINDOW_HEIGHT = 350;
 
 	/**
 	 * Constructor for the SFormulePicker
@@ -77,9 +77,9 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 		description=new JLabel("description:");
 		arguments=new JLabel("arguments:");
 		bot.setLayout(new BorderLayout());
-		bot.add(buttonPanel, BorderLayout.PAGE_START);
-		bot.add(description, BorderLayout.CENTER);
-		bot.add(arguments,BorderLayout.PAGE_END);
+		bot.add(buttonPanel, BorderLayout.PAGE_END);
+		bot.add(description, BorderLayout.PAGE_START);
+		bot.add(arguments,BorderLayout.CENTER);
 		JLabel tekst=new JLabel("Kies je formule.");
 		top.add(tekst);
 		container.add(top,BorderLayout.PAGE_START);
@@ -91,8 +91,8 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
 		Function selected=(Function) lijst.getSelectedValue();
-		description.setText(selected.getDescription());
-		arguments.setText(selected.getArgumentList());
+		description.setText("<html> description:"+selected.getDescription()+"</html>");
+		arguments.setText("<html> arguments>" +selected.getArgumentList()+"</html>");
 	}
 
 	@Override
