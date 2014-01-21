@@ -3,6 +3,7 @@ package Parser;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import File.Cell;
@@ -1579,10 +1580,13 @@ public enum Function {
 	 * </div>
 	 */
 	DATE() {
+		@SuppressWarnings("deprecation")
 		@Override
 		public Object calculate(Object... arguments) {
-			assertArguments(1, arguments.length);
-			return (new SimpleDateFormat(arguments[0].toString())).format(System.currentTimeMillis());
+			String format = arguments.length == 4 && arguments[3] instanceof String ? (String) arguments[1] : "YYYY-MM-DD";
+			return new SimpleDateFormat(format).format(new Date(
+					intValueOf(arguments[0]) - 1900, intValueOf(arguments[1]), intValueOf(arguments[2])
+			));
 		}
 	},
 	

@@ -84,7 +84,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 	 * 
 	 * @author Jan-Willem Gmelig Meyling
 	 */
-	public class Position {
+	public class Position implements Interfaces.Position {
 		/**
 		 * Holds the column index for the current <code>Cell</code>.
 		 */
@@ -123,19 +123,17 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 			}
 		}
 
-		/**
-		 * Method to get a new <code>Position</code> from this
-		 * <code>Position</code> and the defined offset.
-		 * 
-		 * @param x
-		 *            Column offset
-		 * @param y
-		 *            Row offset
-		 * @return New <code>Position</code> instance
-		 * @throws AssertionError
-		 *             When the indexes with the applied offset are negative
-		 *             values.
-		 */
+		@Override
+		public int getRow() {
+			return rowIndex;
+		}
+
+		@Override
+		public int getColumn() {
+			return colIndex;
+		}
+
+		@Override
 		public Position offset(int x, int y) {
 			return new Position(colIndex + x, rowIndex + y);
 		}
