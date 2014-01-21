@@ -108,6 +108,7 @@ public class SMenuBar extends JMenuBar {
 	
 	private AbstractAction insertFunction = new AbstractAction("Insert function", null) {
 
+		@SuppressWarnings("deprecation")
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub

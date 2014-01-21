@@ -14,7 +14,7 @@ import File.Cell;
 import Interfaces.Range;
 
 @SuppressWarnings("serial")
-public class SColorPicker extends JFrame implements ActionListener {
+public class SColorPicker extends JDialog implements ActionListener {
 
 	JColorChooser colorPicker;
 	JButton jbnOk;
@@ -27,7 +27,7 @@ public class SColorPicker extends JFrame implements ActionListener {
 
 	public SColorPicker(String title, Color oldColor, Window window, boolean t) {
 		// super(owner, title, modal);
-		super(title);
+		super(window,title);
 		this.window = window;
 		type = t;
 		colorPicker = new JColorChooser(oldColor);

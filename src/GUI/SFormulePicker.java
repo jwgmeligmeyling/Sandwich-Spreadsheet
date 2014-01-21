@@ -22,6 +22,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import File.Cell;
 import Parser.Function;
 
 @SuppressWarnings("serial")
@@ -95,9 +96,17 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 				}
 				veld.setText(currentInput + functie.toString() + "()");
 			}
-			
+			Cell selected = window.getSelectedCell();
+			if(selected!= null){
+			String currentInput= selected.getInput();
+			if (currentInput.length() == 0 || currentInput.charAt(0) != '=') {
+				currentInput = "=" + currentInput;
+			}
+			selected.setInput(currentInput+functie.toString()+"()");
+			}
 			dispose();
 		}
+		
 
 	}
 	
