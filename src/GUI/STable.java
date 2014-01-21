@@ -5,13 +5,10 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
-import java.util.EventObject;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
@@ -32,6 +29,7 @@ import javax.swing.table.TableCellRenderer;
 import File.Cell;
 import File.Sheet;
 import File.Sheet.Range;
+import Interfaces.ExceptionListener;
 
 @SuppressWarnings("serial")
 /**
@@ -40,29 +38,29 @@ import File.Sheet.Range;
  * @author Jan-Willem Gmelig Meyling
  *
  */
-public class STable extends JTable implements ActionListener {
+public class STable extends JTable implements ExceptionListener {
 
-	/**
-	 * A reference to this <code>STable</code> instance for use in inner classes
-	 */
-	private final STable table = this;
-	/**
-	 * A reference to the <code>FormuleBalk</code> instance in the GUI.
-	 */
-	private final FormuleBalk formuleBalk;
 	/**
 	 * A reference to the <code>Sheet</code> instance used as data model for this
 	 * table instance.
 	 */
 	private final Sheet sheet;
 	
-	private Range selectedRange;
-	private boolean selectingRange;
+	/**
+	 * A reference to the {@code Window} containing this {@code STable}
+	 */
+	private final Window window;
+	
+	/**
+	 * A reference to the current editor
+	 */
 	private JTextField currentEditor;
 
 	private static final Color DEFAULT_GRID_COLOR = new Color(206, 206, 206);
 	private static final Color DEFAULT_SELECTION_COLOR = new Color(190, 220, 255);
 	private static final Color DEFAULT_SELECTION_TEXT = new Color(0, 0, 0);
+	
+	private static final int DEFAULT_COLUMN_WIDTH = 50;
 
 	private final static Long EDITOR_SHIFT_UP = 234234234234234234l;
 	private final static Long EDITOR_SHIFT_RIGHT = 1234234234123123l;
@@ -78,59 +76,55 @@ public class STable extends JTable implements ActionListener {
 	 * @param sheet
 	 * @param formule
 	 */
-	public STable(Sheet sheet, FormuleBalk formule) {
+	public STable(Sheet sheet, Window window) {
+		/*
+		 * Call the super constructor with our custom TableModel
+		 * that uses a Sheet instance for the data
+		 */
 		super(new TableModel(sheet), null, null);
-
+		/*
+		 * Turn off the JTable.autoStartsEdit, so that we
+		 * can hook in to this manually at the processKeyBinding
+		 * function. 
+		 */
+		this.putClientProperty("JTable.autoStartsEdit", false);
+		/*
+		 * Set some final attributes, and create the cross reference
+		 * with the Sheet
+		 */
 		this.sheet = sheet;
 		this.sheet.setSTable(this);
-		this.formuleBalk = formule;
+		this.window = window;
+		/*
+		 * Set the default renderer for the STable
+		 */
 		this.setDefaultRenderer(Cell.class, new CustomCellRenderer());
-
+		/*
+		 * Create a custom mouse adapter to hook into the selections
+		 */
 		CustomMouseAdapter adapter = new CustomMouseAdapter();
 		addMouseListener(adapter);
 		addMouseMotionListener(adapter);
-		addKeyListener(new CustomKeyListener());
 		addListSelectionListener(new SelectionHandler());
-
+		/*
+		 * Limit the Cell selection to a single interval, and allow
+		 * selection of single cells, columns and rows.
+		 */
 		setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		setCellSelectionEnabled(true);
+		/*
+		 * Set the color defaults
+		 */
 		gridColor = DEFAULT_GRID_COLOR;
 		selectionBackground = DEFAULT_SELECTION_COLOR;
 		selectionForeground = DEFAULT_SELECTION_TEXT;
 		autoResizeMode = AUTO_RESIZE_OFF;
-
+		/*
+		 * Create the renderers for the column and row labels
+		 */
 		tableHeader.setDefaultRenderer(new HeaderNameRenderer(tableHeader .getDefaultRenderer()));
-		
-		columnModel.getColumn(0).setPreferredWidth(50);
+		columnModel.getColumn(0).setPreferredWidth(DEFAULT_COLUMN_WIDTH);
 		columnModel.getColumn(0).setCellRenderer(new RowNumberRenderer());
-	}
-	
-	/**
-	 * Listeners bound only to the selection model are not activated when
-	 * the selection changes vertically, thus we bind the ListSelectionListener
-	 * to the column model as well
-	 */
-	public void addListSelectionListener(ListSelectionListener listener) {
-		selectionModel.addListSelectionListener(listener);
-		columnModel.getSelectionModel().addListSelectionListener(listener);
-	}
-
-	@Override
-	public boolean editCellAt(int row, int column, EventObject e) {
-		if (!selectingRange) {
-			return super.editCellAt(row, column, e);
-		}
-		return false;
-	}
-
-	@Override
-	public TableCellEditor getCellEditor(int row, int column) {
-		currentEditor = new JTextField();
-		currentEditor.addActionListener(this);
-		registerKeyStrokes();
-		formuleBalk.setCurrentTable(table);
-		formuleBalk.setCurrentEditor(currentEditor);
-		return new CustomTableCellEditor();
 	}
 	
 	/**
@@ -143,21 +137,18 @@ public class STable extends JTable implements ActionListener {
 		int[] selectedColumns = getSelectedColumns();
 		int[] selectedRows = getSelectedRows();
 	
-		if (selectedColumns.length == 0 || selectedRows.length == 0
-				|| selectedColumns[0] == 0) {
+		if (selectedColumns.length == 0 || selectedRows.length == 0 ) {
 			return null;
 		}
 	
-		int colLeft = selectedColumns[0] - 1;
+		int colLeft = selectedColumns[0];
 		int rowUp = selectedRows[0];
-		int colRight = selectedColumns[selectedColumns.length - 1] - 1;
+		int colRight = selectedColumns[selectedColumns.length - 1];
 		int rowDown = selectedRows[selectedRows.length - 1];
 		
-		Range range = sheet.getRange(colLeft, rowUp, colRight, rowDown);
-
-		return range;
+		return sheet.getRange(colLeft, rowUp, colRight, rowDown);
 	}
-	
+
 	/**
 	 * @return the {@code Sheet} for this {@code STable}
 	 */
@@ -165,6 +156,91 @@ public class STable extends JTable implements ActionListener {
 		return sheet;
 	}
 
+	/**
+	 * <p>Because the default key handler was a bit too limited to prevent
+	 * a new Cell editor being opened on every key, we needed to prevent
+	 * the default behavior of the key handler.</p>
+	 * 
+	 * <p>This key handler makes an exception for key events where there is
+	 * no cell editor open and the key is a alphanumeric character. A new
+	 * cell editor will be opened and the character will be appended to the
+	 * input field.</p>
+	 * 
+	 * <p>For different key events, like the arrow keys, the key event 
+	 * is delegated to the super implementation for this method.</p>
+	 */
+	@Override
+	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,
+           int condition, boolean pressed) {
+		char keyChar = e.getKeyChar();
+		if ( keyChar == '\n' && isEditing() ) {
+			((CustomTableCellEditor) this.cellEditor).stopCellEditing(true);
+		} else if (  keyChar != '\n' && keyChar != KeyEvent.CHAR_UNDEFINED &&
+				this.hasFocus() && !isEditing() ) {
+			int leadRow = getSelectionModel().getLeadSelectionIndex();
+            int leadColumn = getColumnModel().getSelectionModel().
+                               getLeadSelectionIndex();
+            if (leadRow != -1 && leadColumn != -1 && !isEditing()) {
+                if (!editCellAt(leadRow, leadColumn, e)) {
+                    return false;
+                } else if ( currentEditor != null ) {
+                	currentEditor.setText(currentEditor.getText() + keyChar);
+                	currentEditor.requestFocus();
+                }
+            }
+		} else {
+			return super.processKeyBinding(ks, e, condition, pressed);
+		}
+		return true;
+	}
+	
+	/**
+	 * Listeners bound only to the selection model are not activated when
+	 * the selection changes vertically, thus we bind the ListSelectionListener
+	 * to the column model as well
+	 */
+	public void addListSelectionListener(ListSelectionListener listener) {
+		selectionModel.addListSelectionListener(listener);
+		columnModel.getSelectionModel().addListSelectionListener(listener);
+	}
+
+	/**
+	 * The getCellEditor function is called to create a new TableCellEditor.
+	 * In this function we prepare a new JTextField, with special events
+	 * bound to it. This is used to make selections and the relationship
+	 * with the formula bar in the GUI work with the current cell editor.
+	 */
+	@Override
+	public TableCellEditor getCellEditor(int row, int column) {
+		currentEditor = new JTextField();
+		registerKeyStrokes();
+		FormuleBalk formuleBalk = window.getFormuleBalk();
+		formuleBalk.setCurrentTable(STable.this);
+		formuleBalk.setCurrentEditor(currentEditor);
+		return new CustomTableCellEditor();
+	}
+	
+	public JTextField getOrCreateEditor() {
+		if ( isEditing() ) {
+			this.getCellEditor(this.getSelectedRow(), this.getSelectedColumn());
+		}
+		return currentEditor;
+	}
+	
+	@Override
+	public void onException(Exception e) {
+		window.onException(e);
+	}
+	
+	@Override
+	public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
+		super.changeSelection(rowIndex, columnIndex, toggle, extend);
+		Range range = window.getSelectedRange();
+		if ( range != null ) {
+			window.setStatusBar("Selected " + ( range.isSingleCell() ? "cell: " : "range: ") + window.getSelectedRange().toString());
+		}
+	}
+	
 	/**
 	 * Register the key strokes for creating ranges from the <code>CellEditor</code>
 	 */
@@ -187,14 +263,128 @@ public class STable extends JTable implements ActionListener {
 		currentEditor.getActionMap().put(EDITOR_LEFT, new SelectAction(-1, 0, false, false));
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		selectingRange = false;
-		editingStopped(null);
+	/**
+	 * A reference to the selected Range
+	 */
+	private Range selectedRange;
+	
+	/**
+	 * Update the value of the current <code>CellEditor</code> to match the
+	 * selected cells.
+	 */
+	private void updateCellEditor() {
+		if ( this.currentEditor == null ) {
+			return;
+		}
+		
+		Range range = getSelectedRange();
+		if ( range != null && range.equals(this.selectedRange) || range.getTopLeft().equals(sheet.new Position(this.editingColumn, this.editingRow))) {
+			return;
+		} else {
+			this.selectedRange = range;
+		}
+		
+		this.currentEditor.setText(new SelectionUpdater().insertOrReplace(range.toString()));
+	}
+	
+	/**
+	 * The Selection Updater is used to replace the existing range with a new selection
+	 * @author Jan-Willem Gmelig Meyling
+	 *
+	 */
+	private class SelectionUpdater {
+		
+		private final String value;
+		private final int currentIndex;
+		private final int length;
+		
+		private int start;
+		private int end;
+		
+		/**
+		 * The Selection Updater is used to replace the existing range with a new selection
+		 */
+		private SelectionUpdater() {
+			value = currentEditor.getText();
+			currentIndex = currentEditor.getSelectionEnd();
+			length = value.length();
+			start = seekStart();
+			end = seekEnd();
+		}
+		
+		/**
+		 * @return the most likely start index for the "selected" range
+		 */
+		private int seekStart() {
+			for ( int i = currentIndex - 1; i >= 0; i-- ) {
+				char c = value.charAt(i);
+				switch(c) {
+				case ',':
+				case ';':
+				case '(':
+				case '<':
+				case '>':
+				case '^':
+				case '|':
+				case '&':
+				case '=':
+				case '!':
+				case '~':
+				case '+':
+				case '-':
+				case '*':
+				case '/':
+				case '%':
+					return i + 1;
+				}
+			}
+			return 0;
+		}
+		
+		/**
+		 * @return the most likely end index for the "selected" range
+		 */
+		private int seekEnd() {
+			for ( int i = currentIndex; i < length; i++ ) {
+				char c = value.charAt(i);
+				switch(c) {
+				case ',':
+				case ';':
+				case ')':
+					return i;
+				}
+			}
+			return length;
+		}
+		
+		/**
+		 * @return true if the substring between the estimated begin and
+		 * end index represent a range or cell reference.
+		 */
+		private boolean match() {
+			return value.substring(start, end).matches("^((\\d+:\\d+)|([a-zA-Z]+:[a-zA-Z]+)|([a-zA-Z]+\\d+(:[a-zA-Z]+\\d+)?))$");
+		}
+		
+		/**
+		 * Replace the existing range, or append the new range to the end
+		 * @param string
+		 * @return updated String
+		 */
+		public String insertOrReplace(String string) {
+			if ( length == 0 || value.charAt(0) != '=') {
+				return value;
+			} else if ( match() ) {
+				return value.substring(0, start) + string + value.substring(end, length);
+			} else {
+				return value + string;
+			}
+		}
+		
 	}
 
 	/**
-	 * Action for the key strokes in the <code>CellEditor</code>
+	 * Action for the key strokes in the <code>CellEditor</code>. This is used for
+	 * selecting ranges while in editing mode.
 	 * @author Jan-Willem Gmelig Meyling
 	 */
 	private class SelectAction extends AbstractAction {
@@ -215,41 +405,24 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if ( currentEditor != null ) {
+				String text = currentEditor.getText();
+				if ( text != null && text.length() > 1 && text.charAt(0) != '=' ) {
+					STable.this.getCellEditor().stopCellEditing();
+				}
+			}
+			
 			int row = (y < 0) ? selectionModel.getMinSelectionIndex() + y
 					: selectionModel.getMaxSelectionIndex() + y;
+			
 			int col = (x < 0) ? columnModel.getSelectionModel()
 					.getMinSelectionIndex() + x : columnModel.getSelectionModel()
 					.getMaxSelectionIndex() + x;
-			table.changeSelection(row, col, toggle, extend);
+			
+			STable.this.changeSelection(row, col, toggle, extend);
 			updateCellEditor();
 		}
 		
-	}
-	
-	/**
-	 * Key listener that ensures that the new editor gets it's focus 
-	 * @author Jan-Willem Gmelig Meyling
-	 *
-	 */
-	private class CustomKeyListener implements KeyListener {
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-			if (isEditing()) {
-				currentEditor.requestFocus();
-			}
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-
-		}
-
 	}
 
 	/**
@@ -261,80 +434,34 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			if (!selectingRange) {
-				if (isEditing()) {
-					selectingRange = true;
-				} else {
-					return;
-				}
+			if (! isEditing()) {
+				return;
 			}
-
+			
 			Point p = e.getPoint();
-			int row = table.rowAtPoint(p);
-			int column = table.columnAtPoint(p);
+			int row = STable.this.rowAtPoint(p);
+			int column = STable.this.columnAtPoint(p);
 
-			table.changeSelection(row, column, false, false);
+			STable.this.changeSelection(row, column, false, false);
 			updateCellEditor();
 		}
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			if (!selectingRange) {
+			if (! isEditing()) {
 				return;
 			}
 
 			Point p = e.getPoint();
-			int row = table.rowAtPoint(p);
-			int column = table.columnAtPoint(p);
+			int row = STable.this.rowAtPoint(p);
+			int column = STable.this.columnAtPoint(p);
 
-			table.changeSelection(row, column, false, true);
+			STable.this.changeSelection(row, column, false, true);
 			updateCellEditor();
 		}
 
 	}
 	
-	/**
-	 * Update the value of the current <code>CellEditor</code> to match the
-	 * selected cells.
-	 */
-	private void updateCellEditor() {
-		if ( this.currentEditor == null ) {
-			return;
-		}
-		
-		Range range = getSelectedRange();
-		if ( range.equals(this.selectedRange) || range.firstCell().getPosition().equals(this.editingColumn - 1, this.editingRow)) {
-			return;
-		} else {
-			this.selectedRange = range;
-		}
-		
-		String value = currentEditor.getText();
-		int start = this.currentEditor.getSelectionStart();
-		int end = this.currentEditor.getSelectionEnd();
-		int length = value.length();
-
-		if (!(value.length() > 0 && value.charAt(0) == '=' && ((start < end) || (start < 2 || value
-				.charAt(start - 1) == '(')))) {
-			this.cellEditor.stopCellEditing();
-			return;
-		}
-
-		String head = value.substring(0, start);
-		String tail = value.substring(end, length);
-		String rangeStr = range.toString();
-		
-		if(value.length()== end || value.charAt(end+1)!=')'){
-			rangeStr+=")";
-		}
-		
-		value = head + rangeStr + tail;
-		
-		this.currentEditor.setText(value);
-		this.currentEditor.setSelectionStart(start);
-		this.currentEditor.setSelectionEnd(start + rangeStr.length());
-	}
-
 	/**
 	 * The custom TableCellEditor binds the <code>Sheet</code> class to this
 	 * current <code>STable</code> instance.
@@ -344,7 +471,6 @@ public class STable extends JTable implements ActionListener {
 	 * 
 	 */
 	private class CustomTableCellEditor extends DefaultCellEditor {
-		private Cell cell;
 
 		/**
 		 * Constructor for the CustomTableCellEditor. Creates a new table cell
@@ -358,8 +484,7 @@ public class STable extends JTable implements ActionListener {
 		@Override
 		public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
-			cell = sheet.getCellAt(column - 1, row);
-			Object input = cell.getInput();
+			String input = sheet.getInputAt(column, row);
 			currentEditor.setBorder(new LineBorder(Color.black));
 			return super.getTableCellEditorComponent(table, input, isSelected,
 					row, column);
@@ -370,12 +495,24 @@ public class STable extends JTable implements ActionListener {
 			return currentEditor.getText();
 		}
 		
+		private boolean maintainEditor() {
+			return currentEditor != null &&
+					currentEditor.getText().length() > 0 &&
+					currentEditor.getText().charAt(0) == '=';
+		}
+		
 		@Override
 		public boolean stopCellEditing() {
-			if ( ! selectingRange ) {
-				return super.stopCellEditing();
-			}
-			return false;
+			return maintainEditor() ? false : super.stopCellEditing();
+		}
+		
+		/**
+		 * Force close this editor
+		 * @param force
+		 * @return
+		 */
+		public boolean stopCellEditing(boolean force) {
+			return super.stopCellEditing();
 		}
 	}
 
@@ -390,6 +527,9 @@ public class STable extends JTable implements ActionListener {
 	private static class TableModel extends AbstractTableModel {
 
 		private final Sheet sheet;
+		
+		private static final int DEFAULT_COLUMN_COUNT = 26;
+		private static final int DEFAULT_ROW_COUNT = 200;
 
 		/**
 		 * Constructor for the TableModel, sets a sheet variable.
@@ -415,12 +555,12 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public int getRowCount() {
-			return sheet.getRowCount();
+			return DEFAULT_ROW_COUNT;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return sheet.getColumnCount() + 1;
+			return DEFAULT_COLUMN_COUNT + 1;
 		}
 
 		@Override
@@ -428,7 +568,7 @@ public class STable extends JTable implements ActionListener {
 			if (col == 0) {
 				return row + 1;
 			}
-			return sheet.getCellAt(col - 1, row).getValue();
+			return sheet.getValueAt(col - 1, row);
 		}
 
 		@Override
@@ -438,33 +578,40 @@ public class STable extends JTable implements ActionListener {
 
 		@Override
 		public void setValueAt(Object value, int row, int col) {
-			Cell cell = sheet.getCellAt(col - 1, row);
-			cell.setInput(value.toString());
-			cell.update(this);
+			sheet.setValueAt(value, col - 1, row);
 			fireTableCellUpdated(row, col);
 		}
 
 	}
 	
-	private class CustomCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer{
+	/**
+	 * A custom Cell Renderer for the table
+	 * @author Jan-Willem Gmelig Meyling
+	 * @author Liam Clark
+	 *
+	 */
+	private class CustomCellRenderer extends DefaultTableCellRenderer implements TableCellRenderer {
+		
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-			Cell cell = sheet.getCellAt(column - 1, row);
+			Cell cell = sheet.getCellAt(column, row);
 			Component component = super.getTableCellRendererComponent(table, value, false, false, row, column);
-			
-			Color color = cell.getbColor();
-			boolean hasBColor = color != null;
-			if (!hasBColor ) color = table.getBackground();
-			
+		
+			Color cellcolor = cell.getbColor();
 			if ( isSelected ) {
-				color = new Color( Math.abs(255 - color.getRed() + DEFAULT_SELECTION_COLOR.getRed()) % 256,
-								   Math.abs(255 - color.getGreen() + DEFAULT_SELECTION_COLOR.getGreen()) % 256,
-								   Math.abs(255 - color.getBlue() + DEFAULT_SELECTION_COLOR.getBlue()) % 256);
+				if ( cellcolor != null ) {
+					cellcolor = cellcolor.brighter();
+				} else {
+					cellcolor = DEFAULT_SELECTION_COLOR;
+				}
+			} else if ( cellcolor == null ) {
+				cellcolor = STable.this.getBackground();
 			}
 			
-			setBackground(color);
+			this.setBackground(cellcolor);
 			
-			alterFont(component, cell);
+			if ( cell != null)
+				alterFont(component, cell);
 			return component;
 		}
 		
@@ -547,7 +694,6 @@ public class STable extends JTable implements ActionListener {
 			return component;
 		}
 
-		// TODO @JanWillem: klopt dat eerste zinnetje hier wel? Er wordt toch niet per cel gecheckt, maar per kolom?
 		/**
 		 * Determine if a cell in the current column is selected
 		 * @param column
@@ -575,10 +721,8 @@ public class STable extends JTable implements ActionListener {
 			tableHeader.repaint();
 			if (!isEditing() && getSelectedRowCount() == 1
 					&& columnModel.getSelectedColumnCount() == 1) {
-				Cell selectedCell = sheet.getCellAt(
-						columnModel.getSelectedColumns()[0] - 1,
-						getSelectedRow());
-				formuleBalk.setText(selectedCell.getInput());
+				String input = sheet.getInputAt(getSelectedColumn(), getSelectedRow());
+				window.getFormuleBalk().setText(input);
 			}
 		}
 

@@ -3,28 +3,20 @@ package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.print.PrinterException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLStreamException;
-
-import org.xml.sax.SAXException;
 
 import File.Cell;
 import File.Sheet.Range;
-import File.SpreadSheetFile;
 
 /**
  * 
@@ -50,9 +42,6 @@ public class SToolbar extends JToolBar {
 	private final ToolBarToggleButton Bold;
 	private final ToolBarToggleButton Italic;
 	private final ToolBarToggleButton Underlined;
-	
-	private final JFileChooser fc = new JFileChooser();
-	//private final FileNameExtensionFilter filter = new FileNameExtensionFilter("xml");
 	
 	/**
 	 * Construct a new SToobar
@@ -82,6 +71,11 @@ public class SToolbar extends JToolBar {
 		
 	}
 	
+	/**
+	 * Create the selection listener, such that the toggles in the
+	 * toolbar are updated when the selection changes.
+	 * @param table
+	 */
 	public void createSelectionListener(STable table) {
 		table.addListSelectionListener(new ListSelectionListener() {
 
@@ -92,9 +86,11 @@ public class SToolbar extends JToolBar {
 				
 				if ( selection != null ) {
 					Cell first = selection.firstCell();
-					bold = first.isBold();
-					italic = first.isItalic();
-					underlined = first.isUnderlined();
+					if ( first != null ) {
+						bold = first.isBold();
+						italic = first.isItalic();
+						underlined = first.isUnderlined();
+					}
 				}
 
 				Bold.setSelected(bold);
@@ -117,22 +113,28 @@ public class SToolbar extends JToolBar {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		window.FileOpen();	    
+			window.FileOpen();
 		}
+		
 	};
 
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			window.FileSave();
 		}
+		
 	};
 
 	private AbstractAction filePrint = new AbstractAction(null, icoPrint) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String st = "File>Print";
-			JOptionPane.showMessageDialog(null, st);
+			try {
+				window.getCurrentTable().print();
+			} catch (PrinterException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+			}
 		}
 	};
 
@@ -149,9 +151,6 @@ public class SToolbar extends JToolBar {
 			}
 			
 			window.updateTable();
-			
-//			String st = "Bold";
-//			JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
@@ -168,9 +167,6 @@ public class SToolbar extends JToolBar {
 			}
 			
 			window.updateTable();
-			
-			//String st = "Italic";
-			//JOptionPane.showMessageDialog(null, st);
 		}
 	};
 
@@ -209,28 +205,21 @@ public class SToolbar extends JToolBar {
 		}
 	};
 	
-	private AbstractAction insertFunction = new AbstractAction(null, icoFunction) {
-		@SuppressWarnings("deprecation")
+	AbstractAction insertFunction = new AbstractAction(null, icoFunction) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//TODO toon Insert Function dialog!
-			new SFormulePicker( window ).show();
+			new SFormulePicker(window);
 		}
 	};
 	
 	
 	
 	public class ToolBarButton extends JButton {
+		
 		public ToolBarButton(Action action) {
 			super(action);
 		}
-
-		/*
-		@Deprecated
-		public ToolBarButton(String string) {
-			super(string);
-		}
-		*/
 
 		@Override
 		public Dimension getMaximumSize() {

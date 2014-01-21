@@ -1,30 +1,18 @@
 package GUI;
 
 import java.awt.Color;
-import java.awt.Frame;
+
 import javax.swing.JLabel;
+import javax.swing.border.BevelBorder;
 
 @SuppressWarnings("serial")
 public class SStatusBar extends JLabel {
 	
-	@SuppressWarnings("unused")
-	private static Frame window;
-	
-	private int statusbarHeight = 25;
-	
-	public SStatusBar(Frame parent) {
-		super("Dit is de status bar");
-		window = parent;
-		//this.setBorder(new Border());
+	public SStatusBar() {
+		super("Sandwich Spreadsheet");
+		this.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.GRAY));
 		this.setBackground(new Color(100, 100, 200));
 		this.setVisible(true);
 	}
 	
-	public int getStatusbarHeight() {
-		return statusbarHeight;
-	}
-	
-	public void setToolbarHeight(int statusbarHeightIn) {
-		this.statusbarHeight = statusbarHeightIn;
-	}
 }

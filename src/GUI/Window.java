@@ -14,44 +14,49 @@ import java.io.IOException;
 import File.Cell;
 import File.Sheet;
 import File.Sheet.Range;
-import File.SpreadSheetFile;
+import File.Workbook;
+import Interfaces.ExceptionListener;
 
 /**
  * The Window class
  */
 @SuppressWarnings("serial")
-public class Window extends JFrame {
+public class Window extends JFrame implements ExceptionListener {
 	
-	private SToolbar tbMain;
-	private FormuleBalk formule;
-	private JTabbedPane tabbedPane;
-	private SStatusBar statusBar;
-	private SpreadSheetFile newFile;
+	private final SToolbar tbMain;
+	private final FormuleBalk formule;
+	private final JTabbedPane tabbedPane;
+	private final SStatusBar statusBar;
+	private final Workbook newFile;
+	
+	private static final int DEFAULT_WIDTH = 800;
+	private static final int DEFAULT_HEIGHT = 450;
+	private static final Color DEFAULT_BACKGROUND = new Color(240,240,240);
 	
 	/**
 	 * Consturctor for the GUI
 	 */
 	public Window() {
-		this(new SpreadSheetFile(new Sheet()));
+		this(new Workbook(new Sheet()));
 	}
 	
 	/**
 	 * Constructor for the GUI.
-	 * @param title is the title of the window.
+	 * @param spreadsheet
 	 * @throws HeadlessException
 	 */
-	public Window(SpreadSheetFile spreadsheet) throws HeadlessException {
+	public Window(Workbook spreadsheet) throws HeadlessException {
 		super("Sandwich Spreadsheet - " + spreadsheet.getName());
 		newFile = spreadsheet;
 		
-		setSize(800, 450);
+		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		
 		tbMain = new SToolbar(this);
 		tabbedPane = new JTabbedPane();
-		statusBar = new SStatusBar(this);
+		statusBar = new SStatusBar();
 		formule = new FormuleBalk();
 		SMenuBar smenubar = new SMenuBar(this);
 		setJMenuBar(smenubar);
@@ -68,22 +73,37 @@ public class Window extends JFrame {
 		paintSheets();
 	}
 	
+	/**
+	 * @return the {@code Sheet} instance in the active {@code JTabbledPane} tab
+	 */
 	public Sheet getCurrentSheet() {
 		return newFile.getSheet(tabbedPane.getSelectedIndex());
 	}
 	
-	public SpreadSheetFile getCurrentSpreadSheetFile(){
+	/**
+	 * @return the {@code Workbook} associated with this {@code Window}
+	 */
+	public Workbook getCurrentSpreadSheetFile(){
 		return newFile;
 	}
 	
+	/**
+	 * @return the {@code STable} instance in the active {@code JTabbledPane} tab
+	 */
 	public STable getCurrentTable() {
 		return getCurrentSheet().getSTable();
 	}
 	
+	/**
+	 * Update the active table
+	 */
 	public void updateTable() {
 		getCurrentTable().updateUI();
 	}
 	
+	/**
+	 * @return a new {@code Sheet} in this {@code Workbook}
+	 */
 	public Sheet createSheet() {
 		return newFile.createSheet();
 	}
@@ -120,9 +140,13 @@ public class Window extends JFrame {
 	 * Construct (paint) all tabs for the sheets in the current Workbook
 	 */
 	private void paintSheets() {
-		for(Sheet sheet: newFile.getSheets()){
+		for(Sheet sheet : newFile.getSheets()){
 			paintSheet(sheet);
 		}
+	}
+	
+	public FormuleBalk getFormuleBalk() {
+		return formule;
 	}
 	
 	/**
@@ -130,11 +154,14 @@ public class Window extends JFrame {
 	 * @param sheet
 	 */
 	public void paintSheet(Sheet sheet) {
-		STable table = new STable(sheet, formule);
+		STable table = new STable(sheet, this);
 		
 		Box box = Box.createVerticalBox();
 		box.add(table.getTableHeader());
-		box.add(new JScrollPane(table));
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBackground(DEFAULT_BACKGROUND);
+		new FixedColumnTable(1, scrollPane);
+		box.add(scrollPane);
 		
 		tabbedPane.addTab(sheet.getSheetName(), box);
 		tbMain.createSelectionListener(table);
@@ -172,20 +199,29 @@ public class Window extends JFrame {
 	}
 	
 	/**
+	 * Set the contents for the statusbar
+	 * @param text
+	 */
+	public void setStatusBar(String text) {
+		statusBar.setText(text);
+	}
+	
+	@Override
+	public void onException(Exception e) {
+		setStatusBar(e.getMessage() == null ? "Unknown exception occured: " + e.toString() : e.getMessage());
+	}
+
+	/**
 	 * @return the {@code JTextField} for the current editor,
 	 * or null if none exists
 	 */
 	public JTextField getCurrentEditor(){
 		return (JTextField) getCurrentTable().getEditorComponent();
-	}	
+	}
 	
 	/**
-	 * Open a new Window
-	 * @param args
+	 * Open a file in a new Window
 	 */
-	public static void main(String[] args) {
-		new Window();
-	}
 	public void FileOpen(){
 		// Open een dialog
 		//fc.setFileFilter(filter);
@@ -198,7 +234,7 @@ public class Window extends JFrame {
 			
 			try {
 				// Nieuwe sheetfile aanmaken vanuit de XML
-				new Window(new SpreadSheetFile(file));
+				new Window(new Workbook(file));
 				
 			} catch (ParserConfigurationException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -212,24 +248,28 @@ public class Window extends JFrame {
 			}
 	    }	    
 	}
+
+	/**
+	 * Save the file in this Window
+	 */
 	public void FileSave(){
 		JFileChooser fc = new JFileChooser();
-		SpreadSheetFile sheetfile = this.getCurrentSpreadSheetFile();
-    	File file = sheetfile.getFile();
-    	
-    	if ( file == null ) {
+		Workbook workbook = this.getCurrentSpreadSheetFile();
+		File file = workbook.getFile();
+		
+		if ( file == null ) {
 			int returnVal = fc.showSaveDialog(this);
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
 				file = fc.getSelectedFile();
 		    }
-    	}
-    	
-    	if ( file == null ) {
-    		return;
-    	}
-    	
-    	try {
-			sheetfile.write(file);
+		}
+		
+		if ( file == null ) {
+			return;
+		}
+		
+		try {
+			workbook.write(file);
 		} catch (XMLStreamException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 			e1.printStackTrace();
@@ -240,6 +280,14 @@ public class Window extends JFrame {
 			JOptionPane.showMessageDialog(null, e1.getMessage());
 			e1.printStackTrace();
 		}
+	}
+
+	/**
+	 * Open a new Window
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new Window();
 	}
 
 }

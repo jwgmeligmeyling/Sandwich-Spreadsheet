@@ -71,18 +71,18 @@ public class SMenuBar extends JMenuBar {
 		JCheckBox jcbShowStatusBar = new JCheckBox("Show Status Bar");
 		jcbShowStatusBar.setSelected(window.getStatusBar().isVisible());
 		jcbShowStatusBar.setAction(ViewShowStatusBar_Click);
+		
 		menu.add(jcbShowStatusBar);
 		
 		ButtonGroup jbgTabsTopBottom = new ButtonGroup();
 		JRadioButton jrbTabsTop = new JRadioButton("Tabs on top");
+		jbgTabsTopBottom.add(jrbTabsTop);
 		JRadioButton jrbTabsBottom = new JRadioButton("Tabs on bottom", true);
+		jbgTabsTopBottom.add(jrbTabsBottom);
 		
 		jrbTabsTop.setAction(ViewTabsTop_Click);
 		jrbTabsBottom.setAction(ViewTabsBottom_Click);
 		
-		jbgTabsTopBottom.add(jrbTabsTop);
-		jbgTabsTopBottom.add(jrbTabsBottom);
-
 		menu.add(jrbTabsTop);
 		menu.add(jrbTabsBottom);
 		
@@ -99,10 +99,10 @@ public class SMenuBar extends JMenuBar {
 	}
 	
 	private void createHelpMenu() {
-		JMenu menu = new JMenu("Help");
-		menu.setMnemonic(Mnemonic.HELP.value);
-		menu.add(new MenuItem("Help", Mnemonic.GET_HELP));
-		menu.add(new MenuItem("About", Mnemonic.ABOUT));
+		JMenu menu = new JMenu("About");
+		menu.setMnemonic(Mnemonic.ABOUT.value);
+		//menu.add(new MenuItem("Help", Mnemonic.GET_HELP));
+		menu.add(new MenuItem("Info", Mnemonic.INFO));
 		this.add(menu);
 	}
 	
@@ -111,8 +111,6 @@ public class SMenuBar extends JMenuBar {
 		@SuppressWarnings("deprecation")
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			// insert logic here
 			new SFormulePicker( window ).show();
 		}
 		
@@ -238,11 +236,9 @@ public class SMenuBar extends JMenuBar {
 	private AbstractAction InsertWorksheet_Click = new AbstractAction("Create new Sheet") {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 			Sheet sheet = window.createSheet();
 			window.paintSheet(sheet);
 			window.goToSheet(sheet);
-			
 		}
 	};
 	
@@ -251,7 +247,7 @@ public class SMenuBar extends JMenuBar {
 		EDIT('e'), UNDO('z'), REDO('y'), CUT('x'), COPY('c'), PASTE('v'),
 		VIEW('v'), ZOOM('z'), STATUS_BAR('s'),
 		INSERT('i'), INSERT_FUNCTION('F'), CREATE_GRAPH('g'), CREATE_SHEET('s'),
-		HELP('h'), GET_HELP('h'), ABOUT('a');
+		ABOUT('a'), GET_HELP('h'), INFO('i');
 		
 		private final char value;
 		

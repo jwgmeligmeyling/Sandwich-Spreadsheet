@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import File.Cell;
 import File.Sheet;
+import File.Sheet.Position;
 import File.Sheet.Range;
 
 /**
@@ -130,7 +131,7 @@ public class Parser {
 	public Parser(Cell cell) {
 		this.cell = cell;
 		this.sheet = cell.getSheet();
-		input = cell.getInput().replaceAll("\\s+", "");
+		input = cell.getInput();
 		length = input.length();
 		value = preparse();
 	}
@@ -216,16 +217,22 @@ public class Parser {
 					break;
 				}
 				
-				Object reference = getReference();
+				Object reference = getRange();
 				if ( reference != null ) {
 					if ( reference instanceof Range ) {
 						if ( cell != null )
-							cell.listen( (Range) reference);
+							cell.listen(reference);
 						values.push(reference);
-					} else if ( reference instanceof Cell ) {
+					} else if ( reference instanceof Position ) {
+						Cell other = sheet.getCellAt((Position) reference);
+						
+						if ( other == null ) {
+							other = new Cell(sheet, (Position) reference, "");
+						}
+						
 						if ( cell != null )
-							cell.listen( (Cell) reference);
-						values.push(((Cell) reference).getValue());
+							cell.listen(other);
+						values.push(other.getValue());
 					}
 					break;
 				}
@@ -572,29 +579,24 @@ public class Parser {
 	 * @throws IllegalArgumentException
 	 *             When the input of the reference is malformed.
 	 */
-	private Object getReference() {
+	private Object getRange() {
 		/*
 		 * Current implementation only supports Cells (A1) or Ranges (A1:B2)
 		 * TODO Support for rows and columns (?)
 		 */
 		peekIndex = index;
-		Cell a = getCell();
+		Position a = getReference();
 		if (a != null) {
 			if (peek() == ':') {
 				peekIndex++;
-				Cell b = getCell();
+				Position b = getReference();
 				if (b != null) {
 					index = peekIndex -1;
-					Range range = sheet.getRange(a,b);
-					if ( cell != null && range.contains(cell) )
-						throw new IllegalArgumentException("Cross reference!");
-					return sheet.getRange(a, b);
+					Range range = sheet.new Range(a,b);
+					return range;
 				} else {
-					throw new IllegalArgumentException(
-							"Expected a column reference after :");
+					throw new IllegalArgumentException("Expected a column reference after ':'");
 				}
-			} else if (cell != null && a.equals(cell) ) {
-				throw new IllegalArgumentException("Cross reference!");
 			} else {
 				index = peekIndex -1;
 				return a;
@@ -604,19 +606,23 @@ public class Parser {
 	}
 
 	/**
-	 * Method to peek for a <code>Cell</code> at current index. A cell is
+	 * Method to peek for a <code>Position</code> at current index. A cell is
 	 * expected to be in the format "A1"
 	 * 
 	 * @return <code>Cell</code> in the current <code>Sheet</code>, or
 	 *         <code>null</code> if no <code>Cell</code> was found either in the
 	 *         input String or the <code>Sheet</code>.
 	 */
-	private Cell getCell() {
+	private Position getReference() {
 		int colIndex = getColIndex();
 		if (colIndex != -1) {
 			int rowIndex = getRowIndex();
 			if (rowIndex != -1) {
-				return sheet.getCellAt(colIndex, rowIndex);
+				Position position = sheet.new Position(colIndex, rowIndex);
+				if ( cell != null && position.equals(cell.getPosition())) {
+					throw new IllegalArgumentException("Cross reference for " + position.toString());
+				}
+				return position;
 			}
 		}
 		return null;

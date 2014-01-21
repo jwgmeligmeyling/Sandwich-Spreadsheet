@@ -74,15 +74,10 @@ public class SColorPicker extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == jbnCancel) {
-			// JOptionPane.showMessageDialog(this, "Pressed Cancel");
-
 			dispose();
 		}
 
 		if (e.getSource() == jbnOk) {
-			// JOptionPane.showMessageDialog(this,
-			// "Pressed OK. Selected color: " +
-			// colorPicker.getColor().toString());
 			Range range = window.getSelectedRange();
 			Cell[] selectedCells = range == null ? new Cell[0] : range
 					.getCellArray();
