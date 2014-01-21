@@ -212,14 +212,6 @@ public class Window extends JFrame implements ExceptionListener {
 	}
 
 	/**
-	 * @return the {@code JTextField} for the current editor,
-	 * or null if none exists
-	 */
-	public JTextField getCurrentEditor(){
-		return (JTextField) getCurrentTable().getEditorComponent();
-	}
-	
-	/**
 	 * Open a file in a new Window
 	 */
 	public void FileOpen(){

@@ -2,10 +2,11 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,7 +23,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import File.Cell;
 import Parser.Function;
 
 @SuppressWarnings("serial")
@@ -33,6 +33,9 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 	private final JList lijst;
 	private final Window window;
 	private JLabel description;
+	
+	private final static int DEFAULT_WINDOW_WIDTH = 450;
+	private final static int DEFAULT_WINDOW_HEIGHT = 200;
 
 	/**
 	 * Constructor for the SFormulePicker
@@ -42,15 +45,21 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 	public SFormulePicker(Window window) {
 		super(window, "Formules", true);
 		this.window = window;
-		setSize(450, 200);
+		setSize(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
 		lijst = new JList(getSortedFunctions());
 
 		lijst.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		lijst.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		JScrollPane listScroller = new JScrollPane(lijst);
-		listScroller.setPreferredSize(new Dimension(300, 300));
 		lijst.setVisibleRowCount(-1);
 		lijst.addListSelectionListener(this);
+		lijst.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent evt) {
+		        if (evt.getClickCount() == 2) {
+		            actionPerformed(null);
+		        }
+		    }
+		});
 		
 		Container container = getContentPane();
 		container.setLayout(new BorderLayout());
@@ -75,7 +84,6 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 		container.add(listScroller, BorderLayout.CENTER);
 		container.add(bot, BorderLayout.PAGE_END);
 		setVisible(true);
-		
 	}
 	
 	@Override
@@ -88,31 +96,24 @@ public class SFormulePicker extends JDialog implements ActionListener, ListSelec
 	public void actionPerformed(ActionEvent arg0) {
 		Object object = lijst.getSelectedValue();
 		if (object != null) {
-			Function functie = (Function) object;
-			JTextField veld = window.getCurrentEditor();
-			
-			if (veld != null) {
-				String currentInput = veld.getText();
-				if (currentInput.length() == 0 || currentInput.charAt(0) != '=') {
-					currentInput = "=" + currentInput;
-				}
-				veld.setText(currentInput + functie.toString() + "()");
-			}
-			
-			Cell selected = window.getSelectedCell();
-			
-			
-			if(selected!= null){
-				String currentInput= selected.getInput();
-				
-				if (currentInput.length() == 0 || currentInput.charAt(0) != '=') {
-					currentInput = "=" + currentInput;
-				}
-				
-				selected.setInput(currentInput+functie.toString()+"()");
-			}
-			
 			dispose();
+			
+			Function functie = (Function) object;
+			STable table = window.getCurrentTable();
+			table.editCellAt(table.getSelectedRow(), table.getSelectedColumn());
+			JTextField veld = (JTextField) table.getEditorComponent();
+			
+			if ( table.isEditing() && veld != null ) {
+				String input = veld.getText();
+				String head = input.substring(0, veld.getSelectionStart());
+				head = (( input.length() == 0 ) ? "=" + head : head ) + functie.toString() + "(";
+				String tail = ")" + input.substring(veld.getSelectionEnd(), input.length());
+			
+				veld.setText(head + tail);
+				veld.setSelectionStart(head.length());
+				veld.setSelectionEnd(head.length());
+				veld.requestFocus();
+			}
 		}
 	}
 	

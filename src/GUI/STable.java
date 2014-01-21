@@ -220,13 +220,6 @@ public class STable extends JTable implements ExceptionListener {
 		return new CustomTableCellEditor();
 	}
 	
-	public JTextField getOrCreateEditor() {
-		if ( isEditing() ) {
-			this.getCellEditor(this.getSelectedRow(), this.getSelectedColumn());
-		}
-		return currentEditor;
-	}
-	
 	@Override
 	public void onException(Exception e) {
 		window.onException(e);
