@@ -51,7 +51,7 @@ public class TestSpreadsheetFile {
 		sheets.write(new File("xml/output.xml"));
 		BufferedReader reader = new BufferedReader(new FileReader("xml/output.xml"));
 		String one = reader.readLine();
-		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
+		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
 		assertEquals(one, two);
 	}
 	
@@ -141,7 +141,7 @@ public class TestSpreadsheetFile {
 		
 		BufferedReader reader = new BufferedReader(new FileReader("xml/Test XML bestanden (Niet aankomen)/test4.xml"));
 		String one = reader.readLine();
-		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"4\" type=\"TEXT\" underlined=\"true\">Lekker underlined</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\" bold=\"true\">Lekker bold</CELL><CELL row=\"2\" column=\"3\" type=\"TEXT\" italic=\"true\">Lekker italic</CELL><CELL row=\"2\" column=\"1\" type=\"TEXT\" fcolor=\"-65536\" bcolor=\"-16776961\">BC blue en FC red</CELL></SPREADSHEET></WORKBOOK>";
+		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\" bold=\"true\">Lekker bold</CELL><CELL row=\"2\" column=\"3\" type=\"TEXT\" italic=\"true\">Lekker italic</CELL><CELL row=\"2\" column=\"4\" type=\"TEXT\" underlined=\"true\">Lekker underlined</CELL><CELL row=\"2\" column=\"1\" type=\"TEXT\" fcolor=\"-65536\" bcolor=\"-16776961\">BC blue en FC red</CELL></SPREADSHEET></WORKBOOK>";
 		
 		assertEquals(one,two);
 		
