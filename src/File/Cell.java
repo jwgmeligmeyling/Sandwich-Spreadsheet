@@ -2,7 +2,7 @@ package File;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 import java.util.Vector;
 
 import javax.xml.stream.XMLStreamException;
@@ -79,7 +79,6 @@ public class Cell implements Interfaces.Cell {
 			Cell cell = (Cell) other;
 			if ( ! this.references.contains(cell) ) {
 				cell.listeners.add(this);
-				cell.update(this);
 				this.references.add(cell);
 			}
 		} else if ( other instanceof Range ) {
@@ -91,74 +90,6 @@ public class Cell implements Interfaces.Cell {
 	}
 	
 	/**
-	 * Reparse this cell if changed, and recursively update listeners. This method
-	 * is called from the {@code Sheet}'s Initialize function, which requires all
-	 * Cells to be calculated in the right order.
-	 */
-	void update() {
-		update(this);
-	}
-	
-	/**
-	 * Reparse this cell if changed, and recursively update listeners
-	 */
-	private void update(Cell cross) {
-		// Is the value changed, or did the user just open the editor?
-		if ( changed ) {
-			try {
-				// Parse the value
-				value = Parser.parse(this);
-				checkConflicts();
-			} catch ( Exception e ) {
-				value = "#VALUE";
-				// Clear the listeners for the current cell that caused
-				// the problem, the cell input needs to be updated anyways
-				if ( cross == this )
-					this.clear();
-				// Delegate the exception to the sheet
-				if ( e != null && sheet != null ) 
-					sheet.onException(e);
-			} finally {
-				changed = false;
-				// Update the listeners recursively
-				for ( Cell listener : listeners ) {
-					// We already updated the current cell. Thats why an
-					// exception is thrown before
-					if ( listener == cross ) {
-						continue;
-					}
-					// Update the cell that is dependent on this cell
-					listener.changed = true;
-					listener.update(cross);
-				}
-			}
-		}
-	}
-	
-	private void checkConflicts() {
-		List<Object> rlisteners = new ArrayList<Object>(references);
-		
-		for ( int i = 0; i < rlisteners.size(); i++ ) {
-			Object listener = rlisteners.get(i);
-			if ( listener.equals(this) ) {
-				throw new IllegalArgumentException("Crossreference for cell " + position.toString());
-			} else if ( listener instanceof Cell ) {
-				for ( Object sublistener : ((Cell) listener).references ) {
-					if (! rlisteners.contains(sublistener)) {
-						rlisteners.add(sublistener);
-					}
-				}
-			} else if ( listener instanceof Range ) {
-				for ( Object rangecell : ((Range) listener).getCellArray() ) {
-					if ( ! rlisteners.contains(rangecell) ) {
-						rlisteners.add(rangecell);
-					}
-				}
-			}
-		}
-	}
-
-	/**
 	 * Clear all references, for instance when we set the input of this cell
 	 */
 	private void clear() {
@@ -168,6 +99,111 @@ public class Cell implements Interfaces.Cell {
 		references.clear();
 	}
 
+	/**
+	 * Parse this cell and it's relatives if the value has changed
+	 */
+	void update() {
+		if (!changed) {
+			return;
+		}
+		try {
+			update(new Stack<Cell>(), new Stack<Cell>());
+		} catch ( Exception e) {
+			// Delegate the exception to the sheet
+			if ( e != null && sheet != null ) 
+				sheet.onException(e);
+		}
+	}
+	
+	public static final String EXCEPTION = "#VALUE";
+	
+	/**
+	 * An {@code Exception} for cross references
+	 * @author Jan-Willem Gmelig Meyling
+	 *
+	 */
+	public static class CrossReference extends RuntimeException {
+	
+		private static final long serialVersionUID = 1L;
+	
+		/**
+		 * Construct a new {@code CrossReference} exception
+		 * @param a first {@code Cell} 
+		 * @param b last {@code Cell}
+		 */
+		private CrossReference(Cell a, Cell b) {
+			super("Crossreference between " + a.getPositionString() + " and " + b.getPositionString());
+		}
+	}
+
+	/**
+	 * - Preparese the input for this cell to fetch the references,
+	 *   the result might be incorrect.
+	 * - Update these references recursively, and check for cross
+	 *   references the current tree (this > reference > reference).
+	 *   If a cross reference conflict occurs, set the values for this
+	 *   tree and relations to "#VALUE"
+	 * - Update the listeners recursively, if a cross reference conflict
+	 *   occurs, set the values for this tree and relations to "#VALUE"
+	 *   
+	 * @param tree Path from origin to the current cell to check cross
+	 *   	references against
+	 * @param calculated Cells calculated in this update to prevent
+	 *   	infinite updating of listeners
+	 * @throws Exception 
+	 */
+	private void update(Stack<Cell> tree, Vector<Cell> calculated) throws Exception {
+		tree.add(this);
+		calculated.add(this);
+		try {
+			// Prepare the cell to fetch the references
+			Parser.parse(this);
+		} catch ( Exception e ) {}
+		try {
+			for ( Cell reference : references ) {
+				// If the tree contains this reference, we have a cross reference
+				if ( tree.contains(reference)) {
+					throw new CrossReference(reference, this);
+				} else {
+					// Check if this reference conflicts with the tree
+					reference.update(tree, calculated);
+				}
+			}
+			// If no Crss reference is thrown, calculate the value for this cell
+			this.value = Parser.parse(this);
+		} catch ( Exception e ) {
+			this.value = EXCEPTION;
+			// Delegate the method to the parent call
+			throw e;
+		} finally {
+			// Update the listeners for this cell
+			ArrayList<Cell> cells = new ArrayList<Cell>(listeners);
+			for ( int i = 0; i < cells.size(); i++ ) {
+				Cell cell = cells.get(i);
+				// If the tree contains the cell, it is not required
+				// to update the value agan.
+				if (calculated.contains(cell))
+					continue;
+				try {
+					// Update the cell
+					cell.update(new Stack<Cell>(), calculated);
+				} catch (Exception e ){
+					// This exception was already there before
+					// adjusting the other cell, so there is no
+					// reason to delegate it here.
+				};
+				// Append new unique listeners recursively
+				for ( Cell listener : cell.listeners ) {
+					if (!cells.contains(listener)) {
+						cells.add(listener);
+					}
+				}
+			}
+			// Pop the value from the tree
+			tree.pop();
+		}
+	}
+	
 	@Override
 	public String getInput() {
 		if ( input != null ) {

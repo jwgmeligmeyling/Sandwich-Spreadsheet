@@ -404,7 +404,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 
 	@Override
 	public void init() {
-		for (Cell cell : cells.values()) {
+		for ( Cell cell : cells.values() ) {
 			cell.update();
 		}
 	}
