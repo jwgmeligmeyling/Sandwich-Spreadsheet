@@ -2,6 +2,7 @@ package Tests;
 
 import static org.junit.Assert.*;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -89,5 +90,62 @@ public class TestSpreadsheetFile {
 		assertEquals(file,file2);
 		
 	}
-
+	
+	@Test
+	public void TestReadAttributes() throws SAXException, ParserConfigurationException, IOException{
+		Workbook sheets = new Workbook(new File("xml/Test XML bestanden (Niet aankomen)/test3.xml"));
+		Sheet sheet = sheets.getSheet(0);
+		
+		Sheet csheet = new Sheet();
+		
+		csheet.createCell("BC blue en FC red",1,2);
+		csheet.getCellAt(1,2).setbColor(new Color(-16776961));
+		csheet.getCellAt(1,2).setfColor(new Color(-65536));
+		
+		csheet.createCell("Lekker bold",2,2);
+		csheet.getCellAt(2,2).setBold(true);
+		
+		csheet.createCell("Lekker italic",3,2);
+		csheet.getCellAt(3,2).setItalic(true);
+		
+		csheet.createCell("Lekker underlined", 4,2);
+		csheet.getCellAt(4,2).setUnderlined(true);
+		
+		Workbook csheets = new Workbook();
+		csheets.addSheet(csheet);
+		
+		assertEquals(sheets,csheets);
+	}
+	
+	@Test
+	public void testWriteAttributes() throws ParserConfigurationException, SAXException, IOException, XMLStreamException, FactoryConfigurationError{
+		Sheet csheet = new Sheet();
+		
+		csheet.createCell("BC blue en FC red",1,2);
+		csheet.getCellAt(1,2).setbColor(new Color(-16776961));
+		csheet.getCellAt(1,2).setfColor(new Color(-65536));
+		
+		csheet.createCell("Lekker bold",2,2);
+		csheet.getCellAt(2,2).setBold(true);
+		
+		csheet.createCell("Lekker italic",3,2);
+		csheet.getCellAt(3,2).setItalic(true);
+		
+		csheet.createCell("Lekker underlined", 4,2);
+		csheet.getCellAt(4,2).setUnderlined(true);
+		
+		Workbook csheets = new Workbook();
+		csheets.addSheet(csheet);
+		
+		csheets.write(new File("xml/Test XML bestanden (Niet aankomen)/test4.xml"));
+		
+		BufferedReader reader = new BufferedReader(new FileReader("xml/Test XML bestanden (Niet aankomen)/test4.xml"));
+		String one = reader.readLine();
+		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"4\" type=\"TEXT\" underlined=\"true\">Lekker underlined</CELL><CELL row=\"2\" column=\"2\" type=\"TEXT\" bold=\"true\">Lekker bold</CELL><CELL row=\"2\" column=\"3\" type=\"TEXT\" italic=\"true\">Lekker italic</CELL><CELL row=\"2\" column=\"1\" type=\"TEXT\" fcolor=\"-65536\" bcolor=\"-16776961\">BC blue en FC red</CELL></SPREADSHEET></WORKBOOK>";
+		
+		assertEquals(one,two);
+		
+		reader.close();
+	}
+	
 }

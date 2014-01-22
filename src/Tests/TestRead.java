@@ -2,6 +2,7 @@ package Tests;
 
 import static org.junit.Assert.*;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
@@ -76,6 +77,31 @@ public class TestRead {
 		Cell[] lijst2 = csheet.getRange(2,2,1,3).getCellArray();
 		
 		assertArrayEquals(lijst2, lijst);
+	}
+	
+	@Test
+	public void TestReadAttributes() throws SAXException, ParserConfigurationException, IOException{
+		Workbook sheets = new Workbook(new File("xml/Test XML bestanden (Niet aankomen)/test3.xml"));
+		Sheet sheet = sheets.getSheet(0);
+		
+		Sheet csheet = new Sheet();
+		
+		csheet.createCell("BC blue en FC red",1,2);
+		csheet.getCellAt(1,2).setbColor(new Color(-16776961));
+		csheet.getCellAt(1,2).setfColor(new Color(-65536));
+		
+		csheet.createCell("Lekker bold",2,2);
+		csheet.getCellAt(2,2).setBold(true);
+		
+		csheet.createCell("Lekker italic",3,2);
+		csheet.getCellAt(3,2).setItalic(true);
+		
+		csheet.createCell("Lekker underlined", 4,2);
+		csheet.getCellAt(4,2).setUnderlined(true);
+		
+		
+		
+		
 	}
 	
 }
