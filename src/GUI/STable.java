@@ -74,7 +74,7 @@ public class STable extends JTable implements ExceptionListener {
 	/**
 	 * Constructor for the table
 	 * @param sheet
-	 * @param formule
+	 * @param window
 	 */
 	public STable(Sheet sheet, Window window) {
 		/*
@@ -502,7 +502,7 @@ public class STable extends JTable implements ExceptionListener {
 		/**
 		 * Force close this editor
 		 * @param force
-		 * @return
+		 * @return boolean
 		 */
 		public boolean stopCellEditing(boolean force) {
 			return super.stopCellEditing();
@@ -512,10 +512,8 @@ public class STable extends JTable implements ExceptionListener {
 	/**
 	 * The custom TableCellEditor binds the <code>Sheet</code> class to this
 	 * current <code>STable</code> instance.
-	 * 
 	 * @author Jan-Willem Gmelig Meyling
 	 * @author Liam Clark
-	 * 
 	 */
 	private static class TableModel extends AbstractTableModel {
 

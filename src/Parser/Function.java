@@ -68,7 +68,7 @@ public enum Function {
 			for (Object value : values ) {
 				try {
 					output += doubleValueOf(value);
-				} catch ( NumberFormatException e ) {
+				} catch (NumberFormatException e) {
 					// Ignore not parsable Strings
 				}
 			}
@@ -1224,7 +1224,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>Tthe natural logarithm of a number.</li>
+	 * <li>The natural logarithm of a number.</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Authors:</b>
@@ -1273,11 +1273,11 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>value</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The absolute value of the argument</li>
 	 * </ul>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -1300,7 +1300,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The lowest value all the values supplied in the arguments</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>

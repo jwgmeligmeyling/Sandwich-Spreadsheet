@@ -45,7 +45,7 @@ public class SFormulePicker extends JDialog implements ActionListener,
 
 	/**
 	 * Constructor for the SFormulePicker.
-	 * @param window is the parent window.
+	 * @param windowIn is the parent window.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SFormulePicker(Window windowIn) {
