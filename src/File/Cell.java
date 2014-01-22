@@ -152,7 +152,7 @@ public class Cell implements Interfaces.Cell {
 	 *   	infinite updating of listeners
 	 * @throws Exception 
 	 */
-	private void update(Stack<Cell> tree, Vector<Cell> calculated) throws Exception {
+	void update(Stack<Cell> tree, Vector<Cell> calculated) throws Exception {
 		tree.add(this);
 		calculated.add(this);
 		try {
