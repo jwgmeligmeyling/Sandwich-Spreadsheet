@@ -31,7 +31,6 @@ public class SMenuBar extends JMenuBar {
 		super();
 		this.window = window;
 		createFileMenu();
-		createEditMenu();
 		createViewMenu();
 		createInsertMenu();
 		createHelpMenu();
@@ -50,17 +49,6 @@ public class SMenuBar extends JMenuBar {
 		menu.addSeparator();
 		menu.add(new MenuItem(Mnemonic.EXIT, exit));
 		
-		this.add(menu);
-	}
-	
-	private void createEditMenu() {
-		JMenu menu = new JMenu("Edit");
-		menu.setMnemonic(Mnemonic.EDIT.value);
-		menu.add(new MenuItem(Mnemonic.UNDO, undo));
-		menu.add(new MenuItem(Mnemonic.REDO, redo));
-		menu.add(new MenuItem(Mnemonic.CUT, cut));
-		menu.add(new MenuItem(Mnemonic.COPY, copy));
-		menu.add(new MenuItem(Mnemonic.PASTE, paste));
 		this.add(menu);
 	}
 	
@@ -107,13 +95,11 @@ public class SMenuBar extends JMenuBar {
 	}
 	
 	private AbstractAction insertFunction = new AbstractAction("Insert function", null) {
-
 		@SuppressWarnings("deprecation")
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			new SFormulePicker( window ).show();
 		}
-		
 	};
 	
 	private AbstractAction fileNew = new AbstractAction("New file", icoNew) {
@@ -122,7 +108,6 @@ public class SMenuBar extends JMenuBar {
 			new Window();
 		}
 	};
-	
 	
 	private AbstractAction fileOpen = new AbstractAction("Open", icoOpen) {
 		@Override
@@ -148,11 +133,11 @@ public class SMenuBar extends JMenuBar {
 	private AbstractAction filePrint = new AbstractAction("Print", icoPrint) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// TODO !!!!!!!
 			String st = "File>Print";
 			JOptionPane.showMessageDialog(null, st);
 		}
 	};
-	
 	
 	private AbstractAction exit = new AbstractAction("Exit") {
 		@Override
@@ -164,49 +149,9 @@ public class SMenuBar extends JMenuBar {
 		}
 	};
 	
-	// Edit menu:
-	
-	private AbstractAction undo = new AbstractAction("Undo") {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String st = "File>undo";
-			JOptionPane.showMessageDialog(null, st);			
-		}
-	};
-	
-	private AbstractAction redo = new AbstractAction("Redo") {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String st = "File>redo";
-			JOptionPane.showMessageDialog(null, st);			
-		}
-	};
-	
-	private AbstractAction cut = new AbstractAction("Cut") {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String st = "File>cut";
-			JOptionPane.showMessageDialog(null, st);			
-		}
-	};
-	
-	private AbstractAction copy = new AbstractAction("Copy") {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String st = "File>copy";
-			JOptionPane.showMessageDialog(null, st);			
-		}
-	};
-	
-	private AbstractAction paste = new AbstractAction("Paste") {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String st = "File>paste";
-			JOptionPane.showMessageDialog(null, st);			
-		}
-	};
-	
-	// View menu:
+	/*
+	 * View menu:
+	 */
 	
 	private AbstractAction ViewShowStatusBar_Click = new AbstractAction("Show statusbar") {
 		@Override
