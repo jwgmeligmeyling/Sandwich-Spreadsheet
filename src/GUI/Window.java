@@ -1,6 +1,8 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -216,8 +218,13 @@ public class Window extends JFrame implements ExceptionListener {
 	 */
 	public void FileOpen(){
 		// Open een dialog
-		//fc.setFileFilter(filter);
 		JFileChooser fc = new JFileChooser();
+		
+		FileFilter filter = new FileNameExtensionFilter("Sandwich Spreadsheet Document","xSwSht","xml");
+		
+		fc.setFileFilter(filter);
+		fc.addChoosableFileFilter(filter);
+		
 		int returnVal = fc.showOpenDialog(this);
 		
 		// Wanneer niet op cancel gedrukt:
@@ -237,7 +244,7 @@ public class Window extends JFrame implements ExceptionListener {
 			} catch (IOException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage());
 				e1.printStackTrace();
-			}
+			} 
 	    }	    
 	}
 
@@ -253,6 +260,13 @@ public class Window extends JFrame implements ExceptionListener {
 			int returnVal = fc.showSaveDialog(this);
 		    if(returnVal == JFileChooser.APPROVE_OPTION) {
 				file = fc.getSelectedFile();
+				String path = file.getPath();
+				
+				if(!path.toLowerCase().endsWith(".xSwSht"))
+				{
+				    file = new File(path + ".xSwSht");
+				}
+				
 		    }
 		}
 		
