@@ -142,7 +142,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + colIndex;
+			result = prime * result + colIndex << 8;
 			result = prime * result + rowIndex;
 			return result;
 		}
