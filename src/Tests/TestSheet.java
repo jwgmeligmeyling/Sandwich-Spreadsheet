@@ -327,4 +327,15 @@ public class TestSheet {
 		assertEquals(sheet.new Range(A1.getPosition(), C1.getPosition()), row);
 		assertEquals("1:1", row.toString());
 	}
+	
+	@Test
+	public void testCrossReference() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("=B1", 0, 0);
+		sheet.createCell("=A1", 1, 0);
+		
+		sheet.init();
+		
+	}
 }
