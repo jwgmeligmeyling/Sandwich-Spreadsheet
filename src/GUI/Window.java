@@ -32,7 +32,7 @@ public class Window extends JFrame implements ExceptionListener {
 	private final Workbook newFile;
 	
 	private static final int DEFAULT_WIDTH = 800;
-	private static final int DEFAULT_HEIGHT = 450;
+	private static final int DEFAULT_HEIGHT = 500;
 	private static final Color DEFAULT_BACKGROUND = new Color(240,240,240);
 	
 	/**
