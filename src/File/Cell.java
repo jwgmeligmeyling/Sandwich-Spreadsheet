@@ -2,8 +2,6 @@ package File;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -92,143 +90,6 @@ public class Cell implements Interfaces.Cell {
 	}
 	
 	/**
-	 * - Preparese the input for this cell to fetch the references,
-	 *   the result might be incorrect.
-	 * - Update these references recursively, and check for cross
-	 *   references the current tree (this > reference > reference).
-	 *   If a cross reference conflict occurs, set the values for this
-	 *   tree and relations to "#VALUE"
-	 * - Update the listeners recursively, if a cross reference conflict
-	 *   occurs, set the values for this tree and relations to "#VALUE"
-	 */
-	void update() {
-		if (!changed) {
-			return;
-		}
-		try {
-			update(new Stack<Cell>());
-		} catch ( CrossReference e) {
-			// Delegate the exception to the sheet
-			if ( e != null && sheet != null ) 
-				sheet.onException(e);
-		}
-	}
-	
-	public static final String EXCEPTION = "#VALUE";
-	
-	/**
-	 * - Preparese the input for this cell to fetch the references,
-	 *   the result might be incorrect.
-	 * - Update these references recursively, and check for cross
-	 *   references the current tree (this > reference > reference).
-	 *   If a cross reference conflict occurs, set the values for this
-	 *   tree and relations to "#VALUE"
-	 * - Update the listeners recursively, if a cross reference conflict
-	 *   occurs, set the values for this tree and relations to "#VALUE"
-	 */
-	void update(Stack<Cell> tree) {
-		tree.add(this);
-		try {
-			Parser.parse(this);
-		} catch ( Exception e ) {}
-		try {
-			for ( Cell reference : references ) {
-				if ( tree.contains(reference)) {
-					throw new CrossReference(reference, this);
-				} else {
-					tree.push(reference);
-					reference.update(tree);
-				}
-			}
-			this.value = Parser.parse(this);
-		} catch ( CrossReference e ) {
-			this.value = EXCEPTION;
-			// Delegate the method to the parent call
-			throw e;
-		} finally {
-			ArrayList<Cell> cells = new ArrayList<Cell>(references);
-			for ( int i = 0; i < cells.size(); i++ ) {
-				Cell cell = cells.get(i);
-				
-			}
-		}
-	}
-	
-	/**
-	 * Reparse this cell if changed, and recursively update listeners. This method
-	 * is called from the {@code Sheet}'s Initialize function, which requires all
-	 * Cells to be calculated in the right order.
-	 */
-	void oupdate() {
-		if (!changed) return;
-		List<Cell> queue = new ArrayList<Cell>();
-		queue.addAll(references);
-		queue.add(this);
-		
-		/*
-		 * Get all listeners for this cell recursively such
-		 * that listeners for listeners (etc. etc.) are also
-		 * checked
-		 */
-		for ( int i = 0; i < queue.size(); i++ ) {
-			Cell cell = queue.get(i);
-			for ( Cell listener : cell.listeners ) {
-				if (! queue.contains(listener) ) {
-					queue.add(listener);
-				}
-			}
-		}
-		
-		try {
-			/*
-			 * For every Cell in the queue to be updated,
-			 * assume that the cells we're not conflicting before,
-			 * and check if they conflict now. A cell conflicts
-			 * when it or one of its references is dependent on
-			 * this cell (there is a cross reference).
-			 * If there seems to be no issues, recalculate the
-			 * listener.
-			 */
-			Cell[] cells = queue.toArray(new Cell[queue.size()]);
-			for ( int i = 0; i < cells.length; i++ ) {
-				Cell ucell = cells[i];
-				for ( int j = 0; j < i; j++ ) {
-					Cell rcell = cells[j];
-					if ( ucell.listeners.contains(rcell) ) {
-						throw new CrossReference(ucell, rcell);
-					}
-				}
-				ucell.value = Parser.parse(ucell);
-			}
-		} catch ( Exception e ) {
-			/*
-			 * When one of the required cells causes a
-			 * CrossReference, reset all values and delegate
-			 * the exception to the GUI
-			 */
-			for ( Cell cell : queue ) {
-				cell.value = "#VALUE";
-			}
-			// Delegate the exception to the sheet
-			if ( e != null && sheet != null ) 
-				sheet.onException(e);
-		} finally {
-			// Mark that the value for this cell
-			// is calculated for current input
-			this.changed = false;
-		}
-	}
-	
-	public static class CrossReference extends RuntimeException {
-	
-		private static final long serialVersionUID = 1L;
-
-		private CrossReference(Cell a, Cell b) {
-			super("Crossreference between " + a.getPositionString() + " and " + b.getPositionString());
-		}
-	}
-
-	/**
 	 * Clear all references, for instance when we set the input of this cell
 	 */
 	private void clear() {
@@ -238,6 +99,111 @@ public class Cell implements Interfaces.Cell {
 		references.clear();
 	}
 
+	/**
+	 * Parse this cell and it's relatives if the value has changed
+	 */
+	void update() {
+		if (!changed) {
+			return;
+		}
+		try {
+			update(new Stack<Cell>(), new Stack<Cell>());
+		} catch ( Exception e) {
+			// Delegate the exception to the sheet
+			if ( e != null && sheet != null ) 
+				sheet.onException(e);
+		}
+	}
+	
+	public static final String EXCEPTION = "#VALUE";
+	
+	/**
+	 * An {@code Exception} for cross references
+	 * @author Jan-Willem Gmelig Meyling
+	 *
+	 */
+	public static class CrossReference extends RuntimeException {
+	
+		private static final long serialVersionUID = 1L;
+	
+		/**
+		 * Construct a new {@code CrossReference} exception
+		 * @param a first {@code Cell} 
+		 * @param b last {@code Cell}
+		 */
+		private CrossReference(Cell a, Cell b) {
+			super("Crossreference between " + a.getPositionString() + " and " + b.getPositionString());
+		}
+	}
+
+	/**
+	 * - Preparese the input for this cell to fetch the references,
+	 *   the result might be incorrect.
+	 * - Update these references recursively, and check for cross
+	 *   references the current tree (this > reference > reference).
+	 *   If a cross reference conflict occurs, set the values for this
+	 *   tree and relations to "#VALUE"
+	 * - Update the listeners recursively, if a cross reference conflict
+	 *   occurs, set the values for this tree and relations to "#VALUE"
+	 *   
+	 * @param tree Path from origin to the current cell to check cross
+	 *   	references against
+	 * @param calculated Cells calculated in this update to prevent
+	 *   	infinite updating of listeners
+	 * @throws Exception 
+	 */
+	private void update(Stack<Cell> tree, Vector<Cell> calculated) throws Exception {
+		tree.add(this);
+		calculated.add(this);
+		try {
+			// Prepare the cell to fetch the references
+			Parser.parse(this);
+		} catch ( Exception e ) {}
+		try {
+			for ( Cell reference : references ) {
+				// If the tree contains this reference, we have a cross reference
+				if ( tree.contains(reference)) {
+					throw new CrossReference(reference, this);
+				} else {
+					// Check if this reference conflicts with the tree
+					reference.update(tree, calculated);
+				}
+			}
+			// If no Crss reference is thrown, calculate the value for this cell
+			this.value = Parser.parse(this);
+		} catch ( Exception e ) {
+			this.value = EXCEPTION;
+			// Delegate the method to the parent call
+			throw e;
+		} finally {
+			// Update the listeners for this cell
+			ArrayList<Cell> cells = new ArrayList<Cell>(listeners);
+			for ( int i = 0; i < cells.size(); i++ ) {
+				Cell cell = cells.get(i);
+				// If the tree contains the cell, it is not required
+				// to update the value agan.
+				if (calculated.contains(cell))
+					continue;
+				try {
+					// Update the cell
+					cell.update(new Stack<Cell>(), calculated);
+				} catch (Exception e ){
+					// This exception was already there before
+					// adjusting the other cell, so there is no
+					// reason to delegate it here.
+				};
+				// Append new unique listeners recursively
+				for ( Cell listener : cell.listeners ) {
+					if (!cells.contains(listener)) {
+						cells.add(listener);
+					}
+				}
+			}
+			// Pop the value from the tree
+			tree.pop();
+		}
+	}
+	
 	@Override
 	public String getInput() {
 		if ( input != null ) {

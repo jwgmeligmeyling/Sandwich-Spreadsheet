@@ -1,6 +1,5 @@
 package File;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -405,7 +404,9 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 
 	@Override
 	public void init() {
-		Cell.update(new ArrayList<Cell>(cells.values()));
+		for ( Cell cell : cells.values() ) {
+			cell.update();
+		}
 	}
 
 	@Override
