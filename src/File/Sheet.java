@@ -2,6 +2,8 @@ package File;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
+import java.util.Vector;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -404,8 +406,11 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 
 	@Override
 	public void init() {
+		Vector<Cell> calculated = new Vector<Cell>();
 		for ( Cell cell : cells.values() ) {
-			cell.update();
+			try {
+				cell.update(new Stack<Cell>(), calculated);
+			} catch (Exception e) {	}
 		}
 	}
 
