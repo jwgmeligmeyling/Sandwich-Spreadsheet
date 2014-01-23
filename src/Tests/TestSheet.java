@@ -327,4 +327,79 @@ public class TestSheet {
 		assertEquals(sheet.new Range(A1.getPosition(), C1.getPosition()), row);
 		assertEquals("1:1", row.toString());
 	}
+	
+	@Test
+	public void testCrossReference() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("=B1", 0, 0);
+		sheet.createCell("=A1", 1, 0);
+		
+		sheet.init();
+		
+	}
+	
+	@Test
+	public void testGetRow() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("", 1, 1);
+		
+		assertEquals(sheet.getCellAt(1,1).getRow(),1);
+	}
+	
+	@Test
+	public void testGetCol() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("", 1, 1);
+		
+		assertEquals(sheet.getCellAt(1,1).getColumn(),1);
+	}
+	
+	@Test
+	public void testGetPositionRow() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("", 1, 1);
+		
+		assertEquals(sheet.getCellAt(1,1).getPosition().getRow(),1);
+	}
+	
+	@Test
+	public void testGetPositionCol() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("", 1, 1);
+		
+		assertEquals(sheet.getCellAt(1,1).getPosition().getColumn(),1);
+	}
+	
+	@Test
+	public void testEqualsNull() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("",1,1);
+		
+		assertEquals(sheet.getCellAt(1,1).getPosition().equals(null),false);
+	}
+	
+	@Test
+	public void testEqualsOtherObject() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("", 1, 1);
+		
+		assertEquals(sheet.getCellAt(1,1).getPosition().equals(new Sheet()),false);
+	}
+	
+	@Test
+	public void testGetInputDing() {
+		Sheet sheet = new Sheet();
+		
+		sheet.createCell("=SUM(B1:B3)", 1, 1);
+		
+		assertEquals(sheet.getInputAt(1,1).equals("=SUM(B1:B3)"),true);
+	}
+	
 }

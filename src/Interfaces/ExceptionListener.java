@@ -9,7 +9,7 @@ public interface ExceptionListener {
 	
 	/**
 	 * When a Exception occurs, delegate the Exception upstream so that the GUI can supply appropiate information
-	 * @param exception
+	 * @param e
 	 */
 	void onException(Exception e);
 

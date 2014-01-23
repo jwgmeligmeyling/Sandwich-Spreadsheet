@@ -496,6 +496,14 @@ public class TestFunctions {
 		assertEquals("This Is8Ni_Ce/Ly Done", Function.PROPER.calculate("thIS is8nI_cE/LY done"));
 	}
 	
+	@Test
+	public void testLength() {
+		assertEquals(3, Function.LENGTH.calculate("Hoi"));
+	}
+	@Test
+	public void testLengthNumber() {
+		assertEquals(4, Function.LENGTH.calculate(E1));
+	}
 	
 	@Test
 	public void testIsLogicalBoolean() {
@@ -619,7 +627,7 @@ public class TestFunctions {
 	}
 	@Test
 	public void testMinCellInt() {
-		assertEquals(8, Function.MIN.calculate(B1, B2, B3));//TODO
+		assertEquals(8, Function.MIN.calculate(B1, B2, B3));
 	}
 	@Test
 	public void testMinOnlyStrings() {
