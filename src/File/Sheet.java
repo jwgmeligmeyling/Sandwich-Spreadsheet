@@ -524,8 +524,6 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 			cell.setInput(value.toString());
 		}
 		
-		System.out.println(position.toString() + " set to " + value.toString());
-		
 		cell.update();
 	}
 

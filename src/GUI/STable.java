@@ -571,6 +571,7 @@ public class STable extends JTable implements ExceptionListener {
 		public void setValueAt(Object value, int row, int col) {
 			sheet.setValueAt(value, col - 1, row);
 			fireTableCellUpdated(row, col);
+			sheet.getSTable().updateUI();
 		}
 
 	}
