@@ -1,10 +1,8 @@
 package Tests;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import File.*;
 import File.Sheet.Range;
 import Parser.Function;
@@ -166,6 +164,19 @@ public class TestFunctions {
 	public void testSumIf3argsDiffRngSize() {
 		Function.SUMIF.calculate(tValS, ">0", tValBwrong);
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCount() {
+		assertEquals(1, Function.COUNT.calculate(1, "string", "1"));
+	}
+	@Test
+	public void testCountBoolean() {
+		assertEquals(0, Function.COUNT.calculate(r3));
+	}
+	@Test
+	public void testCountVarious() {
+		assertEquals(7, Function.COUNT.calculate(r1));
+	}
 	
 	@Test
 	public void testCountA() {
@@ -174,17 +185,29 @@ public class TestFunctions {
 
 	@Test
 	public void testCountIf1() {
-		// TODO
+		assertEquals(1, Function.COUNTIF.calculate(r3, false));
 	}
-	
+
 	@Test
 	public void testCountIf2() {
-		
+		assertEquals(3, Function.COUNTIF.calculate(r2, ">6"));
+	}
+	@Test
+	public void testCountIfNoEquals() {
+		assertEquals(1, Function.COUNTIF.calculate(r2, "8"));
+	}
+	@Test
+	public void testCountIfSingleEquals() {
+		assertEquals(1, Function.COUNTIF.calculate(r2, "=8"));
+	}
+	@Test
+	public void testCountIfDoubleEquals() {
+		assertEquals(1, Function.COUNTIF.calculate(r2, "==8"));
 	}
 	
-	@Test
-	public void testCountIf3() {
-		
+	@Test(expected = IllegalArgumentException.class)
+	public void testCountIfNoCriteria() {
+		Function.COUNTIF.calculate();
 	}
 
 	@Test
@@ -267,6 +290,36 @@ public class TestFunctions {
 	public void testMatchErrorNotFound() {
 		Function.MATCH.calculate("dit bestaat niet", tValB);
 	}
+	
+	@Test
+	public void testAdres() {
+		assertEquals("D7", Function.ADRES.calculate(4, 7));
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testAdresNoArgs() {
+		Function.ADRES.calculate();
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testAdres1Arg() {
+		Function.ADRES.calculate(1);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testAdresInvalidArg1() {
+		Function.ADRES.calculate(0,5);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testAdresInvalidArg2() {
+		Function.ADRES.calculate(5,0);
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testAdresString() {
+		Function.ADRES.calculate("hoi", "oei");
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testAdresChar() {
+		Function.ADRES.calculate('v', 'c');
+	}
+	
 	
 	@Test
 	public void testRoundUp1() {
@@ -779,9 +832,16 @@ public class TestFunctions {
 	@Test
 	public void testRandBetweenNegative() {
 		for(int i = 0; i < 1000; i++) {
-			int temp = ((Number)Function.RANDBETWEEN.calculate(-2, -5)).intValue();
-			assertTrue(temp >= -5 && temp <= -2);
+			int temp = ((Number)Function.RANDBETWEEN.calculate(-5, -2)).intValue();
+			/*if (temp < -5 || temp > -2) {
+				System.out.println("i:=" + i + ", temp:=" + temp);
+			}*/
+			assertTrue(temp >= -4 && temp <= -1);
 		}
+	}
+	@Test(expected = IllegalArgumentException.class)
+	public void testRandBetweenError() {
+		Function.RANDBETWEEN.calculate(5, 4);
 	}
 	@Test
 	public void testRandBetweenSemiNegative() {
@@ -1107,10 +1167,15 @@ public class TestFunctions {
 	/*
 	 * Test not-function methodes
 	 */
-	
+
 	@Test
 	public void testGetDescription() {
 		assertEquals("Returns the sum of a set of values contained in a specified field on a query.", Function.SUM.getDescription());
+	}
+	
+	@Test
+	public void testGetArgumentList() {
+		assertEquals("<b>value</b>, value, ...", Function.SUM.getArgumentList());
 	}
 	
 	/*
@@ -1241,6 +1306,27 @@ public class TestFunctions {
 	@Test
 	public void testIntValueOfCell() {
 		assertEquals(8, Function.intValueOf(B2));
+	}
+	
+	@Test(expected = NumberFormatException.class)
+	public void testIntValueOfStringNoNum() {
+		Function.intValueOf("hoi9");
+	}
+	@Test(expected = NumberFormatException.class)
+	public void testIntValueOfStringNumInt() {
+		Function.intValueOf("80hertz");
+	}
+	@Test
+	public void testIntValueOfStringEmpty() {
+		assertEquals(0, Function.intValueOf(""));
+	}
+	@Test
+	public void testIntValueOfStringOnlyInt() {
+		assertEquals(80, Function.intValueOf("80"));
+	}
+	@Test(expected = NumberFormatException.class)
+	public void testIntValueOfStringOnlyDouble() {
+		Function.intValueOf("80.9");
 	}
 	
 	// stringValueOf()

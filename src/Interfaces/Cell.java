@@ -1,10 +1,8 @@
 package Interfaces;
 
 import java.awt.Color;
-
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
 import File.Cell.CellType;
 import File.Sheet.Position;
 
@@ -140,7 +138,6 @@ public interface Cell {
 	boolean isFunction();
 	
 	/**
-	 * 
 	 * @return the position as a String
 	 */
 	String getPositionString();
@@ -156,5 +153,4 @@ public interface Cell {
 	 * @return the {@code Position} for this {@code Cell}
 	 */
 	Position getPosition();
-	
 }

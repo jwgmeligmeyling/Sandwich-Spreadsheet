@@ -15,23 +15,19 @@ import File.Sheet.Position;
 public interface Range {
 	
 	/**
-	 * Method to get an array of <code>Cell</code> instances from this
-	 * <code>Range</code>
-	 * 
+	 * Method to get an array of <code>Cell</code> instances from this {@code Range}.
 	 * @return array of <code>Cell</code> instances
 	 */
 	Cell[] getCellArray();
 	
 	/**
-	 * Method to get an array of the values in the Cells from this
-	 * <code>Range</code>
-	 * 
+	 * Method to get an array of the values in the Cells from this {@code Range}.
 	 * @return array of <code>Cell</code> instances
 	 */
 	Object[] getValueArray();
 
 	/**
-	 * Determine if the range contains a single <code>Cell</code>
+	 * Determine if the range contains a single <code>Cell</code>.
 	 * @return true if this <code>Cell</code> contains only one <code>Cell</code>
 	 */
 	boolean isSingleCell();

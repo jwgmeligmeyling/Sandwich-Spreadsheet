@@ -2,7 +2,6 @@ package Interfaces;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
 import File.Cell;
 import File.Sheet.Position;
 import File.Sheet.Column;
@@ -10,7 +9,7 @@ import File.Sheet.Row;
 import GUI.STable;
 
 /**
- * The <code>Sheet</code> class is the main class for the spreadsheet
+ * The <code>Sheet</code> class is the main class for the spreadsheet.
  * @author Jan-Willem Gmelig Meyling
  * @author Maarten Flikkema
  * @author Liam Clark
@@ -18,7 +17,7 @@ import GUI.STable;
 public interface Sheet {
 	
 	/**
-	 * Getter for the name of the current sheet
+	 * Getter for the name of the current sheet.
 	 * @return name of the sheet
 	 */
 	String getSheetName();
@@ -84,22 +83,22 @@ public interface Sheet {
 	Row getRow(int rowIndex);
 	
 	/**
-	 * Method to get all cells in a given column
+	 * Method to get all cells in a given column.
 	 * @param colIndex
 	 * @return all the cells in the given column
 	 */
 	Column getColumn(int colIndex);
 	
 	/**
-	 * 
+	 * Method to get a rectangular part of a sheet as a {@code Range}.
 	 * @param upLeft is the first cell in the expected range
 	 * @param downRight is the last cell in the expected range
-	 * @return an array of cells with all the celsl in the range form Cell upLeft to Cell downRigth
+	 * @return an array of cells with all the cells in the range form Cell upLeft to Cell downRigth
 	 */
 	Range getRange(Cell upLeft, Cell downRight);
 	
 	/**
-	 * 
+	 * Method to get a rectangular part of a sheet as a {@code Range}.
 	 * @param rowUp is the row index of the upper left cell in the range
 	 * @param colLeft is the column index of the upper left cell in the range
 	 * @param rowDown is the row index of the last cell in the range
@@ -119,7 +118,7 @@ public interface Sheet {
 	int getColumnCount();
 	
 	/**
-	 *  Ensure column count, to extend this {@code Sheet}
+	 * Ensure column count, to extend this {@code Sheet}.
 	 * @param columnCount
 	 */
 	void ensureColumnCount(int columnCount);
@@ -130,7 +129,7 @@ public interface Sheet {
 	int getRowCount();
 	
 	/**
-	 * Ensure row count, to extend this {@code Sheet}
+	 * Ensure row count, to extend this {@code Sheet}.
 	 * @param rowCount
 	 */
 	void ensureRowCount(int rowCount);
@@ -145,13 +144,13 @@ public interface Sheet {
 	Cell createCell(String value, int colIndex, int rowIndex);
 	
 	/**
-	 * Setter for the STable instance referencing to this Sheet
+	 * Setter for the STable instance referencing to this Sheet.
 	 * @param stable
 	 */
 	void setSTable(STable stable);
 	
 	/**
-	 * Getter for the STable instance referencing to this Sheet
+	 * Getter for the STable instance referencing to this Sheet.
 	 * @return stable
 	 */
 	STable getSTable();

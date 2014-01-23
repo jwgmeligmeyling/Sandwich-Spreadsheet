@@ -273,16 +273,13 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>real number</code> As Double, <code>[real number...]</code> As Double
+	 * <b>Expected arguments:</b> <code>value(s)</code> As Double, <code>[value(s)...]</code> As Double
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>Average of all the numerical values in the given range(s).</li>
+	 * <li>Median of all the arguments.</li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -305,23 +302,17 @@ public enum Function {
 					countNumbersList.add(doubleValueOf(arg));
 				}
 			}
-			
 			double[] numbersList = new double[countNumbersList.size()];
-			
 			for(int i = 0; i < numbersList.length; i++) {
 				numbersList[i] = countNumbersList.get(i);
 			}
-			
 			Arrays.sort(numbersList);
-			
 			double median;
-			
 			if (numbersList.length % 2 == 0) {
 				median = ((double) numbersList[numbersList.length / 2 - 1] + (double) numbersList[numbersList.length / 2]) / 2;
 			} else {
 				median = (double) numbersList[(int)Math.floor(numbersList.length / 2.0)];
 			}
-			
 			return convertToIntIfApplicable(median);
 		}
 	},
@@ -428,16 +419,15 @@ public enum Function {
 			
 			if ("<>!=".indexOf(criteria.charAt(0)) == -1) {
 				criteria = "==".concat(criteria);	// geen operator -> ==
-			} else if ( criteria.charAt(0) == '=' & criteria.charAt(1) != '=' ) {
+			} else if (criteria.charAt(0) == '=' && criteria.charAt(1) != '=') {
 				criteria = "=".concat(criteria);	// = -> ==
 			}
 			
-			for ( int i = 0; i < range.length; i++ ) {
+			for (int i = 0; i < range.length; i++) {
 				Cell cell = range[i];
-				if ( cell == null )
+				if (cell == null)
 					continue;
-				if (new Parser(cell.getSheet(), cell.getPositionString()
-						+ criteria).parse().equals(Boolean.TRUE)) {
+				if (new Parser(cell.getSheet(), cell.getPositionString() + criteria).parse().equals(Boolean.TRUE)) {
 					count++;
 				}
 			}
@@ -483,7 +473,7 @@ public enum Function {
 			
 			if ("<>!=".indexOf(criteria.charAt(0)) == -1) {
 				criteria = "==".concat(criteria);	// geen operator -> ==
-			} else if ( criteria.charAt(0) == '=' & criteria.charAt(1) != '=' ) {
+			} else if (criteria.charAt(0) == '=' & criteria.charAt(1) != '=') {
 				criteria = "=".concat(criteria);	// = -> ==
 			}
 
@@ -497,7 +487,7 @@ public enum Function {
 						+ criteria).parse().equals(Boolean.TRUE)) {
 					try {
 						sum += doubleValueOf(valueCell);
-					} catch ( NumberFormatException e ) {}
+					} catch (NumberFormatException e) { }
 				}
 			}
 			return convertToIntIfApplicable(sum);
@@ -628,9 +618,6 @@ public enum Function {
 	 * <li></li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -665,9 +652,6 @@ public enum Function {
 	 * <li></li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -705,7 +689,7 @@ public enum Function {
 	 * <ul><li>The integer portion of a number</li></ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
-	 * Different than ROUNDDOWN! INT will just cut of the decimal part of <code>value</code>
+	 * Different than ROUNDDOWN. INT will cut of the decimal part of <code>value</code>
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -728,9 +712,6 @@ public enum Function {
 	 * <div><b>Returns:</b>
 	 * <ul><li>The given string in lower case</li></ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * ...
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -783,7 +764,6 @@ public enum Function {
 			}
 			return new String(result);
 		}
-		
 	},
 	
 	/**
@@ -791,11 +771,8 @@ public enum Function {
 	 * <b>Expected arguments:</b> <code>string</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
-	 * <ul><li>The given string in upper case</li></ul>
+	 * <ul><li>The given string in upper case.</li></ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * ...
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -816,12 +793,9 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>String representation of the arguments.</li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Jan-Willem Gmelig Meyling</li>
@@ -866,6 +840,12 @@ public enum Function {
 	 * <li>A random Integer number between <code>lower limit</code> and <code>upper limit</code></li>
 	 * </ul>
 	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * If lower limit and upper limit are greater then 0, the the result is including limits.
+	 * If lower limit is less then 0, the result will not reach the lower limit (excluding lower limit)
+	 * If upper limit is less then 0 too, then the upper limit is <code>upper limit + 1</code>
+	 * </div><br>
+	 * </div>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -877,9 +857,12 @@ public enum Function {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
-			int a = intValueOf(arguments[0]);
-			int b = intValueOf(arguments[1]);
-			return (int) (Math.random() * (b - a + 1) + a);
+			int lower = intValueOf(arguments[0]);
+			int upper = intValueOf(arguments[1]);
+			if(lower > upper) {
+				throw new IllegalArgumentException("Lower limit should not be greater then upper limit.");
+			}
+			return (int) (Math.random() * (upper - lower + 1) + lower);
 		}
 	},
 	
@@ -932,11 +915,11 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>real number</code>
+	 * <b>Expected arguments:</b> <code>radian angle</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>The sin of <code>real number</code></li>
+	 * <li>The sinus of <code>radian angle</code></li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Authors:</b>
@@ -945,7 +928,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	SIN("Returns a Double specifying the sine of an angle.", "<b>angle</b>") {
+	SIN("Returns a Double specifying the sine of an angle.", "<b>radian angle</b>") {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -955,11 +938,11 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>value</code>
+	 * <b>Expected arguments:</b> <code>sinus value</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The angle in radians of the sinus of <code>value</code>.</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Authors:</b>
@@ -968,7 +951,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ASIN("Returns the arcsine, or inverse sine, of a number. The arcsine is the angle whose sine is number. The returned angle is given in radians in the range -pi/2 to pi/2.", "<b>value</b>") {
+	ASIN("Returns the arcsine, or inverse sine, of a number. The arcsine is the angle whose sine is number. The returned angle is given in radians in the range -pi/2 to pi/2.", "<b>sinus value</b>") {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -978,11 +961,37 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>value</code>
+	 * <b>Expected arguments:</b> <code>radian angle</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The cosine of <code>radian angle</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Comments:</b><br>
+	 * Get the cos of a value. Returns a <code>Double</code> value.
+	 * </div><br>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
+	 */
+	COS("Returns a Double specifying the cosine of an angle.", "<b>radian angle</b>") {
+		@Override
+		public Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return Math.cos(doubleValueOf(arguments[0]));
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>cosine value</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>The angle in radians of the cosine of <code>value</code>.</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Authors:</b>
@@ -991,7 +1000,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ACOS("Returns the arccosine, or inverse cosine, of a number. The arccosine is the angle whose cosine is number. The returned angle is given in radians in the range 0 (zero) to pi.", "<b>value</b>") {
+	ACOS("Returns the arccosine, or inverse cosine, of a number. The arccosine is the angle whose cosine is number. The returned angle is given in radians in the range 0 (zero) to pi.", "<b>cosine value</b>") {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -1001,11 +1010,34 @@ public enum Function {
 	
 	/**
 	 * <div>
+	 * <b>Expected arguments:</b> <code>radian angle</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>The tangent of <code>radian angle</code></li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Jan-Willem Gmelig Meyling</li>
+	 * </ul>
+	 * </div>
+	 */
+	TAN("Returns a Double specifying the tangent of an angle.", "<b>radian angle</b>") {
+		@Override
+		public Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			return Math.tan(doubleValueOf(arguments[0]));			
+		}
+	},
+	
+	/**
+	 * <div>
 	 * <b>Expected arguments:</b> <code>value</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The angle in radians of the tangent of <code>value</code>.</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Authors:</b>
@@ -1038,7 +1070,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	DEGREE("Converts radians to degrees.", "<b>radian angle</b>") {
+	DEGREE("Converts a radian angle to degrees.", "<b>radian angle</b>") {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -1062,7 +1094,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	RADIAN("Converts degrees to radians.", "<b>degree angle</b>") {
+	RADIAN("Converts a degree angle to radians.", "<b>degree angle</b>") {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertArguments(1, arguments.length);
@@ -1072,60 +1104,11 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>real number</code>
-	 * </div><br>
-	 * <div><b>Returns:</b>
-	 * <ul>
-	 * <li>The cosine of <code>real number</code></li>
-	 * </ul>
-	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * Get the cos of a value. Returns a <code>Double</code> value.
-	 * </div><br>
-	 * <div><b>Authors:</b>
-	 * <ul>
-	 * <li>Jan-Willem Gmelig Meyling</li>
-	 * </ul>
-	 * </div>
-	 */
-	COS("Returns a Double specifying the cosine of an angle.", "<b>radian angle</b>") {
-		@Override
-		public Object calculate(Object... arguments) {
-			assertArguments(1, arguments.length);
-			return Math.cos(doubleValueOf(arguments[0]));
-		}
-	},
-	
-	/**
-	 * <div>
-	 * <b>Expected arguments:</b> <code>real number</code>
-	 * </div><br>
-	 * <div><b>Returns:</b>
-	 * <ul>
-	 * <li>The tan of <code>real number</code></li>
-	 * </ul>
-	 * </div>
-	 * <div><b>Authors:</b>
-	 * <ul>
-	 * <li>Jan-Willem Gmelig Meyling</li>
-	 * </ul>
-	 * </div>
-	 */
-	TAN("Returns a Double specifying the tangent of an angle.", "<b>radian angle</b>") {
-		@Override
-		public Object calculate(Object... arguments) {
-			assertArguments(1, arguments.length);
-			return Math.tan(doubleValueOf(arguments[0]));			
-		}
-	},
-	
-	/**
-	 * <div>
 	 * <b>Expected arguments:</b> none
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>The value of Pi (3,1415...) to 15 decimal places</li>
+	 * <li>The value of Pi (3,1415...) to 15 decimal places.</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Authors:</b>
@@ -1148,7 +1131,7 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>The value of e to the power of <code>real power value</code></li>
+	 * <li>The value of <code>e</code> to the power of <code>power value</code> if supplied, else to the first power.</li>
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
@@ -1402,8 +1385,8 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li><code>argument[1]</code> (<code>value if true</code>) if <code>argument[0]</code> (<code>logical test</code>) is true</li>
-	 * <li><code>argument[2]</code> (<code>value if false</code>)</li> if <code>logical test</code> is false
+	 * <li><code>value if true</code> if <code>logical test</code> is true</li>
+	 * <li><code>value if false</code> if <code>logical test</code> is false
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
@@ -1617,7 +1600,7 @@ public enum Function {
 			Position position = matrix.getTopLeft().offset(column, row);
 			
 			if (!matrix.contains(position)) {
-				throw new IllegalArgumentException("The cell at the given position (" + position.toString() + ") does not intersect with the given table range");
+				throw new IllegalArgumentException("The cell at the given position (" + position.toString() + ") does not intersect with the given table range.");
 			} else {
 				return matrix.getSheet().getCellAt(position).getValue();
 			}
@@ -1731,6 +1714,7 @@ public enum Function {
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
+	 * <li>Jan-Willem Gmelig Meyling</li>
 	 * </ul>
 	 * </div>
 	 */
@@ -1738,11 +1722,41 @@ public enum Function {
 		@Override
 		public Object calculate(Object... arguments) {
 			assertArguments(2, arguments.length);
+			assertArgumentRange(1, arguments);
 			Sheet sheet = ((Range) arguments[1]).firstCell().getSheet();
 			String cellref = stringValueOf(arguments[0]);
 			Parser parser = new Parser(sheet, cellref);
 			Object result = parser.parse();
 			return result;
+		}
+	},
+	
+	/**
+	 * <div>
+	 * <b>Expected arguments:</b> <code>row</code>, <code>column</code>
+	 * </div><br>
+	 * <div><b>Returns:</b>
+	 * <ul>
+	 * <li>The cell reference of the cell at (<code>row, column</code>) as a String.</li>
+	 * </ul>
+	 * </div>
+	 * <div><b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	ADRES("Returns a cell reference as a string (input for INDIRECT), e.a: \"B5\"", "<b>row num, column num</b>") {
+		@Override
+		public Object calculate(Object... arguments) {
+			assertArguments(2, arguments.length);
+			int row = intValueOf(arguments[1]);
+			int col = intValueOf(arguments[0]);
+			if(row < 1 || col < 1) {
+				throw new IllegalArgumentException("Row and column numbers should be positive numbers.");
+			} else {
+				return Sheet.getColumnLetter(col - 1) + intValueOf(row);
+			}
 		}
 	},
 	
@@ -1819,7 +1833,7 @@ public enum Function {
 	}
 	
 	private final static String DEFAULT_DESCRIPTION = "No description available for this function";
-	private final static String DEFAULT_ARGLIST= "Sorry, no argument list available.";
+	private final static String DEFAULT_ARGLIST= "No argument list available.";
 	
 	/**
 	 * Function constructor for a Function without a description and argument list.
@@ -1897,7 +1911,7 @@ public enum Function {
 	public static int intValueOf(Object obj) {
 		if (obj instanceof Number) {
 			return ((Number) obj).intValue();
-		} else if ( obj instanceof String ) {
+		} else if (obj instanceof String) {
 			return "".equals(obj) ? 0 : Integer.parseInt((String) obj);
 		} else if (obj instanceof Boolean) {
 			return ((Boolean) obj).equals(Boolean.TRUE) ? 1 : 0;
@@ -2069,7 +2083,7 @@ public enum Function {
 	 */
 	public static void assertArgumentRange(int index, Object... args) {
 		if (!(args[index] instanceof Range)) {
-			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a cell reference, but it is not!");
+			throw new IllegalArgumentException("This function requires argument " + (index + 1) + " to be a range, but it is not!");
 		}
 	}
 	
@@ -2079,7 +2093,7 @@ public enum Function {
 	 */
 	public static void assertArgumentRange(Object arg) {
 		if (!(arg instanceof Range)) {
-			throw new IllegalArgumentException("This function requires a certain argument to be a cell reference, but it is not!");
+			throw new IllegalArgumentException("This function requires a certain argument to be a range, but it is not!");
 		}
 	}
 	
