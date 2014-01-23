@@ -19,7 +19,7 @@ public class positionTest {
 	public void test() {
 		Sheet sheet = new Sheet();
 		
-		int count = 100;
+		int count = 300;
 		
 		for ( int x = 0; x < count; x++){
 			for( int y=0; y<count; y++){
@@ -33,7 +33,8 @@ public class positionTest {
 			}
 		}
 		
+		}
+		
 
-	}
 
 }
