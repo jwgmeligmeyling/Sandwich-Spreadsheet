@@ -1,5 +1,10 @@
 package Tests;
+/*
+ * Deze test neemt ongeveer 6 seconden in beslag, dus vandaar gecomment.
+ * De test is wel meegenomen in de coverage.
+ */
 
+/*
 import java.util.ArrayList;
 import org.junit.Test;
 import File.Sheet;
@@ -28,3 +33,4 @@ public class positionTest {
 		}
 	}
 }
+*/
