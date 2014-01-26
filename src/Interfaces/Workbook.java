@@ -19,7 +19,7 @@ import File.Sheet;
 public interface Workbook {
 
 	/**
-	 * Append a sheet to this spreadsheet file
+	 * Append a sheet to this spreadsheet file.
 	 * @param sheet
 	 */
 	void addSheet(Sheet sheet);
@@ -35,8 +35,7 @@ public interface Workbook {
 	String getName();
 
 	/**
-	 * @return the {@code File} for this {@code Workbook}, or 
-	 * {code null} if not saved
+	 * @return the {@code File} for this {@code Workbook}, or {code null} if not saved.
 	 */
 	File getFile();
 
@@ -68,17 +67,13 @@ public interface Workbook {
 	 * <li>Jim Hommes</li>
 	 * </ul>
 	 * </div>
-	 * 
 	 * @param file
 	 * @throws XMLStreamException
 	 *             If there was an error occurred writing XML
 	 * @throws FactoryConfigurationError
 	 *             if an instance of this factory cannot be loaded
 	 * @throws IOException
-	 *             If there was an error writing the file in the correct
-	 *             encoding
+	 *             If there was an error writing the file in the correct encoding
 	 */
-	void write(File file) throws XMLStreamException, FactoryConfigurationError,
-			IOException;
-
+	void write(File file) throws XMLStreamException, FactoryConfigurationError, IOException;
 }

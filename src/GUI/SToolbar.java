@@ -97,9 +97,7 @@ public class SToolbar extends JToolBar {
 				Italic.setSelected(italic);
 				Underlined.setSelected(underlined);
 			}
-			
 		});
-		
 	}
 
 	private AbstractAction fileNew = new AbstractAction(null, icoNew) {
@@ -110,21 +108,17 @@ public class SToolbar extends JToolBar {
 	};
 
 	private AbstractAction fileOpen = new AbstractAction(null, icoOpen) {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			window.FileOpen();
 		}
-		
 	};
 
 	private AbstractAction fileSave = new AbstractAction(null, icoSave) {
-		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			window.FileSave();
 		}
-		
 	};
 
 	private AbstractAction filePrint = new AbstractAction(null, icoPrint) {
@@ -146,7 +140,7 @@ public class SToolbar extends JToolBar {
 			
 			boolean value = ! selectedCells[0].isBold();
 			
-			for ( Cell cell : selectedCells ) {
+			for (Cell cell : selectedCells) {
 				cell.setBold(value);
 			}
 			
@@ -162,7 +156,7 @@ public class SToolbar extends JToolBar {
 			
 			boolean value = ! selectedCells[0].isItalic();
 			
-			for ( Cell cell : selectedCells ) {
+			for (Cell cell : selectedCells) {
 				cell.setItalic(value);
 			}
 			
@@ -178,7 +172,7 @@ public class SToolbar extends JToolBar {
 			
 			boolean value = ! selectedCells[0].isUnderlined();
 			
-			for ( Cell cell : selectedCells ) {
+			for (Cell cell : selectedCells) {
 				cell.setUnderlined(value);
 			}
 			
@@ -208,12 +202,9 @@ public class SToolbar extends JToolBar {
 	AbstractAction insertFunction = new AbstractAction(null, icoFunction) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//TODO toon Insert Function dialog!
 			new SFormulePicker(window);
 		}
 	};
-	
-	
 	
 	public class ToolBarButton extends JButton {
 		

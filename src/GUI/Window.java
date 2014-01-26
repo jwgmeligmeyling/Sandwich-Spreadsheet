@@ -214,16 +214,20 @@ public class Window extends JFrame implements ExceptionListener {
 	}
 
 	/**
-	 * Open a file in a new Window
+	 * Open a file in a new Window.
 	 */
-	public void FileOpen(){
+	public void FileOpen() {
 		// Open een dialog
 		JFileChooser fc = new JFileChooser();
 		
-		FileFilter filter = new FileNameExtensionFilter("Sandwich Spreadsheet Document","xSwSht","xml");
+		FileFilter filterAll = new FileNameExtensionFilter("All acceptable file formats", "xSwSht", "xml");
+		FileFilter filterSW = new FileNameExtensionFilter("Sandwich Spreadsheet Document", "xSwSht");
+		FileFilter filterXML = new FileNameExtensionFilter("Extensible Markup Language", "xml");
 		
-		fc.setFileFilter(filter);
-		fc.addChoosableFileFilter(filter);
+		fc.addChoosableFileFilter(filterAll);
+		fc.addChoosableFileFilter(filterSW);
+		fc.addChoosableFileFilter(filterXML);
+		fc.setFileFilter(filterSW);
 		
 		int returnVal = fc.showOpenDialog(this);
 		
@@ -232,7 +236,7 @@ public class Window extends JFrame implements ExceptionListener {
 			File file = fc.getSelectedFile();
 			
 			try {
-				// Nieuwe sheetfile aanmaken vanuit de XML
+				// Nieuwe workbook aanmaken vanuit de XML.
 				new Window(new Workbook(file));
 				
 			} catch (ParserConfigurationException e1) {
@@ -249,31 +253,40 @@ public class Window extends JFrame implements ExceptionListener {
 	}
 
 	/**
-	 * Save the file in this Window
+	 * Save the file in this Window.
 	 */
-	public void FileSave(){
+	public void FileSave() {
 		JFileChooser fc = new JFileChooser();
+
+		FileFilter filterAll = new FileNameExtensionFilter("All acceptable file formats", "xSwSht", "xml");
+		FileFilter filterSW = new FileNameExtensionFilter("Sandwich Spreadsheet Document", "xSwSht");
+		FileFilter filterXML = new FileNameExtensionFilter("Extensible Markup Language", "xml");
+		
+		fc.addChoosableFileFilter(filterAll);
+		fc.addChoosableFileFilter(filterSW);
+		fc.addChoosableFileFilter(filterXML);
+		fc.setFileFilter(filterSW);
+		
 		Workbook workbook = this.getCurrentSpreadSheetFile();
 		File file = workbook.getFile();
-		
-		if ( file == null ) {
+
+		if (file == null) {
 			int returnVal = fc.showSaveDialog(this);
-		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				file = fc.getSelectedFile();
 				String path = file.getPath();
-				
-				if(!path.toLowerCase().endsWith(".xSwSht"))
-				{
-				    file = new File(path + ".xSwSht");
+
+				if (!path.toLowerCase().endsWith(".xSwSht")) {
+					file = new File(path + ".xSwSht");
 				}
-				
-		    }
+
+			}
 		}
-		
-		if ( file == null ) {
+
+		if (file == null) {
 			return;
 		}
-		
+
 		try {
 			workbook.write(file);
 		} catch (XMLStreamException e1) {
@@ -289,11 +302,10 @@ public class Window extends JFrame implements ExceptionListener {
 	}
 
 	/**
-	 * Open a new Window
+	 * Open a new Window with a new empty Spreadsheet.
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		new Window();
 	}
-
 }

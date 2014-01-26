@@ -169,7 +169,7 @@ public class Cell implements Interfaces.Cell {
 					reference.update(tree, calculated);
 				}
 			}
-			// If no Crss reference is thrown, calculate the value for this cell
+			// If no Cross reference is thrown, calculate the value for this cell
 			this.value = Parser.parse(this);
 		} catch ( Exception e ) {
 			this.value = EXCEPTION;

@@ -18,18 +18,11 @@ public interface Position {
 	int getColumn();
 	
 	/**
-	 * Method to get a new <code>Position</code> from this
-	 * <code>Position</code> and the defined offset.
-	 * 
-	 * @param x
-	 *            Column offset
-	 * @param y
-	 *            Row offset
+	 * Method to get a new {@code Position} from this {@code Position} and the defined offset.
+	 * @param x Column offset
+	 * @param y Row offset
 	 * @return New <code>Position</code> instance
-	 * @throws AssertionError
-	 *             When the indexes with the applied offset are negative
-	 *             values.
+	 * @throws AssertionError When the indexes with the applied offset are negative values
 	 */
 	Position offset(int x, int y);
-
 }

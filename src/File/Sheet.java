@@ -144,8 +144,8 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + colIndex << 8;
-			result = prime * result + rowIndex;
+			result = 241 * result + colIndex;
+			result = 421 * result + rowIndex;
 			return result;
 		}
 
@@ -523,8 +523,6 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 		} else {
 			cell.setInput(value.toString());
 		}
-		
-		System.out.println(position.toString() + " set to " + value.toString());
 		
 		cell.update();
 	}
