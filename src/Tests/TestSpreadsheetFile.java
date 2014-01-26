@@ -3,9 +3,7 @@ package Tests;
 import static org.junit.Assert.*;
 
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -45,14 +43,13 @@ public class TestSpreadsheetFile {
 		sheets.addSheet(sheet3);
 	}
 	
-	@SuppressWarnings("resource")
 	@Test
-	public void testSaveFile() throws XMLStreamException, FactoryConfigurationError, IOException {
+	public void testSaveFile() throws XMLStreamException, FactoryConfigurationError, IOException, SAXException, ParserConfigurationException {
 		sheets.write(new File("xml/output.xml"));
-		BufferedReader reader = new BufferedReader(new FileReader("xml/output.xml"));
-		String one = reader.readLine();
-		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1 Sheet 1</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 2</CELL></SPREADSHEET><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\">Hallo! Cell 2,2, Sheet 3</CELL><CELL row=\"1\" column=\"1\" type=\"TEXT\">Hallo! Cell 1,1, Sheet 3</CELL></SPREADSHEET></WORKBOOK>";
-		assertEquals(one, two);
+		
+		Workbook csheets = new Workbook(new File("xml/output.xml"));
+		
+		assertEquals(sheets,csheets);
 	}
 	
 	
@@ -94,7 +91,6 @@ public class TestSpreadsheetFile {
 	@Test
 	public void TestReadAttributes() throws SAXException, ParserConfigurationException, IOException{
 		Workbook sheets = new Workbook(new File("xml/Test XML bestanden (Niet aankomen)/test3.xml"));
-		Sheet sheet = sheets.getSheet(0);
 		
 		Sheet csheet = new Sheet();
 		
@@ -139,13 +135,10 @@ public class TestSpreadsheetFile {
 		
 		csheets.write(new File("xml/Test XML bestanden (Niet aankomen)/test4.xml"));
 		
-		BufferedReader reader = new BufferedReader(new FileReader("xml/Test XML bestanden (Niet aankomen)/test4.xml"));
-		String one = reader.readLine();
-		String two = "<WORKBOOK><SPREADSHEET name=\"New sheet\"><CELL row=\"2\" column=\"2\" type=\"TEXT\" bold=\"true\">Lekker bold</CELL><CELL row=\"2\" column=\"3\" type=\"TEXT\" italic=\"true\">Lekker italic</CELL><CELL row=\"2\" column=\"4\" type=\"TEXT\" underlined=\"true\">Lekker underlined</CELL><CELL row=\"2\" column=\"1\" type=\"TEXT\" fcolor=\"-65536\" bcolor=\"-16776961\">BC blue en FC red</CELL></SPREADSHEET></WORKBOOK>";
+		Workbook sheets = new Workbook(new File("xml/Test XML bestanden (Niet aankomen)/test4.xml"));
 		
-		assertEquals(one,two);
+		assertEquals(sheets,csheets);
 		
-		reader.close();
 	}
 	
 }
