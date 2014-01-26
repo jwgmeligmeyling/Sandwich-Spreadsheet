@@ -220,9 +220,11 @@ public class Window extends JFrame implements ExceptionListener {
 		// Open een dialog
 		JFileChooser fc = new JFileChooser();
 		
-		FileFilter filterSW = new FileNameExtensionFilter("Sandwich Spreadsheet Document","xSwSht");
+		FileFilter filterAll = new FileNameExtensionFilter("All acceptable file formats", "xSwSht", "xml");
+		FileFilter filterSW = new FileNameExtensionFilter("Sandwich Spreadsheet Document", "xSwSht");
 		FileFilter filterXML = new FileNameExtensionFilter("Extensible Markup Language", "xml");
-
+		
+		fc.addChoosableFileFilter(filterAll);
 		fc.addChoosableFileFilter(filterSW);
 		fc.addChoosableFileFilter(filterXML);
 		fc.setFileFilter(filterSW);
@@ -255,10 +257,12 @@ public class Window extends JFrame implements ExceptionListener {
 	 */
 	public void FileSave() {
 		JFileChooser fc = new JFileChooser();
-		
-		FileFilter filterSW = new FileNameExtensionFilter("Sandwich Spreadsheet Document","xSwSht");
+
+		FileFilter filterAll = new FileNameExtensionFilter("All acceptable file formats", "xSwSht", "xml");
+		FileFilter filterSW = new FileNameExtensionFilter("Sandwich Spreadsheet Document", "xSwSht");
 		FileFilter filterXML = new FileNameExtensionFilter("Extensible Markup Language", "xml");
 		
+		fc.addChoosableFileFilter(filterAll);
 		fc.addChoosableFileFilter(filterSW);
 		fc.addChoosableFileFilter(filterXML);
 		fc.setFileFilter(filterSW);
