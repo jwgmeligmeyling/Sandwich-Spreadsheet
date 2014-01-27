@@ -1955,7 +1955,7 @@ public enum Function {
 	/**
 	 * Logic operations will use the <code>boolean</code> type for calculations.
 	 * Arguments with other types will be converted to a boolean value.
-	 * <ul>
+	 * <ul> 
 	 * <li><code>Integer</code> and <code>Double</code>-values with a value...
 	 * <ul>
 	 * <li>greater or equal to <code>1</code> will be parsed as <code>true</code></li>
