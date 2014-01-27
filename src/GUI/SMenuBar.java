@@ -81,6 +81,7 @@ public class SMenuBar extends JMenuBar {
 		JMenu menu = new JMenu("Insert");
 		menu.setMnemonic(Mnemonic.INSERT.value);
 		menu.add(new MenuItem(Mnemonic.INSERT_FUNCTION, insertFunction));
+		menu.add(new MenuItem(Mnemonic.CREATE_SHEET, InsertWorksheet_Click));
 		this.add(menu);
 	}
 	
@@ -189,7 +190,7 @@ public class SMenuBar extends JMenuBar {
 		FILE('f'), NEW('n'), OPEN('o'), SAVE('s'), SAVE_AS('a'), PRINT('p'), EXIT('e'),
 		EDIT('e'), UNDO('z'), REDO('y'), CUT('x'), COPY('c'), PASTE('v'),
 		VIEW('v'), ZOOM('z'), STATUS_BAR('s'),
-		INSERT('i'), INSERT_FUNCTION('F'),CREATE_SHEET('s'),
+		INSERT('i'), INSERT_FUNCTION('F'), CREATE_SHEET('s'),
 		ABOUT('a'), GET_HELP('h'), INFO('i');
 		
 		private final char value;
