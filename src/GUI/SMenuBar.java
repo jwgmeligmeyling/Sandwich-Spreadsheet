@@ -1,11 +1,11 @@
 package GUI;
 
 import java.awt.event.ActionEvent;
+import java.awt.print.PrinterException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JMenu;
@@ -24,6 +24,7 @@ public class SMenuBar extends JMenuBar {
 	private static ImageIcon icoOpen = new ImageIcon("img/open.png", "Open");
 	private static ImageIcon icoSave = new ImageIcon("img/save.png", "Save");
 	private static ImageIcon icoPrint = new ImageIcon("img/print.png", "Print");
+	private static ImageIcon icoInfo = new ImageIcon("img/info.png", "Info");
 	
 	private final Window window;
 
@@ -88,16 +89,14 @@ public class SMenuBar extends JMenuBar {
 	private void createHelpMenu() {
 		JMenu menu = new JMenu("About");
 		menu.setMnemonic(Mnemonic.ABOUT.value);
-		//menu.add(new MenuItem("Help", Mnemonic.GET_HELP));
-		menu.add(new MenuItem("Info", Mnemonic.INFO));
+		menu.add(new MenuItem(Mnemonic.INFO, AboutInfo_Click));
 		this.add(menu);
 	}
 	
 	private AbstractAction insertFunction = new AbstractAction("Insert function", null) {
-		@SuppressWarnings("deprecation")
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			new SFormulePicker( window ).show();
+			new SFormulePicker(window);
 		}
 	};
 	
@@ -132,9 +131,11 @@ public class SMenuBar extends JMenuBar {
 	private AbstractAction filePrint = new AbstractAction("Print", icoPrint) {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO !!!!!!!
-			String st = "File>Print";
-			JOptionPane.showMessageDialog(null, st);
+			try {
+				window.getCurrentTable().print();
+			} catch (PrinterException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+			}
 		}
 	};
 	
@@ -186,6 +187,21 @@ public class SMenuBar extends JMenuBar {
 		}
 	};
 	
+	/*
+	 * About menu:
+	 */
+	
+	private AbstractAction AboutInfo_Click = new AbstractAction("Info") {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			final String infoMsg = "Thank you for using Sandwich Spreadsheet®\nThis software has been made by\n     Jan-Willem Gmelig Meyling\n     Jim Hommes\n     Liam Clark\n     Maarten Flikkema\n\nOOP-Project TI1215 2013-2014\n©2014 by Sandwich Spreadsheet";
+			JOptionPane.showMessageDialog(null, infoMsg, "Info", JOptionPane.INFORMATION_MESSAGE, icoInfo);
+		}
+	};
+	
+	/**
+	 * Enum that contains alle the Mnemonic characters of SMenuBar.
+	 */
 	public static enum Mnemonic {
 		FILE('f'), NEW('n'), OPEN('o'), SAVE('s'), SAVE_AS('a'), PRINT('p'), EXIT('e'),
 		EDIT('e'), UNDO('z'), REDO('y'), CUT('x'), COPY('c'), PASTE('v'),
@@ -200,28 +216,10 @@ public class SMenuBar extends JMenuBar {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public static class MenuItem extends JMenuItem {
-		@Deprecated
-		private MenuItem(String text) {
-			this(text, (Icon) null);
-		}
-		
-		@Deprecated
-		private MenuItem(String text, Icon icon) {
-			super(text, icon);
-		}
-		
-		@Deprecated
-		private MenuItem(String text, Mnemonic mnemonic) {
-			this(text);
-			setMnemonic(mnemonic.value);
-		}
-		
-		@Deprecated
-		private MenuItem(String text, Icon icon, Mnemonic mnemonic) {
-			super(text, icon);
-			setMnemonic(mnemonic.value);
-		}
 		
 		private MenuItem(Action action) {
 			super(action);

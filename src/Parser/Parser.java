@@ -11,9 +11,7 @@ import File.Sheet.Range;
 
 /**
  * Class to parse the String
- * 
  * @author Jan-Willem Gmelig Meyling
- * 
  */
 public class Parser {
 
@@ -23,7 +21,7 @@ public class Parser {
 	private final String input;
 
 	/**
-	 * An final <code>int</code> to store the length of the input
+	 * An final <code>int</code> to store the length of the input.
 	 * <code>String</code>.
 	 */
 	private final int length;
@@ -35,7 +33,7 @@ public class Parser {
 	private final Sheet sheet;
 	
 	/**
-	 * A variable to store the current <code>Cell</code>
+	 * A variable to store the current <code>Cell</code>.
 	 */
 	private final Cell cell;
 
@@ -93,8 +91,6 @@ public class Parser {
 	 */
 	private Function function;
 	
-	/**
-	 */
 	private Object value;
 	
 	/**
@@ -137,15 +133,10 @@ public class Parser {
 	}
 
 	/**
-	 * Private Parse constructor. Used for recursive parsing between
-	 * parentheses.
-	 * 
-	 * @param parser
-	 *            Another parse instance
-	 * @param from
-	 *            From index
-	 * @param to
-	 *            To index
+	 * Private Parse constructor. Used for recursive parsing between parentheses.
+	 * @param parser Another parse instance
+	 * @param from is the from index
+	 * @param to is the to index
 	 */
 	private Parser(Parser parser, int from, int to) {
 		sheet = parser.sheet;
@@ -210,27 +201,27 @@ public class Parser {
 				if (depth > 0) {
 					break;
 				}
-				
+
 				Boolean b = getBoolean();
-				if ( b != null ) {
+				if (b != null) {
 					values.push(b);
 					break;
 				}
-				
+
 				Object reference = getRange();
-				if ( reference != null ) {
-					if ( reference instanceof Range ) {
-						if ( cell != null )
+				if (reference != null) {
+					if (reference instanceof Range) {
+						if (cell != null)
 							cell.listen(reference);
 						values.push(reference);
-					} else if ( reference instanceof Position ) {
+					} else if (reference instanceof Position) {
 						Cell other = sheet.getCellAt((Position) reference);
-						
-						if ( other == null ) {
+
+						if (other == null) {
 							other = new Cell(sheet, (Position) reference, "");
 						}
-						
-						if ( cell != null )
+
+						if (cell != null)
 							cell.listen(other);
 						values.push(other.getValue());
 					}
@@ -256,7 +247,6 @@ public class Parser {
 		}
 
 		return values.pop();
-		
 	}
 
 	/**
@@ -264,13 +254,13 @@ public class Parser {
 	 * 2.1, true/false) or returns the string
 	 */
 	private Object preparse() {
-		if ( hasNext() ) {
+		if (hasNext()) {
 			current = next();
-			if  ( current == '=' ) {
+			if (current == '=') {
 				return null;
 			} else {
 				Boolean b = getBoolean();
-				if ( b != null && !hasNext()) {
+				if (b != null && !hasNext()) {
 					return b;
 				} else if (Character.isDigit(current)) {
 					Number n = getNumber();
@@ -362,7 +352,7 @@ public class Parser {
 	 * result to the value stack.
 	 * 
 	 * @throws EmptyStackException
-	 *             if this value stack or operator stack is empty.
+	 *             If this value stack or operator stack is empty.
 	 * 
 	 * <div>
 	 * <b>Authors:</b><br>
@@ -382,16 +372,12 @@ public class Parser {
 	 * <code>Operator</code> in the stack is higher than or equal to the
 	 * <code>precedence</code> of the <code>Operator</code> supplied as
 	 * argument, we calculate this value first.
-	 * 
 	 * <pre>
 	 * This is such that 5 * 5 + 5 converts to 25 + 5.
 	 * </pre>
-	 * 
 	 * See also Dijkstra's Two Stack algorithm.
-	 * 
 	 * @param operator
 	 *            The operator to push
-	 * 
 	 * <div>
 	 * <b>Authors:</b><br>
 	 * <ul><li>Jan-Willem Gmelig Meyling</li></ul>
@@ -410,7 +396,7 @@ public class Parser {
 	 */
 	private void argumentSeparator() {
 		if (depth < 2 && function != null) {
-			if ( openBracket < index - 1 ) {
+			if (openBracket < index - 1) {
 				Object value = new Parser(this, openBracket, index).parse();
 				arguments.add(value);
 			}
@@ -497,16 +483,12 @@ public class Parser {
 	private void getOperator() {
 		if (current == '-' && depth == 0 
 				&& (index == 0 || "+-*/<>~!&|^=(,".indexOf(previous()) != -1)) {
-			/*
-			 * Parse -5 and x-5 differently :)
-			 */
+			//Parse -5 and x-5 differently :)
 			isNegative = true;
 		} else if (depth == 0) {
 			peekIndex = index + 1;
 			char[] op;
-			/*
-			 * Look if the operator uses a second character (">=")
-			 */
+			//Look if the operator uses a second character (">=")
 			char c = peek();
 			if (SECOND_OPERATOR_CHARACTERS.indexOf(c) != -1) {
 				op = new char[] { current, c };
@@ -676,8 +658,7 @@ public class Parser {
 	}
 
 	/**
-	 * Method to determine if there is a next character
-	 * 
+	 * Method to determine if there is a next character.
 	 * @return true if there is a next character
 	 */
 	private boolean hasNext() {
@@ -687,7 +668,6 @@ public class Parser {
 	/**
 	 * Return the next character in the <code>String</code>, and increment the
 	 * current <code>index</code>.
-	 * 
 	 * @return next character
 	 */
 	private char next() {
@@ -695,16 +675,15 @@ public class Parser {
 	}
 
 	/**
-	 * Peek for the character at peekIndex. This is useful for parsing elements of
-	 * which you can't be sure what type it is. For instance, 'A' can mean: the
-	 * start of <code>Function</code> ADD(), or the <code>Reference</code> to
-	 * <code>Cell</code> A1.
-	 * 
+	 * Peek for the character at peekIndex. This is useful for parsing elements
+	 * of which you can't be sure what type it is. For instance, 'A' can mean:
+	 * the start of <code>Function</code> ADD(), or the <code>Reference</code>
+	 * to <code>Cell</code> A1.
 	 * param n Amount of characters to peek forward
 	 * @return The character at the given index
 	 */
 	private char peek() {
-		if ( peekIndex < length ) {
+		if (peekIndex < length) {
 			return input.charAt(peekIndex);
 		}
 		return 0;
@@ -766,9 +745,7 @@ public class Parser {
 	/**
 	 * Static method to initiate parsing of an expression. Automatically slices
 	 * of the '=' character at the beginning, and removes spaces.
-	 * 
-	 * @param string
-	 *            Input
+	 * @param string Input
 	 * @return The result of the parse, which can be of various types. When the
 	 *         input <code>String</code> did not start with a <code>=</code>
 	 *         character, the original <code>String</code> is returned.
@@ -784,5 +761,4 @@ public class Parser {
 	public static Object parse(Cell cell) {
 		return new Parser(cell).parse();
 	}
-
 }

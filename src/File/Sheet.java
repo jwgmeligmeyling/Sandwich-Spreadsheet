@@ -142,11 +142,10 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 
 		@Override
 		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = 241 * result + colIndex;
-			result = 421 * result + rowIndex;
-			return result;
+			int prime = 31;
+			prime = 241 * prime + colIndex;
+			prime = 421 * prime + rowIndex;
+			return prime;
 		}
 
 		@Override
@@ -391,8 +390,7 @@ public class Sheet implements Interfaces.Sheet, Cloneable, ExceptionListener {
 	 * Constructor for declaring a new <code>Sheet</code>.
 	 */
 	public Sheet() {
-		this("New sheet"); // TODO: misschien veranderen naar 'unnamed sheet'
-							// o.i.d.??
+		this("New sheet");
 	}
 
 	/**

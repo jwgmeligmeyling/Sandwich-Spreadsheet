@@ -36,11 +36,9 @@ import Parser.Function;
  * @author Jan-Willem Gmelig Meyling
  * @author Liam Clark
  * @author Maarten Flikkema
- * 
  */
 @SuppressWarnings("serial")
-public class SFormulePicker extends JDialog implements ActionListener,
-		ListSelectionListener {
+public class SFormulePicker extends JDialog implements ActionListener, ListSelectionListener {
 
 	// Implements action listener voor de clicks in je list
 	private final Window window;
@@ -56,9 +54,7 @@ public class SFormulePicker extends JDialog implements ActionListener,
 
 	/**
 	 * Constructor for the SFormulePicker.
-	 * 
-	 * @param windowIn
-	 *            is the parent window.
+	 * @param windowIn is the parent window.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SFormulePicker(Window windowIn) {
@@ -128,7 +124,6 @@ public class SFormulePicker extends JDialog implements ActionListener,
 		add(emptyRight, BorderLayout.EAST);
 		add(emptyBottom, BorderLayout.PAGE_END);
 
-		// pack();
 		setSize(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -168,7 +163,6 @@ public class SFormulePicker extends JDialog implements ActionListener,
 
 	/**
 	 * Method to sort all function in the Function enum in alphabetical order.
-	 * 
 	 * @return the functions sorted
 	 */
 	public Function[] getSortedFunctions() {

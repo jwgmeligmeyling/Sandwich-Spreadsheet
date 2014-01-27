@@ -4,13 +4,11 @@ import java.util.Arrays;
 
 /**
  * Enum for the registered operators.
- * 
  * @author Jan-Willem Gmelig Meyling
  */
 public enum Operator {
 	/**
-	 * Adds two operands
-	 * 
+	 * Adds two operands.
 	 * <pre>
 	 * <b>Example</b>
 	 * <em>10 + 20 will give 30</em>
@@ -26,8 +24,7 @@ public enum Operator {
 	},
 
 	/**
-	 * Subtracts second operand from the first
-	 * 
+	 * Subtracts second operand from the first.
 	 * <pre>
 	 * <b>Example</b>
 	 * <em>10 - 20 will give -10</em>
@@ -43,8 +40,7 @@ public enum Operator {
 	},
 
 	/**
-	 * Multiply both operands
-	 * 
+	 * Multiply both operands by each other.
 	 * <pre>
 	 * <b>Example</b>
 	 * <em>10 * 20 will give 200</em>
@@ -60,8 +56,7 @@ public enum Operator {
 	},
 
 	/**
-	 * Divide numerator by denumerator
-	 * 
+	 * Divide numerator by denumerator.
 	 * <pre>
 	 * <b>Example</b>
 	 * <em>20 / 10 will give 2</em>
@@ -77,8 +72,7 @@ public enum Operator {
 	},
 
 	/**
-	 * Modulus Operator and remainder of after an integer division
-	 * 
+	 * Modulus Operator and remainder of after an integer division.
 	 * <pre>
 	 * <b>Example</b>
 	 * <em>20 % 10 will give 0</em>
@@ -93,7 +87,7 @@ public enum Operator {
 	},
 
 	/**
-	 * Return left operand to the power of the right operand
+	 * Return left operand to the power of the right operand.
 	 */
 	POWER(new char[] { '^' }, 4) {
 
@@ -107,7 +101,7 @@ public enum Operator {
 
 	/**
 	 * Return <code>true</code> if the value of operand A is greater than
-	 * operand B
+	 * operand B.
 	 */
 	GREATER_THAN(new char[] { '>' }, 8) {
 
@@ -121,7 +115,7 @@ public enum Operator {
 
 	/**
 	 * Return <code>true</code> if the value of operand A is greater than or
-	 * equal to operand B
+	 * equal to operand B.
 	 */
 	GREATER_OR_EQUAL(new char[] { '>', '=' }, 8) {
 
@@ -134,7 +128,7 @@ public enum Operator {
 	},
 
 	/**
-	 * Return <code>true</code> if the value of operand A is less than operand B
+	 * Return <code>true</code> if the value of operand A is less than operand B.
 	 */
 	LESS(new char[] { '<' }, 8) {
 
@@ -148,7 +142,7 @@ public enum Operator {
 
 	/**
 	 * Return <code>true</code> if the value of operand A is less than or
-	 * equal to operand B
+	 * equal to operand B.
 	 */
 	LESS_OR_EQUAL(new char[] { '<', '=' }, 8) {
 
@@ -161,7 +155,7 @@ public enum Operator {
 	},
 
 	/**
-	 * Return <code>true</code> if the value of operand A is equal to operand B
+	 * Return <code>true</code> if the value of operand A is equal to operand B.
 	 */
 	EQUAL(new char[] { '=', '=' }, 9) {
 
@@ -174,7 +168,7 @@ public enum Operator {
 	},
 
 	/**
-	 *  Return <code>true</code> if the value of operand A is not equal to operand B
+	 *  Return <code>true</code> if the value of operand A is not equal to operand B.
 	 */
 	DIFFERENT(new char[] { '<', '>' }, 9) {
 
@@ -186,7 +180,7 @@ public enum Operator {
 	},
 
 	/**
-	 *  Return <code>true</code> if the value of operand A is not equal to operand B
+	 *  Return <code>true</code> if the value of operand A is not equal to operand B.
 	 */
 	NOT_EQUAL(new char[] { '!', '=' }, 9) {
 
@@ -199,7 +193,7 @@ public enum Operator {
 	},
 
 	/**
-	 *  Return <code>true</code> if the both operand A and operand B are <code>true</code>
+	 *  Return <code>true</code> if the both operand A and operand B are <code>true</code>.
 	 */
 	AND(new char[] { '&', '&' }, 14) {
 
@@ -237,7 +231,7 @@ public enum Operator {
 	},
 
 	/**
-	 *  Binary shift an integer value to the right
+	 *  Binary shift an integer value to the right.
 	 */
 	SHIFT_RIGHT(new char[] { '>', '>' }, 7) {
 
@@ -249,7 +243,7 @@ public enum Operator {
 	},
 	
 	/**
-	 *  Concatenate two Strings
+	 *  Concatenate two Strings.
 	 */
 	CONCAT(new char[] { '&' }, 6) {
 		@Override
@@ -259,22 +253,23 @@ public enum Operator {
 	};
 
 	/**
-	 * The character sequence for this operator
+	 * The character sequence for this operator.
 	 */
 	private final char[] op;
+	
 	/**
-	 * The precedence for this operator
+	 * The precedence for this operator.
 	 */
 	public final int precedence;
+	
 	/**
-	 * The associativity for this operator
+	 * The associativity for this operator.
 	 */
 	public final Associativity associativity = Associativity.LEFT_TO_RIGHT;
 	
 	/**
-	 * An enumeration with types of associativity for operators
+	 * An enumeration with types of associativity for operators.
 	 * @author Jan-Willem Gmelig Meyling
-	 *
 	 */
 	public enum Associativity {
 		LEFT_TO_RIGHT,
@@ -293,8 +288,8 @@ public enum Operator {
 
 	/**
 	 * Constructor for an operand. Binds an unique char array.
-	 * 
 	 * @param op
+	 * @param precedence
 	 */
 	private Operator(char[] op, int precedence) {
 		this.op = op;
@@ -306,11 +301,8 @@ public enum Operator {
 	 * Parameters should be of the type <code>Integer</code>,
 	 * <code>Double</code>, <code>Boolean</code>, <code>String</code>,
 	 * <code>Reference</code>, or another <code>Function</code>.
-	 * 
-	 * @param first
-	 *            First argument
-	 * @param second
-	 *            Optional additional arguments
+	 * @param first is the first argument
+	 * @param second is the optional additional arguments
 	 * @return <code>Object</code> of implemented type
 	 */
 	abstract Object calculate(Object first, Object second);
@@ -320,7 +312,6 @@ public enum Operator {
 			if (Arrays.equals(op, o.op))
 				return o;
 		}
-		throw new IllegalArgumentException(new String(op).toString()
-				+ " is not a valid operator!");
+		throw new IllegalArgumentException(new String(op).toString() + " is not a valid operator!");
 	}
 }

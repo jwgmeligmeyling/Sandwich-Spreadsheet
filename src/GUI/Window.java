@@ -20,7 +20,7 @@ import File.Workbook;
 import Interfaces.ExceptionListener;
 
 /**
- * The Window class
+ * The Window class.
  */
 @SuppressWarnings("serial")
 public class Window extends JFrame implements ExceptionListener {
@@ -36,14 +36,14 @@ public class Window extends JFrame implements ExceptionListener {
 	private static final Color DEFAULT_BACKGROUND = new Color(240,240,240);
 	
 	/**
-	 * Consturctor for the GUI
+	 * Consturctor for the Window.
 	 */
 	public Window() {
 		this(new Workbook(new Sheet()));
 	}
 	
 	/**
-	 * Constructor for the GUI.
+	 * Constructor for the Window.
 	 * @param spreadsheet
 	 * @throws HeadlessException
 	 */

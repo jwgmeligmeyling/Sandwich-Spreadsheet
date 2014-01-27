@@ -1793,7 +1793,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 * <div><b>Comments:</b><br>
-	 * The ANDY() is the most advanced feature in the Sandwitch spreadsheet application
+	 * The ANDY function is the most advanced feature in the Sandwitch spreadsheet application.
 	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
@@ -1801,7 +1801,7 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	ANDY("Returns a surprise!", "<i>none on anything you like!</i>") {
+	ANDY("Returns a surprise!", "<i>anything you like!</i>") {
 		@Override
 		public Object calculate(Object... arguments) {
 			return "Hoi Andy!";
@@ -1819,6 +1819,7 @@ public enum Function {
 	private final String argumentList;
 	
 	/**
+	 * Method to get the description of a function.
 	 * @return description
 	 */
 	public String getDescription() {
@@ -1826,6 +1827,7 @@ public enum Function {
 	}
 	
 	/**
+	 * Method to get the list of expected arguments and optional arguments of a function.
 	 * @return argumentList
 	 */
 	public String getArgumentList() {
@@ -1844,7 +1846,7 @@ public enum Function {
 	
 	/**
 	 * Function constructor for a Function with a description and without argument list.
-	 * @param description
+	 * @param description is the short description of a function showed in the function dialog
 	 */
 	private Function(String description) {
 		this(description, DEFAULT_ARGLIST);
@@ -1852,8 +1854,8 @@ public enum Function {
 	
 	/**
 	 * Function constructor for a Function with a description and a argument list.
-	 * @param description
-	 * @param argumentList
+	 * @param description is the short description of a function showed in the function dialog
+	 * @param argumentList is the list (String) of expected and optional arguments
 	 */
 	private Function(String description, String argumentList) {
 		this.description = description;
@@ -1867,8 +1869,7 @@ public enum Function {
 	 * <code>Boolean</code>, <code>String</code>, <code>Reference</code>, or
 	 * another <code>Function</code>.
 	 * 
-	 * @param arguments
-	 *            Optional additional arguments
+	 * @param arguments Optional additional arguments
 	 * @return <code>Object</code> of implemented type
 	 */
 	public abstract Object calculate(Object... arguments);
@@ -1880,8 +1881,7 @@ public enum Function {
 	 * <code>Boolean</code>, <code>String</code>, <code>Reference</code>, or
 	 * another <code>Function</code>.
 	 * 
-	 * @param arguments
-	 *            Optional additional arguments
+	 * @param arguments Optional additional arguments
 	 * @return <code>Object</code> of implemented type
 	 */
 	public Object calculateNegative(Object... arguments) {
@@ -1932,8 +1932,7 @@ public enum Function {
 	 * An empty String will return 0. A non-empty String will be casted to
 	 * a double, or throw a NumberFormatException.
 	 * 
-	 * @param obj
-	 *            Object to convert
+	 * @param obj Object to convert
 	 * @return <code>double</code> value to calculate with
 	 * @throws NumberFormatException
 	 */
@@ -1966,9 +1965,7 @@ public enum Function {
 	 * <li>greater than <code>1</code> will be parsed as <code>true</code></li>
 	 * <li>else (empty String) will be parsed as <code>false</code></li>
 	 * </ul>
-	 * 
-	 * @param obj
-	 * 				Object to convert
+	 * @param obj Object to convert
 	 * @return <code>boolean</code> value to calculate with
 	 */
 	public static boolean booleanValueOf(Object obj) {
@@ -1987,7 +1984,7 @@ public enum Function {
 	}
 	
 	/**
-	 * 
+	 * Convert <code>Object</code> type to <Code>String</code type.
 	 * @param obj Object to convert
 	 * @return <code>boolean</code> value to calculate with
 	 */
@@ -2004,8 +2001,7 @@ public enum Function {
 	}
 	
 	/**
-	 * Get a function value by name. The name is converted to uppercase automatically
-	 * 
+	 * Get a function value by name. The name is converted to uppercase automatically.
 	 * @param value
 	 * @return Function matching the name
 	 * @throws IllegalArgumentException
@@ -2020,7 +2016,7 @@ public enum Function {
 	}
 	
 	/**
-	 * Method to convert unnecessary doubles to integers
+	 * Method to convert unnecessary doubles to integers.
 	 * @param d is a double value
 	 * @return the same value as the input, but is converted to Integer if there is no significant decimal part behind the comma
 	 */
@@ -2035,6 +2031,7 @@ public enum Function {
 	 * Checks if the number of arguments given to a function is equal to the number of arguments it requires.
 	 * @param count is the number of arguments the function should get
 	 * @param length is the number of arguments the function actualy got (arguments.length)
+	 * @throws IllegalArgumentException when argument(s) do not match the requirement
 	 */
 	public static void assertArguments(int count, int length) {
 		if (count != length) {
@@ -2047,6 +2044,7 @@ public enum Function {
 	 * @param count1 is the first number of arguments the function can handle
 	 * @param count2 is the second number of arguments the function can handle
 	 * @param length is the number of arguments the function actualy got (arguments.length)
+	 * @throws IllegalArgumentException when argument(s) do not match the requirement
 	 */
 	public static void assertTwoArguments(int count1, int count2, int length) {
 		if (count1 != length && count2 != length) {
@@ -2058,6 +2056,7 @@ public enum Function {
 	 * Checks if the number of arguments given to a function is at least the minimum number of arguments the function requires.
 	 * @param min is the minimum number of argumens the function should get
 	 * @param length is the number of arguments the function actualy got (argument.length)
+	 * @throws IllegalArgumentException when argument(s) do not match the requirement
 	 */
 	public static void assertMinArguments(int min, int length) {
 		if (min > length) {
@@ -2069,6 +2068,7 @@ public enum Function {
 	 * Checks if the number of arguments given to a function is not more than the function can handle.
 	 * @param max is the maximum number of argumens the function should get
 	 * @param length is the number of arguments the function actualy got (argument.length)
+	 * @throws IllegalArgumentException when argument(s) do not match the requirement
 	 */
 	public static void assertMaxArguments(int max, int length) {
 		if (length > max) {
@@ -2080,6 +2080,7 @@ public enum Function {
 	 * Checks if a certain argument in the array of arguments given to a function is instance of Range.
 	 * @param index is the index of the argument in the array of arguments that must be a Range
 	 * @param args is the array of arguments supplied to the function
+	 * @throws IllegalArgumentException when argument(s) do not match the requirement
 	 */
 	public static void assertArgumentRange(int index, Object... args) {
 		if (!(args[index] instanceof Range)) {
@@ -2090,6 +2091,7 @@ public enum Function {
 	/**
 	 * Checks if a certain argument given to a function is instance of Range.
 	 * @param arg is the argument that must be a Range
+	 * @throws IllegalArgumentException when argument(s) do not match the requirement
 	 */
 	public static void assertArgumentRange(Object arg) {
 		if (!(arg instanceof Range)) {
@@ -2101,6 +2103,7 @@ public enum Function {
 	 * Checks if a certain argument given to a function is not a range with more than one cell in it.
 	 * @throws an IllegalArgumentException only if the argument is instance of Range and contains more than 1 cell.
 	 * @param arg is the argument that must be a Range
+	 * @throws IllegalArgumentException when argument(s) do not match the requirement
 	 */
 	public static void assertArgumentSingleRange(Object arg) {
 		if ((arg instanceof Range) && ((Range)arg).getCellArray().length > 1) {

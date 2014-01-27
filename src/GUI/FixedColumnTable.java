@@ -13,7 +13,6 @@ import javax.swing.table.TableColumnModel;
 
 /**
  * COPIED FROM http://www.coderanch.com/t/560132/GUI/java/Fixed-frozen-columns-JTable-topic
- *
  */
 class FixedColumnTable implements ChangeListener, PropertyChangeListener
 {

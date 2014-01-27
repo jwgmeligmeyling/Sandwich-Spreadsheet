@@ -184,9 +184,7 @@ public class SToolbar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Color oldColor = new Color(50, 200, 160);
-			
-			new SColorPicker("Choose a background color", oldColor,window,true);
-			//TODO bColor van selected cells instellen
+			new SColorPicker("Choose a background color", oldColor, window, true);
 		}
 	};
 	
@@ -194,8 +192,7 @@ public class SToolbar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Color oldColor = new Color(50, 200, 160);
-			new SColorPicker("Choose a text color", oldColor,window,false);
-			//TODO fColor van selected cells instellen
+			new SColorPicker("Choose a text color", oldColor, window, false);
 		}
 	};
 	
@@ -206,6 +203,9 @@ public class SToolbar extends JToolBar {
 		}
 	};
 	
+	/**
+	 * Class for creating a standardized button in a toolbar.
+	 */
 	public class ToolBarButton extends JButton {
 		
 		public ToolBarButton(Action action) {
@@ -228,6 +228,10 @@ public class SToolbar extends JToolBar {
 		}
 	}
 
+	/**
+	 * Class for creating a standardized toggle button in a toolbar.
+	 * Toggle buttons are among others used for letting the user set bold, italic and underlined formatting.
+	 */
 	public class ToolBarToggleButton extends JToggleButton {
 
 		ToolBarToggleButton(Action action) {
