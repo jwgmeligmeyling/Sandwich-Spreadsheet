@@ -224,12 +224,9 @@ public enum Function {
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The rest of the denomination of <code>value</code> by <code>denominnator</code></li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -252,10 +249,6 @@ public enum Function {
 	 * <ul>
 	 * <li>Average of all the numerical values in the given range(s).</li>
 	 * </ul>
-	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -325,10 +318,6 @@ public enum Function {
 	 * <ul>
 	 * <li>Number of cells in the given ranges with a numerical value in it</li>
 	 * </ul>
-	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -361,10 +350,6 @@ public enum Function {
 	 * <ul>
 	 * <li>Number of cells in the given range(s) that are not empty</li>
 	 * </ul>
-	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
@@ -391,16 +376,13 @@ public enum Function {
 	
 	/**
 	 * <div>
-	 * <b>Expected arguments:</b> <code>[argument]</code>, <code>[oneindig argument]...</code>
+	 * <b>Expected arguments:</b> <code>range</code>, <code>criteria</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
 	 * <ul>
-	 * <li>[return omschrijving]</li>
+	 * <li>The sum of all values in <code>range</code> that satisfy the criteria</li>
 	 * </ul>
 	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Jan-Willem Gmelig Meyling</li>
@@ -503,10 +485,6 @@ public enum Function {
 	 * <li><code>TRUE</code> if <code>argument</code> is a numerical value</li>
 	 * <li><code>FALSE</code> if <code>argument</code> is not a numerical value</li>
 	 * </ul>
-	 * </div>
-	 * <div><b>Comments:</b><br>
-	 * [opmerkingen]
-	 * </div><br>
 	 * <div><b>Authors:</b>
 	 * <ul>
 	 * <li>Maarten Flikkema</li>
