@@ -1,9 +1,0 @@
-<WORKBOOK>
-<SPREADSHEET>
-<CELL row="2" column="1" type="TEXT" fcolor="-65536" bcolor="-16776961">BC blue en FC red</CELL>
-<CELL row="2" column="2" type="TEXT" bold="true">Lekker bold</CELL>
-<CELL row="2" column="3" type="TEXT" italic="true">Lekker italic</CELL>
-<CELL row="2" column="4" type="TEXT" underlined="true">Lekker underlined</CELL>
-</SPREADSHEET>
-</WORKBOOK>
-
