@@ -1149,21 +1149,6 @@ public class TestFunctions {
 		Function.UPPER.calculate();
 	}
 	
-	
-	/*
-	 * Test calculateNegative method on Add function
-	 */
-	
-	@Test
-	public void testAddCalculateNegativeInt() {
-		assertEquals(-9, Function.SUM.calculateNegative(5, 4));
-	}
-	@Test
-	public void testAddCalculateNegativeDouble() {
-		assertEquals(-4.56, ((Number) Function.SUM.calculateNegative(2, 2.56)).doubleValue(), 1e-15);
-	}
-	
-	
 	/*
 	 * Test not-function methodes
 	 */

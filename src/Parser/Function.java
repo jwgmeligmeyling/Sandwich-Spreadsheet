@@ -1853,27 +1853,6 @@ public enum Function {
 	public abstract Object calculate(Object... arguments);
 	
 	/**
-	 * Calculate the negative value for a function. This method takes at least
-	 * one object as parameter, but additional arguments are allowed. Parameters
-	 * should be of the type <code>Integer</code>, <code>Double</code>,
-	 * <code>Boolean</code>, <code>String</code>, <code>Reference</code>, or
-	 * another <code>Function</code>.
-	 * 
-	 * @param arguments Optional additional arguments
-	 * @return <code>Object</code> of implemented type
-	 */
-	public Object calculateNegative(Object... arguments) {
-		Object result = calculate(arguments);
-		if (result instanceof Integer) {
-			return new Integer(-(Integer) result);
-		} else if (result instanceof Double) {
-			return new Double(-(Double) result);
-		} else {
-			return new Integer(-intValueOf(result));
-		}
-	}
-	
-	/**
 	 * Get the <code>integer</code> value of an object. Values of the type
 	 * <code>Double</code> will be rounded to the closest <code>integer</code>
 	 * and <code>Booleans</code> will be converted to their <code>integer</code>

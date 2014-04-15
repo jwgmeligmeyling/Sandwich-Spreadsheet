@@ -296,17 +296,12 @@ public class Parser {
 	 * push the calculated <code>value</code> to the <code>value stack</code>.
 	 * If the <code>value</code> is a <code>Function</code> result, fetch the
 	 * arguments first and calculate the <code>value</code>.
-	 * 
-	 * <div>
-	 * <b>Authors:</b><br>
-	 * <ul><li>Jan-Willem Gmelig Meyling</li></ul>
-	 * </div>
 	 */
 	private void closeBracket() {
+		Object value;
 		depth--;
 		if (depth == 0) {
 			closeBracket = index;
-
 			if (function != null) {
 				/*
 				 * Since we're parsing a function, we need to push the last
@@ -325,14 +320,12 @@ public class Parser {
 				 * When the value needs to be negative, calculate the negative
 				 * value, else, calculate the normal value.
 				 */
-				Object value = (isNegative) ? function.calculateNegative(args)
-						: function.calculate(args);
+				value = function.calculate(args);
 				/*
-				 * Push the value to the value stack, and clear the arguments
+				 * Clear the arguments
 				 * list and function variable, so that other expressions are
 				 * parsed correctly.
 				 */
-				values.push(value);
 				arguments.clear();
 				function = null;
 			} else {
@@ -340,8 +333,30 @@ public class Parser {
 				 * Parse the expression between the parentheses recursively, by
 				 * constructing a new Parser instance.
 				 */
-				values.push(new Parser(this, openBracket, closeBracket).parse());
+				value = new Parser(this, openBracket, closeBracket).parse();
 			}
+			
+			/*
+			 * Invert the value if negative, and push the value to the stacl
+			 */
+			if(isNegative) value = invert(value);
+			values.push(value);
+		}
+	}
+	
+	/**
+	 * @param input
+	 * @return Convert a positive Number into a negative Number or vice versa.
+	 *         Non numbers will be represented as their integer value defined
+	 *         by Function.intValueOf()
+	 */
+	private static Object invert(Object input) {
+		if (input instanceof Integer) {
+			return new Integer(-(Integer) input);
+		} else if (input instanceof Double) {
+			return new Double(-(Double) input);
+		} else {
+			return new Integer(-Function.intValueOf(input));
 		}
 	}
 	
@@ -353,11 +368,6 @@ public class Parser {
 	 * 
 	 * @throws EmptyStackException
 	 *             If this value stack or operator stack is empty.
-	 * 
-	 * <div>
-	 * <b>Authors:</b><br>
-	 * <ul><li>Jan-Willem Gmelig Meyling</li></ul>
-	 * </div>
 	 */
 	private void calculate() {
 		Object a = values.pop();
@@ -378,10 +388,6 @@ public class Parser {
 	 * See also Dijkstra's Two Stack algorithm.
 	 * @param operator
 	 *            The operator to push
-	 * <div>
-	 * <b>Authors:</b><br>
-	 * <ul><li>Jan-Willem Gmelig Meyling</li></ul>
-	 * </div>
 	 */
 	private void pushOperator(Operator operator) {
 		while (!operators.empty()
