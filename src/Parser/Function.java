@@ -312,6 +312,34 @@ public enum Function {
 	
 	/**
 	 * <div>
+	 * <b>Arguments:</b> <code>value</code>, <code>value...</code>
+	 * </div>
+	 * <div>
+	 * ...
+	 * </div>
+	 * <div>
+	 * <b>Authors:</b>
+	 * <ul>
+	 * <li>Maarten Flikkema</li>
+	 * </ul>
+	 * </div>
+	 */
+	STDEV("Returns the standard deviation.", "<b>values</b>") {
+		@Override
+		public Object calculate(Object... arguments) {
+			assertArguments(1, arguments.length);
+			double mean = doubleValueOf(AVERAGE.calculate(arguments));
+			Cell[] cells = ((Range)arguments[0]).getCellArray();
+			double afw = 0.0;
+			for(int i = 0; i < cells.length; i++) {
+				afw += Math.abs(doubleValueOf(cells[i].getValue()) - mean);
+			}
+			return convertToIntIfApplicable(afw / cells.length);
+		}
+	},
+	
+	/**
+	 * <div>
 	 * <b>Expected arguments:</b> <code>range</code>, <code>[range...]</code>
 	 * </div><br>
 	 * <div><b>Returns:</b>
