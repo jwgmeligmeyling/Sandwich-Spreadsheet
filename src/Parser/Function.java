@@ -56,7 +56,7 @@ public enum Function {
 			
 			List<Object> values = new ArrayList<Object>(arguments.length);
 			values.addAll(Arrays.asList(arguments));
-						
+			
 			for (Object argument : arguments) {
 				if (argument instanceof Range) {
 					Range range = (Range) argument;
@@ -324,17 +324,27 @@ public enum Function {
 	 * </ul>
 	 * </div>
 	 */
-	STDEV("Returns the standard deviation.", "<b>values</b>") {
+	STDEV("Returns the standard deviation of all the arguments.", "<b>values</b>") {
 		@Override
 		public Object calculate(Object... arguments) {
-			assertArguments(1, arguments.length);
-			double mean = doubleValueOf(AVERAGE.calculate(arguments));
-			Cell[] cells = ((Range)arguments[0]).getCellArray();
-			double afw = 0.0;
-			for(int i = 0; i < cells.length; i++) {
-				afw += Math.abs(doubleValueOf(cells[i].getValue()) - mean);
+			assertMinArguments(1, arguments.length);
+			
+			List<Object> values = new ArrayList<Object>(arguments.length);
+			values.addAll(Arrays.asList(arguments));
+			
+			for (Object argument : arguments) {
+				if (argument instanceof Range) {
+					Range range = (Range) argument;
+					values.addAll(Arrays.asList(range.getValueArray()));
+					values.remove(range);
+				}
 			}
-			return convertToIntIfApplicable(afw / cells.length);
+			double aver = doubleValueOf(AVERAGE.calculate(arguments));
+			double afw = 0.0;
+			for(Object value : values) {
+				afw += Math.abs(doubleValueOf(value) - aver);
+			}
+			return convertToIntIfApplicable(afw / doubleValueOf(COUNT.calculate(arguments)));
 		}
 	},
 	
@@ -2044,7 +2054,7 @@ public enum Function {
 	 * @throws IllegalArgumentException when argument(s) do not match the requirement
 	 */
 	public static void assertMinArguments(int min, int length) {
-		if (min > length) {
+		if (length < min) {
 			throw new IllegalArgumentException("This function requires at least " + min + " arguments, but " + length + " where supplied!");
 		}
 	}
